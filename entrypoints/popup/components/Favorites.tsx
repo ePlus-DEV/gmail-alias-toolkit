@@ -20,7 +20,30 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
 
   useEffect(() => {
     loadFavorites();
+    
+    // Listen for storage changes
+    const handleStorageChange = (changes: any) => {
+      if (changes.favorites) {
+        loadFavorites();
+      }
+    };
+
+    browser.storage.onChanged.addListener(handleStorageChange);
+    return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
+
+  // Update favorites when baseEmail changes
+  useEffect(() => {
+    if (favorites.length > 0 && baseEmail.includes('@')) {
+      const [username, domain] = baseEmail.split('@');
+      const updatedFavorites = favorites.map(fav => ({
+        ...fav,
+        email: `${username}+${fav.tag}@${domain}`
+      }));
+      setFavorites(updatedFavorites);
+      browser.storage.local.set({ favorites: updatedFavorites });
+    }
+  }, [baseEmail]);
 
   const loadFavorites = async () => {
     const result = await browser.storage.local.get('favorites');

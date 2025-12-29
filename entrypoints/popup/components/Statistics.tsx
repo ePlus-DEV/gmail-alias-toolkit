@@ -18,6 +18,16 @@ export default function Statistics() {
 
   useEffect(() => {
     loadStats();
+    
+    // Listen for storage changes
+    const handleStorageChange = (changes: any) => {
+      if (changes.alias_stats || changes.gmail_alias_recent) {
+        loadStats();
+      }
+    };
+
+    browser.storage.onChanged.addListener(handleStorageChange);
+    return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
 
   const loadStats = async () => {

@@ -3,6 +3,8 @@ import './App.css';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 import Favorites from './components/Favorites';
+import GmailTricks from './components/GmailTricks';
+import WelcomeScreen from './components/WelcomeScreen';
 
 interface Alias {
   email: string;
@@ -55,20 +57,45 @@ function App() {
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
+  const [emailAccounts, setEmailAccounts] = useState<any[]>([]);
+  const [hasEmailAccounts, setHasEmailAccounts] = useState(true);
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [newAccountEmail, setNewAccountEmail] = useState('');
+  const [newAccountLabel, setNewAccountLabel] = useState('');
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
-    browser.storage.local.get([STORAGE_KEY, 'base_email', 'app_settings']).then((result: StorageResult) => {
+    browser.storage.local.get([STORAGE_KEY, 'base_email', 'app_settings', 'email_accounts']).then((result: StorageResult) => {
       if (result.gmail_alias_recent) {
         setRecentAliases(result.gmail_alias_recent);
       }
-      if (result.base_email) {
+      
+      // Load active email from email_accounts or fall back to base_email
+      if (result.email_accounts && Array.isArray(result.email_accounts)) {
+        const activeAccount = result.email_accounts.find((acc: any) => acc.isActive);
+        if (activeAccount) {
+          setBaseEmail(activeAccount.email);
+        }
+      } else if (result.base_email) {
         setBaseEmail(result.base_email);
       }
+      
       if (result.app_settings) {
         setMaxRecent(result.app_settings.maxHistory || 5);
         setCustomPresets(result.app_settings.customPresets || []);
         setRandomFormat(result.app_settings.randomFormat || 'private-mail');
+      }
+      
+      // Load email accounts list
+      if (result.email_accounts && Array.isArray(result.email_accounts)) {
+        setEmailAccounts(result.email_accounts);
+        setHasEmailAccounts(result.email_accounts.length > 0);
+      } else if (result.base_email) {
+        // Legacy: has base_email but no email_accounts
+        setHasEmailAccounts(true);
+      } else {
+        // First time user
+        setHasEmailAccounts(false);
       }
     });
   }, []);
@@ -82,6 +109,18 @@ function App() {
           setMaxRecent(newSettings.maxHistory || 5);
           setCustomPresets(newSettings.customPresets || []);
           setRandomFormat(newSettings.randomFormat || 'private-mail');
+        }
+      }
+      if (changes.email_accounts) {
+        const newAccounts = changes.email_accounts.newValue;
+        if (newAccounts) {
+          setEmailAccounts(newAccounts);
+          setHasEmailAccounts(newAccounts.length > 0);
+          // Update base email if active account changed
+          const activeAccount = newAccounts.find((acc: any) => acc.isActive);
+          if (activeAccount) {
+            setBaseEmail(activeAccount.email);
+          }
         }
       }
     };
@@ -191,6 +230,16 @@ function App() {
 
   const saveBaseEmail = (email: string) => {
     browser.storage.local.set({ base_email: email });
+    
+    // Also update in email_accounts if exists
+    browser.storage.local.get('email_accounts').then((result) => {
+      if (result.email_accounts && Array.isArray(result.email_accounts)) {
+        const updated = result.email_accounts.map((acc: any) => 
+          acc.isActive ? { ...acc, email } : acc
+        );
+        browser.storage.local.set({ email_accounts: updated });
+      }
+    });
   };
 
   const generateAlias = (tag: string) => {
@@ -232,37 +281,159 @@ function App() {
     }
   };
 
+  const handleAddAccount = async () => {
+    if (!newAccountEmail.trim() || !newAccountEmail.includes('@')) return;
+    
+    const newAccount = {
+      id: Date.now().toString(),
+      email: newAccountEmail.trim(),
+      label: newAccountLabel.trim() || 'Account ' + (emailAccounts.length + 1),
+      isActive: false,
+    };
+    
+    const updatedAccounts = [...emailAccounts, newAccount];
+    await browser.storage.local.set({ email_accounts: updatedAccounts });
+    
+    setNewAccountEmail('');
+    setNewAccountLabel('');
+    setShowAddAccount(false);
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-bold">Gmail Alias Toolkit</h1>
-            <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
+      {/* Show Welcome Screen for first-time users */}
+      {!hasEmailAccounts ? (
+        <WelcomeScreen 
+          onEmailAdded={(email) => {
+            setBaseEmail(email);
+            setHasEmailAccounts(true);
+          }}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+        />
+      ) : (
+        <>
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-bold">Gmail Alias Toolkit</h1>
+                <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
+              </div>
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                title="Settings"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-            title="Settings"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </button>
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="p-4 space-y-4">
-        {/* Statistics */}
-        <Statistics />
+        {/* Base Email Selector - Dropdown */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <label className="block text-xs font-medium text-gray-700 mb-2">
+            Active Gmail Address
+          </label>
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <select
+                value={baseEmail}
+                onChange={(e) => {
+                  const selectedEmail = e.target.value;
+                  setBaseEmail(selectedEmail);
+                  saveBaseEmail(selectedEmail);
+                  
+                  // Update active account
+                  if (emailAccounts.length > 0) {
+                    const updated = emailAccounts.map(acc => ({
+                      ...acc,
+                      isActive: acc.email === selectedEmail
+                    }));
+                    browser.storage.local.set({ email_accounts: updated });
+                  }
+                }}
+                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+              >
+                {emailAccounts.length > 0 ? (
+                  emailAccounts.map((account) => (
+                    <option key={account.id} value={account.email}>
+                      {account.label} - {account.email}
+                    </option>
+                  ))
+                ) : (
+                  <option value={baseEmail}>{baseEmail}</option>
+                )}
+              </select>
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowAddAccount(!showAddAccount)}
+              className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
+              title="Add new account"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Quick Add Account Form */}
+          {showAddAccount && (
+            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+              <input
+                type="email"
+                value={newAccountEmail}
+                onChange={(e) => setNewAccountEmail(e.target.value)}
+                placeholder="Email address"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoFocus
+              />
+              <input
+                type="text"
+                value={newAccountLabel}
+                onChange={(e) => setNewAccountLabel(e.target.value)}
+                placeholder="Label (optional, e.g., Work, Personal)"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={handleAddAccount}
+                  disabled={!newAccountEmail.trim() || !newAccountEmail.includes('@')}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Add Account
+                </button>
+                <button
+                  onClick={() => {
+                    setShowAddAccount(false);
+                    setNewAccountEmail('');
+                    setNewAccountLabel('');
+                  }}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {baseEmail && !baseEmail.includes('@gmail.com') && baseEmail.includes('@') && (
+            <p className="text-xs text-amber-600 mt-2">
+              ⚠ This doesn't look like a Gmail address. Plus addressing works best with Gmail.
+            </p>
+          )}
+        </div>
 
-        {/* Favorites */}
-        <Favorites baseEmail={baseEmail} onCopy={copyToClipboard} />
-
-        {/* Random Alias Generator - Main Feature */}
+        {/* Random Alias Generator - Tính năng chính */}
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-5 text-white">
           <div className="flex items-center gap-2 mb-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,103 +463,70 @@ function App() {
           </div>
         </div>
 
-        {/* Base Email Input */}
+        {/* Alias with Tags - Combined Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <label className="block text-xs font-medium text-gray-700 mb-2">
-            Base Gmail Address
-          </label>
-          <div className="relative">
-            <input
-              type="email"
-              value={baseEmail}
-              onChange={(e) => {
-                setBaseEmail(e.target.value);
-                saveBaseEmail(e.target.value);
-              }}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="your.email@gmail.com"
-            />
-            {baseEmail && baseEmail.includes('@') && (
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            )}
+          <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            Alias with Custom Tags
+          </h2>
+
+          {/* Quick Presets - Main buttons */}
+          <div className="flex flex-wrap gap-2 mb-3">
+            {PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => handlePresetClick(preset.tag)}
+                className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              >
+                {preset.label}
+              </button>
+            ))}
           </div>
-          {baseEmail && !baseEmail.includes('@gmail.com') && baseEmail.includes('@') && (
-            <p className="text-xs text-amber-600 mt-1">
-              ⚠ This doesn't look like a Gmail address. Plus addressing works best with Gmail.
-            </p>
+
+          {/* Custom Presets - If any */}
+          {customPresets.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {customPresets.map((preset) => (
+                <button
+                  key={preset.id}
+                  onClick={() => handlePresetClick(preset.tag)}
+                  className="px-3 py-1.5 bg-purple-50 text-purple-700 text-xs font-medium rounded-md hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
           )}
-        </div>
 
-        {/* Generate Alias Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">Generate Alias</h2>
-
-          {/* Custom Tag Input */}
-          <div className="mb-4">
-            <label className="block text-xs font-medium text-gray-700 mb-2">
-              Custom Tag
-            </label>
+          {/* Custom Tag Input - Below presets */}
+          <div className="pt-3 border-t border-gray-200">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={customTag}
                 onChange={(e) => setCustomTag(e.target.value)}
                 onKeyDown={handleKeyPress}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter custom tag"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Or type custom tag..."
               />
               <button
                 onClick={handleCustomGenerate}
                 disabled={!customTag.trim()}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Generate
+                →
               </button>
             </div>
           </div>
-
-          {/* Presets */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-2">
-              Quick Presets
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  onClick={() => handlePresetClick(preset.tag)}
-                  className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full hover:bg-blue-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
-                >
-                  {preset.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Custom Presets */}
-          {customPresets.length > 0 && (
-            <div className="pt-3 border-t border-gray-200">
-              <label className="block text-xs font-medium text-gray-700 mb-2">
-                Custom Presets
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {customPresets.map((preset) => (
-                  <button
-                    key={preset.id}
-                    onClick={() => handlePresetClick(preset.tag)}
-                    className="px-3 py-1.5 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 hover:text-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1 transition-colors"
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Favorites - Quick Access */}
+        <Favorites baseEmail={baseEmail} onCopy={copyToClipboard} />
+
+        {/* Gmail Advanced Tricks */}
+        <GmailTricks baseEmail={baseEmail} onCopy={copyToClipboard} />
 
         {/* Recent Aliases */}
         {recentAliases.length > 0 && (
@@ -475,6 +613,9 @@ function App() {
           </div>
         )}
 
+        {/* Statistics - Collapsible */}
+        <Statistics />
+
         {/* Success Message */}
         {copiedEmail && (
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in">
@@ -482,6 +623,8 @@ function App() {
           </div>
         )}
       </div>
+      </>
+      )}
 
       {/* Settings Modal */}
       <Settings
