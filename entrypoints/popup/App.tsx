@@ -57,6 +57,12 @@ function App() {
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
+  const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
+  const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
+  const [randomEmailCount, setRandomEmailCount] = useState(10);
+  const [showRandomSettings, setShowRandomSettings] = useState(false);
+  const [showQuickPresets, setShowQuickPresets] = useState(false);
+  const [activeGeneratorTab, setActiveGeneratorTab] = useState<'random' | 'tags' | 'tricks'>('random');
   const [emailAccounts, setEmailAccounts] = useState<any[]>([]);
   const [hasEmailAccounts, setHasEmailAccounts] = useState(true);
   const [showAddAccount, setShowAddAccount] = useState(false);
@@ -185,7 +191,7 @@ function App() {
     browser.storage.local.set({ [STORAGE_KEY]: [] });
   };
 
-  const generateRandomString = (format: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp'): string => {
+  const generateRandomString = (format: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp', index: number = 0): string => {
     if (format === 'private-mail') {
       // Generate format like: private-mail-q2ga
       const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -198,12 +204,13 @@ function App() {
     }
     
     if (format === 'timestamp') {
-      return Date.now().toString(36);
+      // Add index to ensure uniqueness when generating multiple
+      return (Date.now() + index).toString(36);
     }
     
     if (format === 'words') {
-      const adjectives = ['happy', 'sunny', 'calm', 'bright', 'swift', 'brave', 'cool', 'smart', 'quick', 'zen'];
-      const nouns = ['fox', 'bird', 'bear', 'wolf', 'deer', 'lion', 'hawk', 'eagle', 'tiger', 'panda'];
+      const adjectives = ['happy', 'sunny', 'calm', 'bright', 'swift', 'brave', 'cool', 'smart', 'quick', 'zen', 'wild', 'free', 'bold', 'wise', 'pure', 'kind', 'fair', 'true', 'rare', 'fine'];
+      const nouns = ['fox', 'bird', 'bear', 'wolf', 'deer', 'lion', 'hawk', 'eagle', 'tiger', 'panda', 'seal', 'otter', 'raven', 'crane', 'swan', 'lynx', 'coral', 'pearl', 'jade', 'ruby'];
       const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
       const noun = nouns[Math.floor(Math.random() * nouns.length)];
       const num = Math.floor(Math.random() * 999);
@@ -221,11 +228,30 @@ function App() {
   };
 
   const generateRandomAlias = () => {
-    const randomTag = generateRandomString(randomFormat);
-    const alias = generateAlias(randomTag);
-    if (alias) {
-      copyToClipboard(alias);
+    // Clear previous results first
+    setGeneratedRandomList([]);
+    setLastGeneratedRandom('');
+    
+    const aliases: string[] = [];
+    const timestamp = Date.now();
+    
+    for (let i = 0; i < randomEmailCount; i++) {
+      const randomTag = generateRandomString(randomFormat, i + timestamp);
+      const alias = generateAlias(randomTag);
+      if (alias) {
+        aliases.push(alias);
+      }
     }
+    
+    // Use setTimeout to ensure state update triggers re-render
+    setTimeout(() => {
+      if (aliases.length > 0) {
+        setLastGeneratedRandom(aliases[0]);
+        setGeneratedRandomList(aliases);
+        // Copy first one to clipboard
+        copyToClipboard(aliases[0]);
+      }
+    }, 0);
   };
 
   const saveBaseEmail = (email: string) => {
@@ -433,100 +459,271 @@ function App() {
           )}
         </div>
 
-        {/* Random Alias Generator - Tính năng chính */}
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-5 text-white">
-          <div className="flex items-center gap-2 mb-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <h2 className="text-base font-bold">Private Email Generator</h2>
-          </div>
-          <p className="text-xs text-purple-100 mb-4">Generate random alias like Apple's Hide My Email</p>
-          
-          <button
-            onClick={generateRandomAlias}
-            className="w-full bg-white text-purple-600 px-6 py-3 rounded-lg font-bold text-sm hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-600 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <div className="flex items-center justify-center gap-2">
+        {/* Unified Email Alias Generator - RoboForm Style */}
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3">
+            <div className="flex items-center gap-2 text-white">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              Generate Random Alias
+              <h2 className="text-sm font-bold">Email Alias Generator</h2>
             </div>
-          </button>
-          
-          <div className="mt-3 flex items-center justify-center gap-2 text-xs text-purple-100">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <span>Format: {randomFormat === 'private-mail' ? 'private-mail-xxxx' : randomFormat === 'alphanumeric' ? 'Random chars' : randomFormat === 'words' ? 'Random words' : 'Timestamp'}</span>
-          </div>
-        </div>
-
-        {/* Alias with Tags - Combined Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-            </svg>
-            Alias with Custom Tags
-          </h2>
-
-          {/* Quick Presets - Main buttons */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {PRESETS.map((preset) => (
-              <button
-                key={preset.id}
-                onClick={() => handlePresetClick(preset.tag)}
-                className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-              >
-                {preset.label}
-              </button>
-            ))}
           </div>
 
-          {/* Custom Presets - If any */}
-          {customPresets.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              {customPresets.map((preset) => (
+          {/* Main Tabs */}
+          <div className="flex border-b border-gray-200 bg-gray-50">
+            <button
+              onClick={() => setActiveGeneratorTab('random')}
+              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+                activeGeneratorTab === 'random'
+                  ? 'text-purple-600 border-b-2 border-purple-600 bg-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-1.5">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Random
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveGeneratorTab('tags')}
+              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+                activeGeneratorTab === 'tags'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-1.5">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                Custom Tags
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveGeneratorTab('tricks')}
+              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+                activeGeneratorTab === 'tricks'
+                  ? 'text-green-600 border-b-2 border-green-600 bg-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-1.5">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Gmail Tricks
+              </div>
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="p-4">
+            {/* Random Tab */}
+            {activeGeneratorTab === 'random' && (
+              <div>
+                {/* Format Tabs */}
+                <div className="flex gap-1 mb-3">
+                  <button
+                    onClick={() => setRandomFormat('private-mail')}
+                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                      randomFormat === 'private-mail'
+                        ? 'bg-purple-100 text-purple-700 font-semibold'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Private Mail
+                  </button>
+                  <button
+                    onClick={() => setRandomFormat('alphanumeric')}
+                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                      randomFormat === 'alphanumeric'
+                        ? 'bg-purple-100 text-purple-700 font-semibold'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Chars
+                  </button>
+                  <button
+                    onClick={() => setRandomFormat('words')}
+                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                      randomFormat === 'words'
+                        ? 'bg-purple-100 text-purple-700 font-semibold'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Words
+                  </button>
+                  <button
+                    onClick={() => setRandomFormat('timestamp')}
+                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                      randomFormat === 'timestamp'
+                        ? 'bg-purple-100 text-purple-700 font-semibold'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Time
+                  </button>
+                </div>
+
+                {/* Number of Emails */}
+                <div className="mb-3 flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700">Number of aliases</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={randomEmailCount}
+                    onChange={(e) => setRandomEmailCount(Math.max(1, parseInt(e.target.value) || 10))}
+                    className="w-20 px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                </div>
+
+                {/* Generate Button */}
                 <button
-                  key={preset.id}
-                  onClick={() => handlePresetClick(preset.tag)}
-                  className="px-3 py-1.5 bg-purple-50 text-purple-700 text-xs font-medium rounded-md hover:bg-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
+                  onClick={generateRandomAlias}
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-md mb-3"
                 >
-                  {preset.label}
+                  <div className="flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Generate {randomEmailCount} Random Alias{randomEmailCount > 1 ? 'es' : ''}
+                  </div>
                 </button>
-              ))}
-            </div>
-          )}
 
-          {/* Custom Tag Input - Below presets */}
-          <div className="pt-3 border-t border-gray-200">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={customTag}
-                onChange={(e) => setCustomTag(e.target.value)}
-                onKeyDown={handleKeyPress}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Or type custom tag..."
-              />
-              <button
-                onClick={handleCustomGenerate}
-                disabled={!customTag.trim()}
-                className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                →
-              </button>
-            </div>
+                {/* Generated Emails List */}
+                {generatedRandomList.length > 0 && (
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-gray-700">Generated Aliases</span>
+                        <span className="text-xs text-gray-500">{generatedRandomList.length} total</span>
+                      </div>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      {generatedRandomList.map((email, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 last:border-b-0 hover:bg-purple-50 transition-colors"
+                        >
+                          <div className="flex-1 font-mono text-xs text-gray-900 truncate">
+                            {email}
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(email)}
+                            className="p-1.5 text-purple-600 hover:bg-purple-100 rounded transition-colors flex-shrink-0"
+                            title="Copy"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                  {randomFormat === 'private-mail' ? 'Format: private-mail-xxxx' : randomFormat === 'alphanumeric' ? '8 random characters' : randomFormat === 'words' ? '2 random words' : 'Unix timestamp'}
+                </div>
+              </div>
+            )}
+
+            {/* Custom Tags Tab */}
+            {activeGeneratorTab === 'tags' && (
+              <div>
+                <div className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={customTag}
+                    onChange={(e) => setCustomTag(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter tag (e.g., shopping, work)"
+                  />
+                  <button
+                    onClick={handleCustomGenerate}
+                    disabled={!customTag.trim()}
+                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md"
+                  >
+                    Generate
+                  </button>
+                </div>
+
+                {/* Quick Presets */}
+                <button
+                  onClick={() => setShowQuickPresets(!showQuickPresets)}
+                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span>Quick Presets</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${showQuickPresets ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showQuickPresets && (
+                  <div className="mt-2 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex flex-wrap gap-2">
+                      {PRESETS.map((preset) => (
+                        <button
+                          key={preset.id}
+                          onClick={() => {
+                            handlePresetClick(preset.tag);
+                            setShowQuickPresets(false);
+                          }}
+                          className="px-3 py-1.5 bg-white text-blue-700 text-xs font-medium rounded-md border border-blue-200 hover:bg-blue-50 transition-colors"
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+                    {customPresets.length > 0 && (
+                      <div className="mt-2 pt-2 border-t border-gray-300">
+                        <div className="flex flex-wrap gap-2">
+                          {customPresets.map((preset) => (
+                            <button
+                              key={preset.id}
+                              onClick={() => {
+                                handlePresetClick(preset.tag);
+                                setShowQuickPresets(false);
+                              }}
+                              className="px-3 py-1.5 bg-white text-purple-700 text-xs font-medium rounded-md border border-purple-200 hover:bg-purple-50 transition-colors"
+                            >
+                              {preset.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-3 text-xs text-gray-500">
+                  Example: {baseEmail.split('@')[0]}+<strong>your-tag</strong>@{baseEmail.split('@')[1]}
+                </div>
+              </div>
+            )}
+
+            {/* Gmail Tricks Tab */}
+            {activeGeneratorTab === 'tricks' && (
+              <div>
+                <GmailTricks baseEmail={baseEmail} onCopy={copyToClipboard} />
+              </div>
+            )}
           </div>
         </div>
 
         {/* Favorites - Quick Access */}
         <Favorites baseEmail={baseEmail} onCopy={copyToClipboard} />
-
-        {/* Gmail Advanced Tricks */}
-        <GmailTricks baseEmail={baseEmail} onCopy={copyToClipboard} />
 
         {/* Recent Aliases */}
         {recentAliases.length > 0 && (
