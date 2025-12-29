@@ -1,6 +1,12 @@
-import { defineConfig } from 'wxt';
+import { defineConfig } from "wxt";
 
-// See https://wxt.dev/api/config.html
 export default defineConfig({
-  modules: ['@wxt-dev/module-react'],
+  modules: ["@wxt-dev/module-react"],
+  manifest: {
+    name: "Gmail Alias Toolkit",
+    description:
+      "Generate and manage Gmail aliases with plus addressing and presets",
+    version: "1.0.0",
+    permissions: ["storage", "clipboardWrite"],
+  },
 });
