@@ -7,7 +7,7 @@ export default defineConfig({
     description:
       "Generate and manage Gmail aliases with plus addressing and presets",
     version: "1.0.0",
-    permissions: ["storage", "clipboardWrite"],
+    permissions: ["storage", "clipboardWrite", "contextMenus", "activeTab"],
     icons: {
       16: "/icon/16.png",
       32: "/icon/32.png",
