@@ -34,6 +34,9 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSubmit();
+    } else if (e.key === 'Tab' && email && !email.includes('@')) {
+      e.preventDefault();
+      setEmail(email + '@gmail.com');
     }
   };
 
@@ -65,15 +68,25 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
             Enter your Gmail address
           </label>
           
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="your.email@gmail.com"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
-            autoFocus
-          />
+          <div className="relative mb-4">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="your.email"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              autoFocus
+            />
+            {email && !email.includes('@') && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
+                @gmail.com
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 mb-4 -mt-2">
+            💡 Press <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to auto-complete @gmail.com
+          </p>
           
           <button
             onClick={handleSubmit}

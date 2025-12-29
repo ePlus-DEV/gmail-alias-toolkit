@@ -415,14 +415,30 @@ function App() {
           {/* Quick Add Account Form */}
           {showAddAccount && (
             <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
-              <input
-                type="email"
-                value={newAccountEmail}
-                onChange={(e) => setNewAccountEmail(e.target.value)}
-                placeholder="Email address"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                autoFocus
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  value={newAccountEmail}
+                  onChange={(e) => setNewAccountEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
+                      e.preventDefault();
+                      setNewAccountEmail(newAccountEmail + '@gmail.com');
+                    }
+                  }}
+                  placeholder="your.email"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                />
+                {newAccountEmail && !newAccountEmail.includes('@') && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+                    @gmail.com
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 -mt-1">
+                💡 Press <kbd className="px-1 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+              </p>
               <input
                 type="text"
                 value={newAccountLabel}
