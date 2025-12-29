@@ -161,6 +161,9 @@ export default defineBackground(() => {
     }
 
     if (emailToFill) {
+      // Save to history and statistics
+      await saveToHistory(emailToFill, result.app_settings?.maxHistory || 5);
+
       // Send message to content script to fill the input
       browser.tabs.sendMessage(tab.id, {
         action: "fillEmail",
@@ -168,4 +171,45 @@ export default defineBackground(() => {
       });
     }
   });
+
+  // Helper function to save email to history and stats
+  async function saveToHistory(email: string, maxRecent: number) {
+    const STORAGE_KEY = "gmail_alias_recent";
+
+    // Get current history
+    const result = await browser.storage.local.get([
+      STORAGE_KEY,
+      "alias_stats",
+    ]);
+    const recentAliases = result[STORAGE_KEY] || [];
+
+    // Add to history (remove duplicates, add to top)
+    const newAlias = {
+      email,
+      timestamp: Date.now(),
+    };
+
+    const updated = [
+      newAlias,
+      ...recentAliases.filter((a: any) => a.email !== email),
+    ].slice(0, maxRecent);
+
+    // Update statistics
+    let stats = result.alias_stats || { total: 0, tags: {} };
+    stats.total = (stats.total || 0) + 1;
+
+    // Extract tag from email (if it has + addressing)
+    const tagMatch = email.match(/\+([^@]+)@/);
+    if (tagMatch) {
+      const tag = tagMatch[1];
+      stats.tags = stats.tags || {};
+      stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+    }
+
+    // Save to storage
+    await browser.storage.local.set({
+      [STORAGE_KEY]: updated,
+      alias_stats: stats,
+    });
+  }
 });
