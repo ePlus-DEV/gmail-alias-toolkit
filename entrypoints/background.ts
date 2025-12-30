@@ -192,7 +192,7 @@ export default defineBackground(() => {
 
     if (emailToFill) {
       // Save to history and statistics
-      await saveToHistory(emailToFill, result.app_settings?.maxHistory || 5);
+      await saveToHistory(emailToFill, result.app_settings?.maxHistory || 20);
 
       // Send message to content script to fill the input
       browser.tabs.sendMessage(tab.id, {

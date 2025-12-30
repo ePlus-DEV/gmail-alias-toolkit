@@ -49,7 +49,7 @@ function App() {
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [maxRecent, setMaxRecent] = useState(5);
+  const [maxRecent, setMaxRecent] = useState(20);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTag, setFilterTag] = useState<string>('all');
@@ -129,7 +129,7 @@ function App() {
       }
       
       if (result.app_settings) {
-        setMaxRecent(result.app_settings.maxHistory || 5);
+        setMaxRecent(result.app_settings.maxHistory || 20);
         setCustomPresets(result.app_settings.customPresets || []);
         setRandomFormat(result.app_settings.randomFormat || 'private-mail');
       }
@@ -154,7 +154,7 @@ function App() {
       if (changes.app_settings) {
         const newSettings = changes.app_settings.newValue;
         if (newSettings) {
-          setMaxRecent(newSettings.maxHistory || 5);
+          setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
           setRandomFormat(newSettings.randomFormat || 'private-mail');
         }

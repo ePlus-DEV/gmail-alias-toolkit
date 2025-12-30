@@ -32,7 +32,7 @@ interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
-  maxHistory: 5,
+  maxHistory: 20,
   theme: 'light',
   showNotifications: true,
   randomFormat: 'private-mail',
@@ -338,11 +338,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value={3}>3 aliases</option>
-                  <option value={5}>5 aliases</option>
-                  <option value={10}>10 aliases</option>
                   <option value={20}>20 aliases</option>
                   <option value={50}>50 aliases</option>
+                  <option value={100}>100 aliases</option>
+                  <option value={200}>200 aliases</option>
+                  <option value={500}>500 aliases</option>
                 </select>
                 <p className="text-xs text-gray-500 mt-1">Maximum number of aliases to auto-save to history</p>
               </div>
