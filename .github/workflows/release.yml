@@ -50,12 +50,13 @@ jobs:
       - name: Update CHANGELOG
         id: changelog
         uses: requarks/changelog-action@v1
+        continue-on-error: true
         with:
           token: ${{ github.token }}
-          fromTag: "1.0.0"
-          toTag: ${{ github.ref_name }}
+          tag: ${{ github.ref_name }}
 
       - name: Commit CHANGELOG.md
+        if: steps.changelog.outcome == 'success'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           branch: main
@@ -69,7 +70,7 @@ jobs:
           name: "v.${{ github.ref_name }}"
           draft: true
           generate_release_notes: true
-          body_path: INSTALL.md
+          body: ${{ steps.changelog.outputs.changes || 'See commit history for changes.' }}
           files: .output/*.zip
 
       - name: Submit to stores
