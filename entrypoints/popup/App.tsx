@@ -1053,11 +1053,29 @@ function App() {
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
                       <div className="mt-4 pt-3 border-t border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div className="text-xs text-gray-500">
-                            Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
+                        <div className="flex flex-col gap-3">
+                          {/* Page info and items per page selector */}
+                          <div className="flex items-center justify-between">
+                            <div className="text-xs text-gray-500">
+                              Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
+                            </div>
+                            <select
+                              value={itemsPerPage}
+                              onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                              }}
+                              className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              <option value={5}>5 / page</option>
+                              <option value={10}>10 / page</option>
+                              <option value={20}>20 / page</option>
+                              <option value={50}>50 / page</option>
+                            </select>
                           </div>
-                          <div className="flex items-center gap-1">
+                          
+                          {/* Page navigation */}
+                          <div className="flex items-center justify-center gap-1">
                             <button
                               onClick={() => setCurrentPage(1)}
                               disabled={currentPage === 1}
@@ -1121,19 +1139,6 @@ function App() {
                               ⟫
                             </button>
                           </div>
-                          <select
-                            value={itemsPerPage}
-                            onChange={(e) => {
-                              setItemsPerPage(Number(e.target.value));
-                              setCurrentPage(1);
-                            }}
-                            className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          >
-                            <option value={5}>5 / page</option>
-                            <option value={10}>10 / page</option>
-                            <option value={20}>20 / page</option>
-                            <option value={50}>50 / page</option>
-                          </select>
                         </div>
                       </div>
                     )}
