@@ -1,55 +1,66 @@
 # 📧 Gmail Alias Toolkit
 
-A powerful browser extension for generating and managing Gmail aliases using plus addressing (+tag). Streamline your email workflow with smart presets, favorites, context menus, and Gmail tricks.
+A powerful browser extension for generating and managing Gmail aliases using plus addressing (+tag). Streamline your email workflow with random generators, custom presets, favorites, and comprehensive statistics.
 
 ## ✨ Features
 
 ### 🎯 Core Features
-- **Quick Alias Generation**: Generate Gmail aliases with custom tags instantly
+- **Random Alias Generator**: Generate secure random aliases with multiple format options
+  - Private Mail format (e.g., `private-mail-q2ga`)
+  - Alphanumeric (e.g., `abc123xy`)
+  - Random Words (e.g., `happy-fox-42`)
+  - Timestamp-based (e.g., `lk9x2m3n`)
+- **Custom Tags**: Create aliases with your own custom tags
+- **Gmail Tricks**: Quick access to Gmail filtering and management tricks
 - **Built-in Presets**: Shopping, Work, Test, Social, Finance, Travel
-- **Custom Presets**: Create and manage unlimited custom preset tags
-- **Favorites**: Save frequently used aliases with custom labels for quick access
-- **Recent History**: View, search, and manage recent generated aliases
+- **Custom Presets**: Create and manage unlimited preset tags with context menu integration
+- **Favorites System**: Star frequently used aliases for instant access
+- **Recent Aliases**: View, search, filter, and manage alias history with pagination
 - **Multi-Account Support**: Switch between multiple Gmail accounts seamlessly
 - **Statistics Dashboard**: Track usage with detailed analytics and insights
+- **Badge Counter**: Display alias count on extension icon (Total, Today, Week, or All-Time)
 
-### Settings & Customization
+### 🎨 UI/UX Features
+- **Modern Design**: Clean, gradient-based interface with card layouts
+- **Tabbed Interface**: Organized main view with Random, Custom, and Gmail Tricks tabs
+- **Pagination**: Navigate through large alias histories (5-50 items per page)
+- **Search & Filter**: Real-time search and tag-based filtering
+- **View Modes**: Switch between Recent and Favorites views
+- **Responsive**: Optimized for 360px extension popup
+- **Context Menu**: Right-click integration for quick alias generation on any editable field
+
+### ⚙️ Settings & Customization
 
 #### General Settings
-- **History Limit**: Choose how many recent aliases to keep (3-50)
-- **Theme**: Light mode (Dark mode coming soon)
-- **Auto-save**: Automatically save generated aliases to history
+- **Badge Counter**: Choose what to display on extension icon
+  - None (Hidden)
+  - Total in History
+  - Total Generated (All Time)
+  - Created Today
+  - This Week
+- **Random Format**: Select default format for random alias generation
+- **Auto-save Limit**: Set history size (20-500 aliases)
+- **Theme**: Light mode (Dark mode coming in next update)
 - **Show Notifications**: Toggle copy confirmation messages
 
+#### Account Management
+- **Multi-Account**: Add, edit, delete, and switch between Gmail accounts
+- **Account Labels**: Organize accounts with custom labels (Work, Personal, etc.)
+- **Data Isolation**: Each account has separate history, stats, and favorites
+- **Quick Add**: Add accounts directly from Settings with auto-complete
+- **Email Migration**: Change account email while preserving all data
+
 #### Custom Presets
-- Add unlimited custom preset buttons
-- Each preset has a label and tag
-- Appears separately from default presets with purple styling
-- Easy add/remove functionality
+- Add unlimited custom preset tags
+- Synced with context menu automatically
+- Dynamic creation and deletion
+- Display with colored badges
 
-#### Favorites
-- Save your most-used aliases with custom labels
-- Quick one-click copy access
-- Star icon for easy identification
-- Manage directly from the main popup
-
-#### Statistics
-- **Total Generated**: Track all aliases created
-- **Created Today**: Daily usage counter
-- **Created This Week**: Weekly tracking
-- **Most Used Tag**: See your most popular tag
-
-#### Advanced Features
-- **Export Settings**: Download all settings as JSON
-- **Import Settings**: Restore settings from backup
-- **Reset Settings**: Restore all defaults
-- **Clear History**: Remove all recent aliases
-- **Search & Filter**: Search through recent aliases
-
-### Keyboard Shortcuts
-- `Enter`: Generate alias (when in custom tag input)
-- `Ctrl/Cmd + K`: Open settings
-- `Esc`: Close settings
+#### Data Management
+- **Export Settings**: Download all settings as JSON backup
+- **Import Settings**: Restore settings from backup file
+- **Clear History**: Remove all recent aliases for active account
+- **Reset Settings**: Restore all defaults with confirmation
 
 ## 🛠 Tech Stack
 
@@ -179,81 +190,108 @@ yarn zip
   - `storage`: Save settings and history
   - `clipboardWrite`: Copy aliases to clipboard
 
-## 📂 Project Structure
+## � Project Structure
 
 ```
 gmail-alias-toolkit/
 ├── entrypoints/
-│   ├── background.ts          # Background service worker
+│   ├── background.ts          # Service worker (context menu, badge)
 │   ├── content.ts             # Content script
 │   └── popup/
-│       ├── App.tsx            # Main app component
+│       ├── App.tsx            # Main popup component
 │       ├── main.tsx           # React entry point
-│       ├── index.html         # Popup HTML
 │       └── components/
-│           ├── Settings.tsx    # Settings modal
-│           ├── Statistics.tsx  # Usage statistics
-│           ├── Favorites.tsx   # Favorites management
-│           ├── Button.tsx      # Reusable button
-│           ├── Input.tsx       # Reusable input
-│           ├── Toggle.tsx      # Toggle switch
-│           └── KeyboardShortcuts.tsx
+│           ├── Button.tsx
+│           ├── Favorites.tsx
+│           ├── GmailTricks.tsx
+│           ├── Input.tsx
+│           ├── KeyboardShortcuts.tsx
+│           ├── Settings.tsx
+│           ├── Statistics.tsx
+│           ├── Toggle.tsx
+│           └── WelcomeScreen.tsx
 ├── public/
 │   └── icon/                  # Extension icons
+├── assets/                    # Static assets
 ├── package.json
 ├── wxt.config.ts             # WXT configuration
-├── tailwind.config.ts        # Tailwind configuration
-├── tsconfig.json             # TypeScript configuration
-└── README.md
+├── tsconfig.json             # TypeScript config
+└── tailwind.config.ts        # Tailwind CSS config
 ```
+
+## 🔑 Key Components
+
+### App.tsx
+- Main popup interface
+- State management for accounts, history, favorites
+- Pagination and filtering logic
+- Account switching functionality
+
+### background.ts
+- Context menu creation and handling
+- Badge counter updates
+- Storage change listeners
+- Dynamic menu synchronization with presets
+
+### Settings.tsx
+- Comprehensive settings interface
+- Account management (add/edit/delete)
+- Custom preset management
+- Data import/export
+- Version display from manifest
+
+### Statistics.tsx
+- Usage analytics dashboard
+- Tag-based statistics (excludes 'unknown')
+- Time-based counters (today, week, all-time)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how:
+Contributions are welcome! Please follow these guidelines:
 
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes**
-4. **Test thoroughly**: `yarn dev` and test in browser
-5. **Commit**: `git commit -m 'Add amazing feature'`
-6. **Push**: `git push origin feature/amazing-feature`
-7. **Open a Pull Request**
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Submit a pull request
 
-### Development Guidelines
-- Follow existing code style (TypeScript + React hooks)
-- Use Tailwind for styling (no custom CSS unless necessary)
-- Add comments for complex logic
-- Test on Chrome and Firefox if possible
-- Update README if adding new features
+## 📄 License
 
-## ⭐ Show Your Support
+MIT License - see [LICENSE.md](LICENSE.md) for details
 
-If you find this extension useful:
-- ⭐ Star the repository
-- 🐦 Share on social media
-- 🔗 Link from your blog/website
-- 💬 Leave a review (when published on Chrome Web Store)
+## 🐛 Support
 
-## 📝 License
+- **Issues**: [GitHub Issues](https://github.com/yourusername/gmail-alias-toolkit/issues)
+- **Email**: dev@eplus.dev
 
-MIT License © 2025
+## 📝 Changelog
 
-Permission is hereby granted, free of charge, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this software.
+### Version 1.1.0
+- ✨ Added badge counter with 5 display options (none/total/all-time/today/week)
+- 🎨 Complete Settings UI redesign with categorized card sections
+- ➕ Add Account form directly in Settings tab
+- 📊 Added "Total Generated (All Time)" statistics option
+- 📄 Pagination system with configurable items per page (5-50)
+- 🔄 Merged Favorites into Recent Aliases with tabbed interface
+- 🎯 Expanded auto-save limit range (20-500)
+- 💬 Email text wrapping fix (break-all for full visibility)
+- 📱 Version display in Settings footer from manifest
+- 🐛 Fixed duplicate state declarations bug
+- 🔧 Auto-sync version from package.json to manifest
 
-See [LICENSE.md](LICENSE.md) for full details.
-
-## 📧 Support & Contact
-
-- 🐛 **Bug Reports**: Create an issue on GitHub
-- 💡 **Feature Requests**: Open a discussion or issue
-- ❓ **Questions**: Check this README first, then open an issue
-- 📧 **Email**: dev@eplus.dev
-- 🌐 **Website**: https://eplus.dev
+### Version 1.0.0
+- 🎉 Initial release
+- 🚀 Random alias generator with multiple formats
+- 📌 Built-in and custom presets
+- ⭐ Favorites system
+- 📊 Statistics dashboard
+- 🔄 Multi-account support
+- 🎨 Modern UI with Tailwind CSS
 
 ---
 
-**Built with ❤️ by developers, for developers**
+Made with ❤️ for Gmail power users
 
-🛠️ Stack: WXT + React 19 + TypeScript + Tailwind CSS
+🛠️ Built with: WXT + React 19 + TypeScript + Tailwind CSS
 
-📦 Version: 1.0.0 | 📅 Last Updated: December 2025
+📦 Version: 1.1.0 | 📅 Last Updated: January 2025

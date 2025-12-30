@@ -10,8 +10,8 @@ export default defineConfig({
     name: "Gmail Alias Toolkit",
     description:
       "Generate and manage Gmail aliases with plus addressing and presets",
-    version: "1.0.0",
-    permissions: ["storage", "clipboardWrite", "contextMenus", "activeTab"],
+    permissions: ["storage", "clipboardWrite", "contextMenus"],
+    host_permissions: ["<all_urls>"],
     browser_specific_settings: {
       gecko: {
         id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",

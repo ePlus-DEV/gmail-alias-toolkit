@@ -2,7 +2,35 @@ export default defineBackground(() => {
   console.log("Gmail Alias Toolkit background started");
 
   // Create context menu on install
-  browser.runtime.onInstalled.addListener(() => {
+  browser.runtime.onInstalled.addListener(async () => {
+    await createContextMenus();
+    await updateBadge();
+  });
+
+  // Recreate context menus when settings change
+  browser.storage.onChanged.addListener(async (changes) => {
+    if (changes.app_settings) {
+      await browser.contextMenus.removeAll();
+      await createContextMenus();
+      // Update badge when app_settings changes (includes showBadge toggle)
+      await updateBadge();
+    }
+
+    // Update badge when history or accounts change
+    const changedKeys = Object.keys(changes);
+    const shouldUpdateBadge = changedKeys.some(
+      (key) =>
+        key.startsWith("gmail_alias_recent_") ||
+        key.startsWith("alias_stats_") ||
+        key === "email_accounts"
+    );
+    if (shouldUpdateBadge) {
+      await updateBadge();
+    }
+  });
+
+  // Function to create context menus
+  async function createContextMenus() {
     // Parent menu
     browser.contextMenus.create({
       id: "gmail-alias-parent",
@@ -18,7 +46,7 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
-    // Custom tag submenu with common presets
+    // Custom tag submenu - sync with user's presets
     browser.contextMenus.create({
       id: "custom-tag-parent",
       parentId: "gmail-alias-parent",
@@ -26,22 +54,29 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
-    const commonTags = [
-      "shopping",
-      "work",
-      "test",
-      "social",
-      "newsletter",
-      "spam",
-    ];
-    commonTags.forEach((tag) => {
-      browser.contextMenus.create({
-        id: `tag-${tag}`,
-        parentId: "custom-tag-parent",
-        title: tag,
-        contexts: ["editable"],
+    // Load custom presets from storage
+    const result = await browser.storage.local.get("app_settings");
+    const customPresets = result.app_settings?.customPresets || [];
+
+    if (customPresets.length > 0) {
+      customPresets.forEach((preset: any) => {
+        browser.contextMenus.create({
+          id: `tag-${preset.tag}`,
+          parentId: "custom-tag-parent",
+          title: `${preset.label} (+${preset.tag})`,
+          contexts: ["editable"],
+        });
       });
-    });
+    } else {
+      // Show message if no presets
+      browser.contextMenus.create({
+        id: "no-presets",
+        parentId: "custom-tag-parent",
+        title: "No presets - Add in Settings",
+        contexts: ["editable"],
+        enabled: false,
+      });
+    }
 
     // Gmail tricks submenu
     browser.contextMenus.create({
@@ -71,7 +106,7 @@ export default defineBackground(() => {
       title: "Remove All Dots",
       contexts: ["editable"],
     });
-  });
+  }
 
   // Handle context menu clicks
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -162,7 +197,7 @@ export default defineBackground(() => {
 
     if (emailToFill) {
       // Save to history and statistics
-      await saveToHistory(emailToFill, result.app_settings?.maxHistory || 5);
+      await saveToHistory(emailToFill, result.app_settings?.maxHistory || 20);
 
       // Send message to content script to fill the input
       browser.tabs.sendMessage(tab.id, {
@@ -172,16 +207,127 @@ export default defineBackground(() => {
     }
   });
 
+  // Helper function to update badge
+  async function updateBadge() {
+    try {
+      // Check badge display setting
+      const settingsResult = await browser.storage.local.get("app_settings");
+      const badgeDisplay =
+        settingsResult.app_settings?.badgeDisplay ?? "all-time";
+
+      if (badgeDisplay === "none") {
+        await browser.action.setBadgeText({ text: "" });
+        return;
+      }
+
+      // Get active account
+      const accountResult = await browser.storage.local.get([
+        "email_accounts",
+        "base_email",
+      ]);
+      let activeEmail = "your.email@gmail.com";
+
+      if (
+        accountResult.email_accounts &&
+        Array.isArray(accountResult.email_accounts)
+      ) {
+        const activeAccount = accountResult.email_accounts.find(
+          (acc: any) => acc.isActive
+        );
+        if (activeAccount) {
+          activeEmail = activeAccount.email;
+        }
+      } else if (accountResult.base_email) {
+        activeEmail = accountResult.base_email;
+      }
+
+      // Get history for active account
+      const historyKey = getAccountStorageKey(
+        activeEmail,
+        "gmail_alias_recent"
+      );
+      const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
+      const result = await browser.storage.local.get([historyKey, statsKey]);
+      const recentAliases = result[historyKey] || [];
+      const aliasStats = result[statsKey] || { total: 0, tags: {} };
+
+      let count = 0;
+      const now = new Date();
+
+      switch (badgeDisplay) {
+        case "total":
+          count = recentAliases.length;
+          break;
+        case "all-time":
+          count = aliasStats.total || 0;
+          break;
+        case "today":
+          const today = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          ).getTime();
+          count = recentAliases.filter((a: any) => a.timestamp >= today).length;
+          break;
+        case "week":
+          const weekAgo = new Date(
+            now.getTime() - 7 * 24 * 60 * 60 * 1000
+          ).getTime();
+          count = recentAliases.filter(
+            (a: any) => a.timestamp >= weekAgo
+          ).length;
+          break;
+      }
+
+      // Update badge
+      if (count > 0) {
+        await browser.action.setBadgeText({ text: count.toString() });
+        await browser.action.setBadgeBackgroundColor({ color: "#3B82F6" }); // Blue
+        await browser.action.setBadgeTextColor({ color: "#FFFFFF" }); // White text
+      } else {
+        await browser.action.setBadgeText({ text: "" });
+      }
+    } catch (error) {
+      console.error("Error updating badge:", error);
+    }
+  }
+
+  // Helper function to get account-specific storage key
+  function getAccountStorageKey(email: string, suffix: string): string {
+    const sanitized = email.replace(/[^a-zA-Z0-9]/g, "_");
+    return `${suffix}_${sanitized}`;
+  }
+
   // Helper function to save email to history and stats
   async function saveToHistory(email: string, maxRecent: number) {
-    const STORAGE_KEY = "gmail_alias_recent";
+    // Get active account
+    const accountResult = await browser.storage.local.get([
+      "email_accounts",
+      "base_email",
+    ]);
+    let activeEmail = "your.email@gmail.com";
+
+    if (
+      accountResult.email_accounts &&
+      Array.isArray(accountResult.email_accounts)
+    ) {
+      const activeAccount = accountResult.email_accounts.find(
+        (acc: any) => acc.isActive
+      );
+      if (activeAccount) {
+        activeEmail = activeAccount.email;
+      }
+    } else if (accountResult.base_email) {
+      activeEmail = accountResult.base_email;
+    }
+
+    // Use account-specific storage keys
+    const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
+    const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
 
     // Get current history
-    const result = await browser.storage.local.get([
-      STORAGE_KEY,
-      "alias_stats",
-    ]);
-    const recentAliases = result[STORAGE_KEY] || [];
+    const result = await browser.storage.local.get([historyKey, statsKey]);
+    const recentAliases = result[historyKey] || [];
 
     // Add to history (remove duplicates, add to top)
     const newAlias = {
@@ -195,7 +341,7 @@ export default defineBackground(() => {
     ].slice(0, maxRecent);
 
     // Update statistics
-    let stats = result.alias_stats || { total: 0, tags: {} };
+    let stats = result[statsKey] || { total: 0, tags: {} };
     stats.total = (stats.total || 0) + 1;
 
     // Extract tag from email (if it has + addressing)
@@ -206,10 +352,13 @@ export default defineBackground(() => {
       stats.tags[tag] = (stats.tags[tag] || 0) + 1;
     }
 
-    // Save to storage
+    // Save to storage with account-specific keys
     await browser.storage.local.set({
-      [STORAGE_KEY]: updated,
-      alias_stats: stats,
+      [historyKey]: updated,
+      [statsKey]: stats,
     });
+
+    // Update badge
+    await updateBadge();
   }
 });
