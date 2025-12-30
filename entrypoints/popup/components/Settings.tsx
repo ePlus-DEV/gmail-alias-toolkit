@@ -55,6 +55,18 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState('');
   const [editingEmail, setEditingEmail] = useState('');
+  const [version, setVersion] = useState('1.1.0');
+
+  useEffect(() => {
+    try {
+      const manifest = browser.runtime.getManifest();
+      if (manifest && manifest.version) {
+        setVersion(manifest.version);
+      }
+    } catch (error) {
+      console.log('Could not get manifest version:', error);
+    }
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -704,6 +716,18 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
               </div>
             </div>
           )}
+        </div>
+
+        {/* Footer */}
+        <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-6 py-3 border-t border-gray-300">
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="font-medium">Gmail Alias Toolkit</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-gray-500">v{version}</span>
+          </div>
         </div>
       </div>
     </div>
