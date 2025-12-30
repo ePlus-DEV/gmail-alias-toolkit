@@ -7,6 +7,12 @@ interface Stats {
   createdThisWeek: number;
 }
 
+// Helper to get account-specific storage key
+const getAccountStorageKey = (email: string, suffix: string) => {
+  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
+  return `${suffix}_${sanitized}`;
+};
+
 export default function Statistics() {
   const [stats, setStats] = useState<Stats>({
     totalGenerated: 0,
@@ -15,14 +21,26 @@ export default function Statistics() {
     createdThisWeek: 0,
   });
   const [isOpen, setIsOpen] = useState(false);
+  const [activeEmail, setActiveEmail] = useState('your.email@gmail.com');
 
   useEffect(() => {
-    loadStats();
+    loadActiveEmailAndStats();
     
     // Listen for storage changes
     const handleStorageChange = (changes: any) => {
-      if (changes.alias_stats || changes.gmail_alias_recent) {
-        loadStats();
+      // Reload if any account-specific storage key changes or if email_accounts changes
+      if (changes.email_accounts) {
+        loadActiveEmailAndStats();
+      } else {
+        // Check if any changed key starts with our prefixes
+        const changedKeys = Object.keys(changes);
+        const relevantChange = changedKeys.some(key => 
+          key.startsWith('gmail_alias_recent_') || 
+          key.startsWith('alias_stats_')
+        );
+        if (relevantChange) {
+          loadActiveEmailAndStats();
+        }
       }
     };
 
@@ -30,10 +48,29 @@ export default function Statistics() {
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
 
-  const loadStats = async () => {
-    const result = await browser.storage.local.get(['gmail_alias_recent', 'alias_stats']);
-    const recent = (result.gmail_alias_recent || []) as any[];
-    const savedStats = (result.alias_stats || { total: 0, tags: {} }) as { total: number; tags: Record<string, number> };
+  const loadActiveEmailAndStats = async () => {
+    // Get active account first
+    const accountResult = await browser.storage.local.get(['email_accounts', 'base_email']);
+    let email = 'your.email@gmail.com';
+    
+    if (accountResult.email_accounts && Array.isArray(accountResult.email_accounts)) {
+      const activeAccount = accountResult.email_accounts.find((acc: any) => acc.isActive);
+      if (activeAccount) {
+        email = activeAccount.email;
+      }
+    } else if (accountResult.base_email) {
+      email = accountResult.base_email;
+    }
+    
+    setActiveEmail(email);
+    
+    // Load stats for this account
+    const historyKey = getAccountStorageKey(email, 'gmail_alias_recent');
+    const statsKey = getAccountStorageKey(email, 'alias_stats');
+    
+    const result = await browser.storage.local.get([historyKey, statsKey]);
+    const recent = (result[historyKey] || []) as any[];
+    const savedStats = (result[statsKey] || { total: 0, tags: {} }) as { total: number; tags: Record<string, number> };
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();

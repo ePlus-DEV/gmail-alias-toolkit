@@ -172,16 +172,42 @@ export default defineBackground(() => {
     }
   });
 
+  // Helper function to get account-specific storage key
+  function getAccountStorageKey(email: string, suffix: string): string {
+    const sanitized = email.replace(/[^a-zA-Z0-9]/g, "_");
+    return `${suffix}_${sanitized}`;
+  }
+
   // Helper function to save email to history and stats
   async function saveToHistory(email: string, maxRecent: number) {
-    const STORAGE_KEY = "gmail_alias_recent";
+    // Get active account
+    const accountResult = await browser.storage.local.get([
+      "email_accounts",
+      "base_email",
+    ]);
+    let activeEmail = "your.email@gmail.com";
+
+    if (
+      accountResult.email_accounts &&
+      Array.isArray(accountResult.email_accounts)
+    ) {
+      const activeAccount = accountResult.email_accounts.find(
+        (acc: any) => acc.isActive
+      );
+      if (activeAccount) {
+        activeEmail = activeAccount.email;
+      }
+    } else if (accountResult.base_email) {
+      activeEmail = accountResult.base_email;
+    }
+
+    // Use account-specific storage keys
+    const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
+    const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
 
     // Get current history
-    const result = await browser.storage.local.get([
-      STORAGE_KEY,
-      "alias_stats",
-    ]);
-    const recentAliases = result[STORAGE_KEY] || [];
+    const result = await browser.storage.local.get([historyKey, statsKey]);
+    const recentAliases = result[historyKey] || [];
 
     // Add to history (remove duplicates, add to top)
     const newAlias = {
@@ -195,7 +221,7 @@ export default defineBackground(() => {
     ].slice(0, maxRecent);
 
     // Update statistics
-    let stats = result.alias_stats || { total: 0, tags: {} };
+    let stats = result[statsKey] || { total: 0, tags: {} };
     stats.total = (stats.total || 0) + 1;
 
     // Extract tag from email (if it has + addressing)
@@ -206,10 +232,10 @@ export default defineBackground(() => {
       stats.tags[tag] = (stats.tags[tag] || 0) + 1;
     }
 
-    // Save to storage
+    // Save to storage with account-specific keys
     await browser.storage.local.set({
-      [STORAGE_KEY]: updated,
-      alias_stats: stats,
+      [historyKey]: updated,
+      [statsKey]: stats,
     });
   }
 });

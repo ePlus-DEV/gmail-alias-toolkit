@@ -12,6 +12,12 @@ interface FavoritesProps {
   onCopy: (email: string) => void;
 }
 
+// Helper to get account-specific storage key
+const getAccountStorageKey = (email: string, suffix: string) => {
+  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
+  return `${suffix}_${sanitized}`;
+};
+
 export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -20,10 +26,15 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
 
   useEffect(() => {
     loadFavorites();
-    
+  }, [baseEmail]);
+
+  useEffect(() => {
     // Listen for storage changes
     const handleStorageChange = (changes: any) => {
-      if (changes.favorites) {
+      // Check if any favorites key changed
+      const changedKeys = Object.keys(changes);
+      const relevantChange = changedKeys.some(key => key.startsWith('favorites_'));
+      if (relevantChange || changes.email_accounts) {
         loadFavorites();
       }
     };
@@ -32,24 +43,20 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
 
-  // Update favorites when baseEmail changes
-  useEffect(() => {
-    if (favorites.length > 0 && baseEmail.includes('@')) {
-      const [username, domain] = baseEmail.split('@');
-      const updatedFavorites = favorites.map(fav => ({
-        ...fav,
-        email: `${username}+${fav.tag}@${domain}`
-      }));
-      setFavorites(updatedFavorites);
-      browser.storage.local.set({ favorites: updatedFavorites });
-    }
-  }, [baseEmail]);
-
   const loadFavorites = async () => {
-    const result = await browser.storage.local.get('favorites');
-    if (result.favorites && Array.isArray(result.favorites)) {
-      setFavorites(result.favorites as Favorite[]);
+    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    const result = await browser.storage.local.get(favoritesKey);
+    if (result[favoritesKey] && Array.isArray(result[favoritesKey])) {
+      setFavorites(result[favoritesKey] as Favorite[]);
+    } else {
+      setFavorites([]);
     }
+  };
+
+  const saveFavorites = (updated: Favorite[]) => {
+    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    setFavorites(updated);
+    browser.storage.local.set({ [favoritesKey]: updated });
   };
 
   const addFavorite = () => {
@@ -66,8 +73,7 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     };
 
     const updated = [...favorites, favorite];
-    setFavorites(updated);
-    browser.storage.local.set({ favorites: updated });
+    saveFavorites(updated);
 
     setNewLabel('');
     setNewTag('');
@@ -76,8 +82,7 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
 
   const removeFavorite = (id: string) => {
     const updated = favorites.filter((f) => f.id !== id);
-    setFavorites(updated);
-    browser.storage.local.set({ favorites: updated });
+    saveFavorites(updated);
   };
 
   if (favorites.length === 0 && !isAdding) {

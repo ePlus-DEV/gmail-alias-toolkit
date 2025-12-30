@@ -47,6 +47,12 @@ const PRESETS: Preset[] = [
 
 const STORAGE_KEY = 'gmail_alias_recent';
 
+// Helper to get account-specific storage key
+const getAccountStorageKey = (email: string, suffix: string) => {
+  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
+  return `${suffix}_${sanitized}`;
+};
+
 function App() {
   const [baseEmail, setBaseEmail] = useState('your.email@gmail.com');
   const [customTag, setCustomTag] = useState('');
@@ -73,19 +79,28 @@ function App() {
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
-    browser.storage.local.get([STORAGE_KEY, 'base_email', 'app_settings', 'email_accounts']).then((result: StorageResult) => {
-      if (result.gmail_alias_recent) {
-        setRecentAliases(result.gmail_alias_recent);
-      }
+    browser.storage.local.get(['base_email', 'app_settings', 'email_accounts']).then(async (result: StorageResult) => {
+      let activeEmail = 'your.email@gmail.com';
       
       // Load active email from email_accounts or fall back to base_email
       if (result.email_accounts && Array.isArray(result.email_accounts)) {
         const activeAccount = result.email_accounts.find((acc: any) => acc.isActive);
         if (activeAccount) {
-          setBaseEmail(activeAccount.email);
+          activeEmail = activeAccount.email;
+          setBaseEmail(activeEmail);
         }
       } else if (result.base_email) {
-        setBaseEmail(result.base_email);
+        activeEmail = result.base_email;
+        setBaseEmail(activeEmail);
+      }
+      
+      // Load account-specific history
+      const historyKey = getAccountStorageKey(activeEmail, 'gmail_alias_recent');
+      const historyResult = await browser.storage.local.get(historyKey);
+      if (historyResult[historyKey] && Array.isArray(historyResult[historyKey])) {
+        setRecentAliases(historyResult[historyKey] as Alias[]);
+      } else {
+        setRecentAliases([]);
       }
       
       if (result.app_settings) {
@@ -110,7 +125,7 @@ function App() {
 
   // Listen for settings changes
   useEffect(() => {
-    const handleStorageChange = (changes: any) => {
+    const handleStorageChange = async (changes: any) => {
       if (changes.app_settings) {
         const newSettings = changes.app_settings.newValue;
         if (newSettings) {
@@ -126,8 +141,16 @@ function App() {
           setHasEmailAccounts(newAccounts.length > 0);
           // Update base email if active account changed
           const activeAccount = newAccounts.find((acc: any) => acc.isActive);
-          if (activeAccount) {
+          if (activeAccount && activeAccount.email !== baseEmail) {
             setBaseEmail(activeAccount.email);
+            // Load history for new account
+            const historyKey = getAccountStorageKey(activeAccount.email, 'gmail_alias_recent');
+            const historyResult = await browser.storage.local.get(historyKey);
+            if (historyResult[historyKey] && Array.isArray(historyResult[historyKey])) {
+              setRecentAliases(historyResult[historyKey] as Alias[]);
+            } else {
+              setRecentAliases([]);
+            }
           }
         }
       }
@@ -135,7 +158,7 @@ function App() {
 
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
-  }, []);
+  }, [baseEmail]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -167,7 +190,10 @@ function App() {
     );
 
     setRecentAliases(updated);
-    browser.storage.local.set({ [STORAGE_KEY]: updated });
+    
+    // Save with account-specific key
+    const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
+    browser.storage.local.set({ [historyKey]: updated });
 
     // Update statistics
     updateStats(email);
@@ -178,19 +204,22 @@ function App() {
     const matchResult = /\+([^@]+)@/.exec(email);
     const tag = matchResult ? matchResult[1] : 'unknown';
 
-    const result: StorageResult = await browser.storage.local.get('alias_stats');
-    const stats = result.alias_stats || { total: 0, tags: {} };
+    // Use account-specific stats key
+    const statsKey = getAccountStorageKey(baseEmail, 'alias_stats');
+    const result: StorageResult = await browser.storage.local.get(statsKey);
+    const stats = result[statsKey] || { total: 0, tags: {} };
 
     stats.total = (stats.total || 0) + 1;
     stats.tags = stats.tags || {};
     stats.tags[tag] = (stats.tags[tag] || 0) + 1;
 
-    await browser.storage.local.set({ alias_stats: stats });
+    await browser.storage.local.set({ [statsKey]: stats });
   };
 
   const clearHistory = () => {
     setRecentAliases([]);
-    browser.storage.local.set({ [STORAGE_KEY]: [] });
+    const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
+    browser.storage.local.set({ [historyKey]: [] });
   };
 
   const generateRandomString = (format: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp', index: number = 0): string => {
