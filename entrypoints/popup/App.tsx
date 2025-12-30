@@ -251,18 +251,20 @@ function App() {
   };
 
   const updateStats = async (email: string) => {
-    // Extract tag from email
-    const matchResult = /\+([^@]+)@/.exec(email);
-    const tag = matchResult ? matchResult[1] : 'unknown';
-
     // Use account-specific stats key
     const statsKey = getAccountStorageKey(baseEmail, 'alias_stats');
     const result: StorageResult = await browser.storage.local.get(statsKey);
     const stats = result[statsKey] || { total: 0, tags: {} };
 
     stats.total = (stats.total || 0) + 1;
-    stats.tags = stats.tags || {};
-    stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+
+    // Extract tag from email (only if it has + addressing)
+    const tagMatch = email.match(/\+([^@]+)@/);
+    if (tagMatch) {
+      const tag = tagMatch[1];
+      stats.tags = stats.tags || {};
+      stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+    }
 
     await browser.storage.local.set({ [statsKey]: stats });
   };

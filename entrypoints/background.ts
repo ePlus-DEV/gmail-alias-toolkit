@@ -4,6 +4,7 @@ export default defineBackground(() => {
   // Create context menu on install
   browser.runtime.onInstalled.addListener(async () => {
     await createContextMenus();
+    await updateBadge();
   });
 
   // Recreate context menus when settings change
@@ -11,6 +12,15 @@ export default defineBackground(() => {
     if (changes.app_settings) {
       await browser.contextMenus.removeAll();
       await createContextMenus();
+    }
+
+    // Update badge when history or accounts change
+    const changedKeys = Object.keys(changes);
+    const shouldUpdateBadge = changedKeys.some(
+      (key) => key.startsWith("gmail_alias_recent_") || key === "email_accounts"
+    );
+    if (shouldUpdateBadge) {
+      await updateBadge();
     }
   });
 
@@ -192,6 +202,62 @@ export default defineBackground(() => {
     }
   });
 
+  // Helper function to update badge
+  async function updateBadge() {
+    try {
+      // Get active account
+      const accountResult = await browser.storage.local.get([
+        "email_accounts",
+        "base_email",
+      ]);
+      let activeEmail = "your.email@gmail.com";
+
+      if (
+        accountResult.email_accounts &&
+        Array.isArray(accountResult.email_accounts)
+      ) {
+        const activeAccount = accountResult.email_accounts.find(
+          (acc: any) => acc.isActive
+        );
+        if (activeAccount) {
+          activeEmail = activeAccount.email;
+        }
+      } else if (accountResult.base_email) {
+        activeEmail = accountResult.base_email;
+      }
+
+      // Get history for active account
+      const historyKey = getAccountStorageKey(
+        activeEmail,
+        "gmail_alias_recent"
+      );
+      const result = await browser.storage.local.get(historyKey);
+      const recentAliases = result[historyKey] || [];
+
+      // Count aliases created today
+      const now = new Date();
+      const today = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      ).getTime();
+      const todayCount = recentAliases.filter(
+        (a: any) => a.timestamp >= today
+      ).length;
+
+      // Update badge
+      if (todayCount > 0) {
+        await browser.action.setBadgeText({ text: todayCount.toString() });
+        await browser.action.setBadgeBackgroundColor({ color: "#3B82F6" }); // Blue
+        await browser.action.setBadgeTextColor({ color: "#FFFFFF" }); // White text
+      } else {
+        await browser.action.setBadgeText({ text: "" });
+      }
+    } catch (error) {
+      console.error("Error updating badge:", error);
+    }
+  }
+
   // Helper function to get account-specific storage key
   function getAccountStorageKey(email: string, suffix: string): string {
     const sanitized = email.replace(/[^a-zA-Z0-9]/g, "_");
@@ -257,5 +323,8 @@ export default defineBackground(() => {
       [historyKey]: updated,
       [statsKey]: stats,
     });
+
+    // Update badge
+    await updateBadge();
   }
 });
