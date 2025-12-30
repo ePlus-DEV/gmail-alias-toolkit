@@ -234,20 +234,12 @@ export default defineBackground(() => {
       const result = await browser.storage.local.get(historyKey);
       const recentAliases = result[historyKey] || [];
 
-      // Count aliases created today
-      const now = new Date();
-      const today = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      ).getTime();
-      const todayCount = recentAliases.filter(
-        (a: any) => a.timestamp >= today
-      ).length;
+      // Count total aliases
+      const totalCount = recentAliases.length;
 
       // Update badge
-      if (todayCount > 0) {
-        await browser.action.setBadgeText({ text: todayCount.toString() });
+      if (totalCount > 0) {
+        await browser.action.setBadgeText({ text: totalCount.toString() });
         await browser.action.setBadgeBackgroundColor({ color: "#3B82F6" }); // Blue
         await browser.action.setBadgeTextColor({ color: "#FFFFFF" }); // White text
       } else {

@@ -56,7 +56,7 @@ function App() {
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
   const [viewMode, setViewMode] = useState<'all' | 'favorites'>('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
   const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
@@ -986,7 +986,7 @@ function App() {
                     key={alias.email}
                     className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-md group transition-colors"
                   >
-                    <span className="text-sm text-gray-700 font-mono truncate flex-1">
+                    <span className="text-sm text-gray-700 font-mono break-all flex-1">
                       {alias.email}
                     </span>
                     <button
@@ -1129,10 +1129,10 @@ function App() {
                             }}
                             className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                           >
+                            <option value={5}>5 / page</option>
                             <option value={10}>10 / page</option>
                             <option value={20}>20 / page</option>
                             <option value={50}>50 / page</option>
-                            <option value={100}>100 / page</option>
                           </select>
                         </div>
                       </div>
