@@ -40,9 +40,9 @@ export default defineBackground(() => {
     });
 
     // Load custom presets from storage
-    const result = await browser.storage.local.get('app_settings');
+    const result = await browser.storage.local.get("app_settings");
     const customPresets = result.app_settings?.customPresets || [];
-    
+
     if (customPresets.length > 0) {
       customPresets.forEach((preset: any) => {
         browser.contextMenus.create({

@@ -686,21 +686,28 @@ function App() {
             {/* Random Tab */}
             {activeGeneratorTab === 'random' && (
               <div>
-                {/* Current Format Display */}
-                <div className="mb-3 p-2 bg-purple-50 border border-purple-200 rounded-lg">
-                  <div className="text-xs text-purple-700 font-medium mb-1">Current Format</div>
-                  <div className="text-sm font-semibold text-purple-900">
-                    {randomFormat === 'private-mail' ? '📧 Private Mail (private-mail-xxxx)' :
-                     randomFormat === 'alphanumeric' ? '🔤 Random Characters (abc123xy)' :
-                     randomFormat === 'words' ? '📝 Random Words (happy-fox-42)' :
-                     '⏱️ Timestamp (1234567890)'}
-                  </div>
-                  <button
-                    onClick={() => setIsSettingsOpen(true)}
-                    className="mt-2 text-xs text-purple-600 hover:text-purple-700 underline"
+                {/* Format Selector */}
+                <div className="mb-3">
+                  <label className="block text-xs font-medium text-gray-700 mb-2">Format</label>
+                  <select
+                    value={randomFormat}
+                    onChange={async (e) => {
+                      const newFormat = e.target.value as any;
+                      setRandomFormat(newFormat);
+                      // Save to settings
+                      const result = await browser.storage.local.get('app_settings');
+                      const currentSettings = result.app_settings || {};
+                      await browser.storage.local.set({
+                        app_settings: { ...currentSettings, randomFormat: newFormat }
+                      });
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
-                    Change format in Settings →
-                  </button>
+                    <option value="private-mail">📧 Private Mail (private-mail-xxxx)</option>
+                    <option value="alphanumeric">🔤 Random Characters (abc123xy)</option>
+                    <option value="words">📝 Random Words (happy-fox-42)</option>
+                    <option value="timestamp">⏱️ Timestamp (1234567890)</option>
+                  </select>
                 </div>
 
                 {/* Number of Emails */}

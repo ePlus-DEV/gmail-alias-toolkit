@@ -293,43 +293,34 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         <div className="flex border-b border-gray-200 bg-gray-50">
           <button
             onClick={() => setActiveTab('general')}
-            className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
               activeTab === 'general'
-                ? 'border-b-2 border-blue-600 text-blue-600'
+                ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            General
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              General
+            </div>
           </button>
           <button
             onClick={() => setActiveTab('accounts')}
-            className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
               activeTab === 'accounts'
-                ? 'border-b-2 border-blue-600 text-blue-600'
+                ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            Accounts
-          </button>
-          <button
-            onClick={() => setActiveTab('presets')}
-            className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'presets'
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Presets
-          </button>
-          <button
-            onClick={() => setActiveTab('advanced')}
-            className={`flex-1 px-3 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'advanced'
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Advanced
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Accounts
+            </div>
           </button>
         </div>
 
@@ -411,6 +402,101 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   fullWidth
                 >
                   Clear History
+                </Button>
+              </div>
+
+              {/* Presets Section */}
+              <div className="pt-4 border-t border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">Custom Presets</h3>
+                <div className="space-y-3">
+                  <Input
+                    value={newPresetLabel}
+                    onChange={setNewPresetLabel}
+                    placeholder="Label (e.g., Newsletter)"
+                    label="Preset Label"
+                  />
+                  <Input
+                    value={newPresetTag}
+                    onChange={setNewPresetTag}
+                    placeholder="Tag (e.g., newsletter)"
+                    label="Tag Name"
+                  />
+                  <Button
+                    onClick={handleAddPreset}
+                    disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
+                    fullWidth
+                  >
+                    Add Preset
+                  </Button>
+                </div>
+
+                {settings.customPresets.length > 0 && (
+                  <div className="mt-4">
+                    <div className="text-xs font-medium text-gray-700 mb-2">Your Presets ({settings.customPresets.length})</div>
+                    <div className="space-y-2">
+                      {settings.customPresets.map((preset) => (
+                        <div
+                          key={preset.id}
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
+                        >
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">{preset.label}</div>
+                            <div className="text-xs text-gray-500 font-mono">+{preset.tag}</div>
+                          </div>
+                          <button
+                            onClick={() => handleRemovePreset(preset.id)}
+                            className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Advanced Section */}
+              <div className="pt-4 border-t border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">Backup & Restore</h3>
+                <div className="space-y-2">
+                  <Button
+                    onClick={handleExportSettings}
+                    variant="secondary"
+                    fullWidth
+                    icon={
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                    }
+                  >
+                    Export Settings
+                  </Button>
+                  <Button
+                    onClick={handleImportSettings}
+                    variant="secondary"
+                    fullWidth
+                    icon={
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                    }
+                  >
+                    Import Settings
+                  </Button>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-900 mb-3 text-red-600">Danger Zone</h3>
+                <Button
+                  onClick={handleResetSettings}
+                  variant="danger"
+                  fullWidth
+                >
+                  Reset All Settings
                 </Button>
               </div>
             </div>
@@ -553,120 +639,6 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 <p className="text-xs text-gray-500">
                   💡 Tip: Use the "+" button on the main screen to add new accounts.
                 </p>
-              </div>
-            </div>
-          )}
-
-          {/* Presets Tab */}
-          {activeTab === 'presets' && (
-            <div className="space-y-5">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Add Custom Preset</h3>
-                <div className="space-y-3">
-                  <Input
-                    value={newPresetLabel}
-                    onChange={setNewPresetLabel}
-                    placeholder="Label (e.g., Newsletter)"
-                    label="Preset Label"
-                  />
-                  <Input
-                    value={newPresetTag}
-                    onChange={setNewPresetTag}
-                    placeholder="Tag (e.g., newsletter)"
-                    label="Tag Name"
-                  />
-                  <Button
-                    onClick={handleAddPreset}
-                    disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
-                    fullWidth
-                  >
-                    Add Preset
-                  </Button>
-                </div>
-              </div>
-
-              {settings.customPresets.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-900 mb-3">Custom Presets</h3>
-                  <div className="space-y-2">
-                    {settings.customPresets.map((preset) => (
-                      <div
-                        key={preset.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
-                      >
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{preset.label}</div>
-                          <div className="text-xs text-gray-500 font-mono">+{preset.tag}</div>
-                        </div>
-                        <button
-                          onClick={() => handleRemovePreset(preset.id)}
-                          className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Advanced Tab */}
-          {activeTab === 'advanced' && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Backup & Restore</h3>
-                <div className="space-y-2">
-                  <Button
-                    onClick={handleExportSettings}
-                    variant="secondary"
-                    fullWidth
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                    }
-                  >
-                    Export Settings
-                  </Button>
-                  <Button
-                    onClick={handleImportSettings}
-                    variant="secondary"
-                    fullWidth
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                    }
-                  >
-                    Import Settings
-                  </Button>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Danger Zone</h3>
-                <Button
-                  onClick={handleResetSettings}
-                  variant="danger"
-                  fullWidth
-                >
-                  Reset All Settings
-                </Button>
-              </div>
-
-              <div className="pt-3 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-2">About</h3>
-                <div className="text-xs text-gray-600 space-y-1">
-                  <p>Gmail Alias Toolkit v1.0.0</p>
-                  <p>Built with WXT + React + TypeScript</p>
-                  <p className="text-gray-500 mt-2">
-                    Generate Gmail aliases using plus addressing (+tag)
-                  </p>
-                </div>
               </div>
             </div>
           )}
