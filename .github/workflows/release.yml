@@ -70,7 +70,7 @@ jobs:
           name: "v.${{ github.ref_name }}"
           draft: true
           generate_release_notes: true
-          body: ${{ steps.changelog.outputs.changes || 'See commit history for changes.' }}
+          body_path: INSTALL.md
           files: .output/*.zip
 
       - name: Submit to stores
