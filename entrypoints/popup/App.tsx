@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
-import Favorites from './components/Favorites';
 import GmailTricks from './components/GmailTricks';
 import WelcomeScreen from './components/WelcomeScreen';
 
@@ -64,6 +63,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTag, setFilterTag] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
+  const [viewMode, setViewMode] = useState<'all' | 'favorites'>('all');
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
   const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
@@ -886,19 +886,50 @@ function App() {
           </div>
         </div>
 
-        {/* Favorites - Quick Access */}
-        <Favorites baseEmail={baseEmail} onCopy={copyToClipboard} />
-
         {/* Recent Aliases */}
-        {recentAliases.length > 0 && (
+        {(recentAliases.length > 0 || favorites.length > 0) && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-semibold text-gray-900">
-                Recent Aliases
+                {viewMode === 'all' ? 'Recent Aliases' : 'Favorites'}
               </h2>
               <span className="text-xs text-gray-500">
-                {recentAliases.length} total
+                {viewMode === 'all' ? `${recentAliases.length} total` : `${favorites.length} starred`}
               </span>
+            </div>
+
+            {/* View Mode Tabs */}
+            <div className="mb-3 flex gap-1 p-1 bg-gray-100 rounded-lg">
+              <button
+                onClick={() => setViewMode('all')}
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  viewMode === 'all'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  All ({recentAliases.length})
+                </div>
+              </button>
+              <button
+                onClick={() => setViewMode('favorites')}
+                className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  viewMode === 'favorites'
+                    ? 'bg-white text-yellow-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-1.5">
+                  <svg className="w-3.5 h-3.5" fill={viewMode === 'favorites' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                  Favorites ({favorites.length})
+                </div>
+              </button>
             </div>
 
             {/* Search and Filters */}
@@ -952,6 +983,11 @@ function App() {
             <div className="space-y-2">
               {recentAliases
                 .filter((alias) => {
+                  // Filter by view mode
+                  if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
+                    return false;
+                  }
+                  
                   // Filter by search query
                   if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
                     return false;
@@ -976,7 +1012,47 @@ function App() {
                   }
                 })
                 .slice(0, 50)
-                .map((alias) => (
+                .length === 0 && viewMode === 'favorites' ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                    <p className="text-sm font-medium mb-1">No favorites yet</p>
+                    <p className="text-xs">Star emails from your history to quick access them here</p>
+                  </div>
+                ) : (
+                  recentAliases
+                    .filter((alias) => {
+                      // Filter by view mode
+                      if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
+                        return false;
+                      }
+                      
+                      // Filter by search query
+                      if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
+                        return false;
+                      }
+                      
+                      // Filter by tag
+                      if (filterTag !== 'all') {
+                        const tagMatch = alias.email.match(/\+([^@]+)@/);
+                        const emailTag = tagMatch ? tagMatch[1] : null;
+                        if (emailTag !== filterTag) {
+                          return false;
+                        }
+                      }
+                      
+                      return true;
+                    })
+                    .sort((a, b) => {
+                      if (sortBy === 'recent') {
+                        return b.timestamp - a.timestamp;
+                      } else {
+                        return a.email.localeCompare(b.email);
+                      }
+                    })
+                    .slice(0, 50)
+                    .map((alias) => (
                   <div
                     key={alias.email}
                     className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-md group transition-colors"
@@ -1043,7 +1119,8 @@ function App() {
                       )}
                     </button>
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
         )}
