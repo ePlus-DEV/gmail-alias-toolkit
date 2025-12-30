@@ -8,6 +8,11 @@ export default defineConfig({
       "Generate and manage Gmail aliases with plus addressing and presets",
     version: "1.0.0",
     permissions: ["storage", "clipboardWrite", "contextMenus", "activeTab"],
+    browser_specific_settings: {
+      gecko: {
+        id: "{71243e5a-8ec2-41a5-8ef5-f2861ebd8fed}",
+      },
+    },
     icons: {
       16: "/icon/16.png",
       32: "/icon/32.png",

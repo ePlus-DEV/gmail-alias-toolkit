@@ -3,6 +3,9 @@
   "description": "Generate and manage Gmail aliases with plus addressing and presets",
   "private": true,
   "version": "1.0.0",
+  "author": "dev@eplus.dev",
+  "license": "MIT",
+  "homepage_url": "https://eplus.dev",
   "type": "module",
   "scripts": {
     "dev": "wxt",
