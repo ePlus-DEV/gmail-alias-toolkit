@@ -276,14 +276,20 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold">Settings</h2>
+        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <h2 className="text-xl font-bold">Settings</h2>
+          </div>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-white hover:bg-opacity-20 rounded transition-colors"
+            className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -292,142 +298,154 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 bg-gray-50">
+        <div className="flex border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
           <button
             onClick={() => setActiveTab('general')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
               activeTab === 'general'
-                ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'border-b-3 border-blue-600 text-blue-700 bg-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
-              General
+              <span>General</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('accounts')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
               activeTab === 'accounts'
-                ? 'border-b-2 border-blue-600 text-blue-600 bg-white'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'border-b-3 border-blue-600 text-blue-700 bg-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             <div className="flex items-center justify-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              Accounts
+              <span>Accounts</span>
             </div>
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-5">
+        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
           {/* General Tab */}
           {activeTab === 'general' && (
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Auto-save Limit
-                </label>
-                <select
-                  value={settings.maxHistory}
-                  onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value={20}>20 aliases</option>
-                  <option value={50}>50 aliases</option>
-                  <option value={100}>100 aliases</option>
-                  <option value={200}>200 aliases</option>
-                  <option value={500}>500 aliases</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Maximum number of aliases to auto-save to history</p>
-              </div>
+            <div className="space-y-6">
+              {/* Appearance Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                  Appearance & Display
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Theme
+                    </label>
+                    <select
+                      value={settings.theme}
+                      onChange={(e) => saveSettings({ ...settings, theme: e.target.value as any })}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+                    >
+                      <option value="light">☀️ Light</option>
+                      <option value="dark">🌙 Dark (Coming Soon)</option>
+                      <option value="auto">🔄 Auto (Coming Soon)</option>
+                    </select>
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Random Alias Format
-                </label>
-                <select
-                  value={settings.randomFormat}
-                  onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="private-mail">Private Mail (e.g., private-mail-q2ga) ⭐</option>
-                  <option value="alphanumeric">Random Characters (e.g., abc123xy)</option>
-                  <option value="words">Random Words (e.g., happy-fox-42)</option>
-                  <option value="timestamp">Timestamp (e.g., lk9x2m3n)</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Choose the format for random alias generation</p>
-              </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Badge Counter
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">Display count on extension icon</p>
+                    <select
+                      value={settings.badgeDisplay}
+                      onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+                    >
+                      <option value="none">🚫 None (Hidden)</option>
+                      <option value="total">📊 Total in History</option>
+                      <option value="all-time">🏆 Total Generated (All Time)</option>
+                      <option value="today">📅 Created Today</option>
+                      <option value="week">📆 This Week</option>
+                    </select>
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Theme
-                </label>
-                <select
-                  value={settings.theme}
-                  onChange={(e) => saveSettings({ ...settings, theme: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="light">Light</option>
-                  <option value="dark">Dark (Coming Soon)</option>
-                  <option value="auto">Auto (Coming Soon)</option>
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Show notifications</label>
-                  <p className="text-xs text-gray-500">Copy confirmation messages</p>
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <label className="text-sm font-semibold text-gray-700">Show Notifications</label>
+                      <p className="text-xs text-gray-500 mt-0.5">Copy confirmation messages</p>
+                    </div>
+                    <Toggle
+                      enabled={settings.showNotifications}
+                      onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
+                      label=""
+                    />
+                  </div>
                 </div>
-                <Toggle
-                  enabled={settings.showNotifications}
-                  onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
-                  label=""
-                />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Badge counter
-                </label>
-                <p className="text-xs text-gray-500 mb-2">Display count on extension icon</p>
-                <select
-                  value={settings.badgeDisplay}
-                  onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="none">None (Hidden)</option>
-                  <option value="total">Total in History</option>
-                  <option value="all-time">Total Generated (All Time)</option>
-                  <option value="today">Created Today</option>
-                  <option value="week">This Week</option>
-                </select>
+              {/* Alias Generation Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Alias Generation
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Random Alias Format
+                    </label>
+                    <select
+                      value={settings.randomFormat}
+                      onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+                    >
+                      <option value="private-mail">🎯 Private Mail (e.g., private-mail-q2ga) ⭐</option>
+                      <option value="alphanumeric">🔤 Random Characters (e.g., abc123xy)</option>
+                      <option value="words">💬 Random Words (e.g., happy-fox-42)</option>
+                      <option value="timestamp">⏱️ Timestamp (e.g., lk9x2m3n)</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-2">Choose the format for random alias generation</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Auto-save Limit
+                    </label>
+                    <select
+                      value={settings.maxHistory}
+                      onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
+                    >
+                      <option value={20}>20 aliases</option>
+                      <option value={50}>50 aliases</option>
+                      <option value={100}>100 aliases</option>
+                      <option value={200}>200 aliases</option>
+                      <option value={500}>500 aliases</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-2">Maximum number of aliases to auto-save to history</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="pt-3 border-t border-gray-200">
-                <Button
-                  onClick={() => {
-                    if (confirm('Clear all recent aliases?')) {
-                      onClearHistory();
-                    }
-                  }}
-                  variant="danger"
-                  fullWidth
-                >
-                  Clear History
-                </Button>
-              </div>
-
-              {/* Presets Section */}
-              <div className="pt-4 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Custom Presets</h3>
+              {/* Custom Presets Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                  Custom Presets
+                </h3>
                 <div className="space-y-3">
                   <Input
                     value={newPresetLabel}
@@ -446,26 +464,26 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
                     fullWidth
                   >
-                    Add Preset
+                    + Add Preset
                   </Button>
                 </div>
 
                 {settings.customPresets.length > 0 && (
-                  <div className="mt-4">
-                    <div className="text-xs font-medium text-gray-700 mb-2">Your Presets ({settings.customPresets.length})</div>
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <div className="text-xs font-semibold text-gray-700 mb-3">Your Presets ({settings.customPresets.length})</div>
                     <div className="space-y-2">
                       {settings.customPresets.map((preset) => (
                         <div
                           key={preset.id}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
+                          className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow"
                         >
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{preset.label}</div>
-                            <div className="text-xs text-gray-500 font-mono">+{preset.tag}</div>
+                            <div className="text-sm font-semibold text-gray-900">{preset.label}</div>
+                            <div className="text-xs text-gray-600 font-mono mt-0.5">+{preset.tag}</div>
                           </div>
                           <button
                             onClick={() => handleRemovePreset(preset.id)}
-                            className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                            className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -478,45 +496,70 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 )}
               </div>
 
-              {/* Advanced Section */}
-              <div className="pt-4 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Backup & Restore</h3>
-                <div className="space-y-2">
+              {/* Data Management Section */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                  </svg>
+                  Data Management
+                </h3>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      onClick={handleExportSettings}
+                      variant="secondary"
+                      fullWidth
+                      icon={
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                      }
+                    >
+                      Export
+                    </Button>
+                    <Button
+                      onClick={handleImportSettings}
+                      variant="secondary"
+                      fullWidth
+                      icon={
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                      }
+                    >
+                      Import
+                    </Button>
+                  </div>
                   <Button
-                    onClick={handleExportSettings}
-                    variant="secondary"
+                    onClick={() => {
+                      if (confirm('Clear all recent aliases?')) {
+                        onClearHistory();
+                      }
+                    }}
+                    variant="danger"
                     fullWidth
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                    }
                   >
-                    Export Settings
-                  </Button>
-                  <Button
-                    onClick={handleImportSettings}
-                    variant="secondary"
-                    fullWidth
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                      </svg>
-                    }
-                  >
-                    Import Settings
+                    Clear History
                   </Button>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3 text-red-600">Danger Zone</h3>
+              {/* Danger Zone */}
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg shadow-sm border-2 border-red-200 p-5">
+                <h3 className="text-base font-bold text-red-700 mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  Danger Zone
+                </h3>
+                <p className="text-xs text-red-600 mb-3">This action cannot be undone</p>
                 <Button
                   onClick={handleResetSettings}
                   variant="danger"
                   fullWidth
                 >
-                  Reset All Settings
+                  Reset All Settings to Default
                 </Button>
               </div>
             </div>
