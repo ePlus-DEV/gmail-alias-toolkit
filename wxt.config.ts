@@ -14,10 +14,14 @@ export default defineConfig({
     permissions: ["storage", "clipboardWrite", "contextMenus", "activeTab"],
     browser_specific_settings: {
       gecko: {
-        id: "{71243e5a-8ec2-41a5-8ef5-f2861ebd8fed}",
+        id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",
+        // @ts-ignore - WXT doesn't support this field yet
+        data_collection_permissions: {
+          required: ["none"],
+        },
       },
     },
-  },
+  } as any,
   autoIcons: {
     developmentIndicator: "overlay",
   },
