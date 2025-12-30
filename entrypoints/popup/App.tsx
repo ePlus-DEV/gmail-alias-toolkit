@@ -77,6 +77,7 @@ function App() {
   const [newAccountEmail, setNewAccountEmail] = useState('');
   const [newAccountLabel, setNewAccountLabel] = useState('');
   const [addAccountError, setAddAccountError] = useState('');
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
@@ -119,11 +120,20 @@ function App() {
       
       // Load account-specific history
       const historyKey = getAccountStorageKey(activeEmail, 'gmail_alias_recent');
-      const historyResult = await browser.storage.local.get(historyKey);
+      const favoritesKey = getAccountStorageKey(activeEmail, 'favorites');
+      const historyResult = await browser.storage.local.get([historyKey, favoritesKey]);
       if (historyResult[historyKey] && Array.isArray(historyResult[historyKey])) {
         setRecentAliases(historyResult[historyKey] as Alias[]);
       } else {
         setRecentAliases([]);
+      }
+      
+      // Load favorites
+      if (historyResult[favoritesKey] && Array.isArray(historyResult[favoritesKey])) {
+        const favEmails = historyResult[favoritesKey].map((f: any) => f.email);
+        setFavorites(favEmails);
+      } else {
+        setFavorites([]);
       }
       
       if (result.app_settings) {
@@ -174,7 +184,28 @@ function App() {
             } else {
               setRecentAliases([]);
             }
+            // Load favorites for new account
+            const favoritesKey = getAccountStorageKey(activeAccount.email, 'favorites');
+            const favResult = await browser.storage.local.get(favoritesKey);
+            if (favResult[favoritesKey] && Array.isArray(favResult[favoritesKey])) {
+              const favEmails = favResult[favoritesKey].map((f: any) => f.email);
+              setFavorites(favEmails);
+            } else {
+              setFavorites([]);
+            }
           }
+        }
+      }
+      
+      // Listen for favorites changes
+      const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+      if (changes[favoritesKey]) {
+        const newFavorites = changes[favoritesKey].newValue;
+        if (newFavorites && Array.isArray(newFavorites)) {
+          const favEmails = newFavorites.map((f: any) => f.email);
+          setFavorites(favEmails);
+        } else {
+          setFavorites([]);
         }
       }
     };
@@ -243,6 +274,34 @@ function App() {
     setRecentAliases([]);
     const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
     browser.storage.local.set({ [historyKey]: [] });
+  };
+
+  const toggleFavorite = async (email: string) => {
+    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    const result = await browser.storage.local.get(favoritesKey);
+    const currentFavs = result[favoritesKey] || [];
+    
+    const exists = currentFavs.find((f: any) => f.email === email);
+    
+    let updated;
+    if (exists) {
+      // Remove from favorites
+      updated = currentFavs.filter((f: any) => f.email !== email);
+    } else {
+      // Add to favorites
+      const newFav = {
+        id: Date.now().toString(),
+        email,
+        addedAt: Date.now(),
+      };
+      updated = [...currentFavs, newFav];
+    }
+    
+    await browser.storage.local.set({ [favoritesKey]: updated });
+    
+    // Update local state
+    const favEmails = updated.map((f: any) => f.email);
+    setFavorites(favEmails);
   };
 
   const generateRandomString = (format: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp', index: number = 0): string => {
@@ -925,6 +984,29 @@ function App() {
                     <span className="text-sm text-gray-700 font-mono truncate flex-1">
                       {alias.email}
                     </span>
+                    <button
+                      onClick={() => toggleFavorite(alias.email)}
+                      className={`ml-2 p-1.5 focus:outline-none transition-colors ${
+                        favorites.includes(alias.email)
+                          ? 'text-yellow-500 hover:text-yellow-600'
+                          : 'text-gray-300 hover:text-yellow-500'
+                      }`}
+                      title={favorites.includes(alias.email) ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill={favorites.includes(alias.email) ? 'currentColor' : 'none'}
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                        />
+                      </svg>
+                    </button>
                     <button
                       onClick={() => copyToClipboard(alias.email)}
                       className="ml-2 p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
