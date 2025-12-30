@@ -1,16 +1,17 @@
-# Gmail Alias Toolkit
+# 📧 Gmail Alias Toolkit
 
-A powerful Chrome Extension for generating and managing Gmail aliases using plus addressing (+tag).
+A powerful browser extension for generating and managing Gmail aliases using plus addressing (+tag). Streamline your email workflow with smart presets, favorites, context menus, and Gmail tricks.
 
-## 🚀 Features
+## ✨ Features
 
-### Core Features
-- **Quick Alias Generation**: Generate Gmail aliases with custom tags
+### 🎯 Core Features
+- **Quick Alias Generation**: Generate Gmail aliases with custom tags instantly
 - **Built-in Presets**: Shopping, Work, Test, Social, Finance, Travel
-- **Custom Presets**: Create and manage your own preset tags
-- **Favorites**: Save frequently used aliases for quick access
-- **Recent History**: View and search recent generated aliases
-- **Statistics**: Track usage with detailed analytics
+- **Custom Presets**: Create and manage unlimited custom preset tags
+- **Favorites**: Save frequently used aliases with custom labels for quick access
+- **Recent History**: View, search, and manage recent generated aliases
+- **Multi-Account Support**: Switch between multiple Gmail accounts seamlessly
+- **Statistics Dashboard**: Track usage with detailed analytics and insights
 
 ### Settings & Customization
 
@@ -208,48 +209,51 @@ gmail-alias-toolkit/
 
 ## 🤝 Contributing
 
-This is a personal project, but suggestions are welcome!
+Contributions are welcome! Here's how:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes**
+4. **Test thoroughly**: `yarn dev` and test in browser
+5. **Commit**: `git commit -m 'Add amazing feature'`
+6. **Push**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request**
+
+### Development Guidelines
+- Follow existing code style (TypeScript + React hooks)
+- Use Tailwind for styling (no custom CSS unless necessary)
+- Add comments for complex logic
+- Test on Chrome and Firefox if possible
+- Update README if adding new features
+
+## ⭐ Show Your Support
+
+If you find this extension useful:
+- ⭐ Star the repository
+- 🐦 Share on social media
+- 🔗 Link from your blog/website
+- 💬 Leave a review (when published on Chrome Web Store)
 
 ## 📝 License
 
-MIT License - feel free to use and modify
+MIT License © 2025
 
-## 🎯 Roadmap
+Permission is hereby granted, free of charge, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this software.
 
-- [ ] Dark mode theme
-- [ ] Auto-detect Gmail from active tab
-- [ ] Alias templates with variables
-- [ ] Export history as CSV
-- [ ] Browser sync for settings
-- [ ] Firefox support
-- [ ] Edge support
+See [LICENSE.md](LICENSE.md) for full details.
 
-## 💡 Tips & Tricks
+## 📧 Support & Contact
 
-1. **Use Favorites for Services**: Create favorites for services you use often (Netflix, Amazon, etc.)
-2. **Custom Presets for Projects**: Add project names as custom presets
-3. **Export Regularly**: Back up your settings weekly if you have many customizations
-4. **Search is Smart**: Search works on the entire email, not just the tag
-5. **Keyboard First**: Use `Ctrl+K` and `Enter` for faster workflow
-
-## 🐛 Troubleshooting
-
-**Aliases not copying?**
-- Check clipboard permissions in Chrome settings
-- Try clicking the extension icon again
-
-**Settings not saving?**
-- Check Chrome storage quota
-- Try clearing history to free space
-
-**Extension not loading?**
-- Reload the extension in `chrome://extensions/`
-- Check browser console for errors
-
-## 📧 Support
-
-For issues or questions, create an issue in the repository.
+- 🐛 **Bug Reports**: Create an issue on GitHub
+- 💡 **Feature Requests**: Open a discussion or issue
+- ❓ **Questions**: Check this README first, then open an issue
+- 📧 **Email**: dev@eplus.dev
+- 🌐 **Website**: https://eplus.dev
 
 ---
 
-Built with ❤️ using WXT + React + TypeScript
+**Built with ❤️ by developers, for developers**
+
+🛠️ Stack: WXT + React 19 + TypeScript + Tailwind CSS
+
+📦 Version: 1.0.0 | 📅 Last Updated: December 2025
