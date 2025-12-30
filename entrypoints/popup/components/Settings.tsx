@@ -26,7 +26,6 @@ interface AppSettings {
   customPresets: CustomPreset[];
   maxHistory: number;
   theme: 'light' | 'dark' | 'auto';
-  autoSave: boolean;
   showNotifications: boolean;
   randomFormat: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp';
 }
@@ -35,7 +34,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
   maxHistory: 5,
   theme: 'light',
-  autoSave: true,
   showNotifications: true,
   randomFormat: 'private-mail',
 };
@@ -342,7 +340,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  History Limit
+                  Auto-save Limit
                 </label>
                 <select
                   value={settings.maxHistory}
@@ -355,6 +353,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   <option value={20}>20 aliases</option>
                   <option value={50}>50 aliases</option>
                 </select>
+                <p className="text-xs text-gray-500 mt-1">Maximum number of aliases to auto-save to history</p>
               </div>
 
               <div>
@@ -387,18 +386,6 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   <option value="dark">Dark (Coming Soon)</option>
                   <option value="auto">Auto (Coming Soon)</option>
                 </select>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Auto-save aliases</label>
-                  <p className="text-xs text-gray-500">Automatically save to history</p>
-                </div>
-                <Toggle
-                  enabled={settings.autoSave}
-                  onChange={(enabled) => saveSettings({ ...settings, autoSave: enabled })}
-                  label=""
-                />
               </div>
 
               <div className="flex items-center justify-between">

@@ -35,15 +35,6 @@ interface StorageResult {
   };
 }
 
-const PRESETS: Preset[] = [
-  { id: 'shopping', label: 'Shopping', tag: 'shopping' },
-  { id: 'work', label: 'Work', tag: 'work' },
-  { id: 'test', label: 'Test', tag: 'test' },
-  { id: 'social', label: 'Social', tag: 'social' },
-  { id: 'finance', label: 'Finance', tag: 'finance' },
-  { id: 'travel', label: 'Travel', tag: 'travel' },
-];
-
 const STORAGE_KEY = 'gmail_alias_recent';
 
 // Helper to get account-specific storage key
@@ -71,7 +62,6 @@ function App() {
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
   const [randomEmailCount, setRandomEmailCount] = useState(10);
   const [showRandomSettings, setShowRandomSettings] = useState(false);
-  const [showQuickPresets, setShowQuickPresets] = useState(false);
   const [activeGeneratorTab, setActiveGeneratorTab] = useState<'random' | 'tags' | 'tricks'>('random');
   const [emailAccounts, setEmailAccounts] = useState<any[]>([]);
   const [hasEmailAccounts, setHasEmailAccounts] = useState(true);
@@ -696,47 +686,20 @@ function App() {
             {/* Random Tab */}
             {activeGeneratorTab === 'random' && (
               <div>
-                {/* Format Tabs */}
-                <div className="flex gap-1 mb-3">
+                {/* Current Format Display */}
+                <div className="mb-3 p-2 bg-purple-50 border border-purple-200 rounded-lg">
+                  <div className="text-xs text-purple-700 font-medium mb-1">Current Format</div>
+                  <div className="text-sm font-semibold text-purple-900">
+                    {randomFormat === 'private-mail' ? '📧 Private Mail (private-mail-xxxx)' :
+                     randomFormat === 'alphanumeric' ? '🔤 Random Characters (abc123xy)' :
+                     randomFormat === 'words' ? '📝 Random Words (happy-fox-42)' :
+                     '⏱️ Timestamp (1234567890)'}
+                  </div>
                   <button
-                    onClick={() => setRandomFormat('private-mail')}
-                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
-                      randomFormat === 'private-mail'
-                        ? 'bg-purple-100 text-purple-700 font-semibold'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="mt-2 text-xs text-purple-600 hover:text-purple-700 underline"
                   >
-                    Private Mail
-                  </button>
-                  <button
-                    onClick={() => setRandomFormat('alphanumeric')}
-                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
-                      randomFormat === 'alphanumeric'
-                        ? 'bg-purple-100 text-purple-700 font-semibold'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    Chars
-                  </button>
-                  <button
-                    onClick={() => setRandomFormat('words')}
-                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
-                      randomFormat === 'words'
-                        ? 'bg-purple-100 text-purple-700 font-semibold'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    Words
-                  </button>
-                  <button
-                    onClick={() => setRandomFormat('timestamp')}
-                    className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
-                      randomFormat === 'timestamp'
-                        ? 'bg-purple-100 text-purple-700 font-semibold'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    Time
+                    Change format in Settings →
                   </button>
                 </div>
 
@@ -825,56 +788,21 @@ function App() {
                   </button>
                 </div>
 
-                {/* Quick Presets */}
-                <button
-                  onClick={() => setShowQuickPresets(!showQuickPresets)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  <span>Quick Presets</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${showQuickPresets ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {showQuickPresets && (
-                  <div className="mt-2 p-3 bg-gray-50 rounded-lg">
+                {/* Custom Presets - Quick Access */}
+                {customPresets.length > 0 && (
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-700 mb-2">Your Presets</div>
                     <div className="flex flex-wrap gap-2">
-                      {PRESETS.map((preset) => (
+                      {customPresets.map((preset) => (
                         <button
                           key={preset.id}
-                          onClick={() => {
-                            handlePresetClick(preset.tag);
-                            setShowQuickPresets(false);
-                          }}
+                          onClick={() => handlePresetClick(preset.tag)}
                           className="px-3 py-1.5 bg-white text-blue-700 text-xs font-medium rounded-md border border-blue-200 hover:bg-blue-50 transition-colors"
                         >
                           {preset.label}
                         </button>
                       ))}
                     </div>
-                    {customPresets.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-gray-300">
-                        <div className="flex flex-wrap gap-2">
-                          {customPresets.map((preset) => (
-                            <button
-                              key={preset.id}
-                              onClick={() => {
-                                handlePresetClick(preset.tag);
-                                setShowQuickPresets(false);
-                              }}
-                              className="px-3 py-1.5 bg-white text-purple-700 text-xs font-medium rounded-md border border-purple-200 hover:bg-purple-50 transition-colors"
-                            >
-                              {preset.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
 

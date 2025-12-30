@@ -2,7 +2,20 @@ export default defineBackground(() => {
   console.log("Gmail Alias Toolkit background started");
 
   // Create context menu on install
-  browser.runtime.onInstalled.addListener(() => {
+  browser.runtime.onInstalled.addListener(async () => {
+    await createContextMenus();
+  });
+
+  // Recreate context menus when settings change
+  browser.storage.onChanged.addListener(async (changes) => {
+    if (changes.app_settings) {
+      await browser.contextMenus.removeAll();
+      await createContextMenus();
+    }
+  });
+
+  // Function to create context menus
+  async function createContextMenus() {
     // Parent menu
     browser.contextMenus.create({
       id: "gmail-alias-parent",
@@ -18,7 +31,7 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
-    // Custom tag submenu with common presets
+    // Custom tag submenu - sync with user's presets
     browser.contextMenus.create({
       id: "custom-tag-parent",
       parentId: "gmail-alias-parent",
@@ -26,22 +39,29 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
-    const commonTags = [
-      "shopping",
-      "work",
-      "test",
-      "social",
-      "newsletter",
-      "spam",
-    ];
-    commonTags.forEach((tag) => {
-      browser.contextMenus.create({
-        id: `tag-${tag}`,
-        parentId: "custom-tag-parent",
-        title: tag,
-        contexts: ["editable"],
+    // Load custom presets from storage
+    const result = await browser.storage.local.get('app_settings');
+    const customPresets = result.app_settings?.customPresets || [];
+    
+    if (customPresets.length > 0) {
+      customPresets.forEach((preset: any) => {
+        browser.contextMenus.create({
+          id: `tag-${preset.tag}`,
+          parentId: "custom-tag-parent",
+          title: `${preset.label} (+${preset.tag})`,
+          contexts: ["editable"],
+        });
       });
-    });
+    } else {
+      // Show message if no presets
+      browser.contextMenus.create({
+        id: "no-presets",
+        parentId: "custom-tag-parent",
+        title: "No presets - Add in Settings",
+        contexts: ["editable"],
+        enabled: false,
+      });
+    }
 
     // Gmail tricks submenu
     browser.contextMenus.create({
