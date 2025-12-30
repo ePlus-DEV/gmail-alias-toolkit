@@ -64,6 +64,8 @@ function App() {
   const [filterTag, setFilterTag] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
   const [viewMode, setViewMode] = useState<'all' | 'favorites'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
   const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
@@ -213,6 +215,11 @@ function App() {
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, [baseEmail]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterTag, viewMode, sortBy]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -981,38 +988,49 @@ function App() {
             </div>
 
             <div className="space-y-2">
-              {recentAliases
-                .filter((alias) => {
-                  // Filter by view mode
-                  if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
-                    return false;
-                  }
-                  
-                  // Filter by search query
-                  if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
-                    return false;
-                  }
-                  
-                  // Filter by tag
-                  if (filterTag !== 'all') {
-                    const tagMatch = alias.email.match(/\+([^@]+)@/);
-                    const emailTag = tagMatch ? tagMatch[1] : null;
-                    if (emailTag !== filterTag) {
+              {(() => {
+                // Filter and sort aliases
+                const filteredAliases = recentAliases
+                  .filter((alias) => {
+                    // Filter by view mode
+                    if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
                       return false;
                     }
-                  }
-                  
-                  return true;
-                })
-                .sort((a, b) => {
-                  if (sortBy === 'recent') {
-                    return b.timestamp - a.timestamp;
-                  } else {
-                    return a.email.localeCompare(b.email);
-                  }
-                })
-                .slice(0, 50)
-                .length === 0 && viewMode === 'favorites' ? (
+                    
+                    // Filter by search query
+                    if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
+                      return false;
+                    }
+                    
+                    // Filter by tag
+                    if (filterTag !== 'all') {
+                      const tagMatch = alias.email.match(/\+([^@]+)@/);
+                      const emailTag = tagMatch ? tagMatch[1] : null;
+                      if (emailTag !== filterTag) {
+                        return false;
+                      }
+                    }
+                    
+                    return true;
+                  })
+                  .sort((a, b) => {
+                    if (sortBy === 'recent') {
+                      return b.timestamp - a.timestamp;
+                    } else {
+                      return a.email.localeCompare(b.email);
+                    }
+                  });
+
+                // Calculate pagination
+                const totalItems = filteredAliases.length;
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedAliases = filteredAliases.slice(startIndex, endIndex);
+
+                // Empty state for favorites
+                if (filteredAliases.length === 0 && viewMode === 'favorites') {
+                  return (
                   <div className="text-center py-8 text-gray-500">
                     <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -1020,39 +1038,13 @@ function App() {
                     <p className="text-sm font-medium mb-1">No favorites yet</p>
                     <p className="text-xs">Star emails from your history to quick access them here</p>
                   </div>
-                ) : (
-                  recentAliases
-                    .filter((alias) => {
-                      // Filter by view mode
-                      if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
-                        return false;
-                      }
-                      
-                      // Filter by search query
-                      if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
-                        return false;
-                      }
-                      
-                      // Filter by tag
-                      if (filterTag !== 'all') {
-                        const tagMatch = alias.email.match(/\+([^@]+)@/);
-                        const emailTag = tagMatch ? tagMatch[1] : null;
-                        if (emailTag !== filterTag) {
-                          return false;
-                        }
-                      }
-                      
-                      return true;
-                    })
-                    .sort((a, b) => {
-                      if (sortBy === 'recent') {
-                        return b.timestamp - a.timestamp;
-                      } else {
-                        return a.email.localeCompare(b.email);
-                      }
-                    })
-                    .slice(0, 50)
-                    .map((alias) => (
+                );
+                }
+
+                // Render paginated list
+                return (
+                  <>
+                    {paginatedAliases.map((alias) => (
                   <div
                     key={alias.email}
                     className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-md group transition-colors"
@@ -1119,8 +1111,98 @@ function App() {
                       )}
                     </button>
                   </div>
-                ))
-              )}
+                ))}
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                      <div className="mt-4 pt-3 border-t border-gray-200">
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs text-gray-500">
+                            Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => setCurrentPage(1)}
+                              disabled={currentPage === 1}
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              title="First page"
+                            >
+                              ⟪
+                            </button>
+                            <button
+                              onClick={() => setCurrentPage(currentPage - 1)}
+                              disabled={currentPage === 1}
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              title="Previous page"
+                            >
+                              ←
+                            </button>
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(page => {
+                                  // Show first, last, current, and pages around current
+                                  if (page === 1 || page === totalPages) return true;
+                                  if (Math.abs(page - currentPage) <= 1) return true;
+                                  return false;
+                                })
+                                .map((page, index, array) => {
+                                  // Add ellipsis
+                                  const prevPage = array[index - 1];
+                                  const showEllipsis = prevPage && page - prevPage > 1;
+                                  
+                                  return (
+                                    <div key={page} className="flex items-center gap-1">
+                                      {showEllipsis && <span className="px-1 text-gray-400">...</span>}
+                                      <button
+                                        onClick={() => setCurrentPage(page)}
+                                        className={`min-w-[28px] px-2 py-1 text-xs rounded transition-colors ${
+                                          currentPage === page
+                                            ? 'bg-blue-600 text-white font-medium'
+                                            : 'hover:bg-gray-100 text-gray-700'
+                                        }`}
+                                      >
+                                        {page}
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                            <button
+                              onClick={() => setCurrentPage(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              title="Next page"
+                            >
+                              →
+                            </button>
+                            <button
+                              onClick={() => setCurrentPage(totalPages)}
+                              disabled={currentPage === totalPages}
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              title="Last page"
+                            >
+                              ⟫
+                            </button>
+                          </div>
+                          <select
+                            value={itemsPerPage}
+                            onChange={(e) => {
+                              setItemsPerPage(Number(e.target.value));
+                              setCurrentPage(1);
+                            }}
+                            className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value={10}>10 / page</option>
+                            <option value={20}>20 / page</option>
+                            <option value={50}>50 / page</option>
+                            <option value={100}>100 / page</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}
