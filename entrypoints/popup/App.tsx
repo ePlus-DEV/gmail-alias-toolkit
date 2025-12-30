@@ -56,6 +56,8 @@ function App() {
   const [maxRecent, setMaxRecent] = useState(5);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterTag, setFilterTag] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
   const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
   const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
@@ -748,35 +750,86 @@ function App() {
               <h2 className="text-sm font-semibold text-gray-900">
                 Recent Aliases
               </h2>
-              {recentAliases.length > 3 && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="text-xs text-gray-500 hover:text-gray-700"
-                >
-                  {searchQuery ? 'Clear' : `${recentAliases.length} total`}
-                </button>
-              )}
+              <span className="text-xs text-gray-500">
+                {recentAliases.length} total
+              </span>
             </div>
 
-            {recentAliases.length > 3 && (
-              <div className="mb-3">
+            {/* Search and Filters */}
+            <div className="mb-3 space-y-2">
+              <div className="relative">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search aliases..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="🔍 Search aliases..."
+                  className="w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
               </div>
-            )}
+              
+              <div className="flex gap-2">
+                <select
+                  value={filterTag}
+                  onChange={(e) => setFilterTag(e.target.value)}
+                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Tags</option>
+                  {Array.from(new Set(recentAliases.map(a => {
+                    const match = a.email.match(/\+([^@]+)@/);
+                    return match ? match[1] : null;
+                  }).filter(Boolean))).map(tag => (
+                    <option key={tag} value={tag}>{tag}</option>
+                  ))}
+                </select>
+                
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'recent' | 'alphabetical')}
+                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="recent">📅 Most Recent</option>
+                  <option value="alphabetical">🔤 A-Z</option>
+                </select>
+              </div>
+            </div>
 
             <div className="space-y-2">
               {recentAliases
-                .filter((alias) =>
-                  searchQuery
-                    ? alias.email.toLowerCase().includes(searchQuery.toLowerCase())
-                    : true
-                )
+                .filter((alias) => {
+                  // Filter by search query
+                  if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
+                    return false;
+                  }
+                  
+                  // Filter by tag
+                  if (filterTag !== 'all') {
+                    const tagMatch = alias.email.match(/\+([^@]+)@/);
+                    const emailTag = tagMatch ? tagMatch[1] : null;
+                    if (emailTag !== filterTag) {
+                      return false;
+                    }
+                  }
+                  
+                  return true;
+                })
+                .sort((a, b) => {
+                  if (sortBy === 'recent') {
+                    return b.timestamp - a.timestamp;
+                  } else {
+                    return a.email.localeCompare(b.email);
+                  }
+                })
+                .slice(0, 50)
                 .map((alias) => (
                   <div
                     key={alias.email}

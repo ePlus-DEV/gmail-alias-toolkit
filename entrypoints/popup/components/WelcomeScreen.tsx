@@ -8,9 +8,51 @@ interface WelcomeScreenProps {
 export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeScreenProps) {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationError, setValidationError] = useState<string>('');
+
+  const validateEmail = (value: string): boolean => {
+    setValidationError('');
+    
+    if (!value.trim()) {
+      setValidationError('Email is required');
+      return false;
+    }
+    
+    if (!value.includes('@')) {
+      setValidationError('Please enter a valid email address');
+      return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      setValidationError('Invalid email format');
+      return false;
+    }
+    
+    const [username, domain] = value.split('@');
+    
+    if (username.length < 1) {
+      setValidationError('Username cannot be empty');
+      return false;
+    }
+    
+    if (!domain.includes('.')) {
+      setValidationError('Domain must include a dot (e.g., gmail.com)');
+      return false;
+    }
+    
+    // Warning for non-Gmail (but still allow)
+    if (!domain.includes('gmail') && !domain.includes('googlemail')) {
+      setValidationError('⚠️ Works best with Gmail addresses');
+    }
+    
+    return true;
+  };
 
   const handleSubmit = async () => {
-    if (!email.trim() || !email.includes('@')) return;
+    if (!validateEmail(email.trim())) {
+      return;
+    }
     
     setIsSubmitting(true);
     
@@ -68,29 +110,50 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
             Enter your Gmail address
           </label>
           
-          <div className="relative mb-4">
+          <div className="relative mb-2">
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (validationError) setValidationError('');
+              }}
+              onBlur={() => email && validateEmail(email)}
               onKeyDown={handleKeyPress}
               placeholder="your.email"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={`w-full px-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-2 transition-colors ${
+                validationError && !validationError.includes('⚠️')
+                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                  : validationError && validationError.includes('⚠️')
+                  ? 'border-amber-300 focus:ring-amber-500 focus:border-amber-500'
+                  : 'border-gray-300 focus:ring-blue-500 focus:border-transparent'
+              }`}
               autoFocus
             />
-            {email && !email.includes('@') && (
+            {email && !email.includes('@') && !validationError && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
                 @gmail.com
               </div>
             )}
           </div>
-          <p className="text-xs text-gray-500 mb-4 -mt-2">
+          
+          {validationError && (
+            <div className={`mb-3 p-2 rounded-md text-xs ${
+              validationError.includes('⚠️')
+                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                : 'bg-red-50 text-red-700 border border-red-200'
+            }`}>
+              {validationError}
+            </div>
+          )}
+          
+          <p className="text-xs text-gray-500 mb-4">
             💡 Press <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to auto-complete @gmail.com
           </p>
           
           <button
             onClick={handleSubmit}
-            disabled={!email.trim() || !email.includes('@') || isSubmitting}
+            disabled={!email.trim() || (validationError && !validationError.includes('⚠️')) || isSubmitting}
             className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg mb-2"
           >
             {isSubmitting ? 'Setting up...' : 'Get Started'}
