@@ -1,8 +1,6 @@
 export default defineContentScript({
   matches: ["<all_urls>"],
   main() {
-    console.log("Gmail Alias Toolkit content script loaded");
-
     // Listen for messages from background script
     browser.runtime.onMessage.addListener((message) => {
       if (message.action === "fillEmail" && message.email) {

@@ -27,6 +27,7 @@ interface AppSettings {
   maxHistory: number;
   theme: 'light' | 'dark' | 'auto';
   showNotifications: boolean;
+  badgeDisplay: 'none' | 'total' | 'today' | 'week' | 'all-time';
   randomFormat: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp';
 }
 
@@ -35,6 +36,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   maxHistory: 20,
   theme: 'light',
   showNotifications: true,
+  badgeDisplay: 'all-time',
   randomFormat: 'private-mail',
 };
 
@@ -389,6 +391,24 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
                   label=""
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Badge counter
+                </label>
+                <p className="text-xs text-gray-500 mb-2">Display count on extension icon</p>
+                <select
+                  value={settings.badgeDisplay}
+                  onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="none">None (Hidden)</option>
+                  <option value="total">Total in History</option>
+                  <option value="all-time">Total Generated (All Time)</option>
+                  <option value="today">Created Today</option>
+                  <option value="week">This Week</option>
+                </select>
               </div>
 
               <div className="pt-3 border-t border-gray-200">

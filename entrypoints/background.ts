@@ -12,12 +12,17 @@ export default defineBackground(() => {
     if (changes.app_settings) {
       await browser.contextMenus.removeAll();
       await createContextMenus();
+      // Update badge when app_settings changes (includes showBadge toggle)
+      await updateBadge();
     }
 
     // Update badge when history or accounts change
     const changedKeys = Object.keys(changes);
     const shouldUpdateBadge = changedKeys.some(
-      (key) => key.startsWith("gmail_alias_recent_") || key === "email_accounts"
+      (key) =>
+        key.startsWith("gmail_alias_recent_") ||
+        key.startsWith("alias_stats_") ||
+        key === "email_accounts"
     );
     if (shouldUpdateBadge) {
       await updateBadge();
@@ -205,6 +210,16 @@ export default defineBackground(() => {
   // Helper function to update badge
   async function updateBadge() {
     try {
+      // Check badge display setting
+      const settingsResult = await browser.storage.local.get("app_settings");
+      const badgeDisplay =
+        settingsResult.app_settings?.badgeDisplay ?? "all-time";
+
+      if (badgeDisplay === "none") {
+        await browser.action.setBadgeText({ text: "" });
+        return;
+      }
+
       // Get active account
       const accountResult = await browser.storage.local.get([
         "email_accounts",
@@ -231,15 +246,42 @@ export default defineBackground(() => {
         activeEmail,
         "gmail_alias_recent"
       );
-      const result = await browser.storage.local.get(historyKey);
+      const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
+      const result = await browser.storage.local.get([historyKey, statsKey]);
       const recentAliases = result[historyKey] || [];
+      const aliasStats = result[statsKey] || { total: 0, tags: {} };
 
-      // Count total aliases
-      const totalCount = recentAliases.length;
+      let count = 0;
+      const now = new Date();
+
+      switch (badgeDisplay) {
+        case "total":
+          count = recentAliases.length;
+          break;
+        case "all-time":
+          count = aliasStats.total || 0;
+          break;
+        case "today":
+          const today = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          ).getTime();
+          count = recentAliases.filter((a: any) => a.timestamp >= today).length;
+          break;
+        case "week":
+          const weekAgo = new Date(
+            now.getTime() - 7 * 24 * 60 * 60 * 1000
+          ).getTime();
+          count = recentAliases.filter(
+            (a: any) => a.timestamp >= weekAgo
+          ).length;
+          break;
+      }
 
       // Update badge
-      if (totalCount > 0) {
-        await browser.action.setBadgeText({ text: totalCount.toString() });
+      if (count > 0) {
+        await browser.action.setBadgeText({ text: count.toString() });
         await browser.action.setBadgeBackgroundColor({ color: "#3B82F6" }); // Blue
         await browser.action.setBadgeTextColor({ color: "#FFFFFF" }); // White text
       } else {

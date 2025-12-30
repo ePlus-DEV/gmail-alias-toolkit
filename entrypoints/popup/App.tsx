@@ -521,12 +521,12 @@ function App() {
                     base_email: selectedEmail
                   });
                 }}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white truncate"
               >
                 {emailAccounts.length > 0 ? (
                   emailAccounts.map((account) => (
                     <option key={account.id} value={account.email}>
-                      {account.label} - {account.email}
+                      {account.label ? `${account.label} - ` : ''}{account.email}
                     </option>
                   ))
                 ) : (
