@@ -91,7 +91,7 @@ export default defineBackground(() => {
       title: "Remove All Dots",
       contexts: ["editable"],
     });
-  });
+  }
 
   // Handle context menu clicks
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
