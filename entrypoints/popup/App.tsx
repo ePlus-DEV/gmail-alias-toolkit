@@ -76,6 +76,7 @@ function App() {
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [newAccountEmail, setNewAccountEmail] = useState('');
   const [newAccountLabel, setNewAccountLabel] = useState('');
+  const [addAccountError, setAddAccountError] = useState('');
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
@@ -352,12 +353,22 @@ function App() {
   };
 
   const handleAddAccount = async () => {
-    if (!newAccountEmail.trim() || !newAccountEmail.includes('@')) return;
+    setAddAccountError('');
+    
+    if (!newAccountEmail.trim()) {
+      setAddAccountError('Email is required');
+      return;
+    }
+    
+    if (!newAccountEmail.includes('@')) {
+      setAddAccountError('Please enter a valid email address');
+      return;
+    }
     
     // Check if email already exists
-    const emailExists = emailAccounts.some(acc => acc.email === newAccountEmail.trim());
+    const emailExists = emailAccounts.some(acc => acc.email.toLowerCase() === newAccountEmail.trim().toLowerCase());
     if (emailExists) {
-      alert('This email address is already added!');
+      setAddAccountError('This email address is already added!');
       return;
     }
     
@@ -384,6 +395,7 @@ function App() {
     
     setNewAccountEmail('');
     setNewAccountLabel('');
+    setAddAccountError('');
     setShowAddAccount(false);
     
     // Show success message briefly
@@ -487,7 +499,10 @@ function App() {
                 <input
                   type="email"
                   value={newAccountEmail}
-                  onChange={(e) => setNewAccountEmail(e.target.value)}
+                  onChange={(e) => {
+                    setNewAccountEmail(e.target.value);
+                    setAddAccountError('');
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
                       e.preventDefault();
@@ -504,6 +519,11 @@ function App() {
                   </div>
                 )}
               </div>
+              {addAccountError && (
+                <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-xs text-red-600">{addAccountError}</p>
+                </div>
+              )}
               <p className="text-xs text-gray-500 -mt-1">
                 💡 Press <kbd className="px-1 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
               </p>
@@ -527,6 +547,7 @@ function App() {
                     setShowAddAccount(false);
                     setNewAccountEmail('');
                     setNewAccountLabel('');
+                    setAddAccountError('');
                   }}
                   className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                 >

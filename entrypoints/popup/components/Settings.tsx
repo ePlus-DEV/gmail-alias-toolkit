@@ -54,6 +54,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState('');
+  const [editingEmail, setEditingEmail] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -193,11 +194,13 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const handleStartEdit = (account: EmailAccount) => {
     setEditingAccountId(account.id);
     setEditingLabel(account.label);
+    setEditingEmail(account.email);
   };
 
   const handleCancelEdit = () => {
     setEditingAccountId(null);
     setEditingLabel('');
+    setEditingEmail('');
   };
 
   const handleSaveEdit = async (accountId: string) => {
@@ -206,14 +209,68 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       return;
     }
 
+    if (!editingEmail.trim() || !editingEmail.includes('@')) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    const account = emailAccounts.find(acc => acc.id === accountId);
+    if (!account) return;
+
+    const oldEmail = account.email;
+    const newEmail = editingEmail.trim();
+
+    // Check if email changed
+    if (oldEmail !== newEmail) {
+      // Check if new email already exists in another account
+      const emailExists = emailAccounts.some(acc => acc.id !== accountId && acc.email === newEmail);
+      if (emailExists) {
+        alert('This email address is already used by another account!');
+        return;
+      }
+
+      const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n• Migrate all history, statistics, and favorites to the new email\n• Update the account email\n• Delete data associated with the old email\n\nContinue?`;
+      
+      if (!confirm(confirmMsg)) return;
+
+      // Migrate data from old email to new email
+      const oldHistoryKey = getAccountStorageKey(oldEmail, 'gmail_alias_recent');
+      const oldStatsKey = getAccountStorageKey(oldEmail, 'alias_stats');
+      const oldFavoritesKey = getAccountStorageKey(oldEmail, 'favorites');
+
+      const newHistoryKey = getAccountStorageKey(newEmail, 'gmail_alias_recent');
+      const newStatsKey = getAccountStorageKey(newEmail, 'alias_stats');
+      const newFavoritesKey = getAccountStorageKey(newEmail, 'favorites');
+
+      // Get old data
+      const oldData = await browser.storage.local.get([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+
+      // Save to new keys
+      await browser.storage.local.set({
+        [newHistoryKey]: oldData[oldHistoryKey] || [],
+        [newStatsKey]: oldData[oldStatsKey] || { total: 0, tags: {} },
+        [newFavoritesKey]: oldData[oldFavoritesKey] || [],
+      });
+
+      // Delete old keys
+      await browser.storage.local.remove([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+
+      // Update base_email if this is the active account
+      if (account.isActive) {
+        await browser.storage.local.set({ base_email: newEmail });
+      }
+    }
+
+    // Update account in list
     const updated = emailAccounts.map(acc => 
-      acc.id === accountId ? { ...acc, label: editingLabel.trim() } : acc
+      acc.id === accountId ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() } : acc
     );
     
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
     setEditingAccountId(null);
     setEditingLabel('');
+    setEditingEmail('');
   };
 
   if (!isOpen) return null;
@@ -400,23 +457,38 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       {editingAccountId === account.id ? (
                         // Edit mode
                         <div className="p-3 space-y-2">
-                          <input
-                            type="text"
-                            value={editingLabel}
-                            onChange={(e) => setEditingLabel(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Account label"
-                            autoFocus
-                          />
-                          <div className="text-xs text-gray-500 truncate font-mono">
-                            {account.email}
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Label</label>
+                            <input
+                              type="text"
+                              value={editingLabel}
+                              onChange={(e) => setEditingLabel(e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              placeholder="Account label"
+                              autoFocus
+                            />
                           </div>
-                          <div className="flex gap-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Email Address</label>
+                            <input
+                              type="email"
+                              value={editingEmail}
+                              onChange={(e) => setEditingEmail(e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                              placeholder="your.email@gmail.com"
+                            />
+                            {editingEmail !== account.email && (
+                              <p className="text-xs text-orange-600 mt-1">
+                                ⚠️ Changing email will migrate all data to the new email address
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex gap-2 pt-1">
                             <button
                               onClick={() => handleSaveEdit(account.id)}
                               className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors"
                             >
-                              Save
+                              Save Changes
                             </button>
                             <button
                               onClick={handleCancelEdit}
@@ -428,15 +500,15 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                         </div>
                       ) : (
                         // View mode
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
-                          <label className="flex items-start gap-3 flex-1 p-3 cursor-pointer">
+                          <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
                             <input
                               type="radio"
                               name="activeAccount"
                               checked={account.isActive}
                               onChange={() => handleSwitchAccount(account.id)}
-                              className="mt-1 w-4 h-4 text-blue-600 focus:ring-blue-500"
+                              className="w-4 h-4 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                             />
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
@@ -444,7 +516,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                                   {account.label}
                                 </span>
                                 {account.isActive && (
-                                  <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded">
+                                  <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded flex-shrink-0">
                                     Active
                                   </span>
                                 )}
@@ -456,14 +528,14 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                           </label>
                           
                           {/* Action buttons */}
-                          <div className="flex items-center gap-1 p-3 pt-4">
+                          <div className="flex items-center gap-1 flex-shrink-0">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleStartEdit(account);
                               }}
                               className="p-1.5 text-gray-600 hover:bg-gray-100 rounded transition-colors"
-                              title="Edit label"
+                              title="Edit account"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
