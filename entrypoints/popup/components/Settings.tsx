@@ -56,6 +56,10 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const [editingLabel, setEditingLabel] = useState('');
   const [editingEmail, setEditingEmail] = useState('');
   const [version, setVersion] = useState('1.1.0');
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [newAccountEmail, setNewAccountEmail] = useState('');
+  const [newAccountLabel, setNewAccountLabel] = useState('');
+  const [addAccountError, setAddAccountError] = useState('');
 
   useEffect(() => {
     try {
@@ -283,6 +287,59 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     setEditingAccountId(null);
     setEditingLabel('');
     setEditingEmail('');
+  };
+
+  const handleAddAccount = async () => {
+    let email = newAccountEmail.trim();
+    
+    if (!email) {
+      setAddAccountError('Please enter an email address');
+      return;
+    }
+
+    // Auto-add @gmail.com if only username provided
+    if (!email.includes('@')) {
+      email += '@gmail.com';
+    }
+
+    // Validate email format
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      setAddAccountError('Please enter a valid email address');
+      return;
+    }
+
+    // Check if account already exists
+    const exists = emailAccounts.some(acc => acc.email === email);
+    if (exists) {
+      setAddAccountError('This account already exists');
+      return;
+    }
+
+    // Create new account
+    const newAccount: EmailAccount = {
+      id: Date.now().toString(),
+      email,
+      label: newAccountLabel.trim() || email.split('@')[0],
+      isActive: emailAccounts.length === 0, // Make first account active
+    };
+
+    const updated = emailAccounts.length === 0 
+      ? [newAccount]
+      : [...emailAccounts.map(acc => ({ ...acc, isActive: false })), newAccount];
+
+    // Make new account active
+    updated[updated.length - 1].isActive = true;
+
+    await browser.storage.local.set({ 
+      email_accounts: updated,
+      base_email: newAccount.email
+    });
+
+    setEmailAccounts(updated);
+    setShowAddAccount(false);
+    setNewAccountEmail('');
+    setNewAccountLabel('');
+    setAddAccountError('');
   };
 
   if (!isOpen) return null;
@@ -709,10 +766,92 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 </div>
               )}
 
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-xs text-gray-500">
-                  💡 Tip: Use the "+" button on the main screen to add new accounts.
-                </p>
+              {/* Add Account Section */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm border-2 border-blue-200 p-4">
+                {!showAddAccount ? (
+                  <button
+                    onClick={() => setShowAddAccount(true)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add New Account
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-bold text-gray-900">Add New Account</h4>
+                      <button
+                        onClick={() => {
+                          setShowAddAccount(false);
+                          setNewAccountEmail('');
+                          setNewAccountLabel('');
+                          setAddAccountError('');
+                        }}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={newAccountEmail}
+                        onChange={(e) => {
+                          setNewAccountEmail(e.target.value);
+                          setAddAccountError('');
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
+                            e.preventDefault();
+                            setNewAccountEmail(newAccountEmail + '@gmail.com');
+                          }
+                          if (e.key === 'Enter') {
+                            handleAddAccount();
+                          }
+                        }}
+                        placeholder="your.email"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoFocus
+                      />
+                      {newAccountEmail && !newAccountEmail.includes('@') && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+                          @gmail.com
+                        </div>
+                      )}
+                    </div>
+                    
+                    {addAccountError && (
+                      <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-md">
+                        <p className="text-xs text-red-600">{addAccountError}</p>
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-gray-500">
+                      💡 Press <kbd className="px-1 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+                    </p>
+                    
+                    <input
+                      type="text"
+                      value={newAccountLabel}
+                      onChange={(e) => setNewAccountLabel(e.target.value)}
+                      placeholder="Label (optional, e.g., Work, Personal)"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    
+                    <button
+                      onClick={handleAddAccount}
+                      disabled={!newAccountEmail.trim()}
+                      className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Add Account
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
