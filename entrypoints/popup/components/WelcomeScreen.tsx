@@ -56,20 +56,40 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
     
     setIsSubmitting(true);
     
+    const emailTrimmed = email.trim();
+    
     // Create first account
     const account = {
       id: Date.now().toString(),
-      email: email.trim(),
+      email: emailTrimmed,
       label: 'Primary',
       isActive: true,
     };
     
+    // Helper to get account-specific storage key
+    const getAccountStorageKey = (email: string, suffix: string) => {
+      const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
+      return `${suffix}_${sanitized}`;
+    };
+    
+    // Initialize account-specific storage
+    const historyKey = getAccountStorageKey(emailTrimmed, 'gmail_alias_recent');
+    const statsKey = getAccountStorageKey(emailTrimmed, 'alias_stats');
+    const favoritesKey = getAccountStorageKey(emailTrimmed, 'favorites');
+    
+    // Check if there's existing data in old format and migrate it
+    const existingData = await browser.storage.local.get(['gmail_alias_recent', 'alias_stats', 'favorites']);
+    
     await browser.storage.local.set({ 
       email_accounts: [account],
-      base_email: email.trim(),
+      base_email: emailTrimmed,
+      // Initialize account-specific storage
+      [historyKey]: existingData.gmail_alias_recent || [],
+      [statsKey]: existingData.alias_stats || { total: 0, tags: {} },
+      [favoritesKey]: existingData.favorites || [],
     });
     
-    onEmailAdded(email.trim());
+    onEmailAdded(emailTrimmed);
     setIsSubmitting(false);
   };
 

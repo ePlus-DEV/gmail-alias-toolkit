@@ -79,8 +79,9 @@ function App() {
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
-    browser.storage.local.get(['base_email', 'app_settings', 'email_accounts']).then(async (result: StorageResult) => {
+    browser.storage.local.get(['base_email', 'app_settings', 'email_accounts', 'gmail_alias_recent', 'alias_stats', 'favorites']).then(async (result: StorageResult) => {
       let activeEmail = 'your.email@gmail.com';
+      let needsMigration = false;
       
       // Load active email from email_accounts or fall back to base_email
       if (result.email_accounts && Array.isArray(result.email_accounts)) {
@@ -92,6 +93,27 @@ function App() {
       } else if (result.base_email) {
         activeEmail = result.base_email;
         setBaseEmail(activeEmail);
+        // Check if we need to migrate from old format
+        needsMigration = true;
+      }
+      
+      // Migrate old data format to new account-specific format if needed
+      if (needsMigration && (result.gmail_alias_recent || result.alias_stats || result.favorites)) {
+        const historyKey = getAccountStorageKey(activeEmail, 'gmail_alias_recent');
+        const statsKey = getAccountStorageKey(activeEmail, 'alias_stats');
+        const favoritesKey = getAccountStorageKey(activeEmail, 'favorites');
+        
+        // Only migrate if account-specific data doesn't exist yet
+        const accountData = await browser.storage.local.get([historyKey, statsKey, favoritesKey]);
+        
+        if (!accountData[historyKey] && !accountData[statsKey] && !accountData[favoritesKey]) {
+          await browser.storage.local.set({
+            [historyKey]: result.gmail_alias_recent || [],
+            [statsKey]: result.alias_stats || { total: 0, tags: {} },
+            [favoritesKey]: result.favorites || [],
+          });
+          console.log('Migrated old data to account-specific storage for:', activeEmail);
+        }
       }
       
       // Load account-specific history
@@ -286,17 +308,8 @@ function App() {
   };
 
   const saveBaseEmail = (email: string) => {
+    // Only update base_email storage, don't modify account data
     browser.storage.local.set({ base_email: email });
-    
-    // Also update in email_accounts if exists
-    browser.storage.local.get('email_accounts').then((result) => {
-      if (result.email_accounts && Array.isArray(result.email_accounts)) {
-        const updated = result.email_accounts.map((acc: any) => 
-          acc.isActive ? { ...acc, email } : acc
-        );
-        browser.storage.local.set({ email_accounts: updated });
-      }
-    });
   };
 
   const generateAlias = (tag: string) => {
@@ -341,19 +354,42 @@ function App() {
   const handleAddAccount = async () => {
     if (!newAccountEmail.trim() || !newAccountEmail.includes('@')) return;
     
+    // Check if email already exists
+    const emailExists = emailAccounts.some(acc => acc.email === newAccountEmail.trim());
+    if (emailExists) {
+      alert('This email address is already added!');
+      return;
+    }
+    
     const newAccount = {
       id: Date.now().toString(),
       email: newAccountEmail.trim(),
       label: newAccountLabel.trim() || 'Account ' + (emailAccounts.length + 1),
-      isActive: false,
+      isActive: false, // Don't auto-switch to new account
     };
     
     const updatedAccounts = [...emailAccounts, newAccount];
     await browser.storage.local.set({ email_accounts: updatedAccounts });
     
+    // Initialize empty storage for new account
+    const historyKey = getAccountStorageKey(newAccount.email, 'gmail_alias_recent');
+    const statsKey = getAccountStorageKey(newAccount.email, 'alias_stats');
+    const favoritesKey = getAccountStorageKey(newAccount.email, 'favorites');
+    
+    await browser.storage.local.set({
+      [historyKey]: [],
+      [statsKey]: { total: 0, tags: {} },
+      [favoritesKey]: [],
+    });
+    
     setNewAccountEmail('');
     setNewAccountLabel('');
     setShowAddAccount(false);
+    
+    // Show success message briefly
+    const accountLabel = newAccount.label;
+    setCopiedEmail(`✓ ${accountLabel} added!`);
+    setTimeout(() => setCopiedEmail(null), 2000);
   };
 
   return (
@@ -400,19 +436,20 @@ function App() {
             <div className="relative flex-1">
               <select
                 value={baseEmail}
-                onChange={(e) => {
+                onChange={async (e) => {
                   const selectedEmail = e.target.value;
                   setBaseEmail(selectedEmail);
-                  saveBaseEmail(selectedEmail);
                   
-                  // Update active account
-                  if (emailAccounts.length > 0) {
-                    const updated = emailAccounts.map(acc => ({
-                      ...acc,
-                      isActive: acc.email === selectedEmail
-                    }));
-                    browser.storage.local.set({ email_accounts: updated });
-                  }
+                  // Update active account and base_email
+                  const updated = emailAccounts.map(acc => ({
+                    ...acc,
+                    isActive: acc.email === selectedEmail
+                  }));
+                  
+                  await browser.storage.local.set({ 
+                    email_accounts: updated,
+                    base_email: selectedEmail
+                  });
                 }}
                 className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
               >
