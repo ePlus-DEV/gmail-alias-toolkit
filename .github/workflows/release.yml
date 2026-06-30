@@ -34,11 +34,14 @@ jobs:
           node-version: 24.x
           cache: "yarn"
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts --ignore-engines
+        run: yarn install --immutable --mode=skip-build
 
       - name: Prepare WXT types
-        run: yarn wxt prepare
+        run: yarn exec wxt prepare
 
       - name: Build the extension
         run: |
@@ -77,7 +80,7 @@ jobs:
       - name: Submit to stores
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          yarn wxt submit \
+          yarn exec wxt submit \
             --chrome-zip .output/*-chrome.zip \
             --firefox-zip .output/*-firefox.zip \
             --firefox-sources-zip .output/*-sources.zip
