@@ -1,8 +1,8 @@
 {
   "name": "gmail-alias-toolkit",
-  "description": "Generate and manage Gmail aliases with plus addressing and presets",
+  "description": "Local-first Gmail plus alias manager. No account. No server. No tracking.",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.6.0",
   "author": "dev@eplus.dev",
   "license": "MIT",
   "homepage_url": "https://eplus.dev",

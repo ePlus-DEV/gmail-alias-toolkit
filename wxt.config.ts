@@ -9,8 +9,8 @@ export default defineConfig({
   manifest: {
     name: "Gmail Alias Toolkit",
     description:
-      "Generate and manage Gmail aliases with plus addressing and presets",
-    permissions: ["storage", "clipboardWrite", "contextMenus"],
+      "Local-first Gmail plus alias manager. No account. No server. No tracking.",
+    permissions: ["storage", "tabs", "activeTab", "clipboardWrite", "contextMenus"],
     host_permissions: ["<all_urls>"],
     browser_specific_settings: {
       gecko: {
