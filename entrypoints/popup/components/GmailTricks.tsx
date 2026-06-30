@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { generateDotVariations } from '../utils';
 
 interface GmailTricksProps {
   baseEmail: string;
@@ -11,60 +12,6 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
   const [generatedTricks, setGeneratedTricks] = useState<string[]>([]);
   const [randomizeDots, setRandomizeDots] = useState(false);
 
-  const generateDotVariations = (username: string, count: number = 10): string[] => {
-    if (username.length < 2) return [];
-    
-    const variations: string[] = [];
-    
-    if (randomizeDots) {
-      // Random dot positions - truly random each time
-      for (let i = 0; i < count; i++) {
-        const chars = username.split('');
-        const maxDots = Math.min(3, chars.length - 1);
-        const numDots = Math.floor(Math.random() * maxDots) + 1;
-        const positions = new Set<number>();
-        
-        // Generate truly random positions
-        while (positions.size < numDots) {
-          const pos = Math.floor(Math.random() * (chars.length - 1)) + 1;
-          positions.add(pos);
-        }
-        
-        // Insert dots at random positions
-        const sortedPositions = Array.from(positions).sort((a, b) => a - b);
-        let result = '';
-        let lastPos = 0;
-        sortedPositions.forEach(pos => {
-          result += chars.slice(lastPos, pos).join('') + '.';
-          lastPos = pos;
-        });
-        result += chars.slice(lastPos).join('');
-        
-        variations.push(result);
-      }
-    } else {
-      // Sequential dot positions (original behavior)
-      const len = username.length;
-      for (let i = 1; i < len; i++) {
-        variations.push(username.slice(0, i) + '.' + username.slice(i));
-      }
-      
-      // Generate multiple dots
-      if (username.length >= 4) {
-        for (let i = 1; i < len - 1; i++) {
-          for (let j = i + 1; j < len; j++) {
-            variations.push(
-              username.slice(0, i) + '.' + 
-              username.slice(i, j) + '.' + 
-              username.slice(j)
-            );
-          }
-        }
-      }
-    }
-    
-    return [...new Set(variations)].slice(0, count);
-  };
 
   const generateGooglemailVariation = (): string | null => {
     if (!baseEmail.includes('@')) return null;
@@ -85,7 +32,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!domain.includes('gmail')) return [];
     
     const combinations: string[] = [];
-    const dotVariations = generateDotVariations(username, count);
+    const dotVariations = generateDotVariations(username, count, randomizeDots);
     
     // Dot + common tags
     const commonTags = ['newsletter', 'shop', 'spam', 'work', 'personal', 'test', 'promo', 'social', 'finance', 'travel'];
@@ -117,7 +64,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!baseEmail.includes('@')) return [];
     
     const [username, domain] = baseEmail.split('@');
-    const dotVars = generateDotVariations(username, Math.ceil(count / 3));
+    const dotVars = generateDotVariations(username, Math.ceil(count / 3), randomizeDots);
     const tags = ['shop', 'work', 'test', 'spam', 'newsletter', 'promo', 'social', 'finance'];
     const results: string[] = [];
     
@@ -141,11 +88,11 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     
     switch (selectedTrick) {
       case 'dot':
-        results = generateDotVariations(username, tricksCount).map(u => `${u}@${domain}`);
+        results = generateDotVariations(username, tricksCount, randomizeDots).map(u => `${u}@${domain}`);
         break;
       case 'googlemail':
         const altDomain = domain === 'gmail.com' ? 'googlemail.com' : 'gmail.com';
-        results = generateDotVariations(username, tricksCount).map(u => `${u}@${altDomain}`);
+        results = generateDotVariations(username, tricksCount, randomizeDots).map(u => `${u}@${altDomain}`);
         break;
       case 'nodots':
         const noDots = username.replace(/\./g, '');

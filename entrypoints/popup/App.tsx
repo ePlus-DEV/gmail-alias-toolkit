@@ -4,6 +4,13 @@ import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 import GmailTricks from './components/GmailTricks';
 import WelcomeScreen from './components/WelcomeScreen';
+import {
+  getAccountStorageKey,
+  generateAlias,
+  generateRandomString,
+  filterAliases,
+  type RandomFormat,
+} from './utils';
 
 interface Alias {
   email: string;
@@ -35,19 +42,13 @@ interface StorageResult {
   };
 }
 
-const STORAGE_KEY = 'gmail_alias_recent';
-
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
 
 function App() {
   const [baseEmail, setBaseEmail] = useState('your.email@gmail.com');
   const [customTag, setCustomTag] = useState('');
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [maxRecent, setMaxRecent] = useState(20);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
@@ -57,11 +58,9 @@ function App() {
   const [viewMode, setViewMode] = useState<'all' | 'favorites'>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [randomFormat, setRandomFormat] = useState<'private-mail' | 'alphanumeric' | 'words' | 'timestamp'>('private-mail');
-  const [lastGeneratedRandom, setLastGeneratedRandom] = useState<string>('');
+  const [randomFormat, setRandomFormat] = useState<RandomFormat>('private-mail');
   const [generatedRandomList, setGeneratedRandomList] = useState<string[]>([]);
   const [randomEmailCount, setRandomEmailCount] = useState(10);
-  const [showRandomSettings, setShowRandomSettings] = useState(false);
   const [activeGeneratorTab, setActiveGeneratorTab] = useState<'random' | 'tags' | 'tricks'>('random');
   const [emailAccounts, setEmailAccounts] = useState<any[]>([]);
   const [hasEmailAccounts, setHasEmailAccounts] = useState(true);
@@ -278,7 +277,7 @@ function App() {
   const toggleFavorite = async (email: string) => {
     const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
     const result = await browser.storage.local.get(favoritesKey);
-    const currentFavs = result[favoritesKey] || [];
+    const currentFavs = (result[favoritesKey] as any[]) || [];
     
     const exists = currentFavs.find((f: any) => f.email === email);
     
@@ -303,93 +302,45 @@ function App() {
     setFavorites(favEmails);
   };
 
-  const generateRandomString = (format: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp', index: number = 0): string => {
-    if (format === 'private-mail') {
-      // Generate format like: private-mail-q2ga
-      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-      const length = 4;
-      let randomStr = '';
-      for (let i = 0; i < length; i++) {
-        randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return `private-mail-${randomStr}`;
-    }
-    
-    if (format === 'timestamp') {
-      // Add index to ensure uniqueness when generating multiple
-      return (Date.now() + index).toString(36);
-    }
-    
-    if (format === 'words') {
-      const adjectives = ['happy', 'sunny', 'calm', 'bright', 'swift', 'brave', 'cool', 'smart', 'quick', 'zen', 'wild', 'free', 'bold', 'wise', 'pure', 'kind', 'fair', 'true', 'rare', 'fine'];
-      const nouns = ['fox', 'bird', 'bear', 'wolf', 'deer', 'lion', 'hawk', 'eagle', 'tiger', 'panda', 'seal', 'otter', 'raven', 'crane', 'swan', 'lynx', 'coral', 'pearl', 'jade', 'ruby'];
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-      const noun = nouns[Math.floor(Math.random() * nouns.length)];
-      const num = Math.floor(Math.random() * 999);
-      return `${adj}-${noun}-${num}`;
-    }
-    
-    // alphanumeric
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    const length = 8;
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  };
 
   const generateRandomAlias = () => {
-    // Clear previous results first
     setGeneratedRandomList([]);
-    setLastGeneratedRandom('');
-    
+
     const aliases: string[] = [];
     const timestamp = Date.now();
-    
+
     for (let i = 0; i < randomEmailCount; i++) {
       const randomTag = generateRandomString(randomFormat, i + timestamp);
-      const alias = generateAlias(randomTag);
-      if (alias) {
-        aliases.push(alias);
-      }
+      const alias = generateAlias(baseEmail, randomTag);
+      if (alias) aliases.push(alias);
     }
-    
-    // Use setTimeout to ensure state update triggers re-render
+
     setTimeout(() => {
       if (aliases.length > 0) {
-        setLastGeneratedRandom(aliases[0]);
         setGeneratedRandomList(aliases);
-        // Copy first one to clipboard
         copyToClipboard(aliases[0]);
       }
     }, 0);
   };
 
-  const saveBaseEmail = (email: string) => {
-    // Only update base_email storage, don't modify account data
-    browser.storage.local.set({ base_email: email });
-  };
-
-  const generateAlias = (tag: string) => {
-    const [username, domain] = baseEmail.split('@');
-    if (!username || !domain) return null;
-    return `${username}+${tag}@${domain}`;
-  };
 
   const copyToClipboard = async (email: string) => {
     try {
       await navigator.clipboard.writeText(email);
       setCopiedEmail(email);
+      setToastMessage('✓ Copied to clipboard!');
       saveRecentAlias(email);
-      setTimeout(() => setCopiedEmail(null), 2000);
+      setTimeout(() => {
+        setCopiedEmail(null);
+        setToastMessage(null);
+      }, 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
   };
 
   const handlePresetClick = (tag: string) => {
-    const alias = generateAlias(tag);
+    const alias = generateAlias(baseEmail, tag);
     if (alias) {
       copyToClipboard(alias);
     }
@@ -397,7 +348,7 @@ function App() {
 
   const handleCustomGenerate = () => {
     if (!customTag.trim()) return;
-    const alias = generateAlias(customTag.trim());
+    const alias = generateAlias(baseEmail, customTag.trim());
     if (alias) {
       copyToClipboard(alias);
       setCustomTag('');
@@ -456,10 +407,8 @@ function App() {
     setAddAccountError('');
     setShowAddAccount(false);
     
-    // Show success message briefly
-    const accountLabel = newAccount.label;
-    setCopiedEmail(`✓ ${accountLabel} added!`);
-    setTimeout(() => setCopiedEmail(null), 2000);
+    setToastMessage(`✓ ${newAccount.label} added!`);
+    setTimeout(() => setToastMessage(null), 2000);
   };
 
   return (
@@ -743,7 +692,20 @@ function App() {
                     <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-gray-700">Generated Aliases</span>
-                        <span className="text-xs text-gray-500">{generatedRandomList.length} total</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500">{generatedRandomList.length} total</span>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(generatedRandomList.join('\n'));
+                              setToastMessage(`✓ Copied ${generatedRandomList.length} aliases!`);
+                              setTimeout(() => setToastMessage(null), 2000);
+                            }}
+                            className="text-xs text-purple-600 hover:text-purple-800 font-medium"
+                            title="Copy all to clipboard"
+                          >
+                            Copy All
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div className="max-h-64 overflow-y-auto">
@@ -908,7 +870,7 @@ function App() {
                   {Array.from(new Set(recentAliases.map(a => {
                     const match = a.email.match(/\+([^@]+)@/);
                     return match ? match[1] : null;
-                  }).filter(Boolean))).map(tag => (
+                  }).filter((t): t is string => t !== null))).map(tag => (
                     <option key={tag} value={tag}>{tag}</option>
                   ))}
                 </select>
@@ -926,37 +888,13 @@ function App() {
 
             <div className="space-y-2">
               {(() => {
-                // Filter and sort aliases
-                const filteredAliases = recentAliases
-                  .filter((alias) => {
-                    // Filter by view mode
-                    if (viewMode === 'favorites' && !favorites.includes(alias.email)) {
-                      return false;
-                    }
-                    
-                    // Filter by search query
-                    if (searchQuery && !alias.email.toLowerCase().includes(searchQuery.toLowerCase())) {
-                      return false;
-                    }
-                    
-                    // Filter by tag
-                    if (filterTag !== 'all') {
-                      const tagMatch = alias.email.match(/\+([^@]+)@/);
-                      const emailTag = tagMatch ? tagMatch[1] : null;
-                      if (emailTag !== filterTag) {
-                        return false;
-                      }
-                    }
-                    
-                    return true;
-                  })
-                  .sort((a, b) => {
-                    if (sortBy === 'recent') {
-                      return b.timestamp - a.timestamp;
-                    } else {
-                      return a.email.localeCompare(b.email);
-                    }
-                  });
+                const filteredAliases = filterAliases(recentAliases, {
+                  viewMode,
+                  favorites,
+                  searchQuery,
+                  filterTag,
+                  sortBy,
+                });
 
                 // Calculate pagination
                 const totalItems = filteredAliases.length;
@@ -965,7 +903,6 @@ function App() {
                 const endIndex = startIndex + itemsPerPage;
                 const paginatedAliases = filteredAliases.slice(startIndex, endIndex);
 
-                // Empty state for favorites
                 if (filteredAliases.length === 0 && viewMode === 'favorites') {
                   return (
                   <div className="text-center py-8 text-gray-500">
@@ -976,6 +913,18 @@ function App() {
                     <p className="text-xs">Star emails from your history to quick access them here</p>
                   </div>
                 );
+                }
+
+                if (filteredAliases.length === 0 && (searchQuery || filterTag !== 'all')) {
+                  return (
+                    <div className="text-center py-6 text-gray-500">
+                      <svg className="w-10 h-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <p className="text-sm font-medium mb-1">No results found</p>
+                      <p className="text-xs">Try a different search or filter</p>
+                    </div>
+                  );
                 }
 
                 // Render paginated list
@@ -1152,10 +1101,10 @@ function App() {
         {/* Statistics - Collapsible */}
         <Statistics />
 
-        {/* Success Message */}
-        {copiedEmail && (
+        {/* Toast Notification */}
+        {toastMessage && (
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in">
-            ✓ Copied to clipboard!
+            {toastMessage}
           </div>
         )}
       </div>

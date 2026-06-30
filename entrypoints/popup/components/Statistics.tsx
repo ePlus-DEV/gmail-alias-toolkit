@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getAccountStorageKey } from '../utils';
 
 interface Stats {
   totalGenerated: number;
@@ -6,12 +7,6 @@ interface Stats {
   createdToday: number;
   createdThisWeek: number;
 }
-
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
 
 export default function Statistics() {
   const [stats, setStats] = useState<Stats>({

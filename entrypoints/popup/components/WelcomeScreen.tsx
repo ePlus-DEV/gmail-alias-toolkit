@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { validateEmail as validateEmailPure, getAccountStorageKey } from '../utils';
 
 interface WelcomeScreenProps {
   onEmailAdded: (email: string) => void;
@@ -12,40 +13,14 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
 
   const validateEmail = (value: string): boolean => {
     setValidationError('');
-    
-    if (!value.trim()) {
-      setValidationError('Email is required');
+    const result = validateEmailPure(value.trim());
+    if (!result.isValid) {
+      setValidationError(result.error || '');
       return false;
     }
-    
-    if (!value.includes('@')) {
-      setValidationError('Please enter a valid email address');
-      return false;
+    if (result.warning) {
+      setValidationError(result.warning);
     }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      setValidationError('Invalid email format');
-      return false;
-    }
-    
-    const [username, domain] = value.split('@');
-    
-    if (username.length < 1) {
-      setValidationError('Username cannot be empty');
-      return false;
-    }
-    
-    if (!domain.includes('.')) {
-      setValidationError('Domain must include a dot (e.g., gmail.com)');
-      return false;
-    }
-    
-    // Warning for non-Gmail (but still allow)
-    if (!domain.includes('gmail') && !domain.includes('googlemail')) {
-      setValidationError('⚠️ Works best with Gmail addresses');
-    }
-    
     return true;
   };
 
@@ -64,12 +39,6 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
       email: emailTrimmed,
       label: 'Primary',
       isActive: true,
-    };
-    
-    // Helper to get account-specific storage key
-    const getAccountStorageKey = (email: string, suffix: string) => {
-      const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-      return `${suffix}_${sanitized}`;
     };
     
     // Initialize account-specific storage
