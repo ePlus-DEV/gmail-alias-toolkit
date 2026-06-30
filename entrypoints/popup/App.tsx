@@ -46,6 +46,8 @@ const getAccountStorageKey = (email: string, suffix: string) => {
 function App() {
   const [baseEmail, setBaseEmail] = useState('your.email@gmail.com');
   const [customTag, setCustomTag] = useState('');
+  const [bulkTags, setBulkTags] = useState('');
+  const [generatedBulkAliases, setGeneratedBulkAliases] = useState<string[]>([]);
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -395,12 +397,55 @@ function App() {
     }
   };
 
+  const normalizeAliasTag = (tag: string) =>
+    tag
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]+/g, '-')
+      .replace(/^[._-]+|[._-]+$/g, '')
+      .slice(0, 64);
+
+  const parseBulkTags = (value: string) =>
+    Array.from(
+      new Set(
+        value
+          .split(/[\n,;\t]+/)
+          .map(normalizeAliasTag)
+          .filter(Boolean)
+      )
+    );
+
   const handleCustomGenerate = () => {
     if (!customTag.trim()) return;
-    const alias = generateAlias(customTag.trim());
+    const alias = generateAlias(normalizeAliasTag(customTag));
     if (alias) {
       copyToClipboard(alias);
       setCustomTag('');
+    }
+  };
+
+  const handleBulkGenerate = () => {
+    const aliases = parseBulkTags(bulkTags)
+      .map((tag) => generateAlias(tag))
+      .filter((alias): alias is string => Boolean(alias));
+
+    setGeneratedBulkAliases(aliases);
+
+    if (aliases.length > 0) {
+      copyToClipboard(aliases[0]);
+    }
+  };
+
+  const copyBulkAliases = async () => {
+    if (generatedBulkAliases.length === 0) return;
+
+    try {
+      await navigator.clipboard.writeText(generatedBulkAliases.join('\n'));
+      setCopiedEmail('✓ Bulk aliases copied!');
+      generatedBulkAliases.forEach(saveRecentAlias);
+      setTimeout(() => setCopiedEmail(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy bulk aliases:', err);
     }
   };
 
@@ -814,6 +859,55 @@ function App() {
                     </div>
                   </div>
                 )}
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-gray-700">Bulk tag generator</label>
+                    <span className="text-[10px] text-gray-500">comma, tab, semicolon, or newline</span>
+                  </div>
+                  <textarea
+                    value={bulkTags}
+                    onChange={(e) => setBulkTags(e.target.value)}
+                    className="w-full min-h-20 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder={"amazon\nnetflix, github; bank"}
+                  />
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={handleBulkGenerate}
+                      disabled={parseBulkTags(bulkTags).length === 0}
+                      className="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Generate {parseBulkTags(bulkTags).length || ''} bulk aliases
+                    </button>
+                    <button
+                      onClick={copyBulkAliases}
+                      disabled={generatedBulkAliases.length === 0}
+                      className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Copy all
+                    </button>
+                  </div>
+
+                  {generatedBulkAliases.length > 0 && (
+                    <div className="mt-3 border border-blue-100 rounded-lg overflow-hidden">
+                      <div className="bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-800">
+                        {generatedBulkAliases.length} aliases ready
+                      </div>
+                      <div className="max-h-40 overflow-y-auto">
+                        {generatedBulkAliases.map((email) => (
+                          <button
+                            key={email}
+                            onClick={() => copyToClipboard(email)}
+                            className="w-full text-left px-3 py-2 font-mono text-xs text-gray-800 hover:bg-blue-50 border-t border-blue-50 truncate"
+                            title="Copy this alias"
+                          >
+                            {email}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 <div className="mt-3 text-xs text-gray-500">
                   Example: {baseEmail.split('@')[0]}+<strong>your-tag</strong>@{baseEmail.split('@')[1]}
