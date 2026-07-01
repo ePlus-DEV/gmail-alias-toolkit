@@ -3089,7 +3089,7 @@ __metadata:
     "@wxt-dev/module-react": "npm:^1.1.5"
     autoprefixer: "npm:^10.4.20"
     jsdom: "npm:^29.1.1"
-    postcss: "npm:^8.4.49"
+    postcss: "npm:^8.5.10"
     qrcode: "npm:^1.5.4"
     react: "npm:^19.2.3"
     react-dom: "npm:^19.2.3"
@@ -4771,7 +4771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.47, postcss@npm:^8.4.49":
+"postcss@npm:^8.4.47":
   version: 8.5.6
   resolution: "postcss@npm:8.5.6"
   dependencies:
@@ -4782,7 +4782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.5.16":
+"postcss@npm:^8.5.10, postcss@npm:^8.5.16":
   version: 8.5.16
   resolution: "postcss@npm:8.5.16"
   dependencies:
