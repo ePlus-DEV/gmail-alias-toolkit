@@ -622,7 +622,7 @@ function App() {
           
           {/* Quick Add Account Form */}
           {showAddAccount && (
-            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
               <div className="relative">
                 <input
                   type="email"
@@ -638,29 +638,29 @@ function App() {
                     }
                   }}
                   placeholder="your.email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   autoFocus
                 />
                 {newAccountEmail && !newAccountEmail.includes('@') && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
                     @gmail.com
                   </div>
                 )}
               </div>
               {addAccountError && (
-                <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-xs text-red-600">{addAccountError}</p>
+                <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-md">
+                  <p className="text-xs text-red-600 dark:text-red-400">{addAccountError}</p>
                 </div>
               )}
-              <p className="text-xs text-gray-500 -mt-1">
-                💡 Press <kbd className="px-1 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+                💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
               </p>
               <input
                 type="text"
                 value={newAccountLabel}
                 onChange={(e) => setNewAccountLabel(e.target.value)}
                 placeholder="Label (optional, e.g., Work, Personal)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
               <div className="flex gap-2">
                 <button
@@ -677,16 +677,16 @@ function App() {
                     setNewAccountLabel('');
                     setAddAccountError('');
                   }}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           )}
-          
+
           {baseEmail && !baseEmail.includes('@gmail.com') && baseEmail.includes('@') && (
-            <p className="text-xs text-amber-600 mt-2">
+            <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
               ⚠ This doesn't look like a Gmail address. Plus addressing works best with Gmail.
             </p>
           )}
@@ -710,8 +710,8 @@ function App() {
               onClick={() => setActiveGeneratorTab('random')}
               className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'random'
-                  ? 'text-purple-600 border-b-2 border-purple-600 bg-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400 bg-white dark:bg-gray-800'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
               }`}
             >
               <div className="flex items-center justify-center gap-1.5">
@@ -725,8 +725,8 @@ function App() {
               onClick={() => setActiveGeneratorTab('tags')}
               className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'tags'
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-white dark:bg-gray-800'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
               }`}
             >
               <div className="flex items-center justify-center gap-1.5">
@@ -740,8 +740,8 @@ function App() {
               onClick={() => setActiveGeneratorTab('tricks')}
               className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'tricks'
-                  ? 'text-green-600 border-b-2 border-green-600 bg-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'text-green-600 dark:text-green-400 border-b-2 border-green-600 dark:border-green-400 bg-white dark:bg-gray-800'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
               }`}
             >
               <div className="flex items-center justify-center gap-1.5">
@@ -760,7 +760,7 @@ function App() {
               <div>
                 {/* Format Selector */}
                 <div className="mb-3">
-                  <label className="block text-xs font-medium text-gray-700 mb-2">Format</label>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Format</label>
                   <select
                     value={randomFormat}
                     onChange={async (e) => {
@@ -773,7 +773,7 @@ function App() {
                         app_settings: { ...currentSettings, randomFormat: newFormat }
                       });
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
                     <option value="private-mail">📧 Private Mail (private-mail-xxxx)</option>
                     <option value="alphanumeric">🔤 Random Characters (abc123xy)</option>
@@ -784,13 +784,13 @@ function App() {
 
                 {/* Number of Emails */}
                 <div className="mb-3 flex items-center gap-3">
-                  <label className="text-sm font-medium text-gray-700">Number of aliases</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Number of aliases</label>
                   <input
                     type="number"
                     min="1"
                     value={randomEmailCount}
                     onChange={(e) => setRandomEmailCount(Math.max(1, parseInt(e.target.value) || 10))}
-                    className="w-20 px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
 
@@ -809,12 +809,12 @@ function App() {
 
                 {/* Generated Emails List */}
                 {generatedRandomList.length > 0 && (
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                    <div className="bg-gray-50 dark:bg-gray-900 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-gray-700">Generated Aliases</span>
+                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">Generated Aliases</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500">{generatedRandomList.length} total</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{generatedRandomList.length} total</span>
                           <button
                             onClick={async () => {
                               try {
@@ -826,7 +826,7 @@ function App() {
                               }
                               setTimeout(() => setToastMessage(null), 2000);
                             }}
-                            className="text-xs text-purple-600 hover:text-purple-800 font-medium"
+                            className="text-xs text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium"
                             title="Copy all to clipboard"
                           >
                             Copy All
@@ -838,14 +838,14 @@ function App() {
                       {generatedRandomList.map((email, index) => (
                         <div
                           key={index}
-                          className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 last:border-b-0 hover:bg-purple-50 transition-colors"
+                          className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-purple-50 dark:hover:bg-purple-950/30 transition-colors"
                         >
-                          <div className="flex-1 font-mono text-xs text-gray-900 truncate">
+                          <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">
                             {email}
                           </div>
                           <button
                             onClick={() => copyToClipboard(email)}
-                            className="p-1.5 text-purple-600 hover:bg-purple-100 rounded transition-colors flex-shrink-0"
+                            className="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded transition-colors flex-shrink-0"
                             title="Copy"
                           >
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -858,7 +858,7 @@ function App() {
                   </div>
                 )}
 
-                <div className="mt-2 text-xs text-gray-500 text-center">
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
                   {randomFormat === 'private-mail' ? 'Format: private-mail-xxxx' : randomFormat === 'alphanumeric' ? '8 random characters' : randomFormat === 'words' ? '2 random words' : 'Unix timestamp'}
                 </div>
               </div>
@@ -873,7 +873,7 @@ function App() {
                     value={customTag}
                     onChange={(e) => setCustomTag(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Enter tag (e.g., shopping, work)"
                   />
                   <button
@@ -888,13 +888,13 @@ function App() {
                 {/* Custom Presets - Quick Access */}
                 {customPresets.length > 0 && (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-700 mb-2">Your Presets</div>
+                    <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Your Presets</div>
                     <div className="flex flex-wrap gap-2">
                       {customPresets.map((preset) => (
                         <button
                           key={preset.id}
                           onClick={() => handlePresetClick(preset.tag)}
-                          className="px-3 py-1.5 bg-white text-blue-700 text-xs font-medium rounded-md border border-blue-200 hover:bg-blue-50 transition-colors"
+                          className="px-3 py-1.5 bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-md border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
                         >
                           {preset.label}
                         </button>
@@ -903,7 +903,7 @@ function App() {
                   </div>
                 )}
 
-                <div className="mt-3 text-xs text-gray-500">
+                <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
                   Example: {baseEmail.split('@')[0]}+<strong>your-tag</strong>@{baseEmail.split('@')[1]}
                 </div>
               </div>
@@ -930,12 +930,12 @@ function App() {
                   <>
                     <button
                       onClick={() => exportAliases('csv')}
-                      className="text-xs text-gray-500 hover:text-blue-600 px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors"
+                      className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
                       title="Export as CSV"
                     >CSV</button>
                     <button
                       onClick={() => exportAliases('json')}
-                      className="text-xs text-gray-500 hover:text-blue-600 px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors"
+                      className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
                       title="Export as JSON"
                     >JSON</button>
                     <button
@@ -943,19 +943,19 @@ function App() {
                         setIsSelectMode(m => !m);
                         setSelectedAliases(new Set());
                       }}
-                      className={`text-xs px-1.5 py-0.5 rounded transition-colors ${isSelectMode ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'}`}
+                      className={`text-xs px-1.5 py-0.5 rounded transition-colors ${isSelectMode ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40'}`}
                       title="Select aliases"
                     >Select</button>
                   </>
                 )}
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   {viewMode === 'all' ? `${recentAliases.length} total` : `${favorites.length} starred`}
                 </span>
               </div>
             </div>
             {/* Bulk delete bar */}
             {isSelectMode && (
-              <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
+              <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-950/40 rounded-lg">
                 <button
                   onClick={() => {
                     if (selectedAliases.size === filteredAliases.length) {
@@ -964,11 +964,11 @@ function App() {
                       setSelectedAliases(new Set(filteredAliases.map(a => a.email)));
                     }
                   }}
-                  className="text-xs text-blue-700 hover:text-blue-900 font-medium"
+                  className="text-xs text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium"
                 >
                   {selectedAliases.size === filteredAliases.length ? 'Deselect All' : 'Select All'}
                 </button>
-                <span className="text-xs text-gray-500 flex-1">{selectedAliases.size} selected</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 flex-1">{selectedAliases.size} selected</span>
                 <button
                   onClick={deleteSelected}
                   disabled={selectedAliases.size === 0}
@@ -985,8 +985,8 @@ function App() {
                 onClick={() => setViewMode('all')}
                 className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   viewMode === 'all'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 <div className="flex items-center justify-center gap-1.5">
@@ -1000,8 +1000,8 @@ function App() {
                 onClick={() => setViewMode('favorites')}
                 className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   viewMode === 'favorites'
-                    ? 'bg-white text-yellow-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-800 text-yellow-600 dark:text-yellow-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 <div className="flex items-center justify-center gap-1.5">
@@ -1021,12 +1021,12 @@ function App() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="🔍 Search aliases..."
-                  className="w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-3 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1039,7 +1039,7 @@ function App() {
                 <select
                   value={filterTag}
                   onChange={(e) => setFilterTag(e.target.value)}
-                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 >
                   <option value="all">All Tags</option>
                   {Array.from(new Set(recentAliases.map(a => {
@@ -1053,7 +1053,7 @@ function App() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'recent' | 'alphabetical')}
-                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 >
                   <option value="recent">📅 Most Recent</option>
                   <option value="alphabetical">🔤 A-Z</option>
@@ -1072,8 +1072,8 @@ function App() {
 
                 if (filteredAliases.length === 0 && viewMode === 'favorites') {
                   return (
-                  <div className="text-center py-8 text-gray-500">
-                    <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <svg className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                     <p className="text-sm font-medium mb-1">No favorites yet</p>
@@ -1084,8 +1084,8 @@ function App() {
 
                 if (filteredAliases.length === 0 && (searchQuery || filterTag !== 'all')) {
                   return (
-                    <div className="text-center py-6 text-gray-500">
-                      <svg className="w-10 h-10 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+                      <svg className="w-10 h-10 mx-auto mb-2 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                       <p className="text-sm font-medium mb-1">No results found</p>
@@ -1116,7 +1116,7 @@ function App() {
                     {/* QR code button */}
                     <button
                       onClick={() => setQrAlias(alias.email)}
-                      className="ml-1 p-1.5 text-gray-300 hover:text-indigo-500 focus:outline-none transition-colors"
+                      className="ml-1 p-1.5 text-gray-300 dark:text-gray-600 hover:text-indigo-500 dark:hover:text-indigo-400 focus:outline-none transition-colors"
                       title="Show QR code"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1186,11 +1186,11 @@ function App() {
 
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
-                      <div className="mt-4 pt-3 border-t border-gray-200">
+                      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
                         <div className="flex flex-col gap-3">
                           {/* Page info and items per page selector */}
                           <div className="flex items-center justify-between">
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
                               Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of {totalItems}
                             </div>
                             <select
@@ -1199,7 +1199,7 @@ function App() {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                               }}
-                              className="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             >
                               <option value={5}>5 / page</option>
                               <option value={10}>10 / page</option>
@@ -1213,7 +1213,7 @@ function App() {
                             <button
                               onClick={() => setCurrentPage(1)}
                               disabled={currentPage === 1}
-                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
                               title="First page"
                             >
                               ⟪
@@ -1221,7 +1221,7 @@ function App() {
                             <button
                               onClick={() => setCurrentPage(currentPage - 1)}
                               disabled={currentPage === 1}
-                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
                               title="Previous page"
                             >
                               ←
@@ -1238,16 +1238,16 @@ function App() {
                                   // Add ellipsis
                                   const prevPage = array[index - 1];
                                   const showEllipsis = prevPage && page - prevPage > 1;
-                                  
+
                                   return (
                                     <div key={page} className="flex items-center gap-1">
-                                      {showEllipsis && <span className="px-1 text-gray-400">...</span>}
+                                      {showEllipsis && <span className="px-1 text-gray-400 dark:text-gray-500">...</span>}
                                       <button
                                         onClick={() => setCurrentPage(page)}
                                         className={`min-w-[28px] px-2 py-1 text-xs rounded transition-colors ${
                                           currentPage === page
                                             ? 'bg-blue-600 text-white font-medium'
-                                            : 'hover:bg-gray-100 text-gray-700'
+                                            : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                                         }`}
                                       >
                                         {page}
@@ -1259,7 +1259,7 @@ function App() {
                             <button
                               onClick={() => setCurrentPage(currentPage + 1)}
                               disabled={currentPage === totalPages}
-                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
                               title="Next page"
                             >
                               →
@@ -1267,7 +1267,7 @@ function App() {
                             <button
                               onClick={() => setCurrentPage(totalPages)}
                               disabled={currentPage === totalPages}
-                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
                               title="Last page"
                             >
                               ⟫
@@ -1303,12 +1303,12 @@ function App() {
           onClick={() => setQrAlias(null)}
         >
           <div
-            className="bg-white rounded-xl shadow-2xl p-6 flex flex-col items-center gap-4"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 flex flex-col items-center gap-4"
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="text-sm font-semibold text-gray-800">Scan to copy alias</h3>
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">Scan to copy alias</h3>
             <canvas ref={qrCanvasRef} className="rounded-lg" />
-            <p className="text-xs text-gray-500 font-mono text-center max-w-[200px] break-all">{qrAlias}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-mono text-center max-w-[200px] break-all">{qrAlias}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => copyToClipboard(qrAlias)}
@@ -1316,7 +1316,7 @@ function App() {
               >Copy</button>
               <button
                 onClick={() => setQrAlias(null)}
-                className="px-4 py-1.5 bg-gray-200 text-gray-700 text-xs rounded-lg hover:bg-gray-300 transition-colors"
+                className="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >Close</button>
             </div>
           </div>

@@ -9,13 +9,13 @@ export default function Toggle({ enabled, onChange, label, description }: Toggle
   return (
     <div className="flex items-center justify-between">
       <div>
-        <label className="text-sm font-medium text-gray-700">{label}</label>
-        {description && <p className="text-xs text-gray-500">{description}</p>}
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+        {description && <p className="text-xs text-gray-500 dark:text-gray-400">{description}</p>}
       </div>
       <button
         onClick={() => onChange(!enabled)}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-          enabled ? 'bg-blue-600' : 'bg-gray-300'
+          enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
         }`}
         aria-checked={enabled}
         role="switch"
