@@ -247,7 +247,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     // Check if email changed
     if (oldEmail !== newEmail) {
       // Check if new email already exists in another account
-      const emailExists = emailAccounts.some(acc => acc.id !== accountId && acc.email === newEmail);
+      const emailExists = emailAccounts.some(acc => acc.id !== accountId && acc.email.toLowerCase() === newEmail.toLowerCase());
       if (emailExists) {
         alert('This email address is already used by another account!');
         return;
@@ -324,24 +324,22 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       return;
     }
 
-    // Create new account
+    // Create new account — only auto-activate if it's the first account
+    const isFirst = emailAccounts.length === 0;
     const newAccount: EmailAccount = {
       id: Date.now().toString(),
       email,
       label: newAccountLabel.trim() || email.split('@')[0],
-      isActive: emailAccounts.length === 0, // Make first account active
+      isActive: isFirst,
     };
 
-    const updated = emailAccounts.length === 0 
+    const updated = isFirst
       ? [newAccount]
-      : [...emailAccounts.map(acc => ({ ...acc, isActive: false })), newAccount];
+      : [...emailAccounts, newAccount];
 
-    // Make new account active
-    updated[updated.length - 1].isActive = true;
-
-    await browser.storage.local.set({ 
+    await browser.storage.local.set({
       email_accounts: updated,
-      base_email: newAccount.email
+      ...(isFirst ? { base_email: newAccount.email } : {}),
     });
 
     setEmailAccounts(updated);

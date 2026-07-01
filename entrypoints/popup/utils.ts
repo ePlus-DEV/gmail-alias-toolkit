@@ -131,7 +131,7 @@ export function filterAliases(
   return aliases
     .filter((alias) => {
       if (opts.viewMode === 'favorites' && !opts.favorites.includes(alias.email)) return false;
-      if (opts.searchQuery && !alias.email.toLowerCase().includes(opts.searchQuery.toLowerCase())) return false;
+      if (opts.searchQuery && !alias.email.toLowerCase().includes(opts.searchQuery.trim().toLowerCase())) return false;
       if (opts.filterTag !== 'all') {
         const tagMatch = alias.email.match(/\+([^@]+)@/);
         const emailTag = tagMatch ? tagMatch[1] : null;

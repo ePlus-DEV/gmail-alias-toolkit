@@ -447,7 +447,8 @@ function App() {
         setToastMessage(null);
       }, 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      setToastMessage('✗ Failed to copy');
+      setTimeout(() => setToastMessage(null), 2000);
     }
   };
 
@@ -523,6 +524,9 @@ function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
+  // Compute outside IIFE so bulk-delete bar can reference it
+  const filteredAliases = filterAliases(recentAliases, { viewMode, favorites, searchQuery, filterTag, sortBy });
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Show Welcome Screen for first-time users */}
@@ -570,14 +574,19 @@ function App() {
                 onChange={async (e) => {
                   const selectedEmail = e.target.value;
                   setBaseEmail(selectedEmail);
-                  
+                  setIsSelectMode(false);
+                  setSelectedAliases(new Set());
+                  setSearchQuery('');
+                  setFilterTag('all');
+                  setCurrentPage(1);
+
                   // Update active account and base_email
                   const updated = emailAccounts.map(acc => ({
                     ...acc,
                     isActive: acc.email === selectedEmail
                   }));
-                  
-                  await browser.storage.local.set({ 
+
+                  await browser.storage.local.set({
                     email_accounts: updated,
                     base_email: selectedEmail
                   });
@@ -807,9 +816,14 @@ function App() {
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-500">{generatedRandomList.length} total</span>
                           <button
-                            onClick={() => {
-                              navigator.clipboard.writeText(generatedRandomList.join('\n'));
-                              setToastMessage(`✓ Copied ${generatedRandomList.length} aliases!`);
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(generatedRandomList.join('\n'));
+                                generatedRandomList.forEach(e => saveRecentAlias(e));
+                                setToastMessage(`✓ Copied ${generatedRandomList.length} aliases!`);
+                              } catch {
+                                setToastMessage('✗ Failed to copy');
+                              }
                               setTimeout(() => setToastMessage(null), 2000);
                             }}
                             className="text-xs text-purple-600 hover:text-purple-800 font-medium"
@@ -944,15 +958,15 @@ function App() {
               <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
                 <button
                   onClick={() => {
-                    if (selectedAliases.size === recentAliases.length) {
+                    if (selectedAliases.size === filteredAliases.length) {
                       setSelectedAliases(new Set());
                     } else {
-                      setSelectedAliases(new Set(recentAliases.map(a => a.email)));
+                      setSelectedAliases(new Set(filteredAliases.map(a => a.email)));
                     }
                   }}
                   className="text-xs text-blue-700 hover:text-blue-900 font-medium"
                 >
-                  {selectedAliases.size === recentAliases.length ? 'Deselect All' : 'Select All'}
+                  {selectedAliases.size === filteredAliases.length ? 'Deselect All' : 'Select All'}
                 </button>
                 <span className="text-xs text-gray-500 flex-1">{selectedAliases.size} selected</span>
                 <button
@@ -1049,14 +1063,6 @@ function App() {
 
             <div className="space-y-2">
               {(() => {
-                const filteredAliases = filterAliases(recentAliases, {
-                  viewMode,
-                  favorites,
-                  searchQuery,
-                  filterTag,
-                  sortBy,
-                });
-
                 // Calculate pagination
                 const totalItems = filteredAliases.length;
                 const totalPages = Math.ceil(totalItems / itemsPerPage);
