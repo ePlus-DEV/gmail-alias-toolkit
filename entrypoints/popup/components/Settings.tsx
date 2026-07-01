@@ -410,24 +410,24 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-5 bg-gray-50 dark:bg-gray-900">
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
           {/* General Tab */}
           {activeTab === 'general' && (
-            <div className="space-y-4">
+            <div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
               {/* Appearance Section */}
-              <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-3.5">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                     </svg>
                   </span>
                   Appearance & Display
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
                       Theme
                     </label>
                     <select
@@ -438,7 +438,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                         document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'auto' && prefersDark));
                       }}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="light">☀️ Light</option>
                       <option value="dark">🌙 Dark</option>
@@ -447,14 +447,13 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
                       Badge Counter
                     </label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Display count on extension icon</p>
                     <select
                       value={settings.badgeDisplay}
                       onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="none">🚫 None (Hidden)</option>
                       <option value="total">📊 Total in History</option>
@@ -464,11 +463,8 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Notifications</label>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Copy confirmation messages</p>
-                    </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Copy notifications</label>
                     <Toggle
                       enabled={settings.showNotifications}
                       onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
@@ -479,41 +475,40 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
               </div>
 
               {/* Alias Generation Section */}
-              <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-3.5">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </span>
                   Alias Generation
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
                       Random Alias Format
                     </label>
                     <select
                       value={settings.randomFormat}
                       onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="private-mail">🎯 Private Mail (e.g., private-mail-q2ga) ⭐</option>
                       <option value="alphanumeric">🔤 Random Characters (e.g., abc123xy)</option>
                       <option value="words">💬 Random Words (e.g., happy-fox-42)</option>
                       <option value="timestamp">⏱️ Timestamp (e.g., lk9x2m3n)</option>
                     </select>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Choose the format for random alias generation</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
                       Auto-save Limit
                     </label>
                     <select
                       value={settings.maxHistory}
                       onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value={20}>20 aliases</option>
                       <option value={50}>50 aliases</option>
@@ -521,37 +516,37 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       <option value={200}>200 aliases</option>
                       <option value={500}>500 aliases</option>
                     </select>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Maximum number of aliases to auto-save to history</p>
                   </div>
                 </div>
               </div>
 
               {/* Custom Presets Section */}
-              <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-3.5">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                     </svg>
                   </span>
                   Custom Presets
                 </h3>
-                <div className="space-y-3">
-                  <Input
-                    value={newPresetLabel}
-                    onChange={setNewPresetLabel}
-                    placeholder="Label (e.g., Newsletter)"
-                    label="Preset Label"
-                  />
-                  <Input
-                    value={newPresetTag}
-                    onChange={setNewPresetTag}
-                    placeholder="Tag (e.g., newsletter)"
-                    label="Tag Name"
-                  />
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newPresetLabel}
+                      onChange={setNewPresetLabel}
+                      placeholder="Label"
+                    />
+                    <Input
+                      value={newPresetTag}
+                      onChange={setNewPresetTag}
+                      placeholder="Tag"
+                    />
+                  </div>
                   <Button
                     onClick={handleAddPreset}
                     disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
+                    size="sm"
                     fullWidth
                   >
                     + Add Preset
@@ -559,70 +554,47 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 </div>
 
                 {settings.customPresets.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-3">Your Presets ({settings.customPresets.length})</div>
-                    <div className="space-y-2">
-                      {settings.customPresets.map((preset) => (
-                        <div
-                          key={preset.id}
-                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 hover:shadow-sm transition-shadow"
-                        >
-                          <div>
-                            <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{preset.label}</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400 font-mono mt-0.5">+{preset.tag}</div>
-                          </div>
-                          <button
-                            onClick={() => handleRemovePreset(preset.id)}
-                            className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
+                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 max-h-28 overflow-y-auto">
+                    {settings.customPresets.map((preset) => (
+                      <div
+                        key={preset.id}
+                        className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600"
+                      >
+                        <div className="text-xs text-gray-900 dark:text-gray-100">
+                          <span className="font-semibold">{preset.label}</span>
+                          <span className="text-gray-500 dark:text-gray-400 font-mono ml-1.5">+{preset.tag}</span>
                         </div>
-                      ))}
-                    </div>
+                        <button
+                          onClick={() => handleRemovePreset(preset.id)}
+                          className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors flex-shrink-0"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
 
               {/* Data Management Section */}
-              <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-3.5">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                     </svg>
                   </span>
                   Data Management
                 </h3>
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      onClick={handleExportSettings}
-                      variant="secondary"
-                      fullWidth
-                      icon={
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                      }
-                    >
-                      Export
-                    </Button>
-                    <Button
-                      onClick={handleImportSettings}
-                      variant="secondary"
-                      fullWidth
-                      icon={
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                      }
-                    >
-                      Import
-                    </Button>
-                  </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <Button onClick={handleExportSettings} variant="secondary" size="sm" fullWidth>
+                    Export
+                  </Button>
+                  <Button onClick={handleImportSettings} variant="secondary" size="sm" fullWidth>
+                    Import
+                  </Button>
                   <Button
                     onClick={() => {
                       if (confirm('Clear all recent aliases?')) {
@@ -630,30 +602,19 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       }
                     }}
                     variant="danger"
+                    size="sm"
                     fullWidth
                   >
-                    Clear History
+                    Clear
                   </Button>
                 </div>
-              </div>
-              </div>
-
-              {/* Danger Zone */}
-              <div className="bg-red-50 dark:bg-red-950/40 rounded-lg shadow-sm border border-red-200 dark:border-red-900/60 p-4">
-                <h3 className="text-base font-bold text-red-700 dark:text-red-400 mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  Danger Zone
-                </h3>
-                <p className="text-xs text-red-600 dark:text-red-400 mb-3">This action cannot be undone</p>
-                <Button
+                <button
                   onClick={handleResetSettings}
-                  variant="danger"
-                  fullWidth
+                  className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
                 >
-                  Reset All Settings to Default
-                </Button>
+                  Reset all settings to default
+                </button>
+              </div>
               </div>
             </div>
           )}
@@ -885,11 +846,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         {/* Footer */}
         <div className="bg-gray-100 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-            <span className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-              <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </span>
+            <img src="/icons/32.png" alt="" className="w-6 h-6 rounded-md flex-shrink-0" />
             <span className="font-medium">Gmail Alias Toolkit</span>
             <span className="text-gray-400 dark:text-gray-600">•</span>
             <span className="text-gray-500 dark:text-gray-500">v{version}</span>
