@@ -92,7 +92,7 @@ export default function Statistics() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 hover:shadow-md transition-shadow"
+        className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2.5 hover:shadow-md transition-shadow"
       >
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">View Statistics</span>
@@ -105,8 +105,8 @@ export default function Statistics() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-      <div className="flex items-center justify-between mb-3">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5">
+      <div className="flex items-center justify-between mb-2.5">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Statistics</h2>
         <button
           onClick={() => setIsOpen(false)}
@@ -118,25 +118,25 @@ export default function Statistics() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-blue-50 dark:bg-blue-950/40 rounded-lg p-3">
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-blue-50 dark:bg-blue-950/40 rounded-lg p-2.5">
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalGenerated}</div>
-          <div className="text-xs text-blue-700 dark:text-blue-300 mt-1">Total Generated</div>
+          <div className="text-xs text-blue-700 dark:text-blue-300 mt-0.5">Total Generated</div>
         </div>
 
-        <div className="bg-purple-50 dark:bg-purple-950/40 rounded-lg p-3">
+        <div className="bg-purple-50 dark:bg-purple-950/40 rounded-lg p-2.5">
           <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.createdToday}</div>
-          <div className="text-xs text-purple-700 dark:text-purple-300 mt-1">Created Today</div>
+          <div className="text-xs text-purple-700 dark:text-purple-300 mt-0.5">Created Today</div>
         </div>
 
-        <div className="bg-green-50 dark:bg-green-950/40 rounded-lg p-3">
+        <div className="bg-green-50 dark:bg-green-950/40 rounded-lg p-2.5">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.createdThisWeek}</div>
-          <div className="text-xs text-green-700 dark:text-green-300 mt-1">This Week</div>
+          <div className="text-xs text-green-700 dark:text-green-300 mt-0.5">This Week</div>
         </div>
 
-        <div className="bg-orange-50 dark:bg-orange-950/40 rounded-lg p-3">
+        <div className="bg-orange-50 dark:bg-orange-950/40 rounded-lg p-2.5">
           <div className="text-sm font-bold text-orange-600 dark:text-orange-400 truncate">{stats.mostUsedTag}</div>
-          <div className="text-xs text-orange-700 dark:text-orange-300 mt-1">Most Used Tag</div>
+          <div className="text-xs text-orange-700 dark:text-orange-300 mt-0.5">Most Used Tag</div>
         </div>
       </div>
     </div>

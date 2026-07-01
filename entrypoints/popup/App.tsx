@@ -541,10 +541,10 @@ function App() {
       ) : (
         <>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-4">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-3.5 shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-lg font-bold">Gmail Alias Toolkit</h1>
+                <h1 className="text-lg font-bold tracking-tight">Gmail Alias Toolkit</h1>
                 <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
               </div>
               <button
@@ -561,10 +561,10 @@ function App() {
           </div>
 
       {/* Main Content */}
-      <div className="p-4 space-y-4">
+      <div className="p-3.5 space-y-3.5">
         {/* Base Email Selector - Dropdown */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5">
+          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
             Active Gmail Address
           </label>
           <div className="flex gap-2">
@@ -695,9 +695,9 @@ function App() {
         {/* Unified Email Alias Generator - RoboForm Style */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2.5">
             <div className="flex items-center gap-2 text-white">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
               <h2 className="text-sm font-bold">Email Alias Generator</h2>
@@ -708,7 +708,7 @@ function App() {
           <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
             <button
               onClick={() => setActiveGeneratorTab('random')}
-              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'random'
                   ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400 bg-white dark:bg-gray-800'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
@@ -723,7 +723,7 @@ function App() {
             </button>
             <button
               onClick={() => setActiveGeneratorTab('tags')}
-              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'tags'
                   ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-white dark:bg-gray-800'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
@@ -738,7 +738,7 @@ function App() {
             </button>
             <button
               onClick={() => setActiveGeneratorTab('tricks')}
-              className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
+              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
                 activeGeneratorTab === 'tricks'
                   ? 'text-green-600 dark:text-green-400 border-b-2 border-green-600 dark:border-green-400 bg-white dark:bg-gray-800'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/50'
@@ -754,7 +754,7 @@ function App() {
           </div>
 
           {/* Tab Content */}
-          <div className="p-4 dark:bg-gray-800">
+          <div className="p-3.5 dark:bg-gray-800">
             {/* Random Tab */}
             {activeGeneratorTab === 'random' && (
               <div>
@@ -920,7 +920,7 @@ function App() {
 
         {/* Recent Aliases */}
         {(recentAliases.length > 0 || favorites.length > 0) && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {viewMode === 'all' ? 'Recent Aliases' : 'Favorites'}
@@ -1100,14 +1100,14 @@ function App() {
                     {paginatedAliases.map((alias) => (
                   <div
                     key={alias.email}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md group transition-colors"
+                    className="flex items-center justify-between gap-0.5 px-2 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md group transition-colors"
                   >
                     {isSelectMode && (
                       <input
                         type="checkbox"
                         checked={selectedAliases.has(alias.email)}
                         onChange={() => toggleSelectAlias(alias.email)}
-                        className="mr-2 w-4 h-4 accent-blue-600 flex-shrink-0"
+                        className="mr-1.5 w-4 h-4 accent-blue-600 flex-shrink-0"
                       />
                     )}
                     <span className="text-sm text-gray-700 dark:text-gray-200 font-mono break-all flex-1">
@@ -1116,7 +1116,7 @@ function App() {
                     {/* QR code button */}
                     <button
                       onClick={() => setQrAlias(alias.email)}
-                      className="ml-1 p-1.5 text-gray-300 dark:text-gray-600 hover:text-indigo-500 dark:hover:text-indigo-400 focus:outline-none transition-colors"
+                      className="p-1.5 text-gray-300 dark:text-gray-600 hover:text-indigo-500 dark:hover:text-indigo-400 focus:outline-none transition-colors"
                       title="Show QR code"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1125,7 +1125,7 @@ function App() {
                     </button>
                     <button
                       onClick={() => toggleFavorite(alias.email)}
-                      className={`ml-1 p-1.5 focus:outline-none transition-colors ${
+                      className={`p-1.5 focus:outline-none transition-colors ${
                         favorites.includes(alias.email)
                           ? 'text-yellow-500 hover:text-yellow-600'
                           : 'text-gray-300 hover:text-yellow-500'
@@ -1148,7 +1148,7 @@ function App() {
                     </button>
                     <button
                       onClick={() => copyToClipboard(alias.email)}
-                      className="ml-1 p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
                       title="Copy to clipboard"
                     >
                       {copiedEmail === alias.email ? (
