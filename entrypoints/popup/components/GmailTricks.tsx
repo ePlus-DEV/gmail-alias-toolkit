@@ -143,8 +143,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('dot')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'dot'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           Dot Trick
@@ -153,8 +153,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('plus')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'plus'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           Plus (+) Tags
@@ -163,8 +163,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('googlemail')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'googlemail'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           Googlemail
@@ -173,8 +173,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('nodots')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'nodots'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           Remove Dots
@@ -183,8 +183,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('dotplus')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'dotplus'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           Dot + Plus
@@ -193,8 +193,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           onClick={() => setSelectedTrick('combo')}
           className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
             selectedTrick === 'combo'
-              ? 'border-green-500 bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-700'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+              : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-blue-300 dark:hover:border-blue-700'
           }`}
         >
           All Combos
@@ -210,24 +210,24 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
             min="1"
             value={tricksCount}
             onChange={(e) => setTricksCount(Math.max(1, parseInt(e.target.value) || 10))}
-            className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
 
         {/* Random Dots Toggle - only show for dot-related tricks */}
         {(selectedTrick === 'dot' || selectedTrick === 'googlemail' || selectedTrick === 'dotplus' || selectedTrick === 'combo') && (
-          <div className="flex items-center gap-2 p-2.5 bg-green-50 dark:bg-green-950/40 rounded-lg border border-green-200 dark:border-green-900/60">
+          <div className="flex items-center gap-2 p-2.5 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-900/60">
             <input
               type="checkbox"
               id="randomizeDots"
               checked={randomizeDots}
               onChange={(e) => setRandomizeDots(e.target.checked)}
-              className="w-4 h-4 text-green-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-green-500"
+              className="w-4 h-4 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
             />
-            <label htmlFor="randomizeDots" className="text-sm font-medium text-green-700 dark:text-green-400 cursor-pointer">
+            <label htmlFor="randomizeDots" className="text-sm font-medium text-blue-700 dark:text-blue-400 cursor-pointer">
               🎲 Randomize dot positions
             </label>
-            <span className="ml-auto text-xs text-green-600 dark:text-green-400">
+            <span className="ml-auto text-xs text-blue-600 dark:text-blue-400">
               {randomizeDots ? 'Random' : 'Sequential'}
             </span>
           </div>
@@ -237,7 +237,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
       {/* Generate Button */}
       <button
         onClick={generateTricksVariations}
-        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:from-green-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-md mb-3"
+        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
       >
         <div className="flex items-center justify-center gap-2">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -260,14 +260,14 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
             {generatedTricks.map((email, index) => (
               <div
                 key={index}
-                className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-green-50 dark:hover:bg-green-950/30 transition-colors"
+                className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">
                   {email}
                 </div>
                 <button
                   onClick={() => onCopy(email)}
-                  className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 rounded transition-colors flex-shrink-0"
+                  className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors flex-shrink-0"
                   title="Copy"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

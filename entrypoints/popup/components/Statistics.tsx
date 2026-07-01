@@ -92,20 +92,18 @@ export default function Statistics() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-2.5 hover:shadow-md transition-shadow"
+        className="w-full p-3.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
       >
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">View Statistics</span>
-          <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-        </div>
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">View Statistics</span>
+        <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
       </button>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5">
+    <div className="p-3.5">
       <div className="flex items-center justify-between mb-2.5">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Statistics</h2>
         <button
@@ -124,19 +122,19 @@ export default function Statistics() {
           <div className="text-xs text-blue-700 dark:text-blue-300 mt-0.5">Total Generated</div>
         </div>
 
-        <div className="bg-purple-50 dark:bg-purple-950/40 rounded-lg p-2.5">
-          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.createdToday}</div>
-          <div className="text-xs text-purple-700 dark:text-purple-300 mt-0.5">Created Today</div>
+        <div className="bg-gray-50 dark:bg-gray-900/60 rounded-lg p-2.5">
+          <div className="text-2xl font-bold text-gray-800 dark:text-gray-200">{stats.createdToday}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Created Today</div>
         </div>
 
-        <div className="bg-green-50 dark:bg-green-950/40 rounded-lg p-2.5">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.createdThisWeek}</div>
-          <div className="text-xs text-green-700 dark:text-green-300 mt-0.5">This Week</div>
+        <div className="bg-gray-50 dark:bg-gray-900/60 rounded-lg p-2.5">
+          <div className="text-2xl font-bold text-gray-800 dark:text-gray-200">{stats.createdThisWeek}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">This Week</div>
         </div>
 
-        <div className="bg-orange-50 dark:bg-orange-950/40 rounded-lg p-2.5">
-          <div className="text-sm font-bold text-orange-600 dark:text-orange-400 truncate">{stats.mostUsedTag}</div>
-          <div className="text-xs text-orange-700 dark:text-orange-300 mt-0.5">Most Used Tag</div>
+        <div className="bg-gray-50 dark:bg-gray-900/60 rounded-lg p-2.5">
+          <div className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{stats.mostUsedTag}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Most Used Tag</div>
         </div>
       </div>
     </div>
