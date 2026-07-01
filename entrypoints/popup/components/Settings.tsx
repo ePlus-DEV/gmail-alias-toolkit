@@ -41,11 +41,57 @@ const DEFAULT_SETTINGS: AppSettings = {
   randomFormat: 'private-mail',
 };
 
+const CHANGELOG: { version: string; date: string; changes: { type: 'Added' | 'Changed' | 'Fixed'; items: string[] }[] }[] = [
+  {
+    version: '1.2.0',
+    date: '2026-07-01',
+    changes: [
+      {
+        type: 'Changed',
+        items: [
+          'Redesigned popup and settings UI with a unified card layout',
+          'Fixed popup height so only content scrolls, not the whole page',
+        ],
+      },
+      {
+        type: 'Fixed',
+        items: [
+          '"Copy All" no longer undercounts statistics for generated aliases',
+          'Settings/QR modals no longer render outside the popup bounds',
+          'Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete',
+        ],
+      },
+    ],
+  },
+  {
+    version: '1.1.0',
+    date: '2025-12-30',
+    changes: [
+      {
+        type: 'Added',
+        items: [
+          'Gmail alias generation with plus addressing',
+          'Preset management',
+          'Keyboard shortcuts',
+          'Statistics tracking',
+        ],
+      },
+      { type: 'Changed', items: ['Updated dependencies'] },
+      { type: 'Fixed', items: ['Bug fixes and improvements'] },
+    ],
+  },
+  {
+    version: '1.0.0',
+    date: '2025-12-30',
+    changes: [{ type: 'Added', items: ['Initial release'] }],
+  },
+];
+
 export default function Settings({ isOpen, onClose, onClearHistory }: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [newPresetLabel, setNewPresetLabel] = useState('');
   const [newPresetTag, setNewPresetTag] = useState('');
-  const [activeTab, setActiveTab] = useState<'general' | 'accounts' | 'presets' | 'advanced'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'accounts' | 'presets' | 'advanced' | 'changelog'>('general');
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState('');
@@ -356,7 +402,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-blue-600 text-white px-4 py-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
@@ -406,6 +452,19 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
             Accounts
+          </button>
+          <button
+            onClick={() => setActiveTab('changelog')}
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              activeTab === 'changelog'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Changelog
           </button>
         </div>
 
@@ -757,7 +816,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 {!showAddAccount ? (
                   <button
                     onClick={() => setShowAddAccount(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors shadow-sm"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -835,13 +894,54 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     <button
                       onClick={handleAddAccount}
                       disabled={!newAccountEmail.trim()}
-                      className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-md hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       Add Account
                     </button>
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Changelog Tab */}
+          {activeTab === 'changelog' && (
+            <div className="space-y-3">
+              {CHANGELOG.map((entry) => (
+                <div
+                  key={entry.version}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      v{entry.version}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{entry.date}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {entry.changes.map((change) => (
+                      <div key={change.type}>
+                        <span
+                          className={`inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 ${
+                            change.type === 'Added'
+                              ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
+                              : change.type === 'Fixed'
+                              ? 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400'
+                              : 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+                          }`}
+                        >
+                          {change.type}
+                        </span>
+                        <ul className="text-xs text-gray-600 dark:text-gray-400 list-disc list-inside space-y-0.5">
+                          {change.items.map((item, i) => (
+                            <li key={i}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

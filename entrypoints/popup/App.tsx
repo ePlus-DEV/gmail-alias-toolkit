@@ -559,7 +559,7 @@ function App() {
       ) : (
         <>
           {/* Header */}
-          <div className="bg-blue-600 text-white px-5 py-3.5 flex-shrink-0">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-3.5 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img src="/icons/48.png" alt="" className="w-9 h-9 rounded-lg flex-shrink-0" />
@@ -709,7 +709,7 @@ function App() {
                 <button
                   onClick={handleAddAccount}
                   disabled={!newAccountEmail.trim() || !newAccountEmail.includes('@')}
-                  className="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5"
+                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m3 9a9 9 0 100-18 9 9 0 000 18z" />
@@ -827,7 +827,7 @@ function App() {
                 {/* Generate Button */}
                 <button
                   onClick={generateRandomAlias}
-                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
                 >
                   <div className="flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -916,7 +916,7 @@ function App() {
                   <button
                     onClick={handleCustomGenerate}
                     disabled={!customTag.trim()}
-                    className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Generate
                   </button>
