@@ -54,7 +54,7 @@ export default function Statistics() {
         email = activeAccount.email;
       }
     } else if (accountResult.base_email) {
-      email = accountResult.base_email;
+      email = accountResult.base_email as string;
     }
     
     setActiveEmail(email);

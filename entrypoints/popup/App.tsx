@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import QRCode from 'qrcode';
 import './App.css';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
@@ -29,6 +30,7 @@ interface AppSettings {
   tags?: Record<string, number>;
   total?: number;
   randomFormat?: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp';
+  theme?: 'light' | 'dark' | 'auto';
 }
 
 interface StorageResult {
@@ -69,6 +71,14 @@ function App() {
   const [newAccountLabel, setNewAccountLabel] = useState('');
   const [addAccountError, setAddAccountError] = useState('');
   const [favorites, setFavorites] = useState<string[]>([]);
+  // Bulk delete
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedAliases, setSelectedAliases] = useState<Set<string>>(new Set());
+  // QR code modal
+  const [qrAlias, setQrAlias] = useState<string | null>(null);
+  const qrCanvasRef = useRef<HTMLCanvasElement>(null);
+  // Theme
+  const [theme, setTheme] = useState<'light' | 'dark' | 'auto'>('light');
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
@@ -131,6 +141,10 @@ function App() {
         setMaxRecent(result.app_settings.maxHistory || 20);
         setCustomPresets(result.app_settings.customPresets || []);
         setRandomFormat(result.app_settings.randomFormat || 'private-mail');
+        const savedTheme = result.app_settings.theme || 'light';
+        setTheme(savedTheme);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark' || (savedTheme === 'auto' && prefersDark));
       }
       
       // Load email accounts list
@@ -156,6 +170,10 @@ function App() {
           setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
           setRandomFormat(newSettings.randomFormat || 'private-mail');
+          const t = newSettings.theme || 'light';
+          setTheme(t);
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'auto' && prefersDark));
         }
       }
       if (changes.email_accounts) {
@@ -268,10 +286,66 @@ function App() {
     await browser.storage.local.set({ [statsKey]: stats });
   };
 
+  // QR code: draw when alias changes
+  useEffect(() => {
+    if (qrAlias && qrCanvasRef.current) {
+      QRCode.toCanvas(qrCanvasRef.current, qrAlias, { width: 200, margin: 2 });
+    }
+  }, [qrAlias]);
+
+  // Export helpers
+  const downloadFile = (filename: string, mimeType: string, content: string) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportAliases = (format: 'csv' | 'json') => {
+    if (recentAliases.length === 0) return;
+    if (format === 'csv') {
+      const rows = recentAliases.map(a =>
+        `"${a.email}","${new Date(a.timestamp).toISOString()}"`
+      );
+      downloadFile(`aliases-${Date.now()}.csv`, 'text/csv', `Email,Created At\n${rows.join('\n')}`);
+    } else {
+      const data = recentAliases.map(a => ({ email: a.email, createdAt: new Date(a.timestamp).toISOString() }));
+      downloadFile(`aliases-${Date.now()}.json`, 'application/json', JSON.stringify(data, null, 2));
+    }
+    setToastMessage(`✓ Exported ${recentAliases.length} aliases`);
+    setTimeout(() => setToastMessage(null), 2000);
+  };
+
+  // Bulk delete
+  const deleteSelected = async () => {
+    const count = selectedAliases.size;
+    const updated = recentAliases.filter(a => !selectedAliases.has(a.email));
+    setRecentAliases(updated);
+    const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
+    await browser.storage.local.set({ [historyKey]: updated });
+    setSelectedAliases(new Set());
+    setIsSelectMode(false);
+    setToastMessage(`✓ Deleted ${count} aliases`);
+    setTimeout(() => setToastMessage(null), 2000);
+  };
+
+  const toggleSelectAlias = (email: string) => {
+    setSelectedAliases(prev => {
+      const next = new Set(prev);
+      next.has(email) ? next.delete(email) : next.add(email);
+      return next;
+    });
+  };
+
   const clearHistory = () => {
     setRecentAliases([]);
     const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
     browser.storage.local.set({ [historyKey]: [] });
+    setToastMessage('✓ History cleared');
+    setTimeout(() => setToastMessage(null), 2000);
   };
 
   const toggleFavorite = async (email: string) => {
@@ -296,10 +370,11 @@ function App() {
     }
     
     await browser.storage.local.set({ [favoritesKey]: updated });
-    
-    // Update local state
+
     const favEmails = updated.map((f: any) => f.email);
     setFavorites(favEmails);
+    setToastMessage(exists ? '✓ Removed from favorites' : '✓ Added to favorites');
+    setTimeout(() => setToastMessage(null), 2000);
   };
 
 
@@ -412,7 +487,7 @@ function App() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
         <WelcomeScreen 
@@ -447,8 +522,8 @@ function App() {
       {/* Main Content */}
       <div className="p-4 space-y-4">
         {/* Base Email Selector - Dropdown */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <label className="block text-xs font-medium text-gray-700 mb-2">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
             Active Gmail Address
           </label>
           <div className="flex gap-2">
@@ -470,7 +545,7 @@ function App() {
                     base_email: selectedEmail
                   });
                 }}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white truncate"
+                className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 truncate"
               >
                 {emailAccounts.length > 0 ? (
                   emailAccounts.map((account) => (
@@ -572,7 +647,7 @@ function App() {
         </div>
 
         {/* Unified Email Alias Generator - RoboForm Style */}
-        <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3">
             <div className="flex items-center gap-2 text-white">
@@ -584,7 +659,7 @@ function App() {
           </div>
 
           {/* Main Tabs */}
-          <div className="flex border-b border-gray-200 bg-gray-50">
+          <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
             <button
               onClick={() => setActiveGeneratorTab('random')}
               className={`flex-1 px-4 py-3 text-xs font-semibold transition-colors ${
@@ -633,7 +708,7 @@ function App() {
           </div>
 
           {/* Tab Content */}
-          <div className="p-4">
+          <div className="p-4 dark:bg-gray-800">
             {/* Random Tab */}
             {activeGeneratorTab === 'random' && (
               <div>
@@ -794,18 +869,67 @@ function App() {
 
         {/* Recent Aliases */}
         {(recentAliases.length > 0 || favorites.length > 0) && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-gray-900">
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {viewMode === 'all' ? 'Recent Aliases' : 'Favorites'}
               </h2>
-              <span className="text-xs text-gray-500">
-                {viewMode === 'all' ? `${recentAliases.length} total` : `${favorites.length} starred`}
-              </span>
+              <div className="flex items-center gap-1.5">
+                {viewMode === 'all' && recentAliases.length > 0 && (
+                  <>
+                    <button
+                      onClick={() => exportAliases('csv')}
+                      className="text-xs text-gray-500 hover:text-blue-600 px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors"
+                      title="Export as CSV"
+                    >CSV</button>
+                    <button
+                      onClick={() => exportAliases('json')}
+                      className="text-xs text-gray-500 hover:text-blue-600 px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors"
+                      title="Export as JSON"
+                    >JSON</button>
+                    <button
+                      onClick={() => {
+                        setIsSelectMode(m => !m);
+                        setSelectedAliases(new Set());
+                      }}
+                      className={`text-xs px-1.5 py-0.5 rounded transition-colors ${isSelectMode ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'}`}
+                      title="Select aliases"
+                    >Select</button>
+                  </>
+                )}
+                <span className="text-xs text-gray-500">
+                  {viewMode === 'all' ? `${recentAliases.length} total` : `${favorites.length} starred`}
+                </span>
+              </div>
             </div>
+            {/* Bulk delete bar */}
+            {isSelectMode && (
+              <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
+                <button
+                  onClick={() => {
+                    if (selectedAliases.size === recentAliases.length) {
+                      setSelectedAliases(new Set());
+                    } else {
+                      setSelectedAliases(new Set(recentAliases.map(a => a.email)));
+                    }
+                  }}
+                  className="text-xs text-blue-700 hover:text-blue-900 font-medium"
+                >
+                  {selectedAliases.size === recentAliases.length ? 'Deselect All' : 'Select All'}
+                </button>
+                <span className="text-xs text-gray-500 flex-1">{selectedAliases.size} selected</span>
+                <button
+                  onClick={deleteSelected}
+                  disabled={selectedAliases.size === 0}
+                  className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  Delete {selectedAliases.size > 0 ? selectedAliases.size : ''}
+                </button>
+              </div>
+            )}
 
             {/* View Mode Tabs */}
-            <div className="mb-3 flex gap-1 p-1 bg-gray-100 rounded-lg">
+            <div className="mb-3 flex gap-1 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
               <button
                 onClick={() => setViewMode('all')}
                 className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
@@ -933,14 +1057,32 @@ function App() {
                     {paginatedAliases.map((alias) => (
                   <div
                     key={alias.email}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-md group transition-colors"
+                    className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md group transition-colors"
                   >
-                    <span className="text-sm text-gray-700 font-mono break-all flex-1">
+                    {isSelectMode && (
+                      <input
+                        type="checkbox"
+                        checked={selectedAliases.has(alias.email)}
+                        onChange={() => toggleSelectAlias(alias.email)}
+                        className="mr-2 w-4 h-4 accent-blue-600 flex-shrink-0"
+                      />
+                    )}
+                    <span className="text-sm text-gray-700 dark:text-gray-200 font-mono break-all flex-1">
                       {alias.email}
                     </span>
+                    {/* QR code button */}
+                    <button
+                      onClick={() => setQrAlias(alias.email)}
+                      className="ml-1 p-1.5 text-gray-300 hover:text-indigo-500 focus:outline-none transition-colors"
+                      title="Show QR code"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5c0 1.933-1.567 3.5-3.5 3.5S13 17.433 13 15.5 14.567 12 16.5 12s3.5 1.567 3.5 3.5zM4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z" />
+                      </svg>
+                    </button>
                     <button
                       onClick={() => toggleFavorite(alias.email)}
-                      className={`ml-2 p-1.5 focus:outline-none transition-colors ${
+                      className={`ml-1 p-1.5 focus:outline-none transition-colors ${
                         favorites.includes(alias.email)
                           ? 'text-yellow-500 hover:text-yellow-600'
                           : 'text-gray-300 hover:text-yellow-500'
@@ -963,7 +1105,7 @@ function App() {
                     </button>
                     <button
                       onClick={() => copyToClipboard(alias.email)}
-                      className="ml-2 p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
+                      className="ml-1 p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
                       title="Copy to clipboard"
                     >
                       {copiedEmail === alias.email ? (
@@ -1109,6 +1251,33 @@ function App() {
         )}
       </div>
       </>
+      )}
+
+      {/* QR Code Modal */}
+      {qrAlias && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          onClick={() => setQrAlias(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl p-6 flex flex-col items-center gap-4"
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 className="text-sm font-semibold text-gray-800">Scan to copy alias</h3>
+            <canvas ref={qrCanvasRef} className="rounded-lg" />
+            <p className="text-xs text-gray-500 font-mono text-center max-w-[200px] break-all">{qrAlias}</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => copyToClipboard(qrAlias)}
+                className="px-4 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+              >Copy</button>
+              <button
+                onClick={() => setQrAlias(null)}
+                className="px-4 py-1.5 bg-gray-200 text-gray-700 text-xs rounded-lg hover:bg-gray-300 transition-colors"
+              >Close</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Settings Modal */}

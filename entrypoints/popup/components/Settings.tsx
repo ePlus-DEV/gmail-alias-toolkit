@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Toggle from './Toggle';
 import Button from './Button';
 import Input from './Input';
+import { getAccountStorageKey } from '../utils';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -40,12 +41,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   randomFormat: 'private-mail',
 };
 
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
-
 export default function Settings({ isOpen, onClose, onClearHistory }: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [newPresetLabel, setNewPresetLabel] = useState('');
@@ -60,6 +55,12 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const [newAccountEmail, setNewAccountEmail] = useState('');
   const [newAccountLabel, setNewAccountLabel] = useState('');
   const [addAccountError, setAddAccountError] = useState('');
+  const [toast, setToast] = useState<string | null>(null);
+
+  const showToast = useCallback((msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2000);
+  }, []);
 
   useEffect(() => {
     try {
@@ -115,6 +116,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     saveSettings(updatedSettings);
     setNewPresetLabel('');
     setNewPresetTag('');
+    showToast('✓ Preset added');
   };
 
   const handleRemovePreset = (id: string) => {
@@ -123,6 +125,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       customPresets: settings.customPresets.filter((p) => p.id !== id),
     };
     saveSettings(updatedSettings);
+    showToast('✓ Preset removed');
   };
 
   const handleExportSettings = () => {
@@ -134,6 +137,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     link.download = `gmail-alias-settings-${Date.now()}.json`;
     link.click();
     URL.revokeObjectURL(url);
+    showToast('✓ Settings exported');
   };
 
   const handleImportSettings = () => {
@@ -148,8 +152,9 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         const text = await file.text();
         const imported = JSON.parse(text);
         saveSettings({ ...DEFAULT_SETTINGS, ...imported });
+        showToast('✓ Settings imported');
       } catch (err) {
-        alert('Failed to import settings. Please check the file format.');
+        showToast('✗ Import failed – invalid file');
       }
     };
     input.click();
@@ -158,6 +163,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   const handleResetSettings = () => {
     if (confirm('Are you sure you want to reset all settings to default?')) {
       saveSettings(DEFAULT_SETTINGS);
+      showToast('✓ Settings reset to default');
     }
   };
 
@@ -172,6 +178,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       await browser.storage.local.set({ base_email: activeAccount.email });
     }
     setEmailAccounts(updated);
+    showToast('✓ Account switched');
   };
 
   const handleDeleteAccount = async (account: EmailAccount) => {
@@ -205,6 +212,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
+    showToast('✓ Account deleted');
   };
 
   const handleStartEdit = (account: EmailAccount) => {
@@ -287,6 +295,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     setEditingAccountId(null);
     setEditingLabel('');
     setEditingEmail('');
+    showToast('✓ Account updated');
   };
 
   const handleAddAccount = async () => {
@@ -340,13 +349,14 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     setNewAccountEmail('');
     setNewAccountLabel('');
     setAddAccountError('');
+    showToast(`✓ ${newAccount.label} added`);
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -416,15 +426,21 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Theme <span className="text-xs text-gray-500 font-normal">(Dark mode coming in next update)</span>
+                      Theme
                     </label>
                     <select
                       value={settings.theme}
-                      onChange={(e) => saveSettings({ ...settings, theme: e.target.value as any })}
+                      onChange={(e) => {
+                        const t = e.target.value as 'light' | 'dark' | 'auto';
+                        saveSettings({ ...settings, theme: t });
+                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'auto' && prefersDark));
+                      }}
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                      disabled
                     >
-                      <option value="light">☀️ Light (Current)</option>
+                      <option value="light">☀️ Light</option>
+                      <option value="dark">🌙 Dark</option>
+                      <option value="auto">🖥️ System (Auto)</option>
                     </select>
                   </div>
 
@@ -869,6 +885,13 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
           </div>
         </div>
       </div>
+
+      {/* Settings Toast - inside modal so it shows above the overlay */}
+      {toast && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap z-10">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
