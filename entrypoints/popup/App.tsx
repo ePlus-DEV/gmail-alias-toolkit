@@ -562,7 +562,7 @@ function App() {
           <div className="bg-blue-600 text-white px-5 py-3.5 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img src="/email.svg" alt="" className="w-9 h-9 rounded-lg flex-shrink-0" />
+                <img src="/icons/48.png" alt="" className="w-9 h-9 rounded-lg flex-shrink-0" />
                 <div>
                   <h1 className="text-lg font-bold tracking-tight">Gmail Alias Toolkit</h1>
                   <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
@@ -666,9 +666,8 @@ function App() {
                     setNewAccountEmail(e.target.value);
                     setAddAccountError('');
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
-                      e.preventDefault();
+                  onBlur={() => {
+                    if (newAccountEmail && !newAccountEmail.includes('@')) {
                       setNewAccountEmail(newAccountEmail + '@gmail.com');
                     }
                   }}
@@ -687,9 +686,11 @@ function App() {
                   <p className="text-xs text-red-600 dark:text-red-400 text-center">{addAccountError}</p>
                 </div>
               )}
-              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
-              </p>
+              {newAccountEmail && !newAccountEmail.includes('@') && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+                  💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+                </p>
+              )}
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

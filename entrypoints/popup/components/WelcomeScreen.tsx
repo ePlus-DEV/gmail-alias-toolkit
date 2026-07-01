@@ -24,15 +24,18 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
     return true;
   };
 
+  const completeDomain = (value: string) => (value.includes('@') ? value : `${value}@gmail.com`);
+
   const handleSubmit = async () => {
-    if (!validateEmail(email.trim())) {
+    const emailTrimmed = completeDomain(email.trim());
+    if (emailTrimmed !== email) setEmail(emailTrimmed);
+
+    if (!validateEmail(emailTrimmed)) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
-    const emailTrimmed = email.trim();
-    
+
     // Create first account
     const account = {
       id: Date.now().toString(),
@@ -65,10 +68,16 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSubmit();
-    } else if (e.key === 'Tab' && email && !email.includes('@')) {
-      e.preventDefault();
-      setEmail(email + '@gmail.com');
     }
+  };
+
+  // Auto-complete @gmail.com on blur (Tab away included) instead of
+  // hijacking the Tab key, which would break normal focus navigation.
+  const handleBlur = () => {
+    if (!email) return;
+    const finalEmail = completeDomain(email);
+    if (finalEmail !== email) setEmail(finalEmail);
+    validateEmail(finalEmail);
   };
 
   return (
@@ -109,7 +118,7 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
                 setEmail(e.target.value);
                 if (validationError) setValidationError('');
               }}
-              onBlur={() => email && validateEmail(email)}
+              onBlur={handleBlur}
               onKeyDown={handleKeyPress}
               placeholder="your.email"
               className={`w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 transition-colors ${
@@ -138,9 +147,11 @@ export default function WelcomeScreen({ onEmailAdded, onOpenSettings }: WelcomeS
             </div>
           )}
 
-          <p className="text-xs text-gray-500 mb-2.5 flex items-center gap-1.5">
-            <span>💡</span> Press <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> for @gmail.com
-          </p>
+          {!email.includes('@') && (
+            <p className="text-xs text-gray-500 mb-2.5 flex items-center gap-1.5">
+              <span>💡</span> Press <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> for @gmail.com
+            </p>
+          )}
 
           <button
             onClick={handleSubmit}

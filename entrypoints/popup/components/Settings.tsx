@@ -792,12 +792,13 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                           setAddAccountError('');
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
-                            e.preventDefault();
-                            setNewAccountEmail(newAccountEmail + '@gmail.com');
-                          }
                           if (e.key === 'Enter') {
                             handleAddAccount();
+                          }
+                        }}
+                        onBlur={() => {
+                          if (newAccountEmail && !newAccountEmail.includes('@')) {
+                            setNewAccountEmail(newAccountEmail + '@gmail.com');
                           }
                         }}
                         placeholder="your.email"
@@ -817,9 +818,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       </div>
                     )}
 
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
-                    </p>
+                    {newAccountEmail && !newAccountEmail.includes('@') && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+                      </p>
+                    )}
 
                     <input
                       type="text"
