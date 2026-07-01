@@ -544,20 +544,22 @@ function App() {
   const filteredAliases = filterAliases(recentAliases, { viewMode, favorites, searchQuery, filterTag, sortBy });
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen relative">
+    <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col relative overflow-hidden">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
-        <WelcomeScreen 
-          onEmailAdded={(email) => {
-            setBaseEmail(email);
-            setHasEmailAccounts(true);
-          }}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-        />
+        <div className="flex-1 overflow-y-auto">
+          <WelcomeScreen
+            onEmailAdded={(email) => {
+              setBaseEmail(email);
+              setHasEmailAccounts(true);
+            }}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+          />
+        </div>
       ) : (
         <>
           {/* Header */}
-          <div className="bg-blue-600 text-white px-5 py-3.5">
+          <div className="bg-blue-600 text-white px-5 py-3.5 flex-shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
@@ -584,7 +586,7 @@ function App() {
           </div>
 
       {/* Main Content */}
-      <div className="p-3.5 space-y-3.5">
+      <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden">
         {/* Base Email Selector - Dropdown */}
         <div className="p-3.5">
