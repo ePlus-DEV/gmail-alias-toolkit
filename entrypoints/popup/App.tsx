@@ -228,6 +228,14 @@ function App() {
     setCurrentPage(1);
   }, [searchQuery, filterTag, viewMode, sortBy]);
 
+  // Modals are absolutely positioned against the document (popups have no stable viewport),
+  // so scroll to top when one opens or it can render off-screen below the fold.
+  useEffect(() => {
+    if (isSettingsOpen || qrAlias) {
+      window.scrollTo(0, 0);
+    }
+  }, [isSettingsOpen, qrAlias]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -246,42 +254,50 @@ function App() {
     return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [isSettingsOpen]);
 
-  const saveRecentAlias = (email: string) => {
-    const newAlias: Alias = {
-      email,
-      timestamp: Date.now(),
-    };
+  const saveRecentAlias = (email: string) => saveRecentAliases([email]);
 
-    const updated = [newAlias, ...recentAliases.filter((a) => a.email !== email)].slice(
+  // Batched save: computes the merged list and stats totals once, avoiding the
+  // stale-closure / lost-update race that happens when saveRecentAlias is called
+  // N times in a tight loop (e.g. "Copy All").
+  const saveRecentAliases = (emails: string[]) => {
+    if (emails.length === 0) return;
+
+    const now = Date.now();
+    const newAliases: Alias[] = emails.map((email, i) => ({ email, timestamp: now - i }));
+    const newEmailSet = new Set(emails);
+
+    const updated = [...newAliases, ...recentAliases.filter((a) => !newEmailSet.has(a.email))].slice(
       0,
       maxRecent
     );
 
     setRecentAliases(updated);
-    
+
     // Save with account-specific key
     const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
     browser.storage.local.set({ [historyKey]: updated });
 
     // Update statistics
-    updateStats(email);
+    updateStats(emails);
   };
 
-  const updateStats = async (email: string) => {
+  const updateStats = async (emails: string[]) => {
     // Use account-specific stats key
     const statsKey = getAccountStorageKey(baseEmail, 'alias_stats');
     const result: StorageResult = await browser.storage.local.get(statsKey);
     const stats = result[statsKey] || { total: 0, tags: {} };
 
-    stats.total = (stats.total || 0) + 1;
+    stats.total = (stats.total || 0) + emails.length;
+    stats.tags = stats.tags || {};
 
-    // Extract tag from email (only if it has + addressing)
-    const tagMatch = email.match(/\+([^@]+)@/);
-    if (tagMatch) {
-      const tag = tagMatch[1];
-      stats.tags = stats.tags || {};
-      stats.tags[tag] = (stats.tags[tag] || 0) + 1;
-    }
+    emails.forEach((email) => {
+      // Extract tag from email (only if it has + addressing)
+      const tagMatch = email.match(/\+([^@]+)@/);
+      if (tagMatch) {
+        const tag = tagMatch[1];
+        stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+      }
+    });
 
     await browser.storage.local.set({ [statsKey]: stats });
   };
@@ -528,7 +544,7 @@ function App() {
   const filteredAliases = filterAliases(recentAliases, { viewMode, favorites, searchQuery, filterTag, sortBy });
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen relative">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
         <WelcomeScreen 
@@ -543,9 +559,16 @@ function App() {
           {/* Header */}
           <div className="bg-blue-600 text-white px-5 py-3.5">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-lg font-bold tracking-tight">Gmail Alias Toolkit</h1>
-                <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold tracking-tight">Gmail Alias Toolkit</h1>
+                  <p className="text-xs text-blue-100 mt-0.5">Generate aliases with plus addressing</p>
+                </div>
               </div>
               <button
                 onClick={() => setIsSettingsOpen(true)}
@@ -570,6 +593,14 @@ function App() {
           </label>
           <div className="flex gap-2">
             <div className="relative flex-1">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.2 3.32v2.77h3.55c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.77c-.98.66-2.23 1.06-3.73 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A10.99 10.99 0 0012 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09A6.6 6.6 0 015.5 12c0-.73.13-1.43.34-2.09V7.07H2.18A11 11 0 001 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z" />
+                </svg>
+              </div>
               <select
                 value={baseEmail}
                 onChange={async (e) => {
@@ -592,7 +623,7 @@ function App() {
                     base_email: selectedEmail
                   });
                 }}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 truncate"
+                className="w-full pl-9 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 truncate"
               >
                 {emailAccounts.length > 0 ? (
                   emailAccounts.map((account) => (
@@ -604,7 +635,7 @@ function App() {
                   <option value={baseEmail}>{baseEmail}</option>
                 )}
               </select>
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -612,7 +643,7 @@ function App() {
             </div>
             <button
               onClick={() => setShowAddAccount(!showAddAccount)}
-              className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
+              className="w-10 h-10 flex-shrink-0 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
               title="Add new account"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -625,6 +656,11 @@ function App() {
           {showAddAccount && (
             <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
               <div className="relative">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
                 <input
                   type="email"
                   value={newAccountEmail}
@@ -639,36 +675,46 @@ function App() {
                     }
                   }}
                   placeholder="your.email"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   autoFocus
                 />
                 {newAccountEmail && !newAccountEmail.includes('@') && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
                     @gmail.com
                   </div>
                 )}
               </div>
               {addAccountError && (
-                <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-md">
-                  <p className="text-xs text-red-600 dark:text-red-400">{addAccountError}</p>
+                <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-full">
+                  <p className="text-xs text-red-600 dark:text-red-400 text-center">{addAccountError}</p>
                 </div>
               )}
               <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
                 💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
               </p>
-              <input
-                type="text"
-                value={newAccountLabel}
-                onChange={(e) => setNewAccountLabel(e.target.value)}
-                placeholder="Label (optional, e.g., Work, Personal)"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
+              <div className="relative">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  value={newAccountLabel}
+                  onChange={(e) => setNewAccountLabel(e.target.value)}
+                  placeholder="Label (optional, e.g., Work, Personal)"
+                  className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={handleAddAccount}
                   disabled={!newAccountEmail.trim() || !newAccountEmail.includes('@')}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5"
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m3 9a9 9 0 100-18 9 9 0 000 18z" />
+                  </svg>
                   Add Account
                 </button>
                 <button
@@ -678,7 +724,7 @@ function App() {
                     setNewAccountLabel('');
                     setAddAccountError('');
                   }}
-                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                  className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                 >
                   Cancel
                 </button>
@@ -696,51 +742,45 @@ function App() {
         {/* Unified Email Alias Generator */}
         <div>
           {/* Main Tabs */}
-          <div className="flex border-b border-gray-200 dark:border-gray-700">
+          <div className="flex gap-2 p-3.5 pb-0">
             <button
               onClick={() => setActiveGeneratorTab('random')}
-              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
                 activeGeneratorTab === 'random'
-                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                  : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
-              <div className="flex items-center justify-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Random
-              </div>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4h4l4 4m0 0l4-4h4m0 16h-4l-4-4m0 0l-4 4H4m0-8h4m8 0h4" />
+              </svg>
+              Random
             </button>
             <button
               onClick={() => setActiveGeneratorTab('tags')}
-              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
                 activeGeneratorTab === 'tags'
-                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                  : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
-              <div className="flex items-center justify-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
-                Custom Tags
-              </div>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              Custom Tags
             </button>
             <button
               onClick={() => setActiveGeneratorTab('tricks')}
-              className={`flex-1 px-4 py-2.5 text-xs font-semibold transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
                 activeGeneratorTab === 'tricks'
-                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                  : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
             >
-              <div className="flex items-center justify-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Gmail Tricks
-              </div>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Gmail Tricks
             </button>
           </div>
 
@@ -764,7 +804,7 @@ function App() {
                         app_settings: { ...currentSettings, randomFormat: newFormat }
                       });
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
                     <option value="private-mail">📧 Private Mail (private-mail-xxxx)</option>
                     <option value="alphanumeric">🔤 Random Characters (abc123xy)</option>
@@ -781,14 +821,14 @@ function App() {
                     min="1"
                     value={randomEmailCount}
                     onChange={(e) => setRandomEmailCount(Math.max(1, parseInt(e.target.value) || 10))}
-                    className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
 
                 {/* Generate Button */}
                 <button
                   onClick={generateRandomAlias}
-                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
+                  className="w-full bg-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
                 >
                   <div className="flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -810,7 +850,7 @@ function App() {
                             onClick={async () => {
                               try {
                                 await navigator.clipboard.writeText(generatedRandomList.join('\n'));
-                                generatedRandomList.forEach(e => saveRecentAlias(e));
+                                saveRecentAliases(generatedRandomList);
                                 setToastMessage(`✓ Copied ${generatedRandomList.length} aliases!`);
                               } catch {
                                 setToastMessage('✗ Failed to copy');
@@ -859,18 +899,25 @@ function App() {
             {activeGeneratorTab === 'tags' && (
               <div>
                 <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={customTag}
-                    onChange={(e) => setCustomTag(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    className="flex-1 px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    placeholder="Enter tag (e.g., shopping, work)"
-                  />
+                  <div className="relative flex-1">
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      value={customTag}
+                      onChange={(e) => setCustomTag(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      placeholder="Enter tag (e.g., shopping, work)"
+                    />
+                  </div>
                   <button
                     onClick={handleCustomGenerate}
                     disabled={!customTag.trim()}
-                    className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Generate
                   </button>
@@ -885,7 +932,7 @@ function App() {
                         <button
                           key={preset.id}
                           onClick={() => handlePresetClick(preset.tag)}
-                          className="px-3 py-1.5 bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-md border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                          className="px-3 py-1.5 bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-full border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
                         >
                           {preset.label}
                         </button>
@@ -894,8 +941,19 @@ function App() {
                   </div>
                 )}
 
-                <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                  Example: {baseEmail.split('@')[0]}+<strong>your-tag</strong>@{baseEmail.split('@')[1]}
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                  <span>
+                    Example: {baseEmail.split('@')[0]}+<strong className="text-gray-700 dark:text-gray-300">your-tag</strong>@{baseEmail.split('@')[1]}
+                  </span>
+                  <button
+                    onClick={() => copyToClipboard(`${baseEmail.split('@')[0]}+your-tag@${baseEmail.split('@')[1]}`)}
+                    className="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 flex-shrink-0"
+                    title="Copy example"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             )}
@@ -1280,7 +1338,7 @@ function App() {
 
         {/* Toast Notification */}
         {toastMessage && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in">
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in z-40">
             {toastMessage}
           </div>
         )}
@@ -1291,7 +1349,7 @@ function App() {
       {/* QR Code Modal */}
       {qrAlias && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
           onClick={() => setQrAlias(null)}
         >
           <div

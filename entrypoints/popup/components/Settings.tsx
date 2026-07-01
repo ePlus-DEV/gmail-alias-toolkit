@@ -353,20 +353,25 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-blue-600 text-white px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <h2 className="text-xl font-bold">Settings</h2>
+        <div className="bg-blue-600 text-white px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onClose}
+              className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              title="Back"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </button>
+            <h2 className="text-lg font-bold">Settings</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -375,36 +380,32 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+        <div className="flex gap-2 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <button
             onClick={() => setActiveTab('general')}
-            className={`flex-1 px-6 py-3.5 text-sm font-semibold transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === 'general'
-                ? 'border-b-3 border-blue-600 text-blue-700 dark:text-blue-400 bg-white dark:bg-gray-800 shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-              </svg>
-              <span>General</span>
-            </div>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            General
           </button>
           <button
             onClick={() => setActiveTab('accounts')}
-            className={`flex-1 px-6 py-3.5 text-sm font-semibold transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === 'accounts'
-                ? 'border-b-3 border-blue-600 text-blue-700 dark:text-blue-400 bg-white dark:bg-gray-800 shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <span>Accounts</span>
-            </div>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Accounts
           </button>
         </div>
 
@@ -416,10 +417,12 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
               {/* Appearance Section */}
               <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                  </svg>
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                  </span>
                   Appearance & Display
                 </h3>
                 <div className="space-y-4">
@@ -435,7 +438,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                         document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'auto' && prefersDark));
                       }}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="light">☀️ Light</option>
                       <option value="dark">🌙 Dark</option>
@@ -451,7 +454,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     <select
                       value={settings.badgeDisplay}
                       onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="none">🚫 None (Hidden)</option>
                       <option value="total">📊 Total in History</option>
@@ -461,9 +464,9 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div>
-                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Show Notifications</label>
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Notifications</label>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Copy confirmation messages</p>
                     </div>
                     <Toggle
@@ -477,10 +480,12 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
               {/* Alias Generation Section */}
               <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </span>
                   Alias Generation
                 </h3>
                 <div className="space-y-4">
@@ -491,7 +496,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     <select
                       value={settings.randomFormat}
                       onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value="private-mail">🎯 Private Mail (e.g., private-mail-q2ga) ⭐</option>
                       <option value="alphanumeric">🔤 Random Characters (e.g., abc123xy)</option>
@@ -508,7 +513,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     <select
                       value={settings.maxHistory}
                       onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <option value={20}>20 aliases</option>
                       <option value={50}>50 aliases</option>
@@ -523,10 +528,12 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
               {/* Custom Presets Section */}
               <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                  </span>
                   Custom Presets
                 </h3>
                 <div className="space-y-3">
@@ -558,7 +565,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       {settings.customPresets.map((preset) => (
                         <div
                           key={preset.id}
-                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-sm transition-shadow"
+                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 hover:shadow-sm transition-shadow"
                         >
                           <div>
                             <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{preset.label}</div>
@@ -581,10 +588,12 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
               {/* Data Management Section */}
               <div className="p-4">
-                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                  </svg>
+                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                  </span>
                   Data Management
                 </h3>
                 <div className="space-y-3">
@@ -876,9 +885,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         {/* Footer */}
         <div className="bg-gray-100 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <span className="w-6 h-6 rounded-md bg-blue-100 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+              <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </span>
             <span className="font-medium">Gmail Alias Toolkit</span>
             <span className="text-gray-400 dark:text-gray-600">•</span>
             <span className="text-gray-500 dark:text-gray-500">v{version}</span>
