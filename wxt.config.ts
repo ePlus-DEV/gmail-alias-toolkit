@@ -6,6 +6,12 @@ EventEmitter.defaultMaxListeners = 15;
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
+  vite: () => ({
+    define: {
+      'process.emit': '(() => {})',
+      'process.env': '{}',
+    },
+  }),
   manifest: {
     name: "Gmail Alias Toolkit",
     description:

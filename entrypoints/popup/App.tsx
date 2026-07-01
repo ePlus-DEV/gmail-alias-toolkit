@@ -325,7 +325,37 @@ function App() {
     const updated = recentAliases.filter(a => !selectedAliases.has(a.email));
     setRecentAliases(updated);
     const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
-    await browser.storage.local.set({ [historyKey]: updated });
+    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    const statsKey = getAccountStorageKey(baseEmail, 'alias_stats');
+
+    const [favResult, statsResult] = await Promise.all([
+      browser.storage.local.get(favoritesKey),
+      browser.storage.local.get(statsKey),
+    ]);
+
+    // Remove deleted emails from favorites
+    const currentFavs = (favResult[favoritesKey] as any[]) || [];
+    const updatedFavs = currentFavs.filter((f: any) => !selectedAliases.has(f.email));
+
+    // Decrement stats: total and per-tag counts
+    const stats = (statsResult[statsKey] as { total: number; tags: Record<string, number> }) || { total: 0, tags: {} };
+    const tags = { ...stats.tags };
+    selectedAliases.forEach(email => {
+      const match = email.match(/\+([^@]+)@/);
+      if (match && tags[match[1]]) {
+        tags[match[1]] = Math.max(0, tags[match[1]] - 1);
+        if (tags[match[1]] === 0) delete tags[match[1]];
+      }
+    });
+    const updatedStats = { total: Math.max(0, stats.total - count), tags };
+
+    await browser.storage.local.set({
+      [historyKey]: updated,
+      [favoritesKey]: updatedFavs,
+      [statsKey]: updatedStats,
+    });
+
+    setFavorites(updatedFavs.map((f: any) => f.email));
     setSelectedAliases(new Set());
     setIsSelectMode(false);
     setToastMessage(`✓ Deleted ${count} aliases`);
@@ -340,10 +370,17 @@ function App() {
     });
   };
 
-  const clearHistory = () => {
+  const clearHistory = async () => {
     setRecentAliases([]);
+    setFavorites([]);
     const historyKey = getAccountStorageKey(baseEmail, 'gmail_alias_recent');
-    browser.storage.local.set({ [historyKey]: [] });
+    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    const statsKey = getAccountStorageKey(baseEmail, 'alias_stats');
+    await browser.storage.local.set({
+      [historyKey]: [],
+      [favoritesKey]: [],
+      [statsKey]: { total: 0, tags: {} },
+    });
     setToastMessage('✓ History cleared');
     setTimeout(() => setToastMessage(null), 2000);
   };
