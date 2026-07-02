@@ -628,8 +628,7 @@ function App() {
     const newAccount = {
       id: Date.now().toString(),
       email: newAccountEmail.trim(),
-      label:
-        newAccountLabel.trim() || `Account ${emailAccounts.length + 1}`,
+      label: newAccountLabel.trim() || `Account ${emailAccounts.length + 1}`,
       isActive: false, // Don't auto-switch to new account
     };
 
