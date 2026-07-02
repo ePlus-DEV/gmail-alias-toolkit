@@ -6,6 +6,7 @@ on:
 
 permissions:
   pull-requests: write
+  issues: write
 
 jobs:
   approve:
@@ -38,11 +39,45 @@ jobs:
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
-      - name: Approve pull request with comment
-        run: gh pr review --approve "$PR_NUMBER" --body "$APPROVAL_COMMENT" --repo "$GITHUB_REPOSITORY"
+      - name: Approve pull request
+        run: |
+          APPROVED_FOR_HEAD="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" \
+            --paginate \
+            --jq ".[] | select(.user.login == \"eplus-bot\" and .state == \"APPROVED\" and .commit_id == \"$HEAD_SHA\") | .id" \
+            | tail -n 1)"
+
+          if [ -z "$APPROVED_FOR_HEAD" ]; then
+            gh pr review --approve "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+          fi
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+
+      - name: Upsert CI approval comment
+        run: |
+          COMMENT_ID="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+            --paginate \
+            --jq ".[] | select(.user.login == \"eplus-bot\" and (.body | contains(\"$COMMENT_MARKER\"))) | .id" \
+            | tail -n 1)"
+
+          if [ -n "$COMMENT_ID" ]; then
+            gh api \
+              --method PATCH \
+              "repos/$GITHUB_REPOSITORY/issues/comments/$COMMENT_ID" \
+              -f body="$APPROVAL_COMMENT"
+          else
+            gh api \
+              --method POST \
+              "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+              -f body="$APPROVAL_COMMENT"
+          fi
+        env:
+          PR_NUMBER: ${{steps.pr.outputs.number}}
+          COMMENT_MARKER: "<!-- eplus-bot-ci-approval -->"
           APPROVAL_COMMENT: |
+            <!-- eplus-bot-ci-approval -->
+
             ![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)
 
             Approved by @eplus-bot after CI passed.
