@@ -1,18 +1,39 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { cn } from "./utils";
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+export interface InputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "onChange"
+> {
   label?: string;
   leftIcon?: ReactNode;
   onChange?: (value: string) => void;
 }
 
-export default function Input({ label, leftIcon, className, onChange, id, ...props }: InputProps) {
+export default function Input({
+  label,
+  leftIcon,
+  className,
+  onChange,
+  id,
+  ...props
+}: InputProps) {
   return (
     <div className="space-y-1.5">
-      {label && <label htmlFor={id} className="block text-xs font-semibold text-gray-700 dark:text-gray-300">{label}</label>}
+      {label && (
+        <label
+          htmlFor={id}
+          className="block text-xs font-semibold text-gray-700 dark:text-gray-300"
+        >
+          {label}
+        </label>
+      )}
       <div className="relative">
-        {leftIcon && <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">{leftIcon}</span>}
+        {leftIcon && (
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            {leftIcon}
+          </span>
+        )}
         <input
           id={id}
           onChange={(e) => onChange?.(e.target.value)}
