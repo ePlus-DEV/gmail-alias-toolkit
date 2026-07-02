@@ -15,7 +15,10 @@ export function getLegacyAccountStorageKey(
 
 /** Creates a plus-addressed alias (user+tag@domain), or null if the base email is malformed. */
 export function generateAlias(baseEmail: string, tag: string): string | null {
-  const [username, domain] = baseEmail.split("@");
+  const parts = baseEmail.trim().split("@");
+  if (parts.length !== 2) return null;
+
+  const [username, domain] = parts;
   if (!username || !domain) return null;
   return `${username}+${tag}@${domain}`;
 }
@@ -109,15 +112,16 @@ export type ValidationResult = {
 
 /** Validates an email address; non-Gmail domains pass with a warning. */
 export function validateEmail(value: string): ValidationResult {
-  if (!value.trim()) return { isValid: false, error: "Email is required" };
-  if (!value.includes("@"))
+  const email = value.trim();
+  if (!email) return { isValid: false, error: "Email is required" };
+  if (!email.includes("@"))
     return { isValid: false, error: "Please enter a valid email address" };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(value))
+  if (!emailRegex.test(email))
     return { isValid: false, error: "Invalid email format" };
 
-  const [username, domain] = value.split("@");
+  const [username, domain] = email.split("@");
   if (username.length < 1)
     return { isValid: false, error: "Username cannot be empty" };
   if (!domain.includes("."))

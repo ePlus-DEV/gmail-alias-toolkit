@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   getAccountStorageKey,
+  getLegacyAccountStorageKey,
   generateAlias,
   generateRandomString,
   validateEmail,
@@ -57,6 +58,20 @@ describe("getAccountStorageKey", () => {
   });
 });
 
+describe("getLegacyAccountStorageKey", () => {
+  it("keeps the old sanitized format for migration lookups", () => {
+    expect(getLegacyAccountStorageKey("user.name@gmail.com", "history")).toBe(
+      "history_user_name_gmail_com",
+    );
+  });
+
+  it("does not trim or lowercase legacy keys", () => {
+    expect(getLegacyAccountStorageKey(" User@Gmail.com ", "stats")).toBe(
+      "stats__User_Gmail_com_",
+    );
+  });
+});
+
 // ─── generateAlias ───────────────────────────────────────────────────────────
 
 describe("generateAlias", () => {
@@ -70,8 +85,16 @@ describe("generateAlias", () => {
     expect(generateAlias("notanemail", "tag")).toBeNull();
   });
 
+  it("returns null for email with more than one @ sign", () => {
+    expect(generateAlias("user@gmail.com@example.com", "tag")).toBeNull();
+  });
+
   it("returns null for empty string", () => {
     expect(generateAlias("", "tag")).toBeNull();
+  });
+
+  it("trims surrounding whitespace from the base email", () => {
+    expect(generateAlias(" user@gmail.com ", "tag")).toBe("user+tag@gmail.com");
   });
 
   it("preserves dots in username", () => {
@@ -171,6 +194,20 @@ describe("validateEmail", () => {
 
   it("accepts valid gmail address", () => {
     expect(validateEmail("user@gmail.com")).toMatchObject({ isValid: true });
+  });
+
+  it("accepts a one-character gmail username", () => {
+    expect(validateEmail("a@gmail.com")).toMatchObject({ isValid: true });
+  });
+
+  it("trims surrounding whitespace before validation", () => {
+    expect(validateEmail(" user@gmail.com ")).toMatchObject({ isValid: true });
+  });
+
+  it("rejects email with more than one @ sign", () => {
+    expect(validateEmail("user@gmail.com@example.com")).toMatchObject({
+      isValid: false,
+    });
   });
 
   it("accepts googlemail domain", () => {
