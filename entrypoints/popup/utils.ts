@@ -104,7 +104,7 @@ export function generateRandomString(format: RandomFormat, index = 0): string {
   return result;
 }
 
-export type ValidationResult = {
+type ValidationResult = {
   isValid: boolean;
   error?: string;
   warning?: string;
