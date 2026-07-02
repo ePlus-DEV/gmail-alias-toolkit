@@ -1,10 +1,13 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./entrypoints/**/*.{html,tsx,ts}"],
+  content: ["./entrypoints/**/*.{html,tsx,ts}", "./src/**/*.{tsx,ts}"],
   darkMode: "class",
   theme: {
     extend: {
+      boxShadow: {
+        soft: "0 14px 35px -22px rgb(15 23 42 / 0.45)",
+      },
       colors: {
         primary: {
           50: "#eff6ff",

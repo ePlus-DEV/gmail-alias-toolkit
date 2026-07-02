@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Button, Card, Toast } from "../../src/components/ui";
 import QRCode from "qrcode";
 import "./App.css";
 import Settings from "./components/Settings";
@@ -709,7 +710,7 @@ function App() {
 
   // skipcq: JS-0415
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col relative overflow-hidden">
+    <div className="h-screen flex flex-col relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_34%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_100%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(79,70,229,0.25),_transparent_34%),linear-gradient(180deg,#020617_0%,#111827_100%)]">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
         <div className="flex-1 overflow-y-auto">
@@ -725,56 +726,40 @@ function App() {
         // skipcq: JS-0415
         <>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-3.5 flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/icons/48.png"
-                  alt=""
-                  className="w-9 h-9 rounded-lg flex-shrink-0"
-                />
-                <div>
-                  <h1 className="text-lg font-bold tracking-tight">
-                    {t("extensionName")}
-                  </h1>
-                  <p className="text-xs text-blue-100 mt-0.5">
-                    {t("headerSubtitle")}
-                  </p>
+          <div className="flex-shrink-0 px-4 pb-3 pt-4">
+            <div className="rounded-3xl border border-white/30 bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 p-4 text-white shadow-soft">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur">
+                    <img src="/icons/48.png" alt="" className="h-8 w-8 rounded-xl" />
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="truncate text-lg font-bold tracking-tight">
+                      {t("extensionName")}
+                    </h1>
+                    <p className="mt-0.5 text-xs text-blue-100">
+                      {t("headerSubtitle")}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <button
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-                title={t("settings")}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <Button
+                  onClick={() => setIsSettingsOpen(true)}
+                  variant="ghost"
+                  size="icon"
+                  className="shrink-0 rounded-2xl text-white hover:bg-white/15 focus-visible:ring-white/60"
+                  title={t("settings")}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </button>
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden">
+          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-4">
+            <Card className="divide-y divide-gray-200/70 overflow-hidden dark:divide-gray-700/70">
               {/* Base Email Selector - Dropdown */}
-              <div className="p-3.5">
+              <div className="p-4">
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                   {t("activeGmailAddress")}
                 </label>
@@ -822,7 +807,7 @@ function App() {
                           base_email: selectedEmail,
                         });
                       }}
-                      className="w-full pl-9 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 truncate"
+                      className="w-full appearance-none rounded-2xl border border-gray-200/90 bg-white/80 py-2.5 pl-9 pr-10 text-sm text-gray-900 shadow-sm outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700/80 dark:bg-gray-800/80 dark:text-gray-100 truncate"
                     >
                       {emailAccounts.length > 0 ? (
                         emailAccounts.map((account) => (
@@ -853,7 +838,7 @@ function App() {
                   </div>
                   <button
                     onClick={() => setShowAddAccount(!showAddAccount)}
-                    className="w-10 h-10 flex-shrink-0 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-soft transition-all hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     title={t("addNewAccount")}
                   >
                     <svg
@@ -874,7 +859,7 @@ function App() {
 
                 {/* Quick Add Account Form */}
                 {showAddAccount && (
-                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
+                  <div className="mt-3 space-y-2 border-t border-gray-200/70 pt-3 dark:border-gray-700/70">
                     <div className="relative">
                       <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
                         <svg
@@ -907,7 +892,7 @@ function App() {
                           }
                         }}
                         placeholder={t("emailPlaceholder")}
-                        className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        className="w-full rounded-2xl border border-gray-200/90 bg-white/80 py-2.5 pl-10 pr-3 text-sm text-gray-900 shadow-sm outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700/80 dark:bg-gray-800/80 dark:text-gray-100"
                         ref={focusOnMount}
                       />
                       {newAccountEmail && !newAccountEmail.includes("@") && (
@@ -953,7 +938,7 @@ function App() {
                         value={newAccountLabel}
                         onChange={(e) => setNewAccountLabel(e.target.value)}
                         placeholder={t("accountLabelPlaceholder")}
-                        className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                        className="w-full rounded-2xl border border-gray-200/90 bg-white/80 py-2.5 pl-10 pr-3 text-sm text-gray-900 shadow-sm outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700/80 dark:bg-gray-800/80 dark:text-gray-100"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -963,7 +948,7 @@ function App() {
                           !newAccountEmail.trim() ||
                           !newAccountEmail.includes("@")
                         }
-                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5"
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:from-blue-700 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <svg
                           className="w-4 h-4"
@@ -987,7 +972,7 @@ function App() {
                           setNewAccountLabel("");
                           setAddAccountError("");
                         }}
-                        className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                        className="rounded-2xl border border-gray-200 bg-white/80 px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                       >
                         {t("cancel")}
                       </button>
@@ -1058,14 +1043,10 @@ function App() {
 
               {/* Statistics - Collapsible */}
               <Statistics />
-            </div>
+            </Card>
 
             {/* Toast Notification */}
-            {toastMessage && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in z-40">
-                {toastMessage}
-              </div>
-            )}
+            {toastMessage && <Toast message={toastMessage} />}
           </div>
         </>
       )}
@@ -1077,7 +1058,7 @@ function App() {
           onClick={() => setQrAlias(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 flex flex-col items-center gap-4"
+            className="flex flex-col items-center gap-4 rounded-3xl border border-white/70 bg-white/90 p-6 shadow-2xl backdrop-blur dark:border-gray-700/70 dark:bg-gray-900/90"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
@@ -1090,13 +1071,13 @@ function App() {
             <div className="flex gap-2">
               <button
                 onClick={() => copyToClipboard(qrAlias)}
-                className="px-4 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+                className="rounded-xl bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700"
               >
                 {t("copy")}
               </button>
               <button
                 onClick={() => setQrAlias(null)}
-                className="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="rounded-xl bg-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               >
                 {t("close")}
               </button>
