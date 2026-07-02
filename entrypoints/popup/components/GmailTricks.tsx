@@ -20,7 +20,10 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
-    if (!domain.includes("gmail")) return [];
+    const normalizedDomain = domain.toLowerCase();
+    const isGmail =
+      normalizedDomain === "gmail.com" || normalizedDomain === "googlemail.com";
+    if (!isGmail) return [];
 
     const combinations: string[] = [];
     const dotVariations = generateDotVariations(username, count, randomizeDots);

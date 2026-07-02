@@ -126,7 +126,11 @@ export function validateEmail(value: string): ValidationResult {
       error: "Domain must include a dot (e.g., gmail.com)",
     };
 
-  if (!domain.includes("gmail") && !domain.includes("googlemail")) {
+  const normalizedDomain = domain.toLowerCase();
+  const isGmail =
+    normalizedDomain === "gmail.com" || normalizedDomain === "googlemail.com";
+
+  if (!isGmail) {
     return { isValid: true, warning: "⚠️ Works best with Gmail addresses" };
   }
 
