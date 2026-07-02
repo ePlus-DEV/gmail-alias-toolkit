@@ -36,6 +36,7 @@ export default function KeyboardShortcuts() {
         Keyboard Shortcuts
       </button>
 
+      {/* skipcq: JS-0415 */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"

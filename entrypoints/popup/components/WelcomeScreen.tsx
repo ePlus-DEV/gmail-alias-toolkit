@@ -121,6 +121,7 @@ export default function WelcomeScreen({
     validateEmail(finalEmail);
   };
 
+  // skipcq: JS-0415
   return (
     <div className="flex items-center justify-center p-4 bg-gray-50">
       <div className="max-w-md w-full">

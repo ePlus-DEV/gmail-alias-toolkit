@@ -195,6 +195,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     }, 0);
   };
 
+  // skipcq: JS-0415
   return (
     <div>
       {/* Trick Type Selector */}

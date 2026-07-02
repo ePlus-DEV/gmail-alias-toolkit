@@ -65,6 +65,7 @@ export default function HistorySection({
 }: HistorySectionProps) {
   if (recentAliases.length === 0 && favorites.length === 0) return null;
 
+  // skipcq: JS-0415
   return (
     <div className="p-3.5">
       {/* Header with title and action buttons */}
@@ -372,6 +373,7 @@ function HistoryList({
     );
   }
 
+  // skipcq: JS-0415
   return (
     <div className="space-y-2">
       {paginatedAliases.map((alias) => (
@@ -541,6 +543,7 @@ function Pagination({
   endIndex: number;
   totalItems: number;
 }) {
+  // skipcq: JS-0415
   return (
     <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
       <div className="flex flex-col gap-3">

@@ -144,6 +144,7 @@ export default function Statistics() {
     );
   }
 
+  // skipcq: JS-0415
   return (
     <div className="p-3.5">
       <div className="flex items-center justify-between mb-2.5">

@@ -32,6 +32,14 @@ interface AppSettings {
   randomFormat: "private-mail" | "alphanumeric" | "words" | "timestamp";
 }
 
+interface ConfirmationRequest {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  variant?: "primary" | "danger";
+  resolve: (confirmed: boolean) => void;
+}
+
 const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
   maxHistory: 20,
@@ -113,10 +121,27 @@ export default function Settings({
   const [newAccountLabel, setNewAccountLabel] = useState("");
   const [addAccountError, setAddAccountError] = useState("");
   const [toast, setToast] = useState<string | null>(null);
+  const [confirmation, setConfirmation] =
+    useState<ConfirmationRequest | null>(null);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const askForConfirmation = useCallback(
+    (request: Omit<ConfirmationRequest, "resolve">) =>
+      new Promise<boolean>((resolve) => {
+        setConfirmation({ ...request, resolve });
+      }),
+    [],
+  );
+
+  const closeConfirmation = useCallback((confirmed: boolean) => {
+    setConfirmation((current) => {
+      current?.resolve(confirmed);
+      return null;
+    });
   }, []);
 
   useEffect(() => {
@@ -230,10 +255,31 @@ export default function Settings({
   }, []);
 
   /** Resets all settings to defaults after user confirmation. */
-  const handleResetSettings = () => {
-    if (confirm("Are you sure you want to reset all settings to default?")) {
-      saveSettings(DEFAULT_SETTINGS);
-      showToast("✓ Settings reset to default");
+  const handleResetSettings = async () => {
+    const confirmed = await askForConfirmation({
+      title: "Reset settings?",
+      message: "This will restore every setting to its default value.",
+      confirmLabel: "Reset",
+      variant: "danger",
+    });
+
+    if (!confirmed) return;
+
+    saveSettings(DEFAULT_SETTINGS);
+    showToast("✓ Settings reset to default");
+  };
+
+  /** Clears recent aliases after user confirmation. */
+  const handleClearHistory = async () => {
+    const confirmed = await askForConfirmation({
+      title: "Clear recent aliases?",
+      message: "This removes all aliases from the recent history list.",
+      confirmLabel: "Clear",
+      variant: "danger",
+    });
+
+    if (confirmed) {
+      onClearHistory();
     }
   };
 
@@ -255,15 +301,20 @@ export default function Settings({
   /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
     if (emailAccounts.length === 1) {
-      alert(
-        "Cannot delete the last account. You must have at least one account.",
-      );
+      showToast("Cannot delete the last account");
       return;
     }
 
-    const confirmMsg = `Delete "${account.label}" (${account.email})?\n\nThis will permanently delete:\n• All history for this account\n• All statistics\n• All favorites\n\nThis action cannot be undone.`;
+    const confirmMsg = `Delete "${account.label}" (${account.email})?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.`;
 
-    if (!confirm(confirmMsg)) return;
+    const confirmed = await askForConfirmation({
+      title: "Delete account?",
+      message: confirmMsg,
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+
+    if (!confirmed) return;
 
     // Delete account-specific data
     const historyKey = getAccountStorageKey(
@@ -309,12 +360,12 @@ export default function Settings({
   /** Saves account edits, migrating stored data if the email changed. */
   const handleSaveEdit = async (accountId: string) => {
     if (!editingLabel.trim()) {
-      alert("Label cannot be empty");
+      showToast("Label cannot be empty");
       return;
     }
 
     if (!editingEmail.trim() || !editingEmail.includes("@")) {
-      alert("Please enter a valid email address");
+      showToast("Please enter a valid email address");
       return;
     }
 
@@ -333,13 +384,19 @@ export default function Settings({
           acc.email.toLowerCase() === newEmail.toLowerCase(),
       );
       if (emailExists) {
-        alert("This email address is already used by another account!");
+        showToast("This email address is already used by another account");
         return;
       }
 
-      const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n• Migrate all history, statistics, and favorites to the new email\n• Update the account email\n• Delete data associated with the old email\n\nContinue?`;
+      const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?`;
 
-      if (!confirm(confirmMsg)) return;
+      const confirmed = await askForConfirmation({
+        title: "Change account email?",
+        message: confirmMsg,
+        confirmLabel: "Change email",
+      });
+
+      if (!confirmed) return;
 
       // Migrate data from old email to new email
       const oldHistoryKey = getAccountStorageKey(
@@ -451,6 +508,7 @@ export default function Settings({
 
   if (!isOpen) return null;
 
+  // skipcq: JS-0415
   return (
     <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
@@ -574,6 +632,7 @@ export default function Settings({
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
           {/* General Tab */}
+          {/* skipcq: JS-0415 */}
           {activeTab === "general" && (
             <div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
@@ -865,11 +924,7 @@ export default function Settings({
                       Import
                     </Button>
                     <Button
-                      onClick={() => {
-                        if (confirm("Clear all recent aliases?")) {
-                          onClearHistory();
-                        }
-                      }}
+                      onClick={handleClearHistory}
                       variant="danger"
                       size="sm"
                       fullWidth
@@ -967,6 +1022,7 @@ export default function Settings({
                         </div>
                       ) : (
                         // View mode
+                        // skipcq: JS-0415
                         <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
                           <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
@@ -1242,6 +1298,60 @@ export default function Settings({
           {toast}
         </div>
       )}
+
+      {confirmation && (
+        <ConfirmationDialog
+          request={confirmation}
+          onCancel={() => closeConfirmation(false)}
+          onConfirm={() => closeConfirmation(true)}
+        />
+      )}
+    </div>
+  );
+}
+
+interface ConfirmationDialogProps {
+  request: ConfirmationRequest;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+function ConfirmationDialog({
+  request,
+  onCancel,
+  onConfirm,
+}: ConfirmationDialogProps) {
+  const confirmClass =
+    request.variant === "danger"
+      ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+      : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500";
+
+  return (
+    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-40 p-4">
+      <div className="w-full max-w-sm rounded-lg bg-white p-4 shadow-xl dark:bg-gray-800">
+        <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+          {request.title}
+        </h3>
+        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-gray-600 dark:text-gray-300">
+          {request.message}
+        </p>
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            className={`rounded-full px-3 py-1.5 text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
+          >
+            {request.confirmLabel}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

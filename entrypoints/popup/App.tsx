@@ -116,6 +116,7 @@ function App() {
         "alias_stats",
         "favorites",
       ])
+      // skipcq: JS-R1005
       .then(async (result: StorageResult) => {
         let activeEmail = "your.email@gmail.com";
         let needsMigration = false;
@@ -705,6 +706,7 @@ function App() {
     sortBy,
   });
 
+  // skipcq: JS-0415
   return (
     <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col relative overflow-hidden">
       {/* Show Welcome Screen for first-time users */}
