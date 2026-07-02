@@ -224,6 +224,11 @@ export default function Settings({
     input.click();
   };
 
+  /** Focuses an input once when it mounts (replaces autoFocus). */
+  const focusOnMount = useCallback((el: HTMLInputElement | null) => {
+    el?.focus();
+  }, []);
+
   /** Resets all settings to defaults after user confirmation. */
   const handleResetSettings = () => {
     if (confirm("Are you sure you want to reset all settings to default?")) {
@@ -924,7 +929,7 @@ export default function Settings({
                               onChange={(e) => setEditingLabel(e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                               placeholder="Account label"
-                              autoFocus
+                              ref={focusOnMount}
                             />
                           </div>
                           <div>
@@ -1124,7 +1129,7 @@ export default function Settings({
                         }}
                         placeholder="your.email"
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        autoFocus
+                        ref={focusOnMount}
                       />
                       {newAccountEmail && !newAccountEmail.includes("@") && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">

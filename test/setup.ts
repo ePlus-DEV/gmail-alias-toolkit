@@ -6,7 +6,7 @@ Object.defineProperty(globalThis, "browser", {
     storage: {
       local: {
         get: vi.fn().mockResolvedValue({}),
-        set: vi.fn().mockResolvedValue(undefined),
+        set: vi.fn(() => Promise.resolve()),
         onChanged: {
           addListener: vi.fn(),
           removeListener: vi.fn(),
@@ -19,7 +19,7 @@ Object.defineProperty(globalThis, "browser", {
 });
 
 Object.defineProperty(navigator, "clipboard", {
-  value: { writeText: vi.fn().mockResolvedValue(undefined) },
+  value: { writeText: vi.fn(() => Promise.resolve()) },
   writable: true,
   configurable: true,
 });

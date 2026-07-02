@@ -5,6 +5,7 @@ interface ToggleProps {
   description?: string;
 }
 
+/** Accessible on/off switch with a label and optional description. */
 export default function Toggle({
   enabled,
   onChange,

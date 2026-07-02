@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   validateEmail as validateEmailPure,
   getAccountStorageKey,
@@ -9,6 +9,7 @@ interface WelcomeScreenProps {
   onOpenSettings: () => void;
 }
 
+/** First-run screen that collects the user's base email and creates the initial account. */
 export default function WelcomeScreen({
   onEmailAdded,
   onOpenSettings,
@@ -16,7 +17,14 @@ export default function WelcomeScreen({
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<string>("");
+  const isWarning = validationError.includes("⚠️");
 
+  /** Focuses the email input once when it mounts (replaces autoFocus). */
+  const focusOnMount = useCallback((el: HTMLInputElement | null) => {
+    el?.focus();
+  }, []);
+
+  /** Validates the email, storing any error or warning message in state. */
   const validateEmail = (value: string): boolean => {
     setValidationError("");
     const result = validateEmailPure(value.trim());
@@ -30,9 +38,11 @@ export default function WelcomeScreen({
     return true;
   };
 
+  /** Appends @gmail.com when the value has no domain part. */
   const completeDomain = (value: string) =>
     value.includes("@") ? value : `${value}@gmail.com`;
 
+  /** Validates the email, creates the first account, and migrates any legacy data. */
   const handleSubmit = async () => {
     const emailTrimmed = completeDomain(email.trim());
     if (emailTrimmed !== email) setEmail(emailTrimmed);
@@ -76,6 +86,7 @@ export default function WelcomeScreen({
     setIsSubmitting(false);
   };
 
+  /** Submits the form when Enter is pressed. */
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleSubmit();
@@ -113,7 +124,7 @@ export default function WelcomeScreen({
           {/* Setup Card */}
           <div className="p-4">
             <h2 className="text-sm font-semibold text-gray-900 mb-2.5">
-              Let's get started
+              Let&apos;s get started
             </h2>
 
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
@@ -147,13 +158,13 @@ export default function WelcomeScreen({
                 onKeyDown={handleKeyPress}
                 placeholder="your.email"
                 className={`w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 transition-colors ${
-                  validationError && !validationError.includes("⚠️")
+                  validationError && !isWarning
                     ? "border-red-300 focus:ring-red-500 focus:border-red-500"
-                    : validationError && validationError.includes("⚠️")
+                    : validationError && isWarning
                       ? "border-amber-300 focus:ring-amber-500 focus:border-amber-500"
                       : "border-blue-500 focus:ring-blue-500 focus:border-transparent"
                 }`}
-                autoFocus
+                ref={focusOnMount}
               />
               {email && !email.includes("@") && !validationError && (
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
@@ -165,7 +176,7 @@ export default function WelcomeScreen({
             {validationError && (
               <div
                 className={`mb-2 p-1.5 rounded-full text-xs text-center ${
-                  validationError.includes("⚠️")
+                  isWarning
                     ? "bg-amber-50 text-amber-700 border border-amber-200"
                     : "bg-red-50 text-red-700 border border-red-200"
                 }`}
@@ -187,9 +198,7 @@ export default function WelcomeScreen({
             <button
               onClick={handleSubmit}
               disabled={
-                !email.trim() ||
-                (validationError && !validationError.includes("⚠️")) ||
-                isSubmitting
+                !email.trim() || (validationError && !isWarning) || isSubmitting
               }
               className="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-1"
             >

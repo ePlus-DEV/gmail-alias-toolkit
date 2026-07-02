@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import QRCode from "qrcode";
 import "./App.css";
 import Settings from "./components/Settings";
@@ -59,6 +59,11 @@ interface StorageResult {
 
 /** Popup root: alias generators, history, favorites, accounts, and settings. */
 function App() {
+  /** Focuses an input once when it mounts (replaces autoFocus). */
+  const focusOnMount = useCallback((el: HTMLInputElement | null) => {
+    el?.focus();
+  }, []);
+
   const [baseEmail, setBaseEmail] = useState("your.email@gmail.com");
   const [customTag, setCustomTag] = useState("");
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
@@ -890,7 +895,7 @@ function App() {
                         }}
                         placeholder="your.email"
                         className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        autoFocus
+                        ref={focusOnMount}
                       />
                       {newAccountEmail && !newAccountEmail.includes("@") && (
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">

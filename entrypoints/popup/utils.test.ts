@@ -42,9 +42,9 @@ describe("getAccountStorageKey", () => {
   });
 
   it("does not collide for emails that would collide under the old sanitizer", () => {
-    const a = getAccountStorageKey("user.name@gmail.com", "history");
-    const b = getAccountStorageKey("user_name@gmail.com", "history");
-    expect(a).not.toBe(b);
+    const dottedKey = getAccountStorageKey("user.name@gmail.com", "history");
+    const underscoreKey = getAccountStorageKey("user_name@gmail.com", "history");
+    expect(dottedKey).not.toBe(underscoreKey);
   });
 
   it("normalizes case so the same account always maps to the same key", () => {
@@ -127,9 +127,9 @@ describe("generateRandomString", () => {
   it("timestamp format uses index offset for uniqueness", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2024-01-01T00:00:00Z"));
-    const a = generateRandomString("timestamp", 0);
-    const b = generateRandomString("timestamp", 1);
-    expect(a).not.toBe(b);
+    const first = generateRandomString("timestamp", 0);
+    const second = generateRandomString("timestamp", 1);
+    expect(first).not.toBe(second);
     vi.useRealTimers();
   });
 });

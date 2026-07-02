@@ -1,3 +1,4 @@
+/** Builds a collision-free, case-insensitive storage key for account-scoped data. */
 export function getAccountStorageKey(email: string, suffix: string): string {
   const normalized = encodeURIComponent(email.trim().toLowerCase());
   return `${suffix}_${normalized}`;
@@ -12,6 +13,7 @@ export function getLegacyAccountStorageKey(
   return `${suffix}_${sanitized}`;
 }
 
+/** Creates a plus-addressed alias (user+tag@domain), or null if the base email is malformed. */
 export function generateAlias(baseEmail: string, tag: string): string | null {
   const [username, domain] = baseEmail.split("@");
   if (!username || !domain) return null;
@@ -24,6 +26,7 @@ export type RandomFormat =
   | "words"
   | "timestamp";
 
+/** Generates a random alias tag in the given format; `index` de-duplicates timestamp batches. */
 export function generateRandomString(format: RandomFormat, index = 0): string {
   if (format === "private-mail") {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -104,6 +107,7 @@ export type ValidationResult = {
   warning?: string;
 };
 
+/** Validates an email address; non-Gmail domains pass with a warning. */
 export function validateEmail(value: string): ValidationResult {
   if (!value.trim()) return { isValid: false, error: "Email is required" };
   if (!value.includes("@"))
@@ -129,6 +133,7 @@ export function validateEmail(value: string): ValidationResult {
   return { isValid: true };
 }
 
+/** Generates Gmail dot-placement variations of a username, exhaustive or randomized. */
 export function generateDotVariations(
   username: string,
   count = 10,
@@ -154,7 +159,7 @@ export function generateDotVariations(
       let result = "";
       let lastPos = 0;
       sortedPositions.forEach((pos) => {
-        result += chars.slice(lastPos, pos).join("") + ".";
+        result += `${chars.slice(lastPos, pos).join("")}.`;
         lastPos = pos;
       });
       result += chars.slice(lastPos).join("");
@@ -163,18 +168,14 @@ export function generateDotVariations(
   } else {
     const len = username.length;
     for (let i = 1; i < len; i++) {
-      variations.push(username.slice(0, i) + "." + username.slice(i));
+      variations.push(`${username.slice(0, i)}.${username.slice(i)}`);
     }
 
     if (username.length >= 4) {
       for (let i = 1; i < len - 1; i++) {
         for (let j = i + 1; j < len; j++) {
           variations.push(
-            username.slice(0, i) +
-              "." +
-              username.slice(i, j) +
-              "." +
-              username.slice(j),
+            `${username.slice(0, i)}.${username.slice(i, j)}.${username.slice(j)}`,
           );
         }
       }
@@ -184,6 +185,7 @@ export function generateDotVariations(
   return [...new Set(variations)].slice(0, count);
 }
 
+/** Filters and sorts aliases by view mode, search query, tag, and sort order. */
 export function filterAliases(
   aliases: Array<{ email: string; timestamp: number }>,
   opts: {

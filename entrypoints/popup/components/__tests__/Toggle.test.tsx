@@ -34,13 +34,13 @@ describe("Toggle", () => {
 
   it("calls onChange with false when toggled from on", () => {
     const onChange = vi.fn();
-    render(<Toggle enabled={true} onChange={onChange} label="Test" />);
+    render(<Toggle enabled onChange={onChange} label="Test" />);
     fireEvent.click(screen.getByRole("switch"));
     expect(onChange).toHaveBeenCalledWith(false);
   });
 
   it("has aria-checked=true when enabled", () => {
-    render(<Toggle enabled={true} onChange={vi.fn()} label="Test" />);
+    render(<Toggle enabled onChange={vi.fn()} label="Test" />);
     expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "true");
   });
 
@@ -50,7 +50,7 @@ describe("Toggle", () => {
   });
 
   it("has bg-blue-600 when enabled", () => {
-    render(<Toggle enabled={true} onChange={vi.fn()} label="Test" />);
+    render(<Toggle enabled onChange={vi.fn()} label="Test" />);
     expect(screen.getByRole("switch")).toHaveClass("bg-blue-600");
   });
 
