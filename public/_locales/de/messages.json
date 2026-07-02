@@ -1,0 +1,621 @@
+{
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "Gmail-Aliase mit Plus-Adressierung und Vorlagen erstellen und verwalten"
+  },
+  "headerSubtitle": {
+    "message": "Aliase mit Plus-Adressierung erstellen"
+  },
+  "settings": {
+    "message": "Einstellungen"
+  },
+  "back": {
+    "message": "Zurück"
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "cancel": {
+    "message": "Abbrechen"
+  },
+  "copy": {
+    "message": "Kopieren"
+  },
+  "copyAll": {
+    "message": "Alle kopieren"
+  },
+  "copyToClipboard": {
+    "message": "In die Zwischenablage kopieren"
+  },
+  "activeGmailAddress": {
+    "message": "Aktive Gmail-Adresse"
+  },
+  "addNewAccount": {
+    "message": "Neues Konto hinzufügen"
+  },
+  "addAccount": {
+    "message": "Konto hinzufügen"
+  },
+  "addNewAccountTitle": {
+    "message": "Neues Konto hinzufügen"
+  },
+  "emailPlaceholder": {
+    "message": "deine.email"
+  },
+  "accountLabelPlaceholder": {
+    "message": "Bezeichnung (optional, z. B. Arbeit, Privat)"
+  },
+  "pressTabToAddGmail": {
+    "message": "Drücke $KEY$, um @gmail.com hinzuzufügen",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "Das sieht nicht wie eine Gmail-Adresse aus. Plus-Adressierung funktioniert am besten mit Gmail."
+  },
+  "random": {
+    "message": "Zufällig"
+  },
+  "customTags": {
+    "message": "Benutzerdefinierte Tags"
+  },
+  "gmailTricks": {
+    "message": "Gmail-Tricks"
+  },
+  "format": {
+    "message": "Format"
+  },
+  "privateMailFormat": {
+    "message": "Private Mail (private-mail-xxxx)"
+  },
+  "randomCharactersFormat": {
+    "message": "Zufällige Zeichen (abc123xy)"
+  },
+  "randomWordsFormat": {
+    "message": "Zufällige Wörter (happy-fox-42)"
+  },
+  "timestampFormat": {
+    "message": "Zeitstempel (1234567890)"
+  },
+  "numberOfAliases": {
+    "message": "Anzahl der Aliase"
+  },
+  "generateRandomAliases": {
+    "message": "$COUNT$ zufällige Aliase generieren",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "Generierte Aliase"
+  },
+  "totalCount": {
+    "message": "$COUNT$ insgesamt",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "✓ $COUNT$ Aliase kopiert!",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "✗ Kopieren fehlgeschlagen"
+  },
+  "formatPrivateMail": {
+    "message": "Format: private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 zufällige Zeichen"
+  },
+  "formatWords": {
+    "message": "2 zufällige Wörter"
+  },
+  "formatTimestamp": {
+    "message": "Unix-Zeitstempel"
+  },
+  "tagPlaceholder": {
+    "message": "Tag eingeben (z. B. shopping, arbeit)"
+  },
+  "generate": {
+    "message": "Generieren"
+  },
+  "yourPresets": {
+    "message": "Deine Vorlagen"
+  },
+  "example": {
+    "message": "Beispiel:"
+  },
+  "copyExample": {
+    "message": "Beispiel kopieren"
+  },
+  "recentAliases": {
+    "message": "Aktuelle Aliase"
+  },
+  "favorites": {
+    "message": "Favoriten"
+  },
+  "exportAsCsv": {
+    "message": "Als CSV exportieren"
+  },
+  "exportAsJson": {
+    "message": "Als JSON exportieren"
+  },
+  "selectAliases": {
+    "message": "Aliase auswählen"
+  },
+  "select": {
+    "message": "Auswählen"
+  },
+  "starredCount": {
+    "message": "$COUNT$ markiert",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "Auswahl aufheben"
+  },
+  "selectAll": {
+    "message": "Alle auswählen"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ ausgewählt",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "$COUNT$ löschen",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "Alle ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "Favoriten ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "Aliase suchen..."
+  },
+  "allTags": {
+    "message": "Alle Tags"
+  },
+  "mostRecent": {
+    "message": "Neueste"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "Noch keine Favoriten"
+  },
+  "starEmailsHint": {
+    "message": "Markiere E-Mails aus deinem Verlauf, um hier schnell darauf zuzugreifen"
+  },
+  "noResultsFound": {
+    "message": "Keine Ergebnisse gefunden"
+  },
+  "differentSearchHint": {
+    "message": "Versuche eine andere Suche oder einen anderen Filter"
+  },
+  "showQrCode": {
+    "message": "QR-Code anzeigen"
+  },
+  "removeFromFavorites": {
+    "message": "Aus Favoriten entfernen"
+  },
+  "addToFavorites": {
+    "message": "Zu Favoriten hinzufügen"
+  },
+  "showingRange": {
+    "message": "$START$–$END$ von $TOTAL$ werden angezeigt",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / Seite",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "Erste Seite"
+  },
+  "previousPage": {
+    "message": "Vorherige Seite"
+  },
+  "nextPage": {
+    "message": "Nächste Seite"
+  },
+  "lastPage": {
+    "message": "Letzte Seite"
+  },
+  "scanToCopyAlias": {
+    "message": "Scannen, um Alias zu kopieren"
+  },
+  "general": {
+    "message": "Allgemein"
+  },
+  "accounts": {
+    "message": "Konten"
+  },
+  "changelog": {
+    "message": "Änderungsprotokoll"
+  },
+  "appearanceDisplay": {
+    "message": "Darstellung & Anzeige"
+  },
+  "theme": {
+    "message": "Design"
+  },
+  "themeLight": {
+    "message": "Hell"
+  },
+  "themeDark": {
+    "message": "Dunkel"
+  },
+  "themeAuto": {
+    "message": "System (Automatisch)"
+  },
+  "badgeCounter": {
+    "message": "Badge-Zähler"
+  },
+  "badgeNone": {
+    "message": "Keine (Ausgeblendet)"
+  },
+  "badgeTotal": {
+    "message": "Gesamt im Verlauf"
+  },
+  "badgeAllTime": {
+    "message": "Insgesamt generiert"
+  },
+  "badgeToday": {
+    "message": "Heute erstellt"
+  },
+  "badgeWeek": {
+    "message": "Diese Woche"
+  },
+  "copyNotifications": {
+    "message": "Kopierbenachrichtigungen"
+  },
+  "aliasGeneration": {
+    "message": "Alias-Generierung"
+  },
+  "randomAliasFormat": {
+    "message": "Format für zufällige Aliase"
+  },
+  "autoSaveLimit": {
+    "message": "Limit für automatisches Speichern"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ Aliase",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "Benutzerdefinierte Vorlagen"
+  },
+  "label": {
+    "message": "Bezeichnung"
+  },
+  "tag": {
+    "message": "Tag"
+  },
+  "addPreset": {
+    "message": "+ Vorlage hinzufügen"
+  },
+  "dataManagement": {
+    "message": "Datenverwaltung"
+  },
+  "export": {
+    "message": "Exportieren"
+  },
+  "import": {
+    "message": "Importieren"
+  },
+  "clear": {
+    "message": "Leeren"
+  },
+  "resetSettings": {
+    "message": "Alle Einstellungen auf Standard zurücksetzen"
+  },
+  "resetSettingsTitle": {
+    "message": "Einstellungen zurücksetzen?"
+  },
+  "resetSettingsMessage": {
+    "message": "Dadurch werden alle Einstellungen auf ihre Standardwerte zurückgesetzt."
+  },
+  "reset": {
+    "message": "Zurücksetzen"
+  },
+  "clearHistoryTitle": {
+    "message": "Aktuelle Aliase löschen?"
+  },
+  "clearHistoryMessage": {
+    "message": "Dadurch werden alle Aliase aus der Liste des aktuellen Verlaufs entfernt."
+  },
+  "emailAccounts": {
+    "message": "E-Mail-Konten"
+  },
+  "manageAccountsDescription": {
+    "message": "Verwalte deine Gmail-Konten. Jedes Konto hat seinen eigenen Verlauf, eigene Statistiken und Favoriten."
+  },
+  "noAccountsFound": {
+    "message": "Keine Konten gefunden. Bitte füge ein Konto über den Hauptbildschirm hinzu."
+  },
+  "emailAddress": {
+    "message": "E-Mail-Adresse"
+  },
+  "accountLabel": {
+    "message": "Kontobezeichnung"
+  },
+  "emailAddressPlaceholder": {
+    "message": "deine.email@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "Beim Ändern der E-Mail werden alle Daten zur neuen E-Mail-Adresse migriert"
+  },
+  "saveChanges": {
+    "message": "Änderungen speichern"
+  },
+  "active": {
+    "message": "Aktiv"
+  },
+  "editAccount": {
+    "message": "Konto bearbeiten"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "Das letzte Konto kann nicht gelöscht werden"
+  },
+  "deleteThisAccount": {
+    "message": "Dieses Konto löschen"
+  },
+  "deleteAccountTitle": {
+    "message": "Konto löschen?"
+  },
+  "deleteAccountMessage": {
+    "message": "„$LABEL$“ ($EMAIL$) löschen?\n\nDies löscht dauerhaft:\n- Den gesamten Verlauf dieses Kontos\n- Alle Statistiken\n- Alle Favoriten\n\nDiese Aktion kann nicht rückgängig gemacht werden.",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "Löschen"
+  },
+  "changeAccountEmailTitle": {
+    "message": "Konto-E-Mail ändern?"
+  },
+  "changeAccountEmailMessage": {
+    "message": "E-Mail ändern von\n$OLD_EMAIL$\nzu\n$NEW_EMAIL$?\n\nDies wird:\n- Den gesamten Verlauf, alle Statistiken und Favoriten zur neuen E-Mail migrieren\n- Die Konto-E-Mail aktualisieren\n- Mit der alten E-Mail verknüpfte Daten löschen\n\nFortfahren?",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "E-Mail ändern"
+  },
+  "menuRandomEmailAlias": {
+    "message": "Zufälliger E-Mail-Alias"
+  },
+  "menuCustomTags": {
+    "message": "Benutzerdefinierte Tags"
+  },
+  "menuNoPresets": {
+    "message": "Keine Vorlagen – in den Einstellungen hinzufügen"
+  },
+  "menuGmailTricks": {
+    "message": "Gmail-Tricks"
+  },
+  "menuDotVariation": {
+    "message": "Punkt-Variation"
+  },
+  "menuGooglemailDomain": {
+    "message": "Googlemail-Domain"
+  },
+  "menuRemoveAllDots": {
+    "message": "Alle Punkte entfernen"
+  },
+  "toastPresetAdded": {
+    "message": "✓ Vorlage hinzugefügt"
+  },
+  "toastPresetRemoved": {
+    "message": "✓ Vorlage entfernt"
+  },
+  "toastSettingsExported": {
+    "message": "✓ Einstellungen exportiert"
+  },
+  "toastSettingsImported": {
+    "message": "✓ Einstellungen importiert"
+  },
+  "toastImportFailed": {
+    "message": "✗ Import fehlgeschlagen – ungültige Datei"
+  },
+  "toastSettingsReset": {
+    "message": "✓ Einstellungen auf Standard zurückgesetzt"
+  },
+  "toastAccountSwitched": {
+    "message": "✓ Konto gewechselt"
+  },
+  "toastAccountDeleted": {
+    "message": "✓ Konto gelöscht"
+  },
+  "toastAccountUpdated": {
+    "message": "✓ Konto aktualisiert"
+  },
+  "toastAccountAdded": {
+    "message": "✓ $LABEL$ hinzugefügt",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "Bezeichnung darf nicht leer sein"
+  },
+  "errorInvalidEmail": {
+    "message": "Bitte gib eine gültige E-Mail-Adresse ein"
+  },
+  "errorDuplicateEmail": {
+    "message": "Diese E-Mail-Adresse wird bereits von einem anderen Konto verwendet"
+  },
+  "errorEnterEmail": {
+    "message": "Bitte gib eine E-Mail-Adresse ein"
+  },
+  "errorAccountExists": {
+    "message": "Dieses Konto existiert bereits"
+  },
+  "toastQrFailed": {
+    "message": "✗ QR-Code konnte nicht erstellt werden"
+  },
+  "toastExportedAliases": {
+    "message": "✓ $COUNT$ Aliase exportiert",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "✓ $COUNT$ Aliase gelöscht",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "✓ Verlauf gelöscht"
+  },
+  "toastFavoriteAdded": {
+    "message": "✓ Zu Favoriten hinzugefügt"
+  },
+  "toastFavoriteRemoved": {
+    "message": "✓ Aus Favoriten entfernt"
+  },
+  "toastCopiedEmail": {
+    "message": "✓ $EMAIL$ kopiert",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "✗ Kopieren fehlgeschlagen"
+  },
+  "welcomeTitle": {
+    "message": "Willkommen bei Gmail Alias Toolkit"
+  },
+  "welcomeSubtitle": {
+    "message": "Erstelle unbegrenzt E-Mail-Aliase für Datenschutz und Organisation"
+  },
+  "letsGetStarted": {
+    "message": "Los geht’s"
+  },
+  "enterGmailAddress": {
+    "message": "Gib deine Gmail-Adresse ein"
+  },
+  "pressTabForGmail": {
+    "message": "Drücke $KEY$ für @gmail.com",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "Einrichtung läuft..."
+  },
+  "getStarted": {
+    "message": "Starten"
+  },
+  "advancedSetup": {
+    "message": "Erweiterte Einrichtung in den Einstellungen"
+  },
+  "whatYouCanDo": {
+    "message": "Was du tun kannst:"
+  },
+  "featurePrivateEmail": {
+    "message": "Private-E-Mail-Generator"
+  },
+  "featureCustomTags": {
+    "message": "Benutzerdefinierte Tags & Vorlagen"
+  },
+  "featureGmailTricks": {
+    "message": "Erweiterte Gmail-Tricks"
+  },
+  "welcomeFooter": {
+    "message": "Alle Daten werden lokal gespeichert. Kein Tracking, kein Server."
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ gespeichert",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "Klicke bei einem Alias im Verlauf auf den Stern, um ihn hier hinzuzufügen"
+  }
+}

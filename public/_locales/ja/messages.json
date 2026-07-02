@@ -1,0 +1,621 @@
+{
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "プラスアドレスとプリセットで Gmail エイリアスを生成・管理します"
+  },
+  "headerSubtitle": {
+    "message": "プラスアドレスでエイリアスを生成"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "back": {
+    "message": "戻る"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "copy": {
+    "message": "コピー"
+  },
+  "copyAll": {
+    "message": "すべてコピー"
+  },
+  "copyToClipboard": {
+    "message": "クリップボードにコピー"
+  },
+  "activeGmailAddress": {
+    "message": "有効な Gmail アドレス"
+  },
+  "addNewAccount": {
+    "message": "新しいアカウントを追加"
+  },
+  "addAccount": {
+    "message": "アカウントを追加"
+  },
+  "addNewAccountTitle": {
+    "message": "新しいアカウントを追加"
+  },
+  "emailPlaceholder": {
+    "message": "your.email"
+  },
+  "accountLabelPlaceholder": {
+    "message": "ラベル（任意、例：仕事、個人）"
+  },
+  "pressTabToAddGmail": {
+    "message": "$KEY$ を押して @gmail.com を追加",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "これは Gmail アドレスではないようです。プラスアドレスは Gmail で最も効果的に機能します。"
+  },
+  "random": {
+    "message": "ランダム"
+  },
+  "customTags": {
+    "message": "カスタムタグ"
+  },
+  "gmailTricks": {
+    "message": "Gmail の便利機能"
+  },
+  "format": {
+    "message": "形式"
+  },
+  "privateMailFormat": {
+    "message": "プライベートメール（private-mail-xxxx）"
+  },
+  "randomCharactersFormat": {
+    "message": "ランダム文字（abc123xy）"
+  },
+  "randomWordsFormat": {
+    "message": "ランダム単語（happy-fox-42）"
+  },
+  "timestampFormat": {
+    "message": "タイムスタンプ（1234567890）"
+  },
+  "numberOfAliases": {
+    "message": "エイリアス数"
+  },
+  "generateRandomAliases": {
+    "message": "$COUNT$ 件のランダムエイリアスを生成",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "生成されたエイリアス"
+  },
+  "totalCount": {
+    "message": "合計 $COUNT$ 件",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "✓ $COUNT$ 件のエイリアスをコピーしました！",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "✗ コピーに失敗しました"
+  },
+  "formatPrivateMail": {
+    "message": "形式：private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 文字のランダム文字"
+  },
+  "formatWords": {
+    "message": "2 つのランダム単語"
+  },
+  "formatTimestamp": {
+    "message": "Unix タイムスタンプ"
+  },
+  "tagPlaceholder": {
+    "message": "タグを入力（例：shopping、work）"
+  },
+  "generate": {
+    "message": "生成"
+  },
+  "yourPresets": {
+    "message": "あなたのプリセット"
+  },
+  "example": {
+    "message": "例："
+  },
+  "copyExample": {
+    "message": "例をコピー"
+  },
+  "recentAliases": {
+    "message": "最近のエイリアス"
+  },
+  "favorites": {
+    "message": "お気に入り"
+  },
+  "exportAsCsv": {
+    "message": "CSV としてエクスポート"
+  },
+  "exportAsJson": {
+    "message": "JSON としてエクスポート"
+  },
+  "selectAliases": {
+    "message": "エイリアスを選択"
+  },
+  "select": {
+    "message": "選択"
+  },
+  "starredCount": {
+    "message": "$COUNT$ 件をスター付き",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "選択解除"
+  },
+  "selectAll": {
+    "message": "すべて選択"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ 件選択中",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "$COUNT$ 件を削除",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "すべて（$COUNT$）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "お気に入り（$COUNT$）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "エイリアスを検索..."
+  },
+  "allTags": {
+    "message": "すべてのタグ"
+  },
+  "mostRecent": {
+    "message": "最新順"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "お気に入りはまだありません"
+  },
+  "starEmailsHint": {
+    "message": "履歴内のメールにスターを付けると、ここからすばやくアクセスできます"
+  },
+  "noResultsFound": {
+    "message": "結果が見つかりません"
+  },
+  "differentSearchHint": {
+    "message": "別の検索語またはフィルターを試してください"
+  },
+  "showQrCode": {
+    "message": "QR コードを表示"
+  },
+  "removeFromFavorites": {
+    "message": "お気に入りから削除"
+  },
+  "addToFavorites": {
+    "message": "お気に入りに追加"
+  },
+  "showingRange": {
+    "message": "$TOTAL$ 件中 $START$〜$END$ 件を表示",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / ページ",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "最初のページ"
+  },
+  "previousPage": {
+    "message": "前のページ"
+  },
+  "nextPage": {
+    "message": "次のページ"
+  },
+  "lastPage": {
+    "message": "最後のページ"
+  },
+  "scanToCopyAlias": {
+    "message": "スキャンしてエイリアスをコピー"
+  },
+  "general": {
+    "message": "一般"
+  },
+  "accounts": {
+    "message": "アカウント"
+  },
+  "changelog": {
+    "message": "変更履歴"
+  },
+  "appearanceDisplay": {
+    "message": "外観と表示"
+  },
+  "theme": {
+    "message": "テーマ"
+  },
+  "themeLight": {
+    "message": "ライト"
+  },
+  "themeDark": {
+    "message": "ダーク"
+  },
+  "themeAuto": {
+    "message": "システム（自動）"
+  },
+  "badgeCounter": {
+    "message": "バッジカウンター"
+  },
+  "badgeNone": {
+    "message": "なし（非表示）"
+  },
+  "badgeTotal": {
+    "message": "履歴内の合計"
+  },
+  "badgeAllTime": {
+    "message": "総生成数"
+  },
+  "badgeToday": {
+    "message": "今日作成"
+  },
+  "badgeWeek": {
+    "message": "今週"
+  },
+  "copyNotifications": {
+    "message": "コピー通知"
+  },
+  "aliasGeneration": {
+    "message": "エイリアス生成"
+  },
+  "randomAliasFormat": {
+    "message": "ランダムエイリアス形式"
+  },
+  "autoSaveLimit": {
+    "message": "自動保存上限"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ 件のエイリアス",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "カスタムプリセット"
+  },
+  "label": {
+    "message": "ラベル"
+  },
+  "tag": {
+    "message": "タグ"
+  },
+  "addPreset": {
+    "message": "+ プリセットを追加"
+  },
+  "dataManagement": {
+    "message": "データ管理"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "import": {
+    "message": "インポート"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "resetSettings": {
+    "message": "すべての設定をデフォルトに戻す"
+  },
+  "resetSettingsTitle": {
+    "message": "設定をリセットしますか？"
+  },
+  "resetSettingsMessage": {
+    "message": "すべての設定がデフォルト値に戻ります。"
+  },
+  "reset": {
+    "message": "リセット"
+  },
+  "clearHistoryTitle": {
+    "message": "最近のエイリアスをクリアしますか？"
+  },
+  "clearHistoryMessage": {
+    "message": "最近の履歴リストからすべてのエイリアスを削除します。"
+  },
+  "emailAccounts": {
+    "message": "メールアカウント"
+  },
+  "manageAccountsDescription": {
+    "message": "Gmail アカウントを管理します。各アカウントには個別の履歴、統計、お気に入りがあります。"
+  },
+  "noAccountsFound": {
+    "message": "アカウントが見つかりません。メイン画面からアカウントを追加してください。"
+  },
+  "emailAddress": {
+    "message": "メールアドレス"
+  },
+  "accountLabel": {
+    "message": "アカウントラベル"
+  },
+  "emailAddressPlaceholder": {
+    "message": "your.email@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "メールを変更すると、すべてのデータが新しいメールアドレスに移行されます"
+  },
+  "saveChanges": {
+    "message": "変更を保存"
+  },
+  "active": {
+    "message": "有効"
+  },
+  "editAccount": {
+    "message": "アカウントを編集"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "最後のアカウントは削除できません"
+  },
+  "deleteThisAccount": {
+    "message": "このアカウントを削除"
+  },
+  "deleteAccountTitle": {
+    "message": "アカウントを削除しますか？"
+  },
+  "deleteAccountMessage": {
+    "message": "「$LABEL$」（$EMAIL$）を削除しますか？\n\nこれにより以下が完全に削除されます：\n- このアカウントのすべての履歴\n- すべての統計\n- すべてのお気に入り\n\nこの操作は元に戻せません。",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "削除"
+  },
+  "changeAccountEmailTitle": {
+    "message": "アカウントのメールを変更しますか？"
+  },
+  "changeAccountEmailMessage": {
+    "message": "メールを\n$OLD_EMAIL$\nから\n$NEW_EMAIL$\nに変更しますか？\n\nこれにより：\n- すべての履歴、統計、お気に入りが新しいメールに移行されます\n- アカウントのメールが更新されます\n- 古いメールに関連付けられたデータが削除されます\n\n続行しますか？",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "メールを変更"
+  },
+  "menuRandomEmailAlias": {
+    "message": "ランダムメールエイリアス"
+  },
+  "menuCustomTags": {
+    "message": "カスタムタグ"
+  },
+  "menuNoPresets": {
+    "message": "プリセットなし - 設定で追加"
+  },
+  "menuGmailTricks": {
+    "message": "Gmail の便利機能"
+  },
+  "menuDotVariation": {
+    "message": "ドットバリエーション"
+  },
+  "menuGooglemailDomain": {
+    "message": "Googlemail ドメイン"
+  },
+  "menuRemoveAllDots": {
+    "message": "すべてのドットを削除"
+  },
+  "toastPresetAdded": {
+    "message": "✓ プリセットを追加しました"
+  },
+  "toastPresetRemoved": {
+    "message": "✓ プリセットを削除しました"
+  },
+  "toastSettingsExported": {
+    "message": "✓ 設定をエクスポートしました"
+  },
+  "toastSettingsImported": {
+    "message": "✓ 設定をインポートしました"
+  },
+  "toastImportFailed": {
+    "message": "✗ インポートに失敗しました - 無効なファイル"
+  },
+  "toastSettingsReset": {
+    "message": "✓ 設定をデフォルトに戻しました"
+  },
+  "toastAccountSwitched": {
+    "message": "✓ アカウントを切り替えました"
+  },
+  "toastAccountDeleted": {
+    "message": "✓ アカウントを削除しました"
+  },
+  "toastAccountUpdated": {
+    "message": "✓ アカウントを更新しました"
+  },
+  "toastAccountAdded": {
+    "message": "✓ $LABEL$ を追加しました",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "ラベルは空にできません"
+  },
+  "errorInvalidEmail": {
+    "message": "有効なメールアドレスを入力してください"
+  },
+  "errorDuplicateEmail": {
+    "message": "このメールアドレスは別のアカウントで既に使用されています"
+  },
+  "errorEnterEmail": {
+    "message": "メールアドレスを入力してください"
+  },
+  "errorAccountExists": {
+    "message": "このアカウントは既に存在します"
+  },
+  "toastQrFailed": {
+    "message": "✗ QR コードの生成に失敗しました"
+  },
+  "toastExportedAliases": {
+    "message": "✓ $COUNT$ 件のエイリアスをエクスポートしました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "✓ $COUNT$ 件のエイリアスを削除しました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "✓ 履歴をクリアしました"
+  },
+  "toastFavoriteAdded": {
+    "message": "✓ お気に入りに追加しました"
+  },
+  "toastFavoriteRemoved": {
+    "message": "✓ お気に入りから削除しました"
+  },
+  "toastCopiedEmail": {
+    "message": "✓ $EMAIL$ をコピーしました",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "✗ コピーに失敗しました"
+  },
+  "welcomeTitle": {
+    "message": "Gmail Alias Toolkit へようこそ"
+  },
+  "welcomeSubtitle": {
+    "message": "プライバシーと整理のために無制限のメールエイリアスを生成"
+  },
+  "letsGetStarted": {
+    "message": "始めましょう"
+  },
+  "enterGmailAddress": {
+    "message": "Gmail アドレスを入力してください"
+  },
+  "pressTabForGmail": {
+    "message": "$KEY$ を押して @gmail.com を入力",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "設定中..."
+  },
+  "getStarted": {
+    "message": "始める"
+  },
+  "advancedSetup": {
+    "message": "設定で詳細セットアップ"
+  },
+  "whatYouCanDo": {
+    "message": "できること："
+  },
+  "featurePrivateEmail": {
+    "message": "プライベートメール生成"
+  },
+  "featureCustomTags": {
+    "message": "カスタムタグとプリセット"
+  },
+  "featureGmailTricks": {
+    "message": "Gmail 高度な便利機能"
+  },
+  "welcomeFooter": {
+    "message": "すべてのデータはローカルに保存されます。追跡なし、サーバーなし。"
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ 件保存済み",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "履歴内の任意のエイリアスのスターをクリックすると、ここに追加できます"
+  }
+}
