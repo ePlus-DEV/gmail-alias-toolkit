@@ -12,6 +12,7 @@ import {
   filterAliases,
   type RandomFormat,
 } from "./utils";
+import { t } from "../../lib/i18n";
 
 interface Alias {
   email: string;
@@ -420,7 +421,7 @@ function App() {
           });
         } catch {
           if (showNotifications) {
-            setToastMessage("✗ Failed to generate QR code");
+            setToastMessage(t("toastQrFailed"));
             setTimeout(() => setToastMessage(null), 2000);
           }
         }
@@ -467,7 +468,7 @@ function App() {
       );
     }
     if (showNotifications) {
-      setToastMessage(`✓ Exported ${recentAliases.length} aliases`);
+      setToastMessage(t("toastExportedAliases", String(recentAliases.length)));
       setTimeout(() => setToastMessage(null), 2000);
     }
   };
@@ -523,7 +524,7 @@ function App() {
     setSelectedAliases(new Set());
     setIsSelectMode(false);
     if (showNotifications) {
-      setToastMessage(`✓ Deleted ${count} aliases`);
+      setToastMessage(t("toastDeletedAliases", String(count)));
       setTimeout(() => setToastMessage(null), 2000);
     }
   };
@@ -554,7 +555,7 @@ function App() {
       [statsKey]: { total: 0, tags: {} },
     });
     if (showNotifications) {
-      setToastMessage("✓ History cleared");
+      setToastMessage(t("toastHistoryCleared"));
       setTimeout(() => setToastMessage(null), 2000);
     }
   };
@@ -587,7 +588,7 @@ function App() {
     setFavorites(favEmails);
     if (showNotifications) {
       setToastMessage(
-        exists ? "✓ Removed from favorites" : "✓ Added to favorites",
+        exists ? t("toastFavoriteRemoved") : t("toastFavoriteAdded"),
       );
       setTimeout(() => setToastMessage(null), 2000);
     }
@@ -599,7 +600,7 @@ function App() {
       await navigator.clipboard.writeText(email);
       setCopiedEmail(email);
       if (showNotifications) {
-        setToastMessage("✓ Copied to clipboard!");
+        setToastMessage(t("toastCopiedEmail", email));
       }
       saveRecentAlias(email);
       setTimeout(() => {
@@ -608,7 +609,7 @@ function App() {
       }, 2000);
     } catch {
       if (showNotifications) {
-        setToastMessage("✗ Failed to copy");
+        setToastMessage(t("toastCopyFailed"));
         setTimeout(() => setToastMessage(null), 2000);
       }
     }
@@ -644,12 +645,12 @@ function App() {
     setAddAccountError("");
 
     if (!newAccountEmail.trim()) {
-      setAddAccountError("Email is required");
+      setAddAccountError(t("errorEnterEmail"));
       return;
     }
 
     if (!newAccountEmail.includes("@")) {
-      setAddAccountError("Please enter a valid email address");
+      setAddAccountError(t("errorInvalidEmail"));
       return;
     }
 
@@ -658,7 +659,7 @@ function App() {
       (acc) => acc.email.toLowerCase() === newAccountEmail.trim().toLowerCase(),
     );
     if (emailExists) {
-      setAddAccountError("This email address is already added!");
+      setAddAccountError(t("errorAccountExists"));
       return;
     }
 
@@ -692,7 +693,7 @@ function App() {
     setShowAddAccount(false);
 
     if (showNotifications) {
-      setToastMessage(`✓ ${newAccount.label} added!`);
+      setToastMessage(t("toastAccountAdded", newAccount.label));
       setTimeout(() => setToastMessage(null), 2000);
     }
   };
@@ -733,17 +734,17 @@ function App() {
                 />
                 <div>
                   <h1 className="text-lg font-bold tracking-tight">
-                    Gmail Alias Toolkit
+                    {t("extensionName")}
                   </h1>
                   <p className="text-xs text-blue-100 mt-0.5">
-                    Generate aliases with plus addressing
+                    {t("headerSubtitle")}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsSettingsOpen(true)}
                 className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-                title="Settings"
+                title={t("settings")}
               >
                 <svg
                   className="w-5 h-5"
@@ -774,7 +775,7 @@ function App() {
               {/* Base Email Selector - Dropdown */}
               <div className="p-3.5">
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                  Active Gmail Address
+                  {t("activeGmailAddress")}
                 </label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
@@ -852,7 +853,7 @@ function App() {
                   <button
                     onClick={() => setShowAddAccount(!showAddAccount)}
                     className="w-10 h-10 flex-shrink-0 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
-                    title="Add new account"
+                    title={t("addNewAccount")}
                   >
                     <svg
                       className="w-4 h-4"
@@ -904,7 +905,7 @@ function App() {
                             setNewAccountEmail(`${newAccountEmail}@gmail.com`);
                           }
                         }}
-                        placeholder="your.email"
+                        placeholder={t("emailPlaceholder")}
                         className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         ref={focusOnMount}
                       />
@@ -923,11 +924,11 @@ function App() {
                     )}
                     {newAccountEmail && !newAccountEmail.includes("@") && (
                       <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                        💡 Press{" "}
+                        {t("pressTabToAddGmail", "Tab").split("Tab")[0]}
                         <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
                           Tab
-                        </kbd>{" "}
-                        to add @gmail.com
+                        </kbd>
+                        {t("pressTabToAddGmail", "Tab").split("Tab")[1]}
                       </p>
                     )}
                     <div className="relative">
@@ -950,7 +951,7 @@ function App() {
                         type="text"
                         value={newAccountLabel}
                         onChange={(e) => setNewAccountLabel(e.target.value)}
-                        placeholder="Label (optional, e.g., Work, Personal)"
+                        placeholder={t("accountLabelPlaceholder")}
                         className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       />
                     </div>
@@ -976,7 +977,7 @@ function App() {
                             d="M12 9v3m0 0v3m0-3h3m-3 0H9m3 9a9 9 0 100-18 9 9 0 000 18z"
                           />
                         </svg>
-                        Add Account
+                        {t("addAccount")}
                       </button>
                       <button
                         onClick={() => {
@@ -987,7 +988,7 @@ function App() {
                         }}
                         className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
                       >
-                        Cancel
+                        {t("cancel")}
                       </button>
                     </div>
                   </div>
@@ -997,8 +998,7 @@ function App() {
                   !baseEmail.includes("@gmail.com") &&
                   baseEmail.includes("@") && (
                     <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
-                      ⚠ This doesn&apos;t look like a Gmail address. Plus
-                      addressing works best with Gmail.
+                      {t("gmailWarning")}
                     </p>
                   )}
               </div>
@@ -1080,7 +1080,7 @@ function App() {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
-              Scan to copy alias
+              {t("scanToCopyAlias")}
             </h3>
             <canvas ref={qrCanvasRef} className="rounded-lg" />
             <p className="text-xs text-gray-500 dark:text-gray-400 font-mono text-center max-w-[200px] break-all">
@@ -1091,13 +1091,13 @@ function App() {
                 onClick={() => copyToClipboard(qrAlias)}
                 className="px-4 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Copy
+                {t("copy")}
               </button>
               <button
                 onClick={() => setQrAlias(null)}
                 className="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
-                Close
+                {t("close")}
               </button>
             </div>
           </div>

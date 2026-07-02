@@ -2,6 +2,7 @@ import {
   getAccountStorageKey,
   getLegacyAccountStorageKey,
 } from "./popup/utils";
+import { t } from "../lib/i18n";
 
 interface EmailAccount {
   email: string;
@@ -113,7 +114,7 @@ export default defineBackground(() => {
     // Parent menu
     browser.contextMenus.create({
       id: "gmail-alias-parent",
-      title: "Gmail Alias Toolkit",
+      title: t("extensionName"),
       contexts: ["editable"],
     });
 
@@ -121,7 +122,7 @@ export default defineBackground(() => {
     browser.contextMenus.create({
       id: "fill-random-email",
       parentId: "gmail-alias-parent",
-      title: "🎲 Random Email Alias",
+      title: t("menuRandomEmailAlias"),
       contexts: ["editable"],
     });
 
@@ -129,7 +130,7 @@ export default defineBackground(() => {
     browser.contextMenus.create({
       id: "custom-tag-parent",
       parentId: "gmail-alias-parent",
-      title: "📝 Custom Tags",
+      title: t("menuCustomTags"),
       contexts: ["editable"],
     });
 
@@ -153,7 +154,7 @@ export default defineBackground(() => {
       browser.contextMenus.create({
         id: "no-presets",
         parentId: "custom-tag-parent",
-        title: "No presets - Add in Settings",
+        title: t("menuNoPresets"),
         contexts: ["editable"],
         enabled: false,
       });
@@ -163,32 +164,31 @@ export default defineBackground(() => {
     browser.contextMenus.create({
       id: "gmail-tricks-parent",
       parentId: "gmail-alias-parent",
-      title: "✨ Gmail Tricks",
+      title: t("menuGmailTricks"),
       contexts: ["editable"],
     });
 
     browser.contextMenus.create({
       id: "trick-dot",
       parentId: "gmail-tricks-parent",
-      title: "Dot Variation",
+      title: t("menuDotVariation"),
       contexts: ["editable"],
     });
 
     browser.contextMenus.create({
       id: "trick-googlemail",
       parentId: "gmail-tricks-parent",
-      title: "Googlemail Domain",
+      title: t("menuGooglemailDomain"),
       contexts: ["editable"],
     });
 
     browser.contextMenus.create({
       id: "trick-nodots",
       parentId: "gmail-tricks-parent",
-      title: "Remove All Dots",
+      title: t("menuRemoveAllDots"),
       contexts: ["editable"],
     });
   }
-
   // Handle context menu clicks
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!tab?.id) return;

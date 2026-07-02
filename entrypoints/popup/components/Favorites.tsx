@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAccountStorageKey } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface Favorite {
   id: string;
@@ -78,7 +79,7 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
               d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
             />
           </svg>
-          <p className="text-xs text-gray-500 mt-2">No favorites yet</p>
+          <p className="text-xs text-gray-500 mt-2">{t("noFavoritesYet")}</p>
           <p className="text-xs text-gray-400 mt-1">
             Click ⭐ on any alias in history to add it here
           </p>
@@ -91,7 +92,9 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-gray-900">⭐ Favorites</h2>
-        <span className="text-xs text-gray-500">{favorites.length} saved</span>
+        <span className="text-xs text-gray-500">
+          {t("favoritesSaved", String(favorites.length))}
+        </span>
       </div>
 
       <div className="space-y-2">
@@ -121,7 +124,7 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
               <button
                 onClick={() => removeFavorite(favorite.email)}
                 className="p-1.5 text-yellow-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors opacity-0 group-hover:opacity-100"
-                title="Remove from favorites"
+                title={t("removeFromFavorites")}
               >
                 <svg
                   className="w-4 h-4"

@@ -3,6 +3,7 @@ import Toggle from "./Toggle";
 import Button from "./Button";
 import Input from "./Input";
 import { getAccountStorageKey } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -202,7 +203,7 @@ export default function Settings({
     saveSettings(updatedSettings);
     setNewPresetLabel("");
     setNewPresetTag("");
-    showToast("✓ Preset added");
+    showToast(t("toastPresetAdded"));
   };
 
   /** Removes a custom preset by id. */
@@ -212,7 +213,7 @@ export default function Settings({
       customPresets: settings.customPresets.filter((p) => p.id !== id),
     };
     saveSettings(updatedSettings);
-    showToast("✓ Preset removed");
+    showToast(t("toastPresetRemoved"));
   };
 
   /** Downloads the current settings as a JSON file. */
@@ -225,7 +226,7 @@ export default function Settings({
     link.download = `gmail-alias-settings-${Date.now()}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    showToast("✓ Settings exported");
+    showToast(t("toastSettingsExported"));
   };
 
   /** Imports settings from a user-selected JSON file. */
@@ -241,9 +242,9 @@ export default function Settings({
         const text = await file.text();
         const imported = JSON.parse(text);
         saveSettings({ ...DEFAULT_SETTINGS, ...imported });
-        showToast("✓ Settings imported");
+        showToast(t("toastSettingsImported"));
       } catch {
-        showToast("✗ Import failed – invalid file");
+        showToast(t("toastImportFailed"));
       }
     };
     input.click();
@@ -257,24 +258,24 @@ export default function Settings({
   /** Resets all settings to defaults after user confirmation. */
   const handleResetSettings = async () => {
     const confirmed = await askForConfirmation({
-      title: "Reset settings?",
-      message: "This will restore every setting to its default value.",
-      confirmLabel: "Reset",
+      title: t("resetSettingsTitle"),
+      message: t("resetSettingsMessage"),
+      confirmLabel: t("reset"),
       variant: "danger",
     });
 
     if (!confirmed) return;
 
     saveSettings(DEFAULT_SETTINGS);
-    showToast("✓ Settings reset to default");
+    showToast(t("toastSettingsReset"));
   };
 
   /** Clears recent aliases after user confirmation. */
   const handleClearHistory = async () => {
     const confirmed = await askForConfirmation({
-      title: "Clear recent aliases?",
-      message: "This removes all aliases from the recent history list.",
-      confirmLabel: "Clear",
+      title: t("clearHistoryTitle"),
+      message: t("clearHistoryMessage"),
+      confirmLabel: t("clear"),
       variant: "danger",
     });
 
@@ -295,22 +296,25 @@ export default function Settings({
       await browser.storage.local.set({ base_email: activeAccount.email });
     }
     setEmailAccounts(updated);
-    showToast("✓ Account switched");
+    showToast(t("toastAccountSwitched"));
   };
 
   /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
     if (emailAccounts.length === 1) {
-      showToast("Cannot delete the last account");
+      showToast(t("cannotDeleteLastAccountTitle"));
       return;
     }
 
-    const confirmMsg = `Delete "${account.label}" (${account.email})?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.`;
+    const confirmMsg = t("deleteAccountMessage", [
+      account.label,
+      account.email,
+    ]);
 
     const confirmed = await askForConfirmation({
-      title: "Delete account?",
+      title: t("deleteAccountTitle"),
       message: confirmMsg,
-      confirmLabel: "Delete",
+      confirmLabel: t("delete"),
       variant: "danger",
     });
 
@@ -340,7 +344,7 @@ export default function Settings({
 
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
-    showToast("✓ Account deleted");
+    showToast(t("toastAccountDeleted"));
   };
 
   /** Enters edit mode for the given account. */
@@ -360,12 +364,12 @@ export default function Settings({
   /** Saves account edits, migrating stored data if the email changed. */
   const handleSaveEdit = async (accountId: string) => {
     if (!editingLabel.trim()) {
-      showToast("Label cannot be empty");
+      showToast(t("errorLabelRequired"));
       return;
     }
 
     if (!editingEmail.trim() || !editingEmail.includes("@")) {
-      showToast("Please enter a valid email address");
+      showToast(t("errorInvalidEmail"));
       return;
     }
 
@@ -384,16 +388,16 @@ export default function Settings({
           acc.email.toLowerCase() === newEmail.toLowerCase(),
       );
       if (emailExists) {
-        showToast("This email address is already used by another account");
+        showToast(t("errorDuplicateEmail"));
         return;
       }
 
-      const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?`;
+      const confirmMsg = t("changeAccountEmailMessage", [oldEmail, newEmail]);
 
       const confirmed = await askForConfirmation({
-        title: "Change account email?",
+        title: t("changeAccountEmailTitle"),
         message: confirmMsg,
-        confirmLabel: "Change email",
+        confirmLabel: t("changeEmail"),
       });
 
       if (!confirmed) return;
@@ -452,7 +456,7 @@ export default function Settings({
     setEditingAccountId(null);
     setEditingLabel("");
     setEditingEmail("");
-    showToast("✓ Account updated");
+    showToast(t("toastAccountUpdated"));
   };
 
   /** Validates and adds a new email account. */
@@ -460,7 +464,7 @@ export default function Settings({
     let email = newAccountEmail.trim();
 
     if (!email) {
-      setAddAccountError("Please enter an email address");
+      setAddAccountError(t("errorEnterEmail"));
       return;
     }
 
@@ -471,14 +475,14 @@ export default function Settings({
 
     // Validate email format
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setAddAccountError("Please enter a valid email address");
+      setAddAccountError(t("errorInvalidEmail"));
       return;
     }
 
     // Check if account already exists
     const exists = emailAccounts.some((acc) => acc.email === email);
     if (exists) {
-      setAddAccountError("This account already exists");
+      setAddAccountError(t("errorAccountExists"));
       return;
     }
 
@@ -503,7 +507,7 @@ export default function Settings({
     setNewAccountEmail("");
     setNewAccountLabel("");
     setAddAccountError("");
-    showToast(`✓ ${newAccount.label} added`);
+    showToast(t("toastAccountAdded", newAccount.label));
   };
 
   if (!isOpen) return null;
@@ -534,7 +538,7 @@ export default function Settings({
                 />
               </svg>
             </button>
-            <h2 className="text-lg font-bold">Settings</h2>
+            <h2 className="text-lg font-bold">{t("settings")}</h2>
           </div>
           <button
             onClick={onClose}
@@ -579,7 +583,7 @@ export default function Settings({
                 d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
               />
             </svg>
-            General
+            {t("general")}
           </button>
           <button
             onClick={() => setActiveTab("accounts")}
@@ -602,7 +606,7 @@ export default function Settings({
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            Accounts
+            {t("accounts")}
           </button>
           <button
             onClick={() => setActiveTab("changelog")}
@@ -625,7 +629,7 @@ export default function Settings({
                 d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            Changelog
+            {t("changelog")}
           </button>
         </div>
 
@@ -654,12 +658,12 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    Appearance & Display
+                    {t("appearanceDisplay")}
                   </h3>
                   <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        Theme
+                        {t("theme")}
                       </label>
                       <select
                         value={settings.theme}
@@ -688,7 +692,7 @@ export default function Settings({
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        Badge Counter
+                        {t("badgeCounter")}
                       </label>
                       <select
                         value={settings.badgeDisplay}
@@ -713,7 +717,7 @@ export default function Settings({
 
                     <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
                       <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Copy notifications
+                        {t("copyNotifications")}
                       </label>
                       <Toggle
                         enabled={settings.showNotifications}
@@ -747,12 +751,12 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    Alias Generation
+                    {t("aliasGeneration")}
                   </h3>
                   <div className="space-y-3">
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        Random Alias Format
+                        {t("randomAliasFormat")}
                       </label>
                       <select
                         value={settings.randomFormat}
@@ -782,7 +786,7 @@ export default function Settings({
 
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        Auto-save Limit
+                        {t("autoSaveLimit")}
                       </label>
                       <select
                         value={settings.maxHistory}
@@ -822,19 +826,19 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    Custom Presets
+                    {t("customPresets")}
                   </h3>
                   <div className="space-y-2">
                     <div className="flex gap-2">
                       <Input
                         value={newPresetLabel}
                         onChange={setNewPresetLabel}
-                        placeholder="Label"
+                        placeholder={t("label")}
                       />
                       <Input
                         value={newPresetTag}
                         onChange={setNewPresetTag}
-                        placeholder="Tag"
+                        placeholder={t("tag")}
                       />
                     </div>
                     <Button
@@ -843,7 +847,7 @@ export default function Settings({
                       size="sm"
                       fullWidth
                     >
-                      + Add Preset
+                      {t("addPreset")}
                     </Button>
                   </div>
 
@@ -904,7 +908,7 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    Data Management
+                    {t("dataManagement")}
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     <Button
@@ -913,7 +917,7 @@ export default function Settings({
                       size="sm"
                       fullWidth
                     >
-                      Export
+                      {t("export")}
                     </Button>
                     <Button
                       onClick={handleImportSettings}
@@ -921,7 +925,7 @@ export default function Settings({
                       size="sm"
                       fullWidth
                     >
-                      Import
+                      {t("import")}
                     </Button>
                     <Button
                       onClick={handleClearHistory}
@@ -929,14 +933,14 @@ export default function Settings({
                       size="sm"
                       fullWidth
                     >
-                      Clear
+                      {t("clear")}
                     </Button>
                   </div>
                   <button
                     onClick={handleResetSettings}
                     className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
                   >
-                    Reset all settings to default
+                    {t("resetSettings")}
                   </button>
                 </div>
               </div>
@@ -948,17 +952,16 @@ export default function Settings({
             <div className="space-y-4">
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                  Email Accounts
+                  {t("emailAccounts")}
                 </h3>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-                  Manage your Gmail accounts. Each account has its own history,
-                  statistics, and favorites.
+                  {t("manageAccountsDescription")}
                 </p>
               </div>
 
               {emailAccounts.length === 0 ? (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
-                  No accounts found. Please add an account from the main screen.
+                  {t("noAccountsFound")}
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -976,32 +979,31 @@ export default function Settings({
                         <div className="p-3 space-y-2">
                           <div>
                             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                              Label
+                              {t("label")}
                             </label>
                             <input
                               type="text"
                               value={editingLabel}
                               onChange={(e) => setEditingLabel(e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                              placeholder="Account label"
+                              placeholder={t("accountLabel")}
                               ref={focusOnMount}
                             />
                           </div>
                           <div>
                             <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                              Email Address
+                              {t("emailAddress")}
                             </label>
                             <input
                               type="email"
                               value={editingEmail}
                               onChange={(e) => setEditingEmail(e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                              placeholder="your.email@gmail.com"
+                              placeholder={t("emailAddressPlaceholder")}
                             />
                             {editingEmail !== account.email && (
                               <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
-                                ⚠️ Changing email will migrate all data to the
-                                new email address
+                                {t("emailChangeWarning")}
                               </p>
                             )}
                           </div>
@@ -1010,13 +1012,13 @@ export default function Settings({
                               onClick={() => handleSaveEdit(account.id)}
                               className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors"
                             >
-                              Save Changes
+                              {t("saveChanges")}
                             </button>
                             <button
                               onClick={handleCancelEdit}
                               className="flex-1 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                             >
-                              Cancel
+                              {t("cancel")}
                             </button>
                           </div>
                         </div>
@@ -1040,7 +1042,7 @@ export default function Settings({
                                 </span>
                                 {account.isActive && (
                                   <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded flex-shrink-0">
-                                    Active
+                                    {t("active")}
                                   </span>
                                 )}
                               </div>
@@ -1058,7 +1060,7 @@ export default function Settings({
                                 handleStartEdit(account);
                               }}
                               className="p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                              title="Edit account"
+                              title={t("editAccount")}
                             >
                               <svg
                                 className="w-4 h-4"
@@ -1082,8 +1084,8 @@ export default function Settings({
                               className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                               title={
                                 emailAccounts.length === 1
-                                  ? "Cannot delete the last account"
-                                  : "Delete this account"
+                                  ? t("cannotDeleteLastAccountTitle")
+                                  : t("deleteThisAccount")
                               }
                               disabled={emailAccounts.length === 1}
                             >
@@ -1129,13 +1131,13 @@ export default function Settings({
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    Add New Account
+                    {t("addNewAccount")}
                   </button>
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                        Add New Account
+                        {t("addNewAccountTitle")}
                       </h4>
                       <button
                         onClick={() => {
@@ -1183,7 +1185,7 @@ export default function Settings({
                             setNewAccountEmail(`${newAccountEmail}@gmail.com`);
                           }
                         }}
-                        placeholder="your.email"
+                        placeholder={t("emailPlaceholder")}
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         ref={focusOnMount}
                       />
@@ -1216,7 +1218,7 @@ export default function Settings({
                       type="text"
                       value={newAccountLabel}
                       onChange={(e) => setNewAccountLabel(e.target.value)}
-                      placeholder="Label (optional, e.g., Work, Personal)"
+                      placeholder={t("accountLabelPlaceholder")}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
 
@@ -1225,7 +1227,7 @@ export default function Settings({
                       disabled={!newAccountEmail.trim()}
                       className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-md hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
-                      Add Account
+                      {t("addAccount")}
                     </button>
                   </div>
                 )}
@@ -1285,7 +1287,7 @@ export default function Settings({
               alt=""
               className="w-6 h-6 rounded-md flex-shrink-0"
             />
-            <span className="font-medium">Gmail Alias Toolkit</span>
+            <span className="font-medium">{t("extensionName")}</span>
             <span className="text-gray-400 dark:text-gray-600">•</span>
             <span className="text-gray-500 dark:text-gray-500">v{version}</span>
           </div>

@@ -13,9 +13,12 @@ export default defineConfig({
     },
   }),
   manifest: {
-    name: "Gmail Alias Toolkit",
-    description:
-      "Generate and manage Gmail aliases with plus addressing and presets",
+    name: "__MSG_extensionName__",
+    description: "__MSG_extensionDescription__",
+    default_locale: "en",
+    action: {
+      default_title: "__MSG_extensionName__",
+    },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
     host_permissions: ["<all_urls>"],
     browser_specific_settings: {

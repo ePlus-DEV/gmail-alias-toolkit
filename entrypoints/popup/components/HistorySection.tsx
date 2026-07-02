@@ -1,4 +1,5 @@
 /** Recent aliases list with search, filter, pagination, and bulk selection. */
+import { t } from "../../../lib/i18n";
 
 interface Alias {
   email: string;
@@ -71,7 +72,7 @@ export default function HistorySection({
       {/* Header with title and action buttons */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-          {viewMode === "all" ? "Recent Aliases" : "Favorites"}
+          {viewMode === "all" ? t("recentAliases") : t("favorites")}
         </h2>
         <div className="flex items-center gap-1.5">
           {viewMode === "all" && recentAliases.length > 0 && (
@@ -79,14 +80,14 @@ export default function HistorySection({
               <button
                 onClick={() => exportAliases("csv")}
                 className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                title="Export as CSV"
+                title={t("exportAsCsv")}
               >
                 CSV
               </button>
               <button
                 onClick={() => exportAliases("json")}
                 className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
-                title="Export as JSON"
+                title={t("exportAsJson")}
               >
                 JSON
               </button>
@@ -100,16 +101,16 @@ export default function HistorySection({
                     ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300"
                     : "text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40"
                 }`}
-                title="Select aliases"
+                title={t("selectAliases")}
               >
-                Select
+                {t("select")}
               </button>
             </>
           )}
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {viewMode === "all"
-              ? `${recentAliases.length} total`
-              : `${favorites.length} starred`}
+              ? t("totalCount", String(recentAliases.length))
+              : t("starredCount", String(favorites.length))}
           </span>
         </div>
       </div>
@@ -130,18 +131,21 @@ export default function HistorySection({
             className="text-xs text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium"
           >
             {selectedAliases.size === filteredAliases.length
-              ? "Deselect All"
-              : "Select All"}
+              ? t("deselectAll")
+              : t("selectAll")}
           </button>
           <span className="text-xs text-gray-500 dark:text-gray-400 flex-1">
-            {selectedAliases.size} selected
+            {t("selectedCount", String(selectedAliases.size))}
           </span>
           <button
             onClick={deleteSelected}
             disabled={selectedAliases.size === 0}
             className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            Delete {selectedAliases.size > 0 ? selectedAliases.size : ""}
+            {t(
+              "deleteCount",
+              selectedAliases.size > 0 ? String(selectedAliases.size) : "",
+            )}
           </button>
         </div>
       )}
@@ -170,7 +174,7 @@ export default function HistorySection({
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            All ({recentAliases.length})
+            {t("allCount", String(recentAliases.length))}
           </div>
         </button>
         <button
@@ -195,7 +199,7 @@ export default function HistorySection({
                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
               />
             </svg>
-            Favorites ({favorites.length})
+            {t("favoritesCount", String(favorites.length))}
           </div>
         </button>
       </div>
@@ -207,7 +211,7 @@ export default function HistorySection({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="🔍 Search aliases..."
+            placeholder={t("searchAliases")}
             className="w-full pl-3 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
           {searchQuery && (
@@ -238,7 +242,7 @@ export default function HistorySection({
             onChange={(e) => setFilterTag(e.target.value)}
             className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           >
-            <option value="all">All Tags</option>
+            <option value="all">{t("allTags")}</option>
             {Array.from(
               new Set(
                 recentAliases
@@ -262,8 +266,8 @@ export default function HistorySection({
             }
             className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           >
-            <option value="recent">📅 Most Recent</option>
-            <option value="alphabetical">🔤 A-Z</option>
+            <option value="recent">{t("mostRecent")}</option>
+            <option value="alphabetical">{t("az")}</option>
           </select>
         </div>
       </div>
@@ -343,9 +347,9 @@ function HistoryList({
             d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
           />
         </svg>
-        <p className="text-sm font-medium mb-1">No favorites yet</p>
+        <p className="text-sm font-medium mb-1">{t("noFavoritesYet")}</p>
         <p className="text-xs">
-          Star emails from your history to quick access them here
+          {t("starEmailsHint")}
         </p>
       </div>
     );
@@ -367,8 +371,8 @@ function HistoryList({
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <p className="text-sm font-medium mb-1">No results found</p>
-        <p className="text-xs">Try a different search or filter</p>
+        <p className="text-sm font-medium mb-1">{t("noResultsFound")}</p>
+        <p className="text-xs">{t("differentSearchHint")}</p>
       </div>
     );
   }
@@ -445,7 +449,7 @@ function AliasRow({
       <button
         onClick={onShowQR}
         className="p-1.5 text-gray-300 dark:text-gray-600 hover:text-blue-500 dark:hover:text-blue-400 focus:outline-none transition-colors"
-        title="Show QR code"
+        title={t("showQrCode")}
       >
         <svg
           className="w-4 h-4"
@@ -468,7 +472,7 @@ function AliasRow({
             ? "text-yellow-500 hover:text-yellow-600"
             : "text-gray-300 hover:text-yellow-500"
         }`}
-        title={isFavorited ? "Remove from favorites" : "Add to favorites"}
+        title={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
       >
         <svg
           className="w-4 h-4"
@@ -487,7 +491,7 @@ function AliasRow({
       <button
         onClick={onCopy}
         className="p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
-        title="Copy to clipboard"
+        title={t("copyToClipboard")}
       >
         {isCopied ? (
           <svg
@@ -550,8 +554,11 @@ function Pagination({
         {/* Page info */}
         <div className="flex items-center justify-between">
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of{" "}
-            {totalItems}
+            {t("showingRange", [
+              String(startIndex + 1),
+              String(Math.min(endIndex, totalItems)),
+              String(totalItems),
+            ])}
           </div>
           <select
             value={itemsPerPage}
@@ -561,10 +568,10 @@ function Pagination({
             }}
             className="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           >
-            <option value={5}>5 / page</option>
-            <option value={10}>10 / page</option>
-            <option value={20}>20 / page</option>
-            <option value={50}>50 / page</option>
+            <option value={5}>{t("perPage", "5")}</option>
+            <option value={10}>{t("perPage", "10")}</option>
+            <option value={20}>{t("perPage", "20")}</option>
+            <option value={50}>{t("perPage", "50")}</option>
           </select>
         </div>
 
@@ -574,7 +581,7 @@ function Pagination({
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
             className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
-            title="First page"
+            title={t("firstPage")}
           >
             ⟪
           </button>
@@ -582,7 +589,7 @@ function Pagination({
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
-            title="Previous page"
+            title={t("previousPage")}
           >
             ←
           </button>
@@ -623,7 +630,7 @@ function Pagination({
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
-            title="Next page"
+            title={t("nextPage")}
           >
             →
           </button>
@@ -631,7 +638,7 @@ function Pagination({
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
             className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
-            title="Last page"
+            title={t("lastPage")}
           >
             ⟫
           </button>

@@ -3,6 +3,7 @@ import {
   validateEmail as validateEmailPure,
   getAccountStorageKey,
 } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface WelcomeScreenProps {
   onEmailAdded: (email: string) => void;
@@ -158,10 +159,10 @@ function WelcomeHeader({}: WelcomeHeaderProps) {
         className="w-12 h-12 rounded-xl mb-2 mx-auto"
       />
       <h1 className="text-lg font-bold text-gray-900">
-        Welcome to Gmail Alias Toolkit
+        {t("welcomeTitle")}
       </h1>
       <p className="text-xs text-gray-600 mt-0.5">
-        Generate unlimited email aliases for privacy and organization
+        {t("welcomeSubtitle")}
       </p>
     </div>
   );
@@ -183,11 +184,11 @@ function WelcomeForm({
   return (
     <div className="p-4">
       <h2 className="text-sm font-semibold text-gray-900 mb-2.5">
-        Let&apos;s get started
+        {t("letsGetStarted")}
       </h2>
 
       <label className="block text-xs font-medium text-gray-700 mb-1.5">
-        Enter your Gmail address
+        {t("enterGmailAddress")}
       </label>
 
       <div className="relative mb-1.5">
@@ -212,7 +213,7 @@ function WelcomeForm({
           onChange={(e) => onEmailChange(e.target.value)}
           onBlur={onBlur}
           onKeyDown={onKeyPress}
-          placeholder="your.email"
+          placeholder={t("emailPlaceholder")}
           className={`w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 transition-colors ${
             validationError && !isWarning
               ? "border-red-300 focus:ring-red-500 focus:border-red-500"
@@ -243,11 +244,11 @@ function WelcomeForm({
 
       {!email.includes("@") && (
         <p className="text-xs text-gray-500 mb-2.5 flex items-center gap-1.5">
-          <span>💡</span> Press{" "}
+          <span>💡</span> {t("pressTabForGmail", "Tab").split("Tab")[0]}
           <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">
             Tab
-          </kbd>{" "}
-          for @gmail.com
+          </kbd>
+          {t("pressTabForGmail", "Tab").split("Tab")[1]}
         </p>
       )}
 
@@ -258,7 +259,7 @@ function WelcomeForm({
         }
         className="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-1"
       >
-        {isSubmitting ? "Setting up..." : "Get Started"}
+        {isSubmitting ? t("settingUp") : t("getStarted")}
       </button>
 
       <button
@@ -284,7 +285,7 @@ function WelcomeForm({
             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
           />
         </svg>
-        Advanced Setup in Settings
+        {t("advancedSetup")}
       </button>
     </div>
   );
@@ -302,7 +303,7 @@ function WelcomeFeatures({}: WelcomeFeaturesProps) {
   return (
     <div className="p-3.5">
       <h3 className="text-xs font-semibold text-gray-900 mb-2">
-        What you can do:
+        {t("whatYouCanDo")}
       </h3>
       <div className="space-y-1.5">
         <FeatureItem
@@ -322,7 +323,7 @@ function WelcomeFeatures({}: WelcomeFeaturesProps) {
             </svg>
           }
           bgColor="bg-blue-50"
-          label="Private Email Generator"
+          label={t("featurePrivateEmail")}
         />
         <FeatureItem
           icon={
@@ -341,7 +342,7 @@ function WelcomeFeatures({}: WelcomeFeaturesProps) {
             </svg>
           }
           bgColor="bg-green-50"
-          label="Custom Tags & Presets"
+          label={t("featureCustomTags")}
         />
         <FeatureItem
           icon={
@@ -360,7 +361,7 @@ function WelcomeFeatures({}: WelcomeFeaturesProps) {
             </svg>
           }
           bgColor="bg-purple-50"
-          label="Gmail Advanced Tricks"
+          label={t("featureGmailTricks")}
         />
       </div>
     </div>
@@ -389,7 +390,7 @@ function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
 function WelcomeFooter() {
   return (
     <p className="text-center text-xs text-gray-500">
-      All data is stored locally. No tracking, no server.
+      {t("welcomeFooter")}
     </p>
   );
 }
