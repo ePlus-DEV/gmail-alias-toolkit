@@ -2,7 +2,7 @@
   "name": "gmail-alias-toolkit",
   "description": "Local-first Gmail plus alias manager. No account. No server. No tracking.",
   "private": true,
-  "version": "1.6.0",
+  "version": "1.6.1",
   "author": "dev@eplus.dev",
   "license": "MIT",
   "homepage_url": "https://eplus.dev",

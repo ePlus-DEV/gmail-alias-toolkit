@@ -10,7 +10,7 @@ export default defineConfig({
     name: "Gmail Alias Toolkit",
     description:
       "Local-first Gmail plus alias manager. No account. No server. No tracking.",
-    permissions: ["storage", "tabs", "activeTab", "clipboardWrite", "contextMenus"],
+    permissions: ["storage", "activeTab", "clipboardWrite", "contextMenus"],
     host_permissions: ["<all_urls>"],
     browser_specific_settings: {
       gecko: {
