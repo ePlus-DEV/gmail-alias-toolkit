@@ -411,14 +411,15 @@ function App() {
   // QR code: draw when alias changes
   useEffect(() => {
     if (qrAlias && qrCanvasRef.current) {
-      void QRCode.toCanvas(qrCanvasRef.current, qrAlias, { width: 200, margin: 2 }).catch(
-        () => {
-          if (showNotifications) {
-            setToastMessage("✗ Failed to generate QR code");
-            setTimeout(() => setToastMessage(null), 2000);
-          }
-        },
-      );
+      void QRCode.toCanvas(qrCanvasRef.current, qrAlias, {
+        width: 200,
+        margin: 2,
+      }).catch(() => {
+        if (showNotifications) {
+          setToastMessage("✗ Failed to generate QR code");
+          setTimeout(() => setToastMessage(null), 2000);
+        }
+      });
     }
   }, [qrAlias, showNotifications]);
 
