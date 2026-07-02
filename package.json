@@ -24,6 +24,8 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "@wxt-dev/auto-icons": "^1.1.0",
+    "@wxt-dev/module-react": "^1.1.5",
     "qrcode": "^1.5.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
@@ -37,8 +39,6 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
-    "@wxt-dev/auto-icons": "^1.1.0",
-    "@wxt-dev/module-react": "^1.1.5",
     "autoprefixer": "^10.4.20",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.10",
