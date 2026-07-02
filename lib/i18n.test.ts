@@ -14,7 +14,7 @@ describe("t", () => {
     });
 
     expect(t("greeting")).toBe("Hello");
-    expect(getMessage).toHaveBeenCalledWith("greeting", undefined);
+    expect(getMessage).toHaveBeenCalledWith("greeting");
   });
 
   it("passes substitutions through to browser i18n", () => {
