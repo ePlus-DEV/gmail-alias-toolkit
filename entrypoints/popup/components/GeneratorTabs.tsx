@@ -25,6 +25,7 @@ interface GeneratorTabsProps {
   randomEmailCount: number;
   setRandomEmailCount: (count: number) => void;
   customPresets: Preset[];
+  showNotifications: boolean;
   copyToClipboard: (email: string) => Promise<void>;
   handleCustomGenerate: () => void;
   handleKeyPress: (e: React.KeyboardEvent) => void;
@@ -46,6 +47,7 @@ export default function GeneratorTabs({
   randomEmailCount,
   setRandomEmailCount,
   customPresets,
+  showNotifications,
   copyToClipboard,
   handleCustomGenerate,
   handleKeyPress,
@@ -249,13 +251,20 @@ export default function GeneratorTabs({
                               generatedRandomList.join("\n"),
                             );
                             saveRecentAliases(generatedRandomList);
-                            setToastMessage(
-                              `✓ Copied ${generatedRandomList.length} aliases!`,
-                            );
+                            if (showNotifications) {
+                              setToastMessage(
+                                `✓ Copied ${generatedRandomList.length} aliases!`,
+                              );
+                            }
                           } catch {
-                            setToastMessage("✗ Failed to copy");
+                            if (showNotifications) {
+                              setToastMessage("✗ Failed to copy");
+                            }
                           }
-                          setTimeout(() => setToastMessage(null), 2000);
+                          setTimeout(
+                            () => setToastMessage(null),
+                            showNotifications ? 2000 : 0,
+                          );
                         }}
                         className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
                         title="Copy all to clipboard"

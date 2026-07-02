@@ -43,6 +43,7 @@ interface AppSettings {
   total?: number;
   randomFormat?: "private-mail" | "alphanumeric" | "words" | "timestamp";
   theme?: "light" | "dark" | "auto";
+  showNotifications?: boolean;
 }
 
 interface StorageResult {
@@ -69,6 +70,7 @@ function App() {
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [maxRecent, setMaxRecent] = useState(20);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
@@ -202,6 +204,7 @@ function App() {
           setMaxRecent(result.app_settings.maxHistory || 20);
           setCustomPresets(result.app_settings.customPresets || []);
           setRandomFormat(result.app_settings.randomFormat || "private-mail");
+          setShowNotifications(result.app_settings.showNotifications ?? true);
           const savedTheme = result.app_settings.theme || "light";
           setTheme(savedTheme);
           const prefersDark = window.matchMedia(
@@ -241,6 +244,7 @@ function App() {
           setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
           setRandomFormat(newSettings.randomFormat || "private-mail");
+          setShowNotifications(newSettings.showNotifications ?? true);
           const newTheme = newSettings.theme || "light";
           setTheme(newTheme);
           const prefersDark = window.matchMedia(
@@ -449,8 +453,10 @@ function App() {
         JSON.stringify(data, null, 2),
       );
     }
-    setToastMessage(`✓ Exported ${recentAliases.length} aliases`);
-    setTimeout(() => setToastMessage(null), 2000);
+    if (showNotifications) {
+      setToastMessage(`✓ Exported ${recentAliases.length} aliases`);
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   /** Deletes the selected aliases from history, favorites, and stats. */
@@ -503,8 +509,10 @@ function App() {
     setFavorites(updatedFavs.map((f: Favorite) => f.email));
     setSelectedAliases(new Set());
     setIsSelectMode(false);
-    setToastMessage(`✓ Deleted ${count} aliases`);
-    setTimeout(() => setToastMessage(null), 2000);
+    if (showNotifications) {
+      setToastMessage(`✓ Deleted ${count} aliases`);
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   /** Toggles an alias in the bulk-delete selection set. */
@@ -532,8 +540,10 @@ function App() {
       [favoritesKey]: [],
       [statsKey]: { total: 0, tags: {} },
     });
-    setToastMessage("✓ History cleared");
-    setTimeout(() => setToastMessage(null), 2000);
+    if (showNotifications) {
+      setToastMessage("✓ History cleared");
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   /** Adds or removes an alias from the account's favorites. */
@@ -562,10 +572,12 @@ function App() {
 
     const favEmails = updated.map((f: Favorite) => f.email);
     setFavorites(favEmails);
-    setToastMessage(
-      exists ? "✓ Removed from favorites" : "✓ Added to favorites",
-    );
-    setTimeout(() => setToastMessage(null), 2000);
+    if (showNotifications) {
+      setToastMessage(
+        exists ? "✓ Removed from favorites" : "✓ Added to favorites",
+      );
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   /** Copies an alias to the clipboard and records it in recent history. */
@@ -573,15 +585,19 @@ function App() {
     try {
       await navigator.clipboard.writeText(email);
       setCopiedEmail(email);
-      setToastMessage("✓ Copied to clipboard!");
+      if (showNotifications) {
+        setToastMessage("✓ Copied to clipboard!");
+      }
       saveRecentAlias(email);
       setTimeout(() => {
         setCopiedEmail(null);
         setToastMessage(null);
       }, 2000);
     } catch {
-      setToastMessage("✗ Failed to copy");
-      setTimeout(() => setToastMessage(null), 2000);
+      if (showNotifications) {
+        setToastMessage("✗ Failed to copy");
+        setTimeout(() => setToastMessage(null), 2000);
+      }
     }
   };
 
@@ -662,8 +678,10 @@ function App() {
     setAddAccountError("");
     setShowAddAccount(false);
 
-    setToastMessage(`✓ ${newAccount.label} added!`);
-    setTimeout(() => setToastMessage(null), 2000);
+    if (showNotifications) {
+      setToastMessage(`✓ ${newAccount.label} added!`);
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   // Compute outside IIFE so bulk-delete bar can reference it
@@ -985,6 +1003,7 @@ function App() {
                 randomEmailCount={randomEmailCount}
                 setRandomEmailCount={setRandomEmailCount}
                 customPresets={customPresets}
+                showNotifications={showNotifications}
                 copyToClipboard={copyToClipboard}
                 handleCustomGenerate={handleCustomGenerate}
                 handleKeyPress={handleKeyPress}
