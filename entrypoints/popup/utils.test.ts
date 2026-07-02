@@ -43,7 +43,10 @@ describe("getAccountStorageKey", () => {
 
   it("does not collide for emails that would collide under the old sanitizer", () => {
     const dottedKey = getAccountStorageKey("user.name@gmail.com", "history");
-    const underscoreKey = getAccountStorageKey("user_name@gmail.com", "history");
+    const underscoreKey = getAccountStorageKey(
+      "user_name@gmail.com",
+      "history",
+    );
     expect(dottedKey).not.toBe(underscoreKey);
   });
 
