@@ -33,6 +33,7 @@ interface GeneratorTabsProps {
   setToastMessage: (msg: string | null) => void;
 }
 
+/** Renders three alias generator tabs: random (formatted strings), custom tags, and Gmail tricks. */
 export default function GeneratorTabs({
   baseEmail,
   activeTab,
@@ -54,6 +55,7 @@ export default function GeneratorTabs({
   saveRecentAliases,
   setToastMessage,
 }: GeneratorTabsProps) {
+  /** Updates random format setting and persists to storage. */
   const handleFormatChange = async (newFormat: RandomFormat) => {
     setRandomFormat(newFormat);
     const result = await browser.storage.local.get("app_settings");
