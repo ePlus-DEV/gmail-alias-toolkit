@@ -601,7 +601,9 @@ export default function Settings({
                         value={settings.theme}
                         onChange={(e) => {
                           const newTheme = e.target.value as
-                            "light" | "dark" | "auto";
+                            | "light"
+                            | "dark"
+                            | "auto";
                           saveSettings({ ...settings, theme: newTheme });
                           const prefersDark = window.matchMedia(
                             "(prefers-color-scheme: dark)",

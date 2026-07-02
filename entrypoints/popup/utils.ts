@@ -19,7 +19,10 @@ export function generateAlias(baseEmail: string, tag: string): string | null {
 }
 
 export type RandomFormat =
-  "private-mail" | "alphanumeric" | "words" | "timestamp";
+  | "private-mail"
+  | "alphanumeric"
+  | "words"
+  | "timestamp";
 
 export function generateRandomString(format: RandomFormat, index = 0): string {
   if (format === "private-mail") {

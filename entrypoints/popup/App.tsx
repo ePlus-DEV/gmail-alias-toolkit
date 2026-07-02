@@ -230,7 +230,8 @@ function App() {
     ) => {
       if (changes.app_settings) {
         const newSettings = changes.app_settings.newValue as
-          AppSettings | undefined;
+          | AppSettings
+          | undefined;
         if (newSettings) {
           setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
@@ -248,7 +249,8 @@ function App() {
       }
       if (changes.email_accounts) {
         const newAccounts = changes.email_accounts.newValue as
-          EmailAccount[] | undefined;
+          | EmailAccount[]
+          | undefined;
         if (newAccounts) {
           setEmailAccounts(newAccounts);
           setHasEmailAccounts(newAccounts.length > 0);
@@ -295,7 +297,8 @@ function App() {
       const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
       if (changes[favoritesKey]) {
         const newFavorites = changes[favoritesKey].newValue as
-          Favorite[] | undefined;
+          | Favorite[]
+          | undefined;
         if (newFavorites && Array.isArray(newFavorites)) {
           const favEmails = newFavorites.map((f: Favorite) => f.email);
           setFavorites(favEmails);
