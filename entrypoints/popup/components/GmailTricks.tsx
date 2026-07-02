@@ -102,10 +102,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
-    const dotVars = getDotUsernames(
-      username,
-      Math.ceil(count / 3),
-    );
+    const dotVars = getDotUsernames(username, Math.ceil(count / 3));
     const tags = [
       "shop",
       "work",
