@@ -27,7 +27,7 @@ jobs:
             PR_NUMBER="$(gh pr list \
               --repo "$GITHUB_REPOSITORY" \
               --state open \
-              --head "${{ github.event.workflow_run.head_branch }}" \
+              --head "$HEAD_BRANCH" \
               --json number \
               --jq '.[0].number')"
           fi
@@ -35,6 +35,7 @@ jobs:
           test -n "$PR_NUMBER"
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
         env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Approve pull request with comment
