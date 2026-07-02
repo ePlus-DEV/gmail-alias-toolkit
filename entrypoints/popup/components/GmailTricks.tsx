@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateDotVariations } from "../utils";
+import { getDotVariationCandidates } from "../utils";
 
 interface GmailTricksProps {
   baseEmail: string;
@@ -15,12 +15,6 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
   const [generatedTricks, setGeneratedTricks] = useState<string[]>([]);
   const [randomizeDots, setRandomizeDots] = useState(false);
 
-  /** Returns dot variations, falling back to the original username when dots are impossible. */
-  const getDotUsernames = (username: string, count: number): string[] => {
-    const dotUsernames = generateDotVariations(username, count, randomizeDots);
-    return dotUsernames.length > 0 ? dotUsernames : [username];
-  };
-
   /** Combines dot variations with common plus tags, capped at `count` results. */
   const generateCombinations = (count = 10): string[] => {
     if (!baseEmail.includes("@")) return [];
@@ -32,7 +26,11 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!isGmail) return [];
 
     const combinations: string[] = [];
-    const dotVariations = getDotUsernames(username, count);
+    const dotVariations = getDotVariationCandidates(
+      username,
+      count,
+      randomizeDots,
+    );
 
     // Dot + common tags
     const commonTags = [
@@ -102,7 +100,11 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
-    const dotVars = getDotUsernames(username, Math.ceil(count / 3));
+    const dotVars = getDotVariationCandidates(
+      username,
+      Math.ceil(count / 3),
+      randomizeDots,
+    );
     const tags = [
       "shop",
       "work",
@@ -136,16 +138,20 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
 
     switch (selectedTrick) {
       case "dot":
-        results = getDotUsernames(username, tricksCount).map(
-          (u) => `${u}@${domain}`,
-        );
+        results = getDotVariationCandidates(
+          username,
+          tricksCount,
+          randomizeDots,
+        ).map((u) => `${u}@${domain}`);
         break;
       case "googlemail": {
         const altDomain =
           domain.toLowerCase() === "gmail.com" ? "googlemail.com" : "gmail.com";
-        results = getDotUsernames(username, tricksCount).map(
-          (u) => `${u}@${altDomain}`,
-        );
+        results = getDotVariationCandidates(
+          username,
+          tricksCount,
+          randomizeDots,
+        ).map((u) => `${u}@${altDomain}`);
         break;
       }
       case "nodots": {

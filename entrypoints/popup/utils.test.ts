@@ -6,6 +6,7 @@ import {
   generateRandomString,
   validateEmail,
   generateDotVariations,
+  getDotVariationCandidates,
   filterAliases,
 } from "./utils";
 
@@ -269,6 +270,19 @@ describe("generateDotVariations", () => {
   it("random mode returns requested count", () => {
     const result = generateDotVariations("abcdefg", 5, true);
     expect(result.length).toBeLessThanOrEqual(5);
+  });
+});
+
+describe("getDotVariationCandidates", () => {
+  it("returns dot variations when they exist", () => {
+    expect(getDotVariationCandidates("abc", 10, false)).toEqual([
+      "a.bc",
+      "ab.c",
+    ]);
+  });
+
+  it("falls back to the original username for a one-character username", () => {
+    expect(getDotVariationCandidates("a", 10, false)).toEqual(["a"]);
   });
 });
 

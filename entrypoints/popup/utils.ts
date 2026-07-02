@@ -193,6 +193,16 @@ export function generateDotVariations(
   return [...new Set(variations)].slice(0, count);
 }
 
+/** Returns dot variations, or the original username when dots cannot be inserted. */
+export function getDotVariationCandidates(
+  username: string,
+  count = 10,
+  randomize = false,
+): string[] {
+  const variations = generateDotVariations(username, count, randomize);
+  return variations.length > 0 ? variations : [username];
+}
+
 /** Filters and sorts aliases by view mode, search query, tag, and sort order. */
 export function filterAliases(
   aliases: Array<{ email: string; timestamp: number }>,
