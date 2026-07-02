@@ -34,6 +34,7 @@ interface HistorySectionProps {
   setQrAlias: (email: string | null) => void;
 }
 
+/** Recent aliases list with search, filter, pagination, and bulk selection. */
 export default function HistorySection({
   recentAliases,
   favorites,
