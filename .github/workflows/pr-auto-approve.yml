@@ -42,5 +42,10 @@ jobs:
         run: gh pr review --approve "$PR_NUMBER" --body "$APPROVAL_COMMENT" --repo "$GITHUB_REPOSITORY"
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
-          APPROVAL_COMMENT: Approved by eplus-bot <bot@eplus.dev> after CI passed.
+          APPROVAL_COMMENT: |
+            ![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)
+
+            Approved by @eplus-bot after CI passed.
+
+            CI run: ${{ github.event.workflow_run.html_url }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
