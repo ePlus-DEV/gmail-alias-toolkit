@@ -14,7 +14,7 @@ describe("t", () => {
     });
 
     expect(t("greeting")).toBe("Hello");
-    expect(getMessage).toHaveBeenCalledWith("greeting", undefined);
+    expect(getMessage.mock.calls[0]).toEqual(["greeting", undefined]);
   });
 
   it("passes substitutions through to browser i18n", () => {
