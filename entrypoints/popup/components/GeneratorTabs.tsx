@@ -163,12 +163,8 @@ export default function GeneratorTabs({
                 <option value="alphanumeric">
                   🔤 Random Characters (abc123xy)
                 </option>
-                <option value="words">
-                  📝 Random Words (happy-fox-42)
-                </option>
-                <option value="timestamp">
-                  ⏱️ Timestamp (1234567890)
-                </option>
+                <option value="words">📝 Random Words (happy-fox-42)</option>
+                <option value="timestamp">⏱️ Timestamp (1234567890)</option>
               </select>
             </div>
 
@@ -182,7 +178,9 @@ export default function GeneratorTabs({
                 min="1"
                 value={randomEmailCount}
                 onChange={(e) =>
-                  setRandomEmailCount(Math.max(1, parseInt(e.target.value) || 10))
+                  setRandomEmailCount(
+                    Math.max(1, parseInt(e.target.value) || 10),
+                  )
                 }
                 className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
@@ -196,7 +194,10 @@ export default function GeneratorTabs({
                 const timestamp = Date.now();
 
                 for (let i = 0; i < randomEmailCount; i++) {
-                  const randomTag = generateRandomString(randomFormat, i + timestamp);
+                  const randomTag = generateRandomString(
+                    randomFormat,
+                    i + timestamp,
+                  );
                   const alias = generateAlias(baseEmail, randomTag);
                   if (alias) aliases.push(alias);
                 }
@@ -413,4 +414,3 @@ export default function GeneratorTabs({
     </div>
   );
 }
-

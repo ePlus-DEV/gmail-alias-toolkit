@@ -585,7 +585,6 @@ function App() {
     }
   };
 
-
   /** Generates and copies an alias for the clicked preset tag. */
   const handlePresetClick = (tag: string) => {
     const alias = generateAlias(baseEmail, tag);
