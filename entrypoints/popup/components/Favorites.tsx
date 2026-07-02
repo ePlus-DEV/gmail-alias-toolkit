@@ -12,9 +12,11 @@ interface FavoritesProps {
   onCopy: (email: string) => void;
 }
 
+/** Lists the favorited aliases for the given base email with copy and remove actions. */
 export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
 
+  /** Loads favorites for the current account from extension storage. */
   const loadFavorites = async () => {
     const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
     const result = await browser.storage.local.get(favoritesKey);
@@ -48,6 +50,7 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
 
+  /** Removes an alias from favorites and persists the updated list. */
   const removeFavorite = async (email: string) => {
     const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
     const updated = favorites.filter((f) => f.email !== email);

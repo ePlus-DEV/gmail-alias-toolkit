@@ -91,6 +91,7 @@ const CHANGELOG: {
   },
 ];
 
+/** Settings modal with general, accounts, presets, advanced, and changelog tabs. */
 export default function Settings({
   isOpen,
   onClose,
@@ -121,13 +122,29 @@ export default function Settings({
   useEffect(() => {
     try {
       const manifest = browser.runtime.getManifest();
-      if (manifest && manifest.version) {
+      if (manifest?.version) {
         setVersion(manifest.version);
       }
     } catch (error) {
       console.log("Could not get manifest version:", error);
     }
   }, []);
+
+  /** Loads saved app settings from extension storage, merged over defaults. */
+  const loadSettings = async () => {
+    const result = await browser.storage.local.get("app_settings");
+    if (result.app_settings) {
+      setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
+    }
+  };
+
+  /** Loads the email accounts list from extension storage. */
+  const loadAccounts = async () => {
+    const result = await browser.storage.local.get("email_accounts");
+    if (result.email_accounts && Array.isArray(result.email_accounts)) {
+      setEmailAccounts(result.email_accounts);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -136,25 +153,13 @@ export default function Settings({
     }
   }, [isOpen]);
 
-  const loadSettings = async () => {
-    const result = await browser.storage.local.get("app_settings");
-    if (result.app_settings) {
-      setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
-    }
-  };
-
-  const loadAccounts = async () => {
-    const result = await browser.storage.local.get("email_accounts");
-    if (result.email_accounts && Array.isArray(result.email_accounts)) {
-      setEmailAccounts(result.email_accounts);
-    }
-  };
-
+  /** Persists settings to extension storage and updates local state. */
   const saveSettings = async (newSettings: AppSettings) => {
     setSettings(newSettings);
     await browser.storage.local.set({ app_settings: newSettings });
   };
 
+  /** Adds a new custom preset from the label/tag form fields. */
   const handleAddPreset = () => {
     if (!newPresetLabel.trim() || !newPresetTag.trim()) return;
 
@@ -175,6 +180,7 @@ export default function Settings({
     showToast("✓ Preset added");
   };
 
+  /** Removes a custom preset by id. */
   const handleRemovePreset = (id: string) => {
     const updatedSettings = {
       ...settings,
@@ -184,6 +190,7 @@ export default function Settings({
     showToast("✓ Preset removed");
   };
 
+  /** Downloads the current settings as a JSON file. */
   const handleExportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
     const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -196,6 +203,7 @@ export default function Settings({
     showToast("✓ Settings exported");
   };
 
+  /** Imports settings from a user-selected JSON file. */
   const handleImportSettings = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -209,13 +217,14 @@ export default function Settings({
         const imported = JSON.parse(text);
         saveSettings({ ...DEFAULT_SETTINGS, ...imported });
         showToast("✓ Settings imported");
-      } catch (err) {
+      } catch {
         showToast("✗ Import failed – invalid file");
       }
     };
     input.click();
   };
 
+  /** Resets all settings to defaults after user confirmation. */
   const handleResetSettings = () => {
     if (confirm("Are you sure you want to reset all settings to default?")) {
       saveSettings(DEFAULT_SETTINGS);
@@ -223,6 +232,7 @@ export default function Settings({
     }
   };
 
+  /** Marks the given account as active and updates the base email. */
   const handleSwitchAccount = async (accountId: string) => {
     const updated = emailAccounts.map((acc) => ({
       ...acc,
@@ -237,6 +247,7 @@ export default function Settings({
     showToast("✓ Account switched");
   };
 
+  /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
     if (emailAccounts.length === 1) {
       alert(
@@ -276,18 +287,21 @@ export default function Settings({
     showToast("✓ Account deleted");
   };
 
+  /** Enters edit mode for the given account. */
   const handleStartEdit = (account: EmailAccount) => {
     setEditingAccountId(account.id);
     setEditingLabel(account.label);
     setEditingEmail(account.email);
   };
 
+  /** Exits edit mode without saving. */
   const handleCancelEdit = () => {
     setEditingAccountId(null);
     setEditingLabel("");
     setEditingEmail("");
   };
 
+  /** Saves account edits, migrating stored data if the email changed. */
   const handleSaveEdit = async (accountId: string) => {
     if (!editingLabel.trim()) {
       alert("Label cannot be empty");
@@ -379,6 +393,7 @@ export default function Settings({
     showToast("✓ Account updated");
   };
 
+  /** Validates and adds a new email account. */
   const handleAddAccount = async () => {
     let email = newAccountEmail.trim();
 
@@ -393,7 +408,7 @@ export default function Settings({
     }
 
     // Validate email format
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setAddAccountError("Please enter a valid email address");
       return;
     }
@@ -585,14 +600,16 @@ export default function Settings({
                       <select
                         value={settings.theme}
                         onChange={(e) => {
-                          const t = e.target.value as "light" | "dark" | "auto";
-                          saveSettings({ ...settings, theme: t });
+                          const newTheme = e.target.value as
+                            "light" | "dark" | "auto";
+                          saveSettings({ ...settings, theme: newTheme });
                           const prefersDark = window.matchMedia(
                             "(prefers-color-scheme: dark)",
                           ).matches;
                           document.documentElement.classList.toggle(
                             "dark",
-                            t === "dark" || (t === "auto" && prefersDark),
+                            newTheme === "dark" ||
+                              (newTheme === "auto" && prefersDark),
                           );
                         }}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -612,7 +629,8 @@ export default function Settings({
                         onChange={(e) =>
                           saveSettings({
                             ...settings,
-                            badgeDisplay: e.target.value as any,
+                            badgeDisplay: e.target
+                              .value as AppSettings["badgeDisplay"],
                           })
                         }
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -675,7 +693,8 @@ export default function Settings({
                         onChange={(e) =>
                           saveSettings({
                             ...settings,
-                            randomFormat: e.target.value as any,
+                            randomFormat: e.target
+                              .value as AppSettings["randomFormat"],
                           })
                         }
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -1098,7 +1117,7 @@ export default function Settings({
                             newAccountEmail &&
                             !newAccountEmail.includes("@")
                           ) {
-                            setNewAccountEmail(newAccountEmail + "@gmail.com");
+                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
                           }
                         }}
                         placeholder="your.email"
@@ -1182,8 +1201,8 @@ export default function Settings({
                           {change.type}
                         </span>
                         <ul className="text-xs text-gray-600 dark:text-gray-400 list-disc list-inside space-y-0.5">
-                          {change.items.map((item, i) => (
-                            <li key={i}>{item}</li>
+                          {change.items.map((item) => (
+                            <li key={item}>{item}</li>
                           ))}
                         </ul>
                       </div>

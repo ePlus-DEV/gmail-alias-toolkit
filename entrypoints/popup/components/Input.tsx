@@ -8,6 +8,7 @@ interface InputProps {
   onKeyPress?: (e: React.KeyboardEvent) => void;
 }
 
+/** Styled text input with optional label. */
 export default function Input({
   type = "text",
   value,

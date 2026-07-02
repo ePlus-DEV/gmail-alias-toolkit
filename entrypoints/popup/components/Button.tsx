@@ -10,6 +10,7 @@ interface ButtonProps {
   icon?: ReactNode;
 }
 
+/** Styled button with variant, size, and optional icon support. */
 export default function Button({
   children,
   onClick,

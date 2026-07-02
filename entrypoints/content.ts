@@ -5,7 +5,7 @@ export default defineContentScript({
     browser.runtime.onMessage.addListener((message) => {
       if (message.action === "fillEmail" && message.email) {
         // Get the active element (the input field that was right-clicked)
-        const activeElement = document.activeElement;
+        const activeElement = document.activeElement as HTMLElement | null;
 
         if (
           activeElement &&

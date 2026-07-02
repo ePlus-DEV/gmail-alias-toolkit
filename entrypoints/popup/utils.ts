@@ -19,15 +19,9 @@ export function generateAlias(baseEmail: string, tag: string): string | null {
 }
 
 export type RandomFormat =
-  | "private-mail"
-  | "alphanumeric"
-  | "words"
-  | "timestamp";
+  "private-mail" | "alphanumeric" | "words" | "timestamp";
 
-export function generateRandomString(
-  format: RandomFormat,
-  index: number = 0,
-): string {
+export function generateRandomString(format: RandomFormat, index = 0): string {
   if (format === "private-mail") {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
@@ -134,8 +128,8 @@ export function validateEmail(value: string): ValidationResult {
 
 export function generateDotVariations(
   username: string,
-  count: number = 10,
-  randomize: boolean = false,
+  count = 10,
+  randomize = false,
 ): string[] {
   if (username.length < 2) return [];
 

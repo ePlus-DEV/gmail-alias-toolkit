@@ -6,6 +6,7 @@ interface GmailTricksProps {
   onCopy: (email: string) => void;
 }
 
+/** Panel that generates Gmail trick variations (dots, plus tags, googlemail, combos) for the base email. */
 export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
   const [selectedTrick, setSelectedTrick] = useState<
     "dot" | "googlemail" | "nodots" | "combo" | "plus" | "dotplus"
@@ -14,19 +15,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
   const [generatedTricks, setGeneratedTricks] = useState<string[]>([]);
   const [randomizeDots, setRandomizeDots] = useState(false);
 
-  const generateGooglemailVariation = (): string | null => {
-    if (!baseEmail.includes("@")) return null;
-
-    const [username, domain] = baseEmail.split("@");
-    if (domain === "gmail.com") {
-      return `${username}@googlemail.com`;
-    } else if (domain === "googlemail.com") {
-      return `${username}@gmail.com`;
-    }
-    return null;
-  };
-
-  const generateCombinations = (count: number = 10): string[] => {
+  /** Combines dot variations with common plus tags, capped at `count` results. */
+  const generateCombinations = (count = 10): string[] => {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
@@ -57,7 +47,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     return combinations.slice(0, count);
   };
 
-  const generatePlusVariations = (count: number = 10): string[] => {
+  /** Generates plus-tag aliases from a list of common tags, capped at `count` results. */
+  const generatePlusVariations = (count = 10): string[] => {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
@@ -97,7 +88,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     return tags.slice(0, count).map((tag) => `${username}+${tag}@${domain}`);
   };
 
-  const generateDotPlusVariations = (count: number = 10): string[] => {
+  /** Combines dot variations with plus tags, capped at `count` results. */
+  const generateDotPlusVariations = (count = 10): string[] => {
     if (!baseEmail.includes("@")) return [];
 
     const [username, domain] = baseEmail.split("@");
@@ -127,6 +119,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     return results.slice(0, count);
   };
 
+  /** Generates variations for the currently selected trick and copies the first result. */
   const generateTricksVariations = () => {
     if (!baseEmail.includes("@")) return;
 
@@ -144,7 +137,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           randomizeDots,
         ).map((u) => `${u}@${domain}`);
         break;
-      case "googlemail":
+      case "googlemail": {
         const altDomain =
           domain === "gmail.com" ? "googlemail.com" : "gmail.com";
         results = generateDotVariations(
@@ -153,7 +146,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           randomizeDots,
         ).map((u) => `${u}@${altDomain}`);
         break;
-      case "nodots":
+      }
+      case "nodots": {
         const noDots = username.replace(/\./g, "");
         const noDotResults = [
           `${noDots}@${domain}`,
@@ -175,6 +169,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
         });
         results = noDotResults.slice(0, tricksCount);
         break;
+      }
       case "plus":
         results = generatePlusVariations(tricksCount);
         break;
@@ -183,6 +178,8 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
         break;
       case "combo":
         results = generateCombinations(tricksCount);
+        break;
+      default:
         break;
     }
 
@@ -193,14 +190,6 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
         onCopy(results[0]);
       }
     }, 0);
-  };
-
-  const removeDots = (): string | null => {
-    if (!baseEmail.includes("@")) return null;
-
-    const [username, domain] = baseEmail.split("@");
-    const noDots = username.replace(/\./g, "");
-    return `${noDots}@${domain}`;
   };
 
   return (
@@ -349,9 +338,9 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
             </div>
           </div>
           <div className="max-h-64 overflow-y-auto">
-            {generatedTricks.map((email, index) => (
+            {generatedTricks.map((email) => (
               <div
-                key={index}
+                key={email}
                 className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">

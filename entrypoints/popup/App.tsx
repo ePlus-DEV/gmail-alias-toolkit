@@ -57,6 +57,7 @@ interface StorageResult {
   };
 }
 
+/** Popup root: alias generators, history, favorites, accounts, and settings. */
 function App() {
   const [baseEmail, setBaseEmail] = useState("your.email@gmail.com");
   const [customTag, setCustomTag] = useState("");
@@ -223,32 +224,31 @@ function App() {
 
   // Listen for settings changes
   useEffect(() => {
+    /** Syncs settings, accounts, and favorites state when extension storage changes. */
     const handleStorageChange = async (
       changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
     ) => {
       if (changes.app_settings) {
         const newSettings = changes.app_settings.newValue as
-          | AppSettings
-          | undefined;
+          AppSettings | undefined;
         if (newSettings) {
           setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
           setRandomFormat(newSettings.randomFormat || "private-mail");
-          const t = newSettings.theme || "light";
-          setTheme(t);
+          const newTheme = newSettings.theme || "light";
+          setTheme(newTheme);
           const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)",
           ).matches;
           document.documentElement.classList.toggle(
             "dark",
-            t === "dark" || (t === "auto" && prefersDark),
+            newTheme === "dark" || (newTheme === "auto" && prefersDark),
           );
         }
       }
       if (changes.email_accounts) {
         const newAccounts = changes.email_accounts.newValue as
-          | EmailAccount[]
-          | undefined;
+          EmailAccount[] | undefined;
         if (newAccounts) {
           setEmailAccounts(newAccounts);
           setHasEmailAccounts(newAccounts.length > 0);
@@ -295,8 +295,7 @@ function App() {
       const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
       if (changes[favoritesKey]) {
         const newFavorites = changes[favoritesKey].newValue as
-          | Favorite[]
-          | undefined;
+          Favorite[] | undefined;
         if (newFavorites && Array.isArray(newFavorites)) {
           const favEmails = newFavorites.map((f: Favorite) => f.email);
           setFavorites(favEmails);
@@ -341,6 +340,7 @@ function App() {
     return () => globalThis.removeEventListener("keydown", handleKeyDown);
   }, [isSettingsOpen]);
 
+  /** Increments the total and per-tag counters for the given generated emails. */
   const updateStats = async (emails: string[]) => {
     // Use account-specific stats key
     const statsKey = getAccountStorageKey(baseEmail, "alias_stats");
@@ -393,6 +393,7 @@ function App() {
     updateStats(emails);
   };
 
+  /** Saves a single alias to recent history. */
   const saveRecentAlias = (email: string) => saveRecentAliases([email]);
 
   // QR code: draw when alias changes
@@ -402,7 +403,7 @@ function App() {
     }
   }, [qrAlias]);
 
-  // Export helpers
+  /** Triggers a browser download for the given file content. */
   const downloadFile = (
     filename: string,
     mimeType: string,
@@ -410,13 +411,14 @@ function App() {
   ) => {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
     URL.revokeObjectURL(url);
   };
 
+  /** Exports recent aliases as a CSV or JSON download. */
   const exportAliases = (format: "csv" | "json") => {
     if (recentAliases.length === 0) return;
     if (format === "csv") {
@@ -443,7 +445,7 @@ function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
-  // Bulk delete
+  /** Deletes the selected aliases from history, favorites, and stats. */
   const deleteSelected = async () => {
     const count = selectedAliases.size;
     const updated = recentAliases.filter((a) => !selectedAliases.has(a.email));
@@ -473,10 +475,16 @@ function App() {
       const match = email.match(/\+([^@]+)@/);
       if (match && tags[match[1]]) {
         tags[match[1]] = Math.max(0, tags[match[1]] - 1);
-        if (tags[match[1]] === 0) delete tags[match[1]];
       }
     });
-    const updatedStats = { total: Math.max(0, stats.total - count), tags };
+    // Drop tags whose count reached zero
+    const remainingTags = Object.fromEntries(
+      Object.entries(tags).filter(([, tagCount]) => tagCount > 0),
+    );
+    const updatedStats = {
+      total: Math.max(0, stats.total - count),
+      tags: remainingTags,
+    };
 
     await browser.storage.local.set({
       [historyKey]: updated,
@@ -491,14 +499,20 @@ function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
+  /** Toggles an alias in the bulk-delete selection set. */
   const toggleSelectAlias = (email: string) => {
     setSelectedAliases((prev) => {
       const next = new Set(prev);
-      next.has(email) ? next.delete(email) : next.add(email);
+      if (next.has(email)) {
+        next.delete(email);
+      } else {
+        next.add(email);
+      }
       return next;
     });
   };
 
+  /** Clears all history, favorites, and stats for the active account. */
   const clearHistory = async () => {
     setRecentAliases([]);
     setFavorites([]);
@@ -514,6 +528,7 @@ function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
+  /** Adds or removes an alias from the account's favorites. */
   const toggleFavorite = async (email: string) => {
     const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
     const result = await browser.storage.local.get(favoritesKey);
@@ -545,6 +560,7 @@ function App() {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
+  /** Copies an alias to the clipboard and records it in recent history. */
   const copyToClipboard = async (email: string) => {
     try {
       await navigator.clipboard.writeText(email);
@@ -561,6 +577,7 @@ function App() {
     }
   };
 
+  /** Generates a batch of random aliases and copies the first one. */
   const generateRandomAlias = () => {
     setGeneratedRandomList([]);
 
@@ -581,6 +598,7 @@ function App() {
     }, 0);
   };
 
+  /** Generates and copies an alias for the clicked preset tag. */
   const handlePresetClick = (tag: string) => {
     const alias = generateAlias(baseEmail, tag);
     if (alias) {
@@ -588,6 +606,7 @@ function App() {
     }
   };
 
+  /** Generates and copies an alias from the custom tag input. */
   const handleCustomGenerate = () => {
     if (!customTag.trim()) return;
     const alias = generateAlias(baseEmail, customTag.trim());
@@ -597,12 +616,14 @@ function App() {
     }
   };
 
+  /** Generates the custom alias when Enter is pressed. */
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleCustomGenerate();
     }
   };
 
+  /** Validates and adds a new email account without switching to it. */
   const handleAddAccount = async () => {
     setAddAccountError("");
 
@@ -1744,14 +1765,13 @@ function App() {
                                       { length: totalPages },
                                       (_, i) => i + 1,
                                     )
-                                      .filter((page) => {
+                                      .filter(
                                         // Show first, last, current, and pages around current
-                                        if (page === 1 || page === totalPages)
-                                          return true;
-                                        if (Math.abs(page - currentPage) <= 1)
-                                          return true;
-                                        return false;
-                                      })
+                                        (page) =>
+                                          page === 1 ||
+                                          page === totalPages ||
+                                          Math.abs(page - currentPage) <= 1,
+                                      )
                                       .map((page, index, array) => {
                                         // Add ellipsis
                                         const prevPage = array[index - 1];

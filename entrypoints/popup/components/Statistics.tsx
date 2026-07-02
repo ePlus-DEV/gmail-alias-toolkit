@@ -8,6 +8,21 @@ interface Stats {
   createdThisWeek: number;
 }
 
+interface StoredAccount {
+  email: string;
+  isActive: boolean;
+}
+
+interface RecentAlias {
+  timestamp: number;
+}
+
+type StorageChanges = Record<
+  string,
+  { newValue?: unknown; oldValue?: unknown }
+>;
+
+/** Collapsible panel showing alias usage statistics for the active account. */
 export default function Statistics() {
   const [stats, setStats] = useState<Stats>({
     totalGenerated: 0,
@@ -16,13 +31,72 @@ export default function Statistics() {
     createdThisWeek: 0,
   });
   const [isOpen, setIsOpen] = useState(false);
-  const [activeEmail, setActiveEmail] = useState("your.email@gmail.com");
+
+  /** Resolves the active account email, then loads and computes its stats. */
+  const loadActiveEmailAndStats = async () => {
+    // Get active account first
+    const accountResult = await browser.storage.local.get([
+      "email_accounts",
+      "base_email",
+    ]);
+    let email = "your.email@gmail.com";
+
+    if (
+      accountResult.email_accounts &&
+      Array.isArray(accountResult.email_accounts)
+    ) {
+      const activeAccount = (
+        accountResult.email_accounts as StoredAccount[]
+      ).find((acc) => acc.isActive);
+      if (activeAccount) {
+        email = activeAccount.email;
+      }
+    } else if (accountResult.base_email) {
+      email = accountResult.base_email as string;
+    }
+
+    // Load stats for this account
+    const historyKey = getAccountStorageKey(email, "gmail_alias_recent");
+    const statsKey = getAccountStorageKey(email, "alias_stats");
+
+    const result = await browser.storage.local.get([historyKey, statsKey]);
+    const recent = (result[historyKey] || []) as RecentAlias[];
+    const savedStats = (result[statsKey] || { total: 0, tags: {} }) as {
+      total: number;
+      tags: Record<string, number>;
+    };
+
+    const now = new Date();
+    const today = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    ).getTime();
+    const weekAgo = today - 7 * 24 * 60 * 60 * 1000;
+
+    const createdToday = recent.filter((a) => a.timestamp >= today).length;
+    const createdThisWeek = recent.filter((a) => a.timestamp >= weekAgo).length;
+
+    // Find most used tag
+    const tags = savedStats.tags || {};
+    const mostUsedTag =
+      Object.keys(tags).length > 0
+        ? Object.entries(tags).sort((a, b) => b[1] - a[1])[0][0]
+        : "-";
+
+    setStats({
+      totalGenerated: savedStats.total || 0,
+      mostUsedTag,
+      createdToday,
+      createdThisWeek,
+    });
+  };
 
   useEffect(() => {
     loadActiveEmailAndStats();
 
-    // Listen for storage changes
-    const handleStorageChange = (changes: any) => {
+    /** Reloads stats when account or alias storage keys change. */
+    const handleStorageChange = (changes: StorageChanges) => {
       // Reload if any account-specific storage key changes or if email_accounts changes
       if (changes.email_accounts) {
         loadActiveEmailAndStats();
@@ -43,69 +117,6 @@ export default function Statistics() {
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
-
-  const loadActiveEmailAndStats = async () => {
-    // Get active account first
-    const accountResult = await browser.storage.local.get([
-      "email_accounts",
-      "base_email",
-    ]);
-    let email = "your.email@gmail.com";
-
-    if (
-      accountResult.email_accounts &&
-      Array.isArray(accountResult.email_accounts)
-    ) {
-      const activeAccount = accountResult.email_accounts.find(
-        (acc: any) => acc.isActive,
-      );
-      if (activeAccount) {
-        email = activeAccount.email;
-      }
-    } else if (accountResult.base_email) {
-      email = accountResult.base_email as string;
-    }
-
-    setActiveEmail(email);
-
-    // Load stats for this account
-    const historyKey = getAccountStorageKey(email, "gmail_alias_recent");
-    const statsKey = getAccountStorageKey(email, "alias_stats");
-
-    const result = await browser.storage.local.get([historyKey, statsKey]);
-    const recent = (result[historyKey] || []) as any[];
-    const savedStats = (result[statsKey] || { total: 0, tags: {} }) as {
-      total: number;
-      tags: Record<string, number>;
-    };
-
-    const now = new Date();
-    const today = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    ).getTime();
-    const weekAgo = today - 7 * 24 * 60 * 60 * 1000;
-
-    const createdToday = recent.filter((a: any) => a.timestamp >= today).length;
-    const createdThisWeek = recent.filter(
-      (a: any) => a.timestamp >= weekAgo,
-    ).length;
-
-    // Find most used tag
-    const tags = savedStats.tags || {};
-    const mostUsedTag =
-      Object.keys(tags).length > 0
-        ? Object.entries(tags).sort((a: any, b: any) => b[1] - a[1])[0][0]
-        : "-";
-
-    setStats({
-      totalGenerated: savedStats.total || 0,
-      mostUsedTag,
-      createdToday,
-      createdThisWeek,
-    });
-  };
 
   if (!isOpen) {
     return (
