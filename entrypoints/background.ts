@@ -1,11 +1,56 @@
+import { getAccountStorageKey, getLegacyAccountStorageKey } from "./popup/utils";
+
 export default defineBackground(() => {
   console.log("Gmail Alias Toolkit background started");
 
   // Create context menu on install
   browser.runtime.onInstalled.addListener(async () => {
+    await migrateLegacyStorageKeys();
     await createContextMenus();
     await updateBadge();
   });
+
+  // One-time migration from the old lossy sanitizer to the new collision-resistant key format
+  async function migrateLegacyStorageKeys() {
+    const { migration_legacy_keys_done, email_accounts, base_email } =
+      await browser.storage.local.get([
+        "migration_legacy_keys_done",
+        "email_accounts",
+        "base_email",
+      ]);
+    if (migration_legacy_keys_done) return;
+
+    const emails = new Set<string>();
+    if (Array.isArray(email_accounts)) {
+      email_accounts.forEach((acc: any) => acc?.email && emails.add(acc.email));
+    }
+    if (base_email) emails.add(base_email);
+
+    const suffixes = ["gmail_alias_recent", "alias_stats", "favorites"];
+    const toSet: Record<string, unknown> = {};
+    const toRemove: string[] = [];
+
+    for (const email of emails) {
+      for (const suffix of suffixes) {
+        const legacyKey = getLegacyAccountStorageKey(email, suffix);
+        const newKey = getAccountStorageKey(email, suffix);
+        if (legacyKey === newKey) continue;
+
+        const legacyResult = await browser.storage.local.get(legacyKey);
+        if (legacyResult[legacyKey] === undefined) continue;
+
+        const newResult = await browser.storage.local.get(newKey);
+        if (newResult[newKey] === undefined) {
+          toSet[newKey] = legacyResult[legacyKey];
+        }
+        toRemove.push(legacyKey);
+      }
+    }
+
+    if (Object.keys(toSet).length > 0) await browser.storage.local.set(toSet);
+    if (toRemove.length > 0) await browser.storage.local.remove(toRemove);
+    await browser.storage.local.set({ migration_legacy_keys_done: true });
+  }
 
   // Recreate context menus when settings change
   browser.storage.onChanged.addListener(async (changes) => {
@@ -290,12 +335,6 @@ export default defineBackground(() => {
     } catch (error) {
       console.error("Error updating badge:", error);
     }
-  }
-
-  // Helper function to get account-specific storage key
-  function getAccountStorageKey(email: string, suffix: string): string {
-    const sanitized = email.replace(/[^a-zA-Z0-9]/g, "_");
-    return `${suffix}_${sanitized}`;
   }
 
   // Helper function to save email to history and stats

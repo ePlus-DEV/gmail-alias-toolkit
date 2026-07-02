@@ -1,4 +1,10 @@
 export function getAccountStorageKey(email: string, suffix: string): string {
+  const normalized = encodeURIComponent(email.trim().toLowerCase());
+  return `${suffix}_${normalized}`;
+}
+
+/** Pre-fix (lossy, non-injective) key format kept only for one-time migration. */
+export function getLegacyAccountStorageKey(email: string, suffix: string): string {
   const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
   return `${suffix}_${sanitized}`;
 }

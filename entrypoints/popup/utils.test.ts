@@ -11,24 +11,36 @@ import {
 // ─── getAccountStorageKey ────────────────────────────────────────────────────
 
 describe('getAccountStorageKey', () => {
-  it('replaces @ and . with underscores', () => {
-    expect(getAccountStorageKey('user@gmail.com', 'history')).toBe('history_user_gmail_com');
+  it('encodes the email so it round-trips uniquely', () => {
+    expect(getAccountStorageKey('user@gmail.com', 'history')).toBe('history_user%40gmail.com');
   });
 
   it('handles dots in username', () => {
-    expect(getAccountStorageKey('first.last@gmail.com', 'stats')).toBe('stats_first_last_gmail_com');
+    expect(getAccountStorageKey('first.last@gmail.com', 'stats')).toBe('stats_first.last%40gmail.com');
   });
 
   it('handles plus signs', () => {
-    expect(getAccountStorageKey('user+tag@gmail.com', 'fav')).toBe('fav_user_tag_gmail_com');
+    expect(getAccountStorageKey('user+tag@gmail.com', 'fav')).toBe('fav_user%2Btag%40gmail.com');
   });
 
   it('handles googlemail domain', () => {
-    expect(getAccountStorageKey('user@googlemail.com', 'history')).toBe('history_user_googlemail_com');
+    expect(getAccountStorageKey('user@googlemail.com', 'history')).toBe('history_user%40googlemail.com');
   });
 
   it('preserves alphanumeric chars', () => {
-    expect(getAccountStorageKey('abc123@test.com', 'key')).toBe('key_abc123_test_com');
+    expect(getAccountStorageKey('abc123@test.com', 'key')).toBe('key_abc123%40test.com');
+  });
+
+  it('does not collide for emails that would collide under the old sanitizer', () => {
+    const a = getAccountStorageKey('user.name@gmail.com', 'history');
+    const b = getAccountStorageKey('user_name@gmail.com', 'history');
+    expect(a).not.toBe(b);
+  });
+
+  it('normalizes case so the same account always maps to the same key', () => {
+    expect(getAccountStorageKey('User@Gmail.com', 'history')).toBe(
+      getAccountStorageKey('user@gmail.com', 'history')
+    );
   });
 });
 

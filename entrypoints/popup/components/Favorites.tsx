@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getAccountStorageKey } from '../utils';
 
 interface Favorite {
   id: string;
@@ -10,12 +11,6 @@ interface FavoritesProps {
   baseEmail: string;
   onCopy: (email: string) => void;
 }
-
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
 
 export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
