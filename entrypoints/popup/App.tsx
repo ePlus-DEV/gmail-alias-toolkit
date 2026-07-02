@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Button, Card, Toast } from "../../src/components/ui";
+import PopupHeader from "../../src/components/alias/PopupHeader";
+import AccountSwitcher from "../../src/components/alias/AccountSwitcher";
 import QRCode from "qrcode";
 import "./App.css";
 import Settings from "./components/Settings";
@@ -709,7 +712,7 @@ function App() {
 
   // skipcq: JS-0415
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 h-screen flex flex-col relative overflow-hidden">
+    <div className="h-screen flex flex-col relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_34%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_100%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(79,70,229,0.25),_transparent_34%),linear-gradient(180deg,#020617_0%,#111827_100%)]">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
         <div className="flex-1 overflow-y-auto">
@@ -724,285 +727,56 @@ function App() {
       ) : (
         // skipcq: JS-0415
         <>
-          {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-3.5 flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/icons/48.png"
-                  alt=""
-                  className="w-9 h-9 rounded-lg flex-shrink-0"
-                />
-                <div>
-                  <h1 className="text-lg font-bold tracking-tight">
-                    {t("extensionName")}
-                  </h1>
-                  <p className="text-xs text-blue-100 mt-0.5">
-                    {t("headerSubtitle")}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-                title={t("settings")}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <PopupHeader onOpenSettings={() => setIsSettingsOpen(true)} />
 
           {/* Main Content */}
-          <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700 overflow-hidden">
-              {/* Base Email Selector - Dropdown */}
-              <div className="p-3.5">
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                  {t("activeGmailAddress")}
-                </label>
-                <div className="flex gap-2">
-                  <div className="relative flex-1">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <svg className="w-4 h-4" viewBox="0 0 24 24">
-                        <path
-                          fill="#4285F4"
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.2 3.32v2.77h3.55c2.08-1.92 3.28-4.74 3.28-8.1z"
-                        />
-                        <path
-                          fill="#34A853"
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.77c-.98.66-2.23 1.06-3.73 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A10.99 10.99 0 0012 23z"
-                        />
-                        <path
-                          fill="#FBBC05"
-                          d="M5.84 14.09A6.6 6.6 0 015.5 12c0-.73.13-1.43.34-2.09V7.07H2.18A11 11 0 001 12c0 1.77.43 3.45 1.18 4.93l3.66-2.84z"
-                        />
-                        <path
-                          fill="#EA4335"
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"
-                        />
-                      </svg>
-                    </div>
-                    <select
-                      value={baseEmail}
-                      onChange={async (e) => {
-                        const selectedEmail = e.target.value;
-                        setBaseEmail(selectedEmail);
-                        setIsSelectMode(false);
-                        setSelectedAliases(new Set());
-                        setSearchQuery("");
-                        setFilterTag("all");
-                        setCurrentPage(1);
+          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-4">
+            <Card className="divide-y divide-gray-200/70 overflow-hidden dark:divide-gray-700/70">
+              <AccountSwitcher
+                baseEmail={baseEmail}
+                emailAccounts={emailAccounts}
+                showAddAccount={showAddAccount}
+                newAccountEmail={newAccountEmail}
+                newAccountLabel={newAccountLabel}
+                addAccountError={addAccountError}
+                focusOnMount={focusOnMount}
+                onToggleAddAccount={() => setShowAddAccount(!showAddAccount)}
+                onSelectAccount={async (selectedEmail) => {
+                  setBaseEmail(selectedEmail);
+                  setIsSelectMode(false);
+                  setSelectedAliases(new Set());
+                  setSearchQuery("");
+                  setFilterTag("all");
+                  setCurrentPage(1);
 
-                        // Update active account and base_email
-                        const updated = emailAccounts.map((acc) => ({
-                          ...acc,
-                          isActive: acc.email === selectedEmail,
-                        }));
+                  const updated = emailAccounts.map((acc) => ({
+                    ...acc,
+                    isActive: acc.email === selectedEmail,
+                  }));
 
-                        await browser.storage.local.set({
-                          email_accounts: updated,
-                          base_email: selectedEmail,
-                        });
-                      }}
-                      className="w-full pl-9 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 dark:text-gray-100 truncate"
-                    >
-                      {emailAccounts.length > 0 ? (
-                        emailAccounts.map((account) => (
-                          <option key={account.id} value={account.email}>
-                            {account.label ? `${account.label} - ` : ""}
-                            {account.email}
-                          </option>
-                        ))
-                      ) : (
-                        <option value={baseEmail}>{baseEmail}</option>
-                      )}
-                    </select>
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setShowAddAccount(!showAddAccount)}
-                    className="w-10 h-10 flex-shrink-0 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors flex items-center justify-center"
-                    title={t("addNewAccount")}
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Quick Add Account Form */}
-                {showAddAccount && (
-                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                    <div className="relative">
-                      <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                      </div>
-                      <input
-                        type="email"
-                        value={newAccountEmail}
-                        onChange={(e) => {
-                          setNewAccountEmail(e.target.value);
-                          setAddAccountError("");
-                        }}
-                        onBlur={() => {
-                          if (
-                            newAccountEmail &&
-                            !newAccountEmail.includes("@")
-                          ) {
-                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
-                          }
-                        }}
-                        placeholder={t("emailPlaceholder")}
-                        className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        ref={focusOnMount}
-                      />
-                      {newAccountEmail && !newAccountEmail.includes("@") && (
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
-                          @gmail.com
-                        </div>
-                      )}
-                    </div>
-                    {addAccountError && (
-                      <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-full">
-                        <p className="text-xs text-red-600 dark:text-red-400 text-center">
-                          {addAccountError}
-                        </p>
-                      </div>
-                    )}
-                    {newAccountEmail && !newAccountEmail.includes("@") && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
-                        {t("pressTabToAddGmail", "Tab").split("Tab")[0]}
-                        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
-                          Tab
-                        </kbd>
-                        {t("pressTabToAddGmail", "Tab").split("Tab")[1]}
-                      </p>
-                    )}
-                    <div className="relative">
-                      <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                          />
-                        </svg>
-                      </div>
-                      <input
-                        type="text"
-                        value={newAccountLabel}
-                        onChange={(e) => setNewAccountLabel(e.target.value)}
-                        placeholder={t("accountLabelPlaceholder")}
-                        className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handleAddAccount}
-                        disabled={
-                          !newAccountEmail.trim() ||
-                          !newAccountEmail.includes("@")
-                        }
-                        className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m3 9a9 9 0 100-18 9 9 0 000 18z"
-                          />
-                        </svg>
-                        {t("addAccount")}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowAddAccount(false);
-                          setNewAccountEmail("");
-                          setNewAccountLabel("");
-                          setAddAccountError("");
-                        }}
-                        className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
-                      >
-                        {t("cancel")}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {baseEmail &&
-                  !baseEmail.includes("@gmail.com") &&
-                  baseEmail.includes("@") && (
-                    <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
-                      {t("gmailWarning")}
-                    </p>
-                  )}
-              </div>
+                  await browser.storage.local.set({
+                    email_accounts: updated,
+                    base_email: selectedEmail,
+                  });
+                }}
+                onNewAccountEmailChange={(value) => {
+                  setNewAccountEmail(value);
+                  setAddAccountError("");
+                }}
+                onNewAccountLabelChange={setNewAccountLabel}
+                onNewAccountBlur={() => {
+                  if (newAccountEmail && !newAccountEmail.includes("@")) {
+                    setNewAccountEmail(`${newAccountEmail}@gmail.com`);
+                  }
+                }}
+                onAddAccount={handleAddAccount}
+                onCancelAddAccount={() => {
+                  setShowAddAccount(false);
+                  setNewAccountEmail("");
+                  setNewAccountLabel("");
+                  setAddAccountError("");
+                }}
+              />
 
               {/* Unified Email Alias Generator */}
               <GeneratorTabs
@@ -1058,14 +832,10 @@ function App() {
 
               {/* Statistics - Collapsible */}
               <Statistics />
-            </div>
+            </Card>
 
             {/* Toast Notification */}
-            {toastMessage && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium animate-fade-in z-40">
-                {toastMessage}
-              </div>
-            )}
+            {toastMessage && <Toast message={toastMessage} />}
           </div>
         </>
       )}
@@ -1077,7 +847,7 @@ function App() {
           onClick={() => setQrAlias(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 flex flex-col items-center gap-4"
+            className="flex flex-col items-center gap-4 rounded-3xl border border-white/70 bg-white/90 p-6 shadow-2xl backdrop-blur dark:border-gray-700/70 dark:bg-gray-900/90"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
@@ -1090,13 +860,13 @@ function App() {
             <div className="flex gap-2">
               <button
                 onClick={() => copyToClipboard(qrAlias)}
-                className="px-4 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+                className="rounded-xl bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700"
               >
                 {t("copy")}
               </button>
               <button
                 onClick={() => setQrAlias(null)}
-                className="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                className="rounded-xl bg-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               >
                 {t("close")}
               </button>
