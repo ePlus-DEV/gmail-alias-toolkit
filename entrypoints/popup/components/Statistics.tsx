@@ -151,10 +151,26 @@ export default function Statistics() {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <StatCard icon={<Mail className="h-4 w-4" />} value={<NumberAnimation value={stats.totalGenerated} />} label="Total Generated" />
-        <StatCard icon={<Check className="h-4 w-4" />} value={<NumberAnimation value={stats.createdToday} />} label="Created Today" />
-        <StatCard icon={<Clock className="h-4 w-4" />} value={<NumberAnimation value={stats.createdThisWeek} />} label="This Week" />
-        <StatCard icon={<BarChart3 className="h-4 w-4" />} value={stats.mostUsedTag} label="Top Tag" />
+        <StatCard
+          icon={<Mail className="h-4 w-4" />}
+          value={<NumberAnimation value={stats.totalGenerated} />}
+          label="Total Generated"
+        />
+        <StatCard
+          icon={<Check className="h-4 w-4" />}
+          value={<NumberAnimation value={stats.createdToday} />}
+          label="Created Today"
+        />
+        <StatCard
+          icon={<Clock className="h-4 w-4" />}
+          value={<NumberAnimation value={stats.createdThisWeek} />}
+          label="This Week"
+        />
+        <StatCard
+          icon={<BarChart3 className="h-4 w-4" />}
+          value={stats.mostUsedTag}
+          label="Top Tag"
+        />
       </div>
     </div>
   );
