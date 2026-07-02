@@ -18,6 +18,18 @@ interface Alias {
   timestamp: number;
 }
 
+interface EmailAccount {
+  id: string;
+  email: string;
+  label?: string;
+  isActive: boolean;
+}
+
+interface Favorite {
+  email: string;
+  timestamp?: number;
+}
+
 interface Preset {
   id: string;
   label: string;
@@ -34,10 +46,11 @@ interface AppSettings {
 }
 
 interface StorageResult {
-  [key: string]: any;
   gmail_alias_recent?: Alias[];
   base_email?: string;
   app_settings?: AppSettings;
+  email_accounts?: EmailAccount[];
+  favorites?: Favorite[];
   alias_stats?: {
     total: number;
     tags: Record<string, number>;
@@ -66,7 +79,7 @@ function App() {
   const [activeGeneratorTab, setActiveGeneratorTab] = useState<
     "random" | "tags" | "tricks"
   >("random");
-  const [emailAccounts, setEmailAccounts] = useState<any[]>([]);
+  const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
   const [hasEmailAccounts, setHasEmailAccounts] = useState(true);
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [newAccountEmail, setNewAccountEmail] = useState("");
@@ -82,7 +95,7 @@ function App() {
   const [qrAlias, setQrAlias] = useState<string | null>(null);
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
   // Theme
-  const [theme, setTheme] = useState<"light" | "dark" | "auto">("light");
+  const [, setTheme] = useState<"light" | "dark" | "auto">("light");
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
@@ -102,7 +115,7 @@ function App() {
         // Load active email from email_accounts or fall back to base_email
         if (result.email_accounts && Array.isArray(result.email_accounts)) {
           const activeAccount = result.email_accounts.find(
-            (acc: any) => acc.isActive,
+            (acc) => acc.isActive,
           );
           if (activeAccount) {
             activeEmail = activeAccount.email;
@@ -144,10 +157,6 @@ function App() {
               [statsKey]: result.alias_stats || { total: 0, tags: {} },
               [favoritesKey]: result.favorites || [],
             });
-            console.log(
-              "Migrated old data to account-specific storage for:",
-              activeEmail,
-            );
           }
         }
 
@@ -176,7 +185,7 @@ function App() {
           Array.isArray(historyResult[favoritesKey])
         ) {
           const favEmails = historyResult[favoritesKey].map(
-            (f: any) => f.email,
+            (f: Favorite) => f.email,
           );
           setFavorites(favEmails);
         } else {
@@ -214,9 +223,13 @@ function App() {
 
   // Listen for settings changes
   useEffect(() => {
-    const handleStorageChange = async (changes: any) => {
+    const handleStorageChange = async (
+      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
+    ) => {
       if (changes.app_settings) {
-        const newSettings = changes.app_settings.newValue;
+        const newSettings = changes.app_settings.newValue as
+          | AppSettings
+          | undefined;
         if (newSettings) {
           setMaxRecent(newSettings.maxHistory || 20);
           setCustomPresets(newSettings.customPresets || []);
@@ -233,12 +246,14 @@ function App() {
         }
       }
       if (changes.email_accounts) {
-        const newAccounts = changes.email_accounts.newValue;
+        const newAccounts = changes.email_accounts.newValue as
+          | EmailAccount[]
+          | undefined;
         if (newAccounts) {
           setEmailAccounts(newAccounts);
           setHasEmailAccounts(newAccounts.length > 0);
           // Update base email if active account changed
-          const activeAccount = newAccounts.find((acc: any) => acc.isActive);
+          const activeAccount = newAccounts.find((acc) => acc.isActive);
           if (activeAccount && activeAccount.email !== baseEmail) {
             setBaseEmail(activeAccount.email);
             // Load history for new account
@@ -266,7 +281,7 @@ function App() {
               Array.isArray(favResult[favoritesKey])
             ) {
               const favEmails = favResult[favoritesKey].map(
-                (f: any) => f.email,
+                (f: Favorite) => f.email,
               );
               setFavorites(favEmails);
             } else {
@@ -279,9 +294,11 @@ function App() {
       // Listen for favorites changes
       const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
       if (changes[favoritesKey]) {
-        const newFavorites = changes[favoritesKey].newValue;
+        const newFavorites = changes[favoritesKey].newValue as
+          | Favorite[]
+          | undefined;
         if (newFavorites && Array.isArray(newFavorites)) {
-          const favEmails = newFavorites.map((f: any) => f.email);
+          const favEmails = newFavorites.map((f: Favorite) => f.email);
           setFavorites(favEmails);
         } else {
           setFavorites([]);
@@ -324,7 +341,29 @@ function App() {
     return () => globalThis.removeEventListener("keydown", handleKeyDown);
   }, [isSettingsOpen]);
 
-  const saveRecentAlias = (email: string) => saveRecentAliases([email]);
+  const updateStats = async (emails: string[]) => {
+    // Use account-specific stats key
+    const statsKey = getAccountStorageKey(baseEmail, "alias_stats");
+    const result = (await browser.storage.local.get(statsKey)) as Record<
+      string,
+      { total: number; tags: Record<string, number> } | undefined
+    >;
+    const stats = result[statsKey] || { total: 0, tags: {} };
+
+    stats.total = (stats.total || 0) + emails.length;
+    stats.tags = stats.tags || {};
+
+    emails.forEach((email) => {
+      // Extract tag from email (only if it has + addressing)
+      const tagMatch = email.match(/\+([^@]+)@/);
+      if (tagMatch) {
+        const tag = tagMatch[1];
+        stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+      }
+    });
+
+    await browser.storage.local.set({ [statsKey]: stats });
+  };
 
   // Batched save: computes the merged list and stats totals once, avoiding the
   // stale-closure / lost-update race that happens when saveRecentAlias is called
@@ -354,26 +393,7 @@ function App() {
     updateStats(emails);
   };
 
-  const updateStats = async (emails: string[]) => {
-    // Use account-specific stats key
-    const statsKey = getAccountStorageKey(baseEmail, "alias_stats");
-    const result: StorageResult = await browser.storage.local.get(statsKey);
-    const stats = result[statsKey] || { total: 0, tags: {} };
-
-    stats.total = (stats.total || 0) + emails.length;
-    stats.tags = stats.tags || {};
-
-    emails.forEach((email) => {
-      // Extract tag from email (only if it has + addressing)
-      const tagMatch = email.match(/\+([^@]+)@/);
-      if (tagMatch) {
-        const tag = tagMatch[1];
-        stats.tags[tag] = (stats.tags[tag] || 0) + 1;
-      }
-    });
-
-    await browser.storage.local.set({ [statsKey]: stats });
-  };
+  const saveRecentAlias = (email: string) => saveRecentAliases([email]);
 
   // QR code: draw when alias changes
   useEffect(() => {
@@ -438,9 +458,9 @@ function App() {
     ]);
 
     // Remove deleted emails from favorites
-    const currentFavs = (favResult[favoritesKey] as any[]) || [];
+    const currentFavs = (favResult[favoritesKey] as Favorite[]) || [];
     const updatedFavs = currentFavs.filter(
-      (f: any) => !selectedAliases.has(f.email),
+      (f: Favorite) => !selectedAliases.has(f.email),
     );
 
     // Decrement stats: total and per-tag counts
@@ -464,7 +484,7 @@ function App() {
       [statsKey]: updatedStats,
     });
 
-    setFavorites(updatedFavs.map((f: any) => f.email));
+    setFavorites(updatedFavs.map((f: Favorite) => f.email));
     setSelectedAliases(new Set());
     setIsSelectMode(false);
     setToastMessage(`✓ Deleted ${count} aliases`);
@@ -497,14 +517,14 @@ function App() {
   const toggleFavorite = async (email: string) => {
     const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
     const result = await browser.storage.local.get(favoritesKey);
-    const currentFavs = (result[favoritesKey] as any[]) || [];
+    const currentFavs = (result[favoritesKey] as Favorite[]) || [];
 
-    const exists = currentFavs.find((f: any) => f.email === email);
+    const exists = currentFavs.find((f: Favorite) => f.email === email);
 
     let updated;
     if (exists) {
       // Remove from favorites
-      updated = currentFavs.filter((f: any) => f.email !== email);
+      updated = currentFavs.filter((f: Favorite) => f.email !== email);
     } else {
       // Add to favorites
       const newFav = {
@@ -517,12 +537,28 @@ function App() {
 
     await browser.storage.local.set({ [favoritesKey]: updated });
 
-    const favEmails = updated.map((f: any) => f.email);
+    const favEmails = updated.map((f: Favorite) => f.email);
     setFavorites(favEmails);
     setToastMessage(
       exists ? "✓ Removed from favorites" : "✓ Added to favorites",
     );
     setTimeout(() => setToastMessage(null), 2000);
+  };
+
+  const copyToClipboard = async (email: string) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopiedEmail(email);
+      setToastMessage("✓ Copied to clipboard!");
+      saveRecentAlias(email);
+      setTimeout(() => {
+        setCopiedEmail(null);
+        setToastMessage(null);
+      }, 2000);
+    } catch {
+      setToastMessage("✗ Failed to copy");
+      setTimeout(() => setToastMessage(null), 2000);
+    }
   };
 
   const generateRandomAlias = () => {
@@ -543,22 +579,6 @@ function App() {
         copyToClipboard(aliases[0]);
       }
     }, 0);
-  };
-
-  const copyToClipboard = async (email: string) => {
-    try {
-      await navigator.clipboard.writeText(email);
-      setCopiedEmail(email);
-      setToastMessage("✓ Copied to clipboard!");
-      saveRecentAlias(email);
-      setTimeout(() => {
-        setCopiedEmail(null);
-        setToastMessage(null);
-      }, 2000);
-    } catch (err) {
-      setToastMessage("✗ Failed to copy");
-      setTimeout(() => setToastMessage(null), 2000);
-    }
   };
 
   const handlePresetClick = (tag: string) => {
@@ -608,7 +628,8 @@ function App() {
     const newAccount = {
       id: Date.now().toString(),
       email: newAccountEmail.trim(),
-      label: newAccountLabel.trim() || "Account " + (emailAccounts.length + 1),
+      label:
+        newAccountLabel.trim() || `Account ${emailAccounts.length + 1}`,
       isActive: false, // Don't auto-switch to new account
     };
 
@@ -841,7 +862,7 @@ function App() {
                             newAccountEmail &&
                             !newAccountEmail.includes("@")
                           ) {
-                            setNewAccountEmail(newAccountEmail + "@gmail.com");
+                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
                           }
                         }}
                         placeholder="your.email"
@@ -937,8 +958,8 @@ function App() {
                   !baseEmail.includes("@gmail.com") &&
                   baseEmail.includes("@") && (
                     <p className="text-xs text-amber-600 dark:text-amber-400 mt-2">
-                      ⚠ This doesn't look like a Gmail address. Plus addressing
-                      works best with Gmail.
+                      ⚠ This doesn&apos;t look like a Gmail address. Plus
+                      addressing works best with Gmail.
                     </p>
                   )}
               </div>
@@ -1031,7 +1052,7 @@ function App() {
                         <select
                           value={randomFormat}
                           onChange={async (e) => {
-                            const newFormat = e.target.value as any;
+                            const newFormat = e.target.value as RandomFormat;
                             setRandomFormat(newFormat);
                             // Save to settings
                             const result =
@@ -1142,9 +1163,9 @@ function App() {
                             </div>
                           </div>
                           <div className="max-h-64 overflow-y-auto">
-                            {generatedRandomList.map((email, index) => (
+                            {generatedRandomList.map((email) => (
                               <div
-                                key={index}
+                                key={email}
                                 className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                               >
                                 <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">

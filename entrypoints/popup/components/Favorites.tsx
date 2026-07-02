@@ -15,13 +15,25 @@ interface FavoritesProps {
 export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
 
+  const loadFavorites = async () => {
+    const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
+    const result = await browser.storage.local.get(favoritesKey);
+    if (result[favoritesKey] && Array.isArray(result[favoritesKey])) {
+      setFavorites(result[favoritesKey] as Favorite[]);
+    } else {
+      setFavorites([]);
+    }
+  };
+
   useEffect(() => {
     loadFavorites();
   }, [baseEmail]);
 
   useEffect(() => {
     // Listen for storage changes
-    const handleStorageChange = (changes: any) => {
+    const handleStorageChange = (
+      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
+    ) => {
       // Check if any favorites key changed
       const changedKeys = Object.keys(changes);
       const relevantChange = changedKeys.some((key) =>
@@ -35,16 +47,6 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
-
-  const loadFavorites = async () => {
-    const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
-    const result = await browser.storage.local.get(favoritesKey);
-    if (result[favoritesKey] && Array.isArray(result[favoritesKey])) {
-      setFavorites(result[favoritesKey] as Favorite[]);
-    } else {
-      setFavorites([]);
-    }
-  };
 
   const removeFavorite = async (email: string) => {
     const favoritesKey = getAccountStorageKey(baseEmail, "favorites");

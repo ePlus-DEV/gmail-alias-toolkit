@@ -3,9 +3,34 @@ import {
   getLegacyAccountStorageKey,
 } from "./popup/utils";
 
-export default defineBackground(() => {
-  console.log("Gmail Alias Toolkit background started");
+interface EmailAccount {
+  email: string;
+  isActive?: boolean;
+}
 
+interface Alias {
+  email: string;
+  timestamp: number;
+}
+
+interface AliasStats {
+  total: number;
+  tags: Record<string, number>;
+}
+
+interface Preset {
+  tag: string;
+  label: string;
+}
+
+interface AppSettings {
+  customPresets?: Preset[];
+  randomFormat?: "private-mail" | "alphanumeric" | "words" | "timestamp";
+  maxHistory?: number;
+  badgeDisplay?: "none" | "total" | "all-time" | "today" | "week";
+}
+
+export default defineBackground(() => {
   // Create context menu on install
   browser.runtime.onInstalled.addListener(async () => {
     await migrateLegacyStorageKeys();
@@ -16,16 +41,22 @@ export default defineBackground(() => {
   // One-time migration from the old lossy sanitizer to the new collision-resistant key format
   async function migrateLegacyStorageKeys() {
     const { migration_legacy_keys_done, email_accounts, base_email } =
-      await browser.storage.local.get([
+      (await browser.storage.local.get([
         "migration_legacy_keys_done",
         "email_accounts",
         "base_email",
-      ]);
+      ])) as {
+        migration_legacy_keys_done?: boolean;
+        email_accounts?: EmailAccount[];
+        base_email?: string;
+      };
     if (migration_legacy_keys_done) return;
 
     const emails = new Set<string>();
     if (Array.isArray(email_accounts)) {
-      email_accounts.forEach((acc: any) => acc?.email && emails.add(acc.email));
+      (email_accounts as EmailAccount[]).forEach(
+        (acc) => acc?.email && emails.add(acc.email),
+      );
     }
     if (base_email) emails.add(base_email);
 
@@ -103,11 +134,13 @@ export default defineBackground(() => {
     });
 
     // Load custom presets from storage
-    const result = await browser.storage.local.get("app_settings");
-    const customPresets = result.app_settings?.customPresets || [];
+    const result = (await browser.storage.local.get("app_settings")) as {
+      app_settings?: AppSettings;
+    };
+    const customPresets: Preset[] = result.app_settings?.customPresets || [];
 
     if (customPresets.length > 0) {
-      customPresets.forEach((preset: any) => {
+      customPresets.forEach((preset) => {
         browser.contextMenus.create({
           id: `tag-${preset.tag}`,
           parentId: "custom-tag-parent",
@@ -161,17 +194,19 @@ export default defineBackground(() => {
     if (!tab?.id) return;
 
     // Get base email from storage
-    const result = await browser.storage.local.get([
+    const result = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
       "app_settings",
-    ]);
+    ])) as {
+      email_accounts?: EmailAccount[];
+      base_email?: string;
+      app_settings?: AppSettings;
+    };
     let baseEmail = "your.email@gmail.com";
 
     if (result.email_accounts && Array.isArray(result.email_accounts)) {
-      const activeAccount = result.email_accounts.find(
-        (acc: any) => acc.isActive,
-      );
+      const activeAccount = result.email_accounts.find((acc) => acc.isActive);
       if (activeAccount) {
         baseEmail = activeAccount.email;
       }
@@ -188,21 +223,23 @@ export default defineBackground(() => {
       let randomTag = "";
 
       switch (format) {
-        case "private-mail":
+        case "private-mail": {
           const chars = "abcdefghijklmnopqrstuvwxyz";
           randomTag = Array.from(
             { length: 8 },
             () => chars[Math.floor(Math.random() * chars.length)],
           ).join("");
           break;
-        case "alphanumeric":
+        }
+        case "alphanumeric": {
           const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
           randomTag = Array.from(
             { length: 10 },
             () => alphanum[Math.floor(Math.random() * alphanum.length)],
           ).join("");
           break;
-        case "words":
+        }
+        case "words": {
           const words = [
             "alpha",
             "beta",
@@ -218,20 +255,24 @@ export default defineBackground(() => {
           const num = Math.floor(Math.random() * 100);
           randomTag = `${word1}${word2}${num}`;
           break;
+        }
         case "timestamp":
+          randomTag = Date.now().toString();
+          break;
+        default:
           randomTag = Date.now().toString();
           break;
       }
 
       emailToFill = `${username}+${randomTag}@${domain}`;
-    } else if (info.menuItemId?.startsWith("tag-")) {
+    } else if (String(info.menuItemId).startsWith("tag-")) {
       // Custom tag from preset
-      const tag = info.menuItemId.replace("tag-", "");
+      const tag = String(info.menuItemId).replace("tag-", "");
       emailToFill = `${username}+${tag}@${domain}`;
     } else if (info.menuItemId === "trick-dot") {
       // Dot variation - insert dot at random position
       const pos = Math.floor(Math.random() * (username.length - 1)) + 1;
-      const dottedUsername = username.slice(0, pos) + "." + username.slice(pos);
+      const dottedUsername = `${username.slice(0, pos)}.${username.slice(pos)}`;
       emailToFill = `${dottedUsername}@${domain}`;
     } else if (info.menuItemId === "trick-googlemail") {
       // Googlemail domain
@@ -259,7 +300,9 @@ export default defineBackground(() => {
   async function updateBadge() {
     try {
       // Check badge display setting
-      const settingsResult = await browser.storage.local.get("app_settings");
+      const settingsResult = (await browser.storage.local.get(
+        "app_settings",
+      )) as { app_settings?: AppSettings };
       const badgeDisplay =
         settingsResult.app_settings?.badgeDisplay ?? "all-time";
 
@@ -269,10 +312,10 @@ export default defineBackground(() => {
       }
 
       // Get active account
-      const accountResult = await browser.storage.local.get([
+      const accountResult = (await browser.storage.local.get([
         "email_accounts",
         "base_email",
-      ]);
+      ])) as { email_accounts?: EmailAccount[]; base_email?: string };
       let activeEmail = "your.email@gmail.com";
 
       if (
@@ -280,7 +323,7 @@ export default defineBackground(() => {
         Array.isArray(accountResult.email_accounts)
       ) {
         const activeAccount = accountResult.email_accounts.find(
-          (acc: any) => acc.isActive,
+          (acc) => acc.isActive,
         );
         if (activeAccount) {
           activeEmail = activeAccount.email;
@@ -295,9 +338,15 @@ export default defineBackground(() => {
         "gmail_alias_recent",
       );
       const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
-      const result = await browser.storage.local.get([historyKey, statsKey]);
-      const recentAliases = result[historyKey] || [];
-      const aliasStats = result[statsKey] || { total: 0, tags: {} };
+      const result = (await browser.storage.local.get([
+        historyKey,
+        statsKey,
+      ])) as Record<string, Alias[] | AliasStats | undefined>;
+      const recentAliases = (result[historyKey] as Alias[]) || [];
+      const aliasStats = (result[statsKey] as AliasStats) || {
+        total: 0,
+        tags: {},
+      };
 
       let count = 0;
       const now = new Date();
@@ -309,21 +358,23 @@ export default defineBackground(() => {
         case "all-time":
           count = aliasStats.total || 0;
           break;
-        case "today":
+        case "today": {
           const today = new Date(
             now.getFullYear(),
             now.getMonth(),
             now.getDate(),
           ).getTime();
-          count = recentAliases.filter((a: any) => a.timestamp >= today).length;
+          count = recentAliases.filter((a) => a.timestamp >= today).length;
           break;
-        case "week":
+        }
+        case "week": {
           const weekAgo = new Date(
             now.getTime() - 7 * 24 * 60 * 60 * 1000,
           ).getTime();
-          count = recentAliases.filter(
-            (a: any) => a.timestamp >= weekAgo,
-          ).length;
+          count = recentAliases.filter((a) => a.timestamp >= weekAgo).length;
+          break;
+        }
+        default:
           break;
       }
 
@@ -343,10 +394,10 @@ export default defineBackground(() => {
   // Helper function to save email to history and stats
   async function saveToHistory(email: string, maxRecent: number) {
     // Get active account
-    const accountResult = await browser.storage.local.get([
+    const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
-    ]);
+    ])) as { email_accounts?: EmailAccount[]; base_email?: string };
     let activeEmail = "your.email@gmail.com";
 
     if (
@@ -354,7 +405,7 @@ export default defineBackground(() => {
       Array.isArray(accountResult.email_accounts)
     ) {
       const activeAccount = accountResult.email_accounts.find(
-        (acc: any) => acc.isActive,
+        (acc) => acc.isActive,
       );
       if (activeAccount) {
         activeEmail = activeAccount.email;
@@ -368,22 +419,28 @@ export default defineBackground(() => {
     const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
 
     // Get current history
-    const result = await browser.storage.local.get([historyKey, statsKey]);
-    const recentAliases = result[historyKey] || [];
+    const result = (await browser.storage.local.get([
+      historyKey,
+      statsKey,
+    ])) as Record<string, Alias[] | AliasStats | undefined>;
+    const recentAliases = (result[historyKey] as Alias[]) || [];
 
     // Add to history (remove duplicates, add to top)
-    const newAlias = {
+    const newAlias: Alias = {
       email,
       timestamp: Date.now(),
     };
 
     const updated = [
       newAlias,
-      ...recentAliases.filter((a: any) => a.email !== email),
+      ...recentAliases.filter((a) => a.email !== email),
     ].slice(0, maxRecent);
 
     // Update statistics
-    let stats = result[statsKey] || { total: 0, tags: {} };
+    const stats: AliasStats = (result[statsKey] as AliasStats) || {
+      total: 0,
+      tags: {},
+    };
     stats.total = (stats.total || 0) + 1;
 
     // Extract tag from email (if it has + addressing)
