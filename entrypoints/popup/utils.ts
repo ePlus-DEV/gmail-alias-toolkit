@@ -21,10 +21,7 @@ export function generateAlias(baseEmail: string, tag: string): string | null {
 }
 
 export type RandomFormat =
-  | "private-mail"
-  | "alphanumeric"
-  | "words"
-  | "timestamp";
+  "private-mail" | "alphanumeric" | "words" | "timestamp";
 
 /** Generates a random alias tag in the given format; `index` de-duplicates timestamp batches. */
 export function generateRandomString(format: RandomFormat, index = 0): string {
