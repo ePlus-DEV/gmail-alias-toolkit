@@ -158,12 +158,8 @@ function WelcomeHeader({}: WelcomeHeaderProps) {
         alt=""
         className="w-12 h-12 rounded-xl mb-2 mx-auto"
       />
-      <h1 className="text-lg font-bold text-gray-900">
-        {t("welcomeTitle")}
-      </h1>
-      <p className="text-xs text-gray-600 mt-0.5">
-        {t("welcomeSubtitle")}
-      </p>
+      <h1 className="text-lg font-bold text-gray-900">{t("welcomeTitle")}</h1>
+      <p className="text-xs text-gray-600 mt-0.5">{t("welcomeSubtitle")}</p>
     </div>
   );
 }
@@ -389,8 +385,6 @@ function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
 
 function WelcomeFooter() {
   return (
-    <p className="text-center text-xs text-gray-500">
-      {t("welcomeFooter")}
-    </p>
+    <p className="text-center text-xs text-gray-500">{t("welcomeFooter")}</p>
   );
 }

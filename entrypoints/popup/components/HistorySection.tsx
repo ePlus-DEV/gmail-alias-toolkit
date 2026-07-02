@@ -348,9 +348,7 @@ function HistoryList({
           />
         </svg>
         <p className="text-sm font-medium mb-1">{t("noFavoritesYet")}</p>
-        <p className="text-xs">
-          {t("starEmailsHint")}
-        </p>
+        <p className="text-xs">{t("starEmailsHint")}</p>
       </div>
     );
   }
