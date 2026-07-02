@@ -68,6 +68,7 @@ export default function HistorySection({
 
   // skipcq: JS-0415
   return (
+    // skipcq: JS-0415
     <div className="p-3.5">
       {/* Header with title and action buttons */}
       <div className="flex items-center justify-between mb-3">
@@ -547,6 +548,7 @@ function Pagination({
 }) {
   // skipcq: JS-0415
   return (
+    // skipcq: JS-0415
     <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
       <div className="flex flex-col gap-3">
         {/* Page info */}

@@ -10,8 +10,6 @@ interface WelcomeScreenProps {
   onOpenSettings: () => void;
 }
 
-interface WelcomeHeaderProps {}
-
 interface WelcomeFormProps {
   email: string;
   validationError: string;
@@ -27,8 +25,6 @@ interface WelcomeFormProps {
 interface WelcomeCardProps {
   children: ReactNode;
 }
-
-interface WelcomeFeaturesProps {}
 
 /** First-run screen that collects the user's base email and creates the initial account. */
 export default function WelcomeScreen({
@@ -150,7 +146,8 @@ export default function WelcomeScreen({
   );
 }
 
-function WelcomeHeader({}: WelcomeHeaderProps) {
+/** Renders the logo, title, and intro copy for the first-run screen. */
+function WelcomeHeader() {
   return (
     <div className="text-center mb-3">
       <img
@@ -164,6 +161,7 @@ function WelcomeHeader({}: WelcomeHeaderProps) {
   );
 }
 
+/** Renders the initial Gmail account form and its validation feedback. */
 function WelcomeForm({
   email,
   validationError,
@@ -287,6 +285,7 @@ function WelcomeForm({
   );
 }
 
+/** Wraps the welcome form sections in the shared first-run card. */
 function WelcomeCard({ children }: WelcomeCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 divide-y divide-gray-200 mb-2.5">
@@ -295,7 +294,8 @@ function WelcomeCard({ children }: WelcomeCardProps) {
   );
 }
 
-function WelcomeFeatures({}: WelcomeFeaturesProps) {
+/** Lists the primary features available after setup. */
+function WelcomeFeatures() {
   return (
     <div className="p-3.5">
       <h3 className="text-xs font-semibold text-gray-900 mb-2">
@@ -370,6 +370,7 @@ interface FeatureItemProps {
   label: string;
 }
 
+/** Renders one compact welcome feature row. */
 function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
   return (
     <div className="flex items-center gap-2.5 px-3 py-1.5 border border-gray-200 rounded-full">
@@ -383,6 +384,7 @@ function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
   );
 }
 
+/** Renders the welcome screen footer message. */
 function WelcomeFooter() {
   return (
     <p className="text-center text-xs text-gray-500">{t("welcomeFooter")}</p>

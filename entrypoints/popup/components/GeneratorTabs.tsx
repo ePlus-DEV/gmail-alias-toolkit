@@ -235,8 +235,8 @@ export default function GeneratorTabs({
             </button>
 
             {/* Generated Emails List */}
-            {/* skipcq: JS-0415 */}
             {generatedRandomList.length > 0 && (
+              // skipcq: JS-0415
               <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                 <div className="bg-gray-50 dark:bg-gray-900 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
@@ -327,8 +327,8 @@ export default function GeneratorTabs({
         )}
 
         {/* Custom Tags Tab */}
-        {/* skipcq: JS-0415 */}
         {activeTab === "tags" && (
+          // skipcq: JS-0415
           <div>
             <div className="flex gap-2 mb-3">
               <div className="relative flex-1">

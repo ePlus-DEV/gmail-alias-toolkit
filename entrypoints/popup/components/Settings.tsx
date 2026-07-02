@@ -515,6 +515,7 @@ export default function Settings({
 
   // skipcq: JS-0415
   return (
+    // skipcq: JS-0415
     <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
@@ -637,8 +638,8 @@ export default function Settings({
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
           {/* General Tab */}
-          {/* skipcq: JS-0415 */}
           {activeTab === "general" && (
+            // skipcq: JS-0415
             <div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
                 {/* Appearance Section */}
@@ -1319,6 +1320,7 @@ interface ConfirmationDialogProps {
   onConfirm: () => void;
 }
 
+/** Renders the blocking confirmation prompt used by destructive settings actions. */
 function ConfirmationDialog({
   request,
   onCancel,

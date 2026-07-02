@@ -146,6 +146,7 @@ export default function Statistics() {
 
   // skipcq: JS-0415
   return (
+    // skipcq: JS-0415
     <div className="p-3.5">
       <div className="flex items-center justify-between mb-2.5">
         <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
