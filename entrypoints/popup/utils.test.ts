@@ -245,7 +245,9 @@ describe("generateDotVariations", () => {
 
   it("generates double-dot variations for 4+ char usernames", () => {
     const result = generateDotVariations("abcd", 20, false);
-    const doubleDot = result.filter((v: string) => (v.match(/\./g) || []).length === 2);
+    const doubleDot = result.filter(
+      (v: string) => (v.match(/\./g) || []).length === 2,
+    );
     expect(doubleDot.length).toBeGreaterThan(0);
   });
 
