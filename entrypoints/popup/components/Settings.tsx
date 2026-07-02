@@ -122,8 +122,9 @@ export default function Settings({
   const [newAccountLabel, setNewAccountLabel] = useState("");
   const [addAccountError, setAddAccountError] = useState("");
   const [toast, setToast] = useState<string | null>(null);
-  const [confirmation, setConfirmation] =
-    useState<ConfirmationRequest | null>(null);
+  const [confirmation, setConfirmation] = useState<ConfirmationRequest | null>(
+    null,
+  );
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
