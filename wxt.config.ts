@@ -8,8 +8,8 @@ export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
   vite: () => ({
     define: {
-      'process.emit': '(() => {})',
-      'process.env': '{}',
+      "process.emit": "(() => {})",
+      "process.env": "{}",
     },
   }),
   manifest: {

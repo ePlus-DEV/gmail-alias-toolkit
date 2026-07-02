@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import Toggle from './Toggle';
-import Button from './Button';
-import Input from './Input';
-import { getAccountStorageKey } from '../utils';
+import { useState, useEffect, useCallback } from "react";
+import Toggle from "./Toggle";
+import Button from "./Button";
+import Input from "./Input";
+import { getAccountStorageKey } from "../utils";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -26,81 +26,91 @@ interface EmailAccount {
 interface AppSettings {
   customPresets: CustomPreset[];
   maxHistory: number;
-  theme: 'light' | 'dark' | 'auto';
+  theme: "light" | "dark" | "auto";
   showNotifications: boolean;
-  badgeDisplay: 'none' | 'total' | 'today' | 'week' | 'all-time';
-  randomFormat: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp';
+  badgeDisplay: "none" | "total" | "today" | "week" | "all-time";
+  randomFormat: "private-mail" | "alphanumeric" | "words" | "timestamp";
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
   maxHistory: 20,
-  theme: 'light',
+  theme: "light",
   showNotifications: true,
-  badgeDisplay: 'all-time',
-  randomFormat: 'private-mail',
+  badgeDisplay: "all-time",
+  randomFormat: "private-mail",
 };
 
-const CHANGELOG: { version: string; date: string; changes: { type: 'Added' | 'Changed' | 'Fixed'; items: string[] }[] }[] = [
+const CHANGELOG: {
+  version: string;
+  date: string;
+  changes: { type: "Added" | "Changed" | "Fixed"; items: string[] }[];
+}[] = [
   {
-    version: '1.2.0',
-    date: '2026-07-01',
+    version: "1.2.0",
+    date: "2026-07-01",
     changes: [
       {
-        type: 'Changed',
+        type: "Changed",
         items: [
-          'Redesigned popup and settings UI with a unified card layout',
-          'Fixed popup height so only content scrolls, not the whole page',
+          "Redesigned popup and settings UI with a unified card layout",
+          "Fixed popup height so only content scrolls, not the whole page",
         ],
       },
       {
-        type: 'Fixed',
+        type: "Fixed",
         items: [
           '"Copy All" no longer undercounts statistics for generated aliases',
-          'Settings/QR modals no longer render outside the popup bounds',
-          'Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete',
+          "Settings/QR modals no longer render outside the popup bounds",
+          "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
         ],
       },
     ],
   },
   {
-    version: '1.1.0',
-    date: '2025-12-30',
+    version: "1.1.0",
+    date: "2025-12-30",
     changes: [
       {
-        type: 'Added',
+        type: "Added",
         items: [
-          'Gmail alias generation with plus addressing',
-          'Preset management',
-          'Keyboard shortcuts',
-          'Statistics tracking',
+          "Gmail alias generation with plus addressing",
+          "Preset management",
+          "Keyboard shortcuts",
+          "Statistics tracking",
         ],
       },
-      { type: 'Changed', items: ['Updated dependencies'] },
-      { type: 'Fixed', items: ['Bug fixes and improvements'] },
+      { type: "Changed", items: ["Updated dependencies"] },
+      { type: "Fixed", items: ["Bug fixes and improvements"] },
     ],
   },
   {
-    version: '1.0.0',
-    date: '2025-12-30',
-    changes: [{ type: 'Added', items: ['Initial release'] }],
+    version: "1.0.0",
+    date: "2025-12-30",
+    changes: [{ type: "Added", items: ["Initial release"] }],
   },
 ];
 
-export default function Settings({ isOpen, onClose, onClearHistory }: SettingsProps) {
+export default function Settings({
+  isOpen,
+  onClose,
+  onClearHistory,
+}: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
-  const [newPresetLabel, setNewPresetLabel] = useState('');
-  const [newPresetTag, setNewPresetTag] = useState('');
-  const [activeTab, setActiveTab] = useState<'general' | 'accounts' | 'presets' | 'advanced' | 'changelog'>('general');
+  const [newPresetLabel, setNewPresetLabel] = useState("");
+  const [newPresetTag, setNewPresetTag] = useState("");
+  const [activeTab, setActiveTab] = useState<
+    "general" | "accounts" | "presets" | "advanced" | "changelog"
+  >("general");
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
-  const [editingLabel, setEditingLabel] = useState('');
-  const [editingEmail, setEditingEmail] = useState('');
-  const [version, setVersion] = useState('1.1.0');
+  const [editingLabel, setEditingLabel] = useState("");
+  const [editingEmail, setEditingEmail] = useState("");
+  const [version, setVersion] = useState("1.1.0");
   const [showAddAccount, setShowAddAccount] = useState(false);
-  const [newAccountEmail, setNewAccountEmail] = useState('');
-  const [newAccountLabel, setNewAccountLabel] = useState('');
-  const [addAccountError, setAddAccountError] = useState('');
+  const [newAccountEmail, setNewAccountEmail] = useState("");
+  const [newAccountLabel, setNewAccountLabel] = useState("");
+  const [addAccountError, setAddAccountError] = useState("");
   const [toast, setToast] = useState<string | null>(null);
 
   const showToast = useCallback((msg: string) => {
@@ -115,7 +125,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         setVersion(manifest.version);
       }
     } catch (error) {
-      console.log('Could not get manifest version:', error);
+      console.log("Could not get manifest version:", error);
     }
   }, []);
 
@@ -127,14 +137,14 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
   }, [isOpen]);
 
   const loadSettings = async () => {
-    const result = await browser.storage.local.get('app_settings');
+    const result = await browser.storage.local.get("app_settings");
     if (result.app_settings) {
       setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
     }
   };
 
   const loadAccounts = async () => {
-    const result = await browser.storage.local.get('email_accounts');
+    const result = await browser.storage.local.get("email_accounts");
     if (result.email_accounts && Array.isArray(result.email_accounts)) {
       setEmailAccounts(result.email_accounts);
     }
@@ -160,9 +170,9 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     };
 
     saveSettings(updatedSettings);
-    setNewPresetLabel('');
-    setNewPresetTag('');
-    showToast('✓ Preset added');
+    setNewPresetLabel("");
+    setNewPresetTag("");
+    showToast("✓ Preset added");
   };
 
   const handleRemovePreset = (id: string) => {
@@ -171,25 +181,25 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       customPresets: settings.customPresets.filter((p) => p.id !== id),
     };
     saveSettings(updatedSettings);
-    showToast('✓ Preset removed');
+    showToast("✓ Preset removed");
   };
 
   const handleExportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `gmail-alias-settings-${Date.now()}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    showToast('✓ Settings exported');
+    showToast("✓ Settings exported");
   };
 
   const handleImportSettings = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
@@ -198,54 +208,59 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         const text = await file.text();
         const imported = JSON.parse(text);
         saveSettings({ ...DEFAULT_SETTINGS, ...imported });
-        showToast('✓ Settings imported');
+        showToast("✓ Settings imported");
       } catch (err) {
-        showToast('✗ Import failed – invalid file');
+        showToast("✗ Import failed – invalid file");
       }
     };
     input.click();
   };
 
   const handleResetSettings = () => {
-    if (confirm('Are you sure you want to reset all settings to default?')) {
+    if (confirm("Are you sure you want to reset all settings to default?")) {
       saveSettings(DEFAULT_SETTINGS);
-      showToast('✓ Settings reset to default');
+      showToast("✓ Settings reset to default");
     }
   };
 
   const handleSwitchAccount = async (accountId: string) => {
-    const updated = emailAccounts.map(acc => ({
+    const updated = emailAccounts.map((acc) => ({
       ...acc,
       isActive: acc.id === accountId,
     }));
     await browser.storage.local.set({ email_accounts: updated });
-    const activeAccount = updated.find(acc => acc.id === accountId);
+    const activeAccount = updated.find((acc) => acc.id === accountId);
     if (activeAccount) {
       await browser.storage.local.set({ base_email: activeAccount.email });
     }
     setEmailAccounts(updated);
-    showToast('✓ Account switched');
+    showToast("✓ Account switched");
   };
 
   const handleDeleteAccount = async (account: EmailAccount) => {
     if (emailAccounts.length === 1) {
-      alert('Cannot delete the last account. You must have at least one account.');
+      alert(
+        "Cannot delete the last account. You must have at least one account.",
+      );
       return;
     }
 
     const confirmMsg = `Delete "${account.label}" (${account.email})?\n\nThis will permanently delete:\n• All history for this account\n• All statistics\n• All favorites\n\nThis action cannot be undone.`;
-    
+
     if (!confirm(confirmMsg)) return;
 
     // Delete account-specific data
-    const historyKey = getAccountStorageKey(account.email, 'gmail_alias_recent');
-    const statsKey = getAccountStorageKey(account.email, 'alias_stats');
-    const favoritesKey = getAccountStorageKey(account.email, 'favorites');
+    const historyKey = getAccountStorageKey(
+      account.email,
+      "gmail_alias_recent",
+    );
+    const statsKey = getAccountStorageKey(account.email, "alias_stats");
+    const favoritesKey = getAccountStorageKey(account.email, "favorites");
 
     await browser.storage.local.remove([historyKey, statsKey, favoritesKey]);
 
     // Remove from accounts list
-    let updated = emailAccounts.filter(acc => acc.id !== account.id);
+    let updated = emailAccounts.filter((acc) => acc.id !== account.id);
 
     // If we deleted the active account, make the first one active
     if (account.isActive && updated.length > 0) {
@@ -258,7 +273,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
-    showToast('✓ Account deleted');
+    showToast("✓ Account deleted");
   };
 
   const handleStartEdit = (account: EmailAccount) => {
@@ -269,22 +284,22 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
   const handleCancelEdit = () => {
     setEditingAccountId(null);
-    setEditingLabel('');
-    setEditingEmail('');
+    setEditingLabel("");
+    setEditingEmail("");
   };
 
   const handleSaveEdit = async (accountId: string) => {
     if (!editingLabel.trim()) {
-      alert('Label cannot be empty');
+      alert("Label cannot be empty");
       return;
     }
 
-    if (!editingEmail.trim() || !editingEmail.includes('@')) {
-      alert('Please enter a valid email address');
+    if (!editingEmail.trim() || !editingEmail.includes("@")) {
+      alert("Please enter a valid email address");
       return;
     }
 
-    const account = emailAccounts.find(acc => acc.id === accountId);
+    const account = emailAccounts.find((acc) => acc.id === accountId);
     if (!account) return;
 
     const oldEmail = account.email;
@@ -293,27 +308,41 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     // Check if email changed
     if (oldEmail !== newEmail) {
       // Check if new email already exists in another account
-      const emailExists = emailAccounts.some(acc => acc.id !== accountId && acc.email.toLowerCase() === newEmail.toLowerCase());
+      const emailExists = emailAccounts.some(
+        (acc) =>
+          acc.id !== accountId &&
+          acc.email.toLowerCase() === newEmail.toLowerCase(),
+      );
       if (emailExists) {
-        alert('This email address is already used by another account!');
+        alert("This email address is already used by another account!");
         return;
       }
 
       const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n• Migrate all history, statistics, and favorites to the new email\n• Update the account email\n• Delete data associated with the old email\n\nContinue?`;
-      
+
       if (!confirm(confirmMsg)) return;
 
       // Migrate data from old email to new email
-      const oldHistoryKey = getAccountStorageKey(oldEmail, 'gmail_alias_recent');
-      const oldStatsKey = getAccountStorageKey(oldEmail, 'alias_stats');
-      const oldFavoritesKey = getAccountStorageKey(oldEmail, 'favorites');
+      const oldHistoryKey = getAccountStorageKey(
+        oldEmail,
+        "gmail_alias_recent",
+      );
+      const oldStatsKey = getAccountStorageKey(oldEmail, "alias_stats");
+      const oldFavoritesKey = getAccountStorageKey(oldEmail, "favorites");
 
-      const newHistoryKey = getAccountStorageKey(newEmail, 'gmail_alias_recent');
-      const newStatsKey = getAccountStorageKey(newEmail, 'alias_stats');
-      const newFavoritesKey = getAccountStorageKey(newEmail, 'favorites');
+      const newHistoryKey = getAccountStorageKey(
+        newEmail,
+        "gmail_alias_recent",
+      );
+      const newStatsKey = getAccountStorageKey(newEmail, "alias_stats");
+      const newFavoritesKey = getAccountStorageKey(newEmail, "favorites");
 
       // Get old data
-      const oldData = await browser.storage.local.get([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+      const oldData = await browser.storage.local.get([
+        oldHistoryKey,
+        oldStatsKey,
+        oldFavoritesKey,
+      ]);
 
       // Save to new keys
       await browser.storage.local.set({
@@ -323,7 +352,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       });
 
       // Delete old keys
-      await browser.storage.local.remove([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+      await browser.storage.local.remove([
+        oldHistoryKey,
+        oldStatsKey,
+        oldFavoritesKey,
+      ]);
 
       // Update base_email if this is the active account
       if (account.isActive) {
@@ -332,41 +365,43 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     }
 
     // Update account in list
-    const updated = emailAccounts.map(acc => 
-      acc.id === accountId ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() } : acc
+    const updated = emailAccounts.map((acc) =>
+      acc.id === accountId
+        ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() }
+        : acc,
     );
-    
+
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
     setEditingAccountId(null);
-    setEditingLabel('');
-    setEditingEmail('');
-    showToast('✓ Account updated');
+    setEditingLabel("");
+    setEditingEmail("");
+    showToast("✓ Account updated");
   };
 
   const handleAddAccount = async () => {
     let email = newAccountEmail.trim();
-    
+
     if (!email) {
-      setAddAccountError('Please enter an email address');
+      setAddAccountError("Please enter an email address");
       return;
     }
 
     // Auto-add @gmail.com if only username provided
-    if (!email.includes('@')) {
-      email += '@gmail.com';
+    if (!email.includes("@")) {
+      email += "@gmail.com";
     }
 
     // Validate email format
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setAddAccountError('Please enter a valid email address');
+      setAddAccountError("Please enter a valid email address");
       return;
     }
 
     // Check if account already exists
-    const exists = emailAccounts.some(acc => acc.email === email);
+    const exists = emailAccounts.some((acc) => acc.email === email);
     if (exists) {
-      setAddAccountError('This account already exists');
+      setAddAccountError("This account already exists");
       return;
     }
 
@@ -375,13 +410,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     const newAccount: EmailAccount = {
       id: Date.now().toString(),
       email,
-      label: newAccountLabel.trim() || email.split('@')[0],
+      label: newAccountLabel.trim() || email.split("@")[0],
       isActive: isFirst,
     };
 
-    const updated = isFirst
-      ? [newAccount]
-      : [...emailAccounts, newAccount];
+    const updated = isFirst ? [newAccount] : [...emailAccounts, newAccount];
 
     await browser.storage.local.set({
       email_accounts: updated,
@@ -390,9 +423,9 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
     setEmailAccounts(updated);
     setShowAddAccount(false);
-    setNewAccountEmail('');
-    setNewAccountLabel('');
-    setAddAccountError('');
+    setNewAccountEmail("");
+    setNewAccountLabel("");
+    setAddAccountError("");
     showToast(`✓ ${newAccount.label} added`);
   };
 
@@ -409,8 +442,18 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
               className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
               title="Back"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
             </button>
             <h2 className="text-lg font-bold">Settings</h2>
@@ -419,8 +462,18 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
             onClick={onClose}
             className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -428,41 +481,71 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         {/* Tabs */}
         <div className="flex gap-2 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <button
-            onClick={() => setActiveTab('general')}
+            onClick={() => setActiveTab("general")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'general'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+              activeTab === "general"
+                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
             }`}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              />
             </svg>
             General
           </button>
           <button
-            onClick={() => setActiveTab('accounts')}
+            onClick={() => setActiveTab("accounts")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'accounts'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+              activeTab === "accounts"
+                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
             }`}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
             </svg>
             Accounts
           </button>
           <button
-            onClick={() => setActiveTab('changelog')}
+            onClick={() => setActiveTab("changelog")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'changelog'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200'
+              activeTab === "changelog"
+                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
             }`}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             Changelog
           </button>
@@ -471,220 +554,324 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
           {/* General Tab */}
-          {activeTab === 'general' && (
+          {activeTab === "general" && (
             <div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
-              {/* Appearance Section */}
-              <div className="p-3.5">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                    </svg>
-                  </span>
-                  Appearance & Display
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                      Theme
-                    </label>
-                    <select
-                      value={settings.theme}
-                      onChange={(e) => {
-                        const t = e.target.value as 'light' | 'dark' | 'auto';
-                        saveSettings({ ...settings, theme: t });
-                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                        document.documentElement.classList.toggle('dark', t === 'dark' || (t === 'auto' && prefersDark));
-                      }}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                      <option value="light">☀️ Light</option>
-                      <option value="dark">🌙 Dark</option>
-                      <option value="auto">🖥️ System (Auto)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                      Badge Counter
-                    </label>
-                    <select
-                      value={settings.badgeDisplay}
-                      onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                      <option value="none">🚫 None (Hidden)</option>
-                      <option value="total">📊 Total in History</option>
-                      <option value="all-time">🏆 Total Generated (All Time)</option>
-                      <option value="today">📅 Created Today</option>
-                      <option value="week">📆 This Week</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Copy notifications</label>
-                    <Toggle
-                      enabled={settings.showNotifications}
-                      onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
-                      label=""
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Alias Generation Section */}
-              <div className="p-3.5">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </span>
-                  Alias Generation
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                      Random Alias Format
-                    </label>
-                    <select
-                      value={settings.randomFormat}
-                      onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                      <option value="private-mail">🎯 Private Mail (e.g., private-mail-q2ga) ⭐</option>
-                      <option value="alphanumeric">🔤 Random Characters (e.g., abc123xy)</option>
-                      <option value="words">💬 Random Words (e.g., happy-fox-42)</option>
-                      <option value="timestamp">⏱️ Timestamp (e.g., lk9x2m3n)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                      Auto-save Limit
-                    </label>
-                    <select
-                      value={settings.maxHistory}
-                      onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    >
-                      <option value={20}>20 aliases</option>
-                      <option value={50}>50 aliases</option>
-                      <option value={100}>100 aliases</option>
-                      <option value={200}>200 aliases</option>
-                      <option value={500}>500 aliases</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Custom Presets Section */}
-              <div className="p-3.5">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-                  </span>
-                  Custom Presets
-                </h3>
-                <div className="space-y-2">
-                  <div className="flex gap-2">
-                    <Input
-                      value={newPresetLabel}
-                      onChange={setNewPresetLabel}
-                      placeholder="Label"
-                    />
-                    <Input
-                      value={newPresetTag}
-                      onChange={setNewPresetTag}
-                      placeholder="Tag"
-                    />
-                  </div>
-                  <Button
-                    onClick={handleAddPreset}
-                    disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
-                    size="sm"
-                    fullWidth
-                  >
-                    + Add Preset
-                  </Button>
-                </div>
-
-                {settings.customPresets.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 max-h-28 overflow-y-auto">
-                    {settings.customPresets.map((preset) => (
-                      <div
-                        key={preset.id}
-                        className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600"
+                {/* Appearance Section */}
+                <div className="p-3.5">
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <div className="text-xs text-gray-900 dark:text-gray-100">
-                          <span className="font-semibold">{preset.label}</span>
-                          <span className="text-gray-500 dark:text-gray-400 font-mono ml-1.5">+{preset.tag}</span>
-                        </div>
-                        <button
-                          onClick={() => handleRemovePreset(preset.id)}
-                          className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors flex-shrink-0"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                        />
+                      </svg>
+                    </span>
+                    Appearance & Display
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                        Theme
+                      </label>
+                      <select
+                        value={settings.theme}
+                        onChange={(e) => {
+                          const t = e.target.value as "light" | "dark" | "auto";
+                          saveSettings({ ...settings, theme: t });
+                          const prefersDark = window.matchMedia(
+                            "(prefers-color-scheme: dark)",
+                          ).matches;
+                          document.documentElement.classList.toggle(
+                            "dark",
+                            t === "dark" || (t === "auto" && prefersDark),
+                          );
+                        }}
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      >
+                        <option value="light">☀️ Light</option>
+                        <option value="dark">🌙 Dark</option>
+                        <option value="auto">🖥️ System (Auto)</option>
+                      </select>
+                    </div>
 
-              {/* Data Management Section */}
-              <div className="p-3.5">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                    </svg>
-                  </span>
-                  Data Management
-                </h3>
-                <div className="grid grid-cols-3 gap-2">
-                  <Button onClick={handleExportSettings} variant="secondary" size="sm" fullWidth>
-                    Export
-                  </Button>
-                  <Button onClick={handleImportSettings} variant="secondary" size="sm" fullWidth>
-                    Import
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      if (confirm('Clear all recent aliases?')) {
-                        onClearHistory();
-                      }
-                    }}
-                    variant="danger"
-                    size="sm"
-                    fullWidth
-                  >
-                    Clear
-                  </Button>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                        Badge Counter
+                      </label>
+                      <select
+                        value={settings.badgeDisplay}
+                        onChange={(e) =>
+                          saveSettings({
+                            ...settings,
+                            badgeDisplay: e.target.value as any,
+                          })
+                        }
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      >
+                        <option value="none">🚫 None (Hidden)</option>
+                        <option value="total">📊 Total in History</option>
+                        <option value="all-time">
+                          🏆 Total Generated (All Time)
+                        </option>
+                        <option value="today">📅 Created Today</option>
+                        <option value="week">📆 This Week</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        Copy notifications
+                      </label>
+                      <Toggle
+                        enabled={settings.showNotifications}
+                        onChange={(enabled) =>
+                          saveSettings({
+                            ...settings,
+                            showNotifications: enabled,
+                          })
+                        }
+                        label=""
+                      />
+                    </div>
+                  </div>
                 </div>
-                <button
-                  onClick={handleResetSettings}
-                  className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
-                >
-                  Reset all settings to default
-                </button>
-              </div>
+
+                {/* Alias Generation Section */}
+                <div className="p-3.5">
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    </span>
+                    Alias Generation
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                        Random Alias Format
+                      </label>
+                      <select
+                        value={settings.randomFormat}
+                        onChange={(e) =>
+                          saveSettings({
+                            ...settings,
+                            randomFormat: e.target.value as any,
+                          })
+                        }
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      >
+                        <option value="private-mail">
+                          🎯 Private Mail (e.g., private-mail-q2ga) ⭐
+                        </option>
+                        <option value="alphanumeric">
+                          🔤 Random Characters (e.g., abc123xy)
+                        </option>
+                        <option value="words">
+                          💬 Random Words (e.g., happy-fox-42)
+                        </option>
+                        <option value="timestamp">
+                          ⏱️ Timestamp (e.g., lk9x2m3n)
+                        </option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                        Auto-save Limit
+                      </label>
+                      <select
+                        value={settings.maxHistory}
+                        onChange={(e) =>
+                          saveSettings({
+                            ...settings,
+                            maxHistory: Number(e.target.value),
+                          })
+                        }
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      >
+                        <option value={20}>20 aliases</option>
+                        <option value={50}>50 aliases</option>
+                        <option value={100}>100 aliases</option>
+                        <option value={200}>200 aliases</option>
+                        <option value={500}>500 aliases</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Custom Presets Section */}
+                <div className="p-3.5">
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
+                      </svg>
+                    </span>
+                    Custom Presets
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={newPresetLabel}
+                        onChange={setNewPresetLabel}
+                        placeholder="Label"
+                      />
+                      <Input
+                        value={newPresetTag}
+                        onChange={setNewPresetTag}
+                        placeholder="Tag"
+                      />
+                    </div>
+                    <Button
+                      onClick={handleAddPreset}
+                      disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
+                      size="sm"
+                      fullWidth
+                    >
+                      + Add Preset
+                    </Button>
+                  </div>
+
+                  {settings.customPresets.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 max-h-28 overflow-y-auto">
+                      {settings.customPresets.map((preset) => (
+                        <div
+                          key={preset.id}
+                          className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600"
+                        >
+                          <div className="text-xs text-gray-900 dark:text-gray-100">
+                            <span className="font-semibold">
+                              {preset.label}
+                            </span>
+                            <span className="text-gray-500 dark:text-gray-400 font-mono ml-1.5">
+                              +{preset.tag}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => handleRemovePreset(preset.id)}
+                            className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors flex-shrink-0"
+                          >
+                            <svg
+                              className="w-3.5 h-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Data Management Section */}
+                <div className="p-3.5">
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                        />
+                      </svg>
+                    </span>
+                    Data Management
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      onClick={handleExportSettings}
+                      variant="secondary"
+                      size="sm"
+                      fullWidth
+                    >
+                      Export
+                    </Button>
+                    <Button
+                      onClick={handleImportSettings}
+                      variant="secondary"
+                      size="sm"
+                      fullWidth
+                    >
+                      Import
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (confirm("Clear all recent aliases?")) {
+                          onClearHistory();
+                        }
+                      }}
+                      variant="danger"
+                      size="sm"
+                      fullWidth
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                  <button
+                    onClick={handleResetSettings}
+                    className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
+                  >
+                    Reset all settings to default
+                  </button>
+                </div>
               </div>
             </div>
           )}
 
           {/* Accounts Tab */}
-          {activeTab === 'accounts' && (
+          {activeTab === "accounts" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Email Accounts</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  Email Accounts
+                </h3>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-                  Manage your Gmail accounts. Each account has its own history, statistics, and favorites.
+                  Manage your Gmail accounts. Each account has its own history,
+                  statistics, and favorites.
                 </p>
               </div>
 
@@ -699,15 +886,17 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       key={account.id}
                       className={`rounded-lg border-2 transition-all ${
                         account.isActive
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40'
-                          : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40"
+                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
                       {editingAccountId === account.id ? (
                         // Edit mode
                         <div className="p-3 space-y-2">
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Label</label>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Label
+                            </label>
                             <input
                               type="text"
                               value={editingLabel}
@@ -718,7 +907,9 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Email Address
+                            </label>
                             <input
                               type="email"
                               value={editingEmail}
@@ -728,7 +919,8 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                             />
                             {editingEmail !== account.email && (
                               <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
-                                ⚠️ Changing email will migrate all data to the new email address
+                                ⚠️ Changing email will migrate all data to the
+                                new email address
                               </p>
                             )}
                           </div>
@@ -786,8 +978,18 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                               className="p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                               title="Edit account"
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
                               </svg>
                             </button>
                             <button
@@ -796,11 +998,25 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                                 handleDeleteAccount(account);
                               }}
                               className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                              title={emailAccounts.length === 1 ? "Cannot delete the last account" : "Delete this account"}
+                              title={
+                                emailAccounts.length === 1
+                                  ? "Cannot delete the last account"
+                                  : "Delete this account"
+                              }
                               disabled={emailAccounts.length === 1}
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
                               </svg>
                             </button>
                           </div>
@@ -818,26 +1034,48 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     onClick={() => setShowAddAccount(true)}
                     className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors shadow-sm"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     Add New Account
                   </button>
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">Add New Account</h4>
+                      <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                        Add New Account
+                      </h4>
                       <button
                         onClick={() => {
                           setShowAddAccount(false);
-                          setNewAccountEmail('');
-                          setNewAccountLabel('');
-                          setAddAccountError('');
+                          setNewAccountEmail("");
+                          setNewAccountLabel("");
+                          setAddAccountError("");
                         }}
                         className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -848,23 +1086,26 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                         value={newAccountEmail}
                         onChange={(e) => {
                           setNewAccountEmail(e.target.value);
-                          setAddAccountError('');
+                          setAddAccountError("");
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                          if (e.key === "Enter") {
                             handleAddAccount();
                           }
                         }}
                         onBlur={() => {
-                          if (newAccountEmail && !newAccountEmail.includes('@')) {
-                            setNewAccountEmail(newAccountEmail + '@gmail.com');
+                          if (
+                            newAccountEmail &&
+                            !newAccountEmail.includes("@")
+                          ) {
+                            setNewAccountEmail(newAccountEmail + "@gmail.com");
                           }
                         }}
                         placeholder="your.email"
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                         autoFocus
                       />
-                      {newAccountEmail && !newAccountEmail.includes('@') && (
+                      {newAccountEmail && !newAccountEmail.includes("@") && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
                           @gmail.com
                         </div>
@@ -873,13 +1114,19 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
                     {addAccountError && (
                       <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-md">
-                        <p className="text-xs text-red-600 dark:text-red-400">{addAccountError}</p>
+                        <p className="text-xs text-red-600 dark:text-red-400">
+                          {addAccountError}
+                        </p>
                       </div>
                     )}
 
-                    {newAccountEmail && !newAccountEmail.includes('@') && (
+                    {newAccountEmail && !newAccountEmail.includes("@") && (
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        💡 Press <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
+                        💡 Press{" "}
+                        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
+                          Tab
+                        </kbd>{" "}
+                        to add @gmail.com
                       </p>
                     )}
 
@@ -890,7 +1137,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                       placeholder="Label (optional, e.g., Work, Personal)"
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
-                    
+
                     <button
                       onClick={handleAddAccount}
                       disabled={!newAccountEmail.trim()}
@@ -905,7 +1152,7 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
           )}
 
           {/* Changelog Tab */}
-          {activeTab === 'changelog' && (
+          {activeTab === "changelog" && (
             <div className="space-y-3">
               {CHANGELOG.map((entry) => (
                 <div
@@ -916,18 +1163,20 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                     <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
                       v{entry.version}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{entry.date}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {entry.date}
+                    </span>
                   </div>
                   <div className="space-y-2">
                     {entry.changes.map((change) => (
                       <div key={change.type}>
                         <span
                           className={`inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 ${
-                            change.type === 'Added'
-                              ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400'
-                              : change.type === 'Fixed'
-                              ? 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400'
-                              : 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+                            change.type === "Added"
+                              ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
+                              : change.type === "Fixed"
+                                ? "bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400"
+                                : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400"
                           }`}
                         >
                           {change.type}
@@ -949,7 +1198,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         {/* Footer */}
         <div className="bg-gray-100 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-            <img src="/icons/32.png" alt="" className="w-6 h-6 rounded-md flex-shrink-0" />
+            <img
+              src="/icons/32.png"
+              alt=""
+              className="w-6 h-6 rounded-md flex-shrink-0"
+            />
             <span className="font-medium">Gmail Alias Toolkit</span>
             <span className="text-gray-400 dark:text-gray-600">•</span>
             <span className="text-gray-500 dark:text-gray-500">v{version}</span>

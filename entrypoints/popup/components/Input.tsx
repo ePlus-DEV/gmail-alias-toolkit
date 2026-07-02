@@ -1,5 +1,5 @@
 interface InputProps {
-  type?: 'text' | 'email' | 'number';
+  type?: "text" | "email" | "number";
   value: string | number;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -9,7 +9,7 @@ interface InputProps {
 }
 
 export default function Input({
-  type = 'text',
+  type = "text",
   value,
   onChange,
   placeholder,

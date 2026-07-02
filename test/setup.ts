@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
-Object.defineProperty(globalThis, 'browser', {
+Object.defineProperty(globalThis, "browser", {
   value: {
     storage: {
       local: {
@@ -18,7 +18,7 @@ Object.defineProperty(globalThis, 'browser', {
   configurable: true,
 });
 
-Object.defineProperty(navigator, 'clipboard', {
+Object.defineProperty(navigator, "clipboard", {
   value: { writeText: vi.fn().mockResolvedValue(undefined) },
   writable: true,
   configurable: true,

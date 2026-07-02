@@ -1,4 +1,7 @@
-import { getAccountStorageKey, getLegacyAccountStorageKey } from "./popup/utils";
+import {
+  getAccountStorageKey,
+  getLegacyAccountStorageKey,
+} from "./popup/utils";
 
 export default defineBackground(() => {
   console.log("Gmail Alias Toolkit background started");
@@ -67,7 +70,7 @@ export default defineBackground(() => {
       (key) =>
         key.startsWith("gmail_alias_recent_") ||
         key.startsWith("alias_stats_") ||
-        key === "email_accounts"
+        key === "email_accounts",
     );
     if (shouldUpdateBadge) {
       await updateBadge();
@@ -167,7 +170,7 @@ export default defineBackground(() => {
 
     if (result.email_accounts && Array.isArray(result.email_accounts)) {
       const activeAccount = result.email_accounts.find(
-        (acc: any) => acc.isActive
+        (acc: any) => acc.isActive,
       );
       if (activeAccount) {
         baseEmail = activeAccount.email;
@@ -189,14 +192,14 @@ export default defineBackground(() => {
           const chars = "abcdefghijklmnopqrstuvwxyz";
           randomTag = Array.from(
             { length: 8 },
-            () => chars[Math.floor(Math.random() * chars.length)]
+            () => chars[Math.floor(Math.random() * chars.length)],
           ).join("");
           break;
         case "alphanumeric":
           const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
           randomTag = Array.from(
             { length: 10 },
-            () => alphanum[Math.floor(Math.random() * alphanum.length)]
+            () => alphanum[Math.floor(Math.random() * alphanum.length)],
           ).join("");
           break;
         case "words":
@@ -277,7 +280,7 @@ export default defineBackground(() => {
         Array.isArray(accountResult.email_accounts)
       ) {
         const activeAccount = accountResult.email_accounts.find(
-          (acc: any) => acc.isActive
+          (acc: any) => acc.isActive,
         );
         if (activeAccount) {
           activeEmail = activeAccount.email;
@@ -289,7 +292,7 @@ export default defineBackground(() => {
       // Get history for active account
       const historyKey = getAccountStorageKey(
         activeEmail,
-        "gmail_alias_recent"
+        "gmail_alias_recent",
       );
       const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
       const result = await browser.storage.local.get([historyKey, statsKey]);
@@ -310,16 +313,16 @@ export default defineBackground(() => {
           const today = new Date(
             now.getFullYear(),
             now.getMonth(),
-            now.getDate()
+            now.getDate(),
           ).getTime();
           count = recentAliases.filter((a: any) => a.timestamp >= today).length;
           break;
         case "week":
           const weekAgo = new Date(
-            now.getTime() - 7 * 24 * 60 * 60 * 1000
+            now.getTime() - 7 * 24 * 60 * 60 * 1000,
           ).getTime();
           count = recentAliases.filter(
-            (a: any) => a.timestamp >= weekAgo
+            (a: any) => a.timestamp >= weekAgo,
           ).length;
           break;
       }
@@ -351,7 +354,7 @@ export default defineBackground(() => {
       Array.isArray(accountResult.email_accounts)
     ) {
       const activeAccount = accountResult.email_accounts.find(
-        (acc: any) => acc.isActive
+        (acc: any) => acc.isActive,
       );
       if (activeAccount) {
         activeEmail = activeAccount.email;
