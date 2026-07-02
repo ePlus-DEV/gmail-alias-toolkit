@@ -1,6 +1,8 @@
 {
   "extensionName": { "message": "Gmail Alias Toolkit" },
-  "extensionDescription": { "message": "Generate and manage Gmail aliases with plus addressing and presets" },
+  "extensionDescription": {
+    "message": "Generate and manage Gmail aliases with plus addressing and presets"
+  },
   "headerSubtitle": { "message": "Generate aliases with plus addressing" },
   "settings": { "message": "Settings" },
   "back": { "message": "Back" },
@@ -14,9 +16,16 @@
   "addAccount": { "message": "Add Account" },
   "addNewAccountTitle": { "message": "Add New Account" },
   "emailPlaceholder": { "message": "your.email" },
-  "accountLabelPlaceholder": { "message": "Label (optional, e.g., Work, Personal)" },
-  "pressTabToAddGmail": { "message": "Press $KEY$ to add @gmail.com", "placeholders": { "key": { "content": "$1" } } },
-  "gmailWarning": { "message": "This doesn't look like a Gmail address. Plus addressing works best with Gmail." },
+  "accountLabelPlaceholder": {
+    "message": "Label (optional, e.g., Work, Personal)"
+  },
+  "pressTabToAddGmail": {
+    "message": "Press $KEY$ to add @gmail.com",
+    "placeholders": { "key": { "content": "$1" } }
+  },
+  "gmailWarning": {
+    "message": "This doesn't look like a Gmail address. Plus addressing works best with Gmail."
+  },
   "random": { "message": "Random" },
   "customTags": { "message": "Custom Tags" },
   "gmailTricks": { "message": "Gmail Tricks" },
@@ -26,10 +35,22 @@
   "randomWordsFormat": { "message": "Random Words (happy-fox-42)" },
   "timestampFormat": { "message": "Timestamp (1234567890)" },
   "numberOfAliases": { "message": "Number of aliases" },
-  "generateRandomAliases": { "message": "Generate $COUNT$ Random Alias$PLURAL$", "placeholders": { "count": { "content": "$1" }, "plural": { "content": "$2" } } },
+  "generateRandomAliases": {
+    "message": "Generate $COUNT$ Random Alias$PLURAL$",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "plural": { "content": "$2" }
+    }
+  },
   "generatedAliases": { "message": "Generated Aliases" },
-  "totalCount": { "message": "$COUNT$ total", "placeholders": { "count": { "content": "$1" } } },
-  "copiedAliases": { "message": "✓ Copied $COUNT$ aliases!", "placeholders": { "count": { "content": "$1" } } },
+  "totalCount": {
+    "message": "$COUNT$ total",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "copiedAliases": {
+    "message": "✓ Copied $COUNT$ aliases!",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "failedToCopy": { "message": "✗ Failed to copy" },
   "formatPrivateMail": { "message": "Format: private-mail-xxxx" },
   "formatAlphanumeric": { "message": "8 random characters" },
@@ -46,26 +67,53 @@
   "exportAsJson": { "message": "Export as JSON" },
   "selectAliases": { "message": "Select aliases" },
   "select": { "message": "Select" },
-  "starredCount": { "message": "$COUNT$ starred", "placeholders": { "count": { "content": "$1" } } },
+  "starredCount": {
+    "message": "$COUNT$ starred",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "deselectAll": { "message": "Deselect All" },
   "selectAll": { "message": "Select All" },
-  "selectedCount": { "message": "$COUNT$ selected", "placeholders": { "count": { "content": "$1" } } },
-  "deleteCount": { "message": "Delete $COUNT$", "placeholders": { "count": { "content": "$1" } } },
-  "allCount": { "message": "All ($COUNT$)", "placeholders": { "count": { "content": "$1" } } },
-  "favoritesCount": { "message": "Favorites ($COUNT$)", "placeholders": { "count": { "content": "$1" } } },
+  "selectedCount": {
+    "message": "$COUNT$ selected",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "deleteCount": {
+    "message": "Delete $COUNT$",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "allCount": {
+    "message": "All ($COUNT$)",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "favoritesCount": {
+    "message": "Favorites ($COUNT$)",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "searchAliases": { "message": "Search aliases..." },
   "allTags": { "message": "All Tags" },
   "mostRecent": { "message": "Most Recent" },
   "az": { "message": "A-Z" },
   "noFavoritesYet": { "message": "No favorites yet" },
-  "starEmailsHint": { "message": "Star emails from your history to quick access them here" },
+  "starEmailsHint": {
+    "message": "Star emails from your history to quick access them here"
+  },
   "noResultsFound": { "message": "No results found" },
   "differentSearchHint": { "message": "Try a different search or filter" },
   "showQrCode": { "message": "Show QR code" },
   "removeFromFavorites": { "message": "Remove from favorites" },
   "addToFavorites": { "message": "Add to favorites" },
-  "showingRange": { "message": "Showing $START$-$END$ of $TOTAL$", "placeholders": { "start": { "content": "$1" }, "end": { "content": "$2" }, "total": { "content": "$3" } } },
-  "perPage": { "message": "$COUNT$ / page", "placeholders": { "count": { "content": "$1" } } },
+  "showingRange": {
+    "message": "Showing $START$-$END$ of $TOTAL$",
+    "placeholders": {
+      "start": { "content": "$1" },
+      "end": { "content": "$2" },
+      "total": { "content": "$3" }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / page",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "firstPage": { "message": "First page" },
   "previousPage": { "message": "Previous page" },
   "nextPage": { "message": "Next page" },
@@ -89,7 +137,10 @@
   "aliasGeneration": { "message": "Alias Generation" },
   "randomAliasFormat": { "message": "Random Alias Format" },
   "autoSaveLimit": { "message": "Auto-save Limit" },
-  "aliasesLimit": { "message": "$COUNT$ aliases", "placeholders": { "count": { "content": "$1" } } },
+  "aliasesLimit": {
+    "message": "$COUNT$ aliases",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "customPresets": { "message": "Custom Presets" },
   "label": { "message": "Label" },
   "tag": { "message": "Tag" },
@@ -100,27 +151,51 @@
   "clear": { "message": "Clear" },
   "resetSettings": { "message": "Reset all settings to default" },
   "resetSettingsTitle": { "message": "Reset settings?" },
-  "resetSettingsMessage": { "message": "This will restore every setting to its default value." },
+  "resetSettingsMessage": {
+    "message": "This will restore every setting to its default value."
+  },
   "reset": { "message": "Reset" },
   "clearHistoryTitle": { "message": "Clear recent aliases?" },
-  "clearHistoryMessage": { "message": "This removes all aliases from the recent history list." },
+  "clearHistoryMessage": {
+    "message": "This removes all aliases from the recent history list."
+  },
   "emailAccounts": { "message": "Email Accounts" },
-  "manageAccountsDescription": { "message": "Manage your Gmail accounts. Each account has its own history, statistics, and favorites." },
-  "noAccountsFound": { "message": "No accounts found. Please add an account from the main screen." },
+  "manageAccountsDescription": {
+    "message": "Manage your Gmail accounts. Each account has its own history, statistics, and favorites."
+  },
+  "noAccountsFound": {
+    "message": "No accounts found. Please add an account from the main screen."
+  },
   "emailAddress": { "message": "Email Address" },
   "accountLabel": { "message": "Account label" },
   "emailAddressPlaceholder": { "message": "your.email@gmail.com" },
-  "emailChangeWarning": { "message": "Changing email will migrate all data to the new email address" },
+  "emailChangeWarning": {
+    "message": "Changing email will migrate all data to the new email address"
+  },
   "saveChanges": { "message": "Save Changes" },
   "active": { "message": "Active" },
   "editAccount": { "message": "Edit account" },
-  "cannotDeleteLastAccountTitle": { "message": "Cannot delete the last account" },
+  "cannotDeleteLastAccountTitle": {
+    "message": "Cannot delete the last account"
+  },
   "deleteThisAccount": { "message": "Delete this account" },
   "deleteAccountTitle": { "message": "Delete account?" },
-  "deleteAccountMessage": { "message": "Delete \"$LABEL$\" ($EMAIL$)?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.", "placeholders": { "label": { "content": "$1" }, "email": { "content": "$2" } } },
+  "deleteAccountMessage": {
+    "message": "Delete \"$LABEL$\" ($EMAIL$)?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.",
+    "placeholders": {
+      "label": { "content": "$1" },
+      "email": { "content": "$2" }
+    }
+  },
   "delete": { "message": "Delete" },
   "changeAccountEmailTitle": { "message": "Change account email?" },
-  "changeAccountEmailMessage": { "message": "Change email from\n$OLD_EMAIL$\nto\n$NEW_EMAIL$?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?", "placeholders": { "old_email": { "content": "$1" }, "new_email": { "content": "$2" } } },
+  "changeAccountEmailMessage": {
+    "message": "Change email from\n$OLD_EMAIL$\nto\n$NEW_EMAIL$?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?",
+    "placeholders": {
+      "old_email": { "content": "$1" },
+      "new_email": { "content": "$2" }
+    }
+  },
   "changeEmail": { "message": "Change email" },
   "menuRandomEmailAlias": { "message": "Random Email Alias" },
   "menuCustomTags": { "message": "Custom Tags" },
@@ -138,25 +213,44 @@
   "toastAccountSwitched": { "message": "✓ Account switched" },
   "toastAccountDeleted": { "message": "✓ Account deleted" },
   "toastAccountUpdated": { "message": "✓ Account updated" },
-  "toastAccountAdded": { "message": "✓ $LABEL$ added", "placeholders": { "label": { "content": "$1" } } },
+  "toastAccountAdded": {
+    "message": "✓ $LABEL$ added",
+    "placeholders": { "label": { "content": "$1" } }
+  },
   "errorLabelRequired": { "message": "Label cannot be empty" },
   "errorInvalidEmail": { "message": "Please enter a valid email address" },
-  "errorDuplicateEmail": { "message": "This email address is already used by another account" },
+  "errorDuplicateEmail": {
+    "message": "This email address is already used by another account"
+  },
   "errorEnterEmail": { "message": "Please enter an email address" },
   "errorAccountExists": { "message": "This account already exists" },
   "toastQrFailed": { "message": "✗ Failed to generate QR code" },
-  "toastExportedAliases": { "message": "✓ Exported $COUNT$ aliases", "placeholders": { "count": { "content": "$1" } } },
-  "toastDeletedAliases": { "message": "✓ Deleted $COUNT$ aliases", "placeholders": { "count": { "content": "$1" } } },
+  "toastExportedAliases": {
+    "message": "✓ Exported $COUNT$ aliases",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "toastDeletedAliases": {
+    "message": "✓ Deleted $COUNT$ aliases",
+    "placeholders": { "count": { "content": "$1" } }
+  },
   "toastHistoryCleared": { "message": "✓ History cleared" },
   "toastFavoriteAdded": { "message": "✓ Added to favorites" },
   "toastFavoriteRemoved": { "message": "✓ Removed from favorites" },
-  "toastCopiedEmail": { "message": "✓ Copied $EMAIL$", "placeholders": { "email": { "content": "$1" } } },
-  "toastCopyFailed": { "message": "✗ Failed to copy" }
-  ,"welcomeTitle": { "message": "Welcome to Gmail Alias Toolkit" },
-  "welcomeSubtitle": { "message": "Generate unlimited email aliases for privacy and organization" },
+  "toastCopiedEmail": {
+    "message": "✓ Copied $EMAIL$",
+    "placeholders": { "email": { "content": "$1" } }
+  },
+  "toastCopyFailed": { "message": "✗ Failed to copy" },
+  "welcomeTitle": { "message": "Welcome to Gmail Alias Toolkit" },
+  "welcomeSubtitle": {
+    "message": "Generate unlimited email aliases for privacy and organization"
+  },
   "letsGetStarted": { "message": "Let's get started" },
   "enterGmailAddress": { "message": "Enter your Gmail address" },
-  "pressTabForGmail": { "message": "Press $KEY$ for @gmail.com", "placeholders": { "key": { "content": "$1" } } },
+  "pressTabForGmail": {
+    "message": "Press $KEY$ for @gmail.com",
+    "placeholders": { "key": { "content": "$1" } }
+  },
   "settingUp": { "message": "Setting up..." },
   "getStarted": { "message": "Get Started" },
   "advancedSetup": { "message": "Advanced Setup in Settings" },
@@ -164,7 +258,14 @@
   "featurePrivateEmail": { "message": "Private Email Generator" },
   "featureCustomTags": { "message": "Custom Tags & Presets" },
   "featureGmailTricks": { "message": "Gmail Advanced Tricks" },
-  "welcomeFooter": { "message": "All data is stored locally. No tracking, no server." }
-  ,"favoritesSaved": { "message": "$COUNT$ saved", "placeholders": { "count": { "content": "$1" } } },
-  "clickStarHint": { "message": "Click star on any alias in history to add it here" }
+  "welcomeFooter": {
+    "message": "All data is stored locally. No tracking, no server."
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ saved",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "clickStarHint": {
+    "message": "Click star on any alias in history to add it here"
+  }
 }
