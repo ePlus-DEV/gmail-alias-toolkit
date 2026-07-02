@@ -1,4 +1,3 @@
-import { useState } from "react";
 import GmailTricks from "./GmailTricks";
 import {
   generateAlias,

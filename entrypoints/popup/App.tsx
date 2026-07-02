@@ -8,7 +8,6 @@ import GeneratorTabs from "./components/GeneratorTabs";
 import {
   getAccountStorageKey,
   generateAlias,
-  generateRandomString,
   filterAliases,
   type RandomFormat,
 } from "./utils";
