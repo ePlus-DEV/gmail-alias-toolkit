@@ -1,4 +1,95 @@
-import type { AliasCategory } from '../types/alias';
-export const CATEGORY_MAP: Record<AliasCategory,string[]> = { shopping:['amazon','shopee','lazada','tiki','ebay','aliexpress','etsy','temu'], developer:['github','gitlab','bitbucket','npmjs','vercel','netlify','cloudflare','docker','stackoverflow'], career:['linkedin','topcv','vietnamworks','indeed','glassdoor','wellfound'], social:['facebook','instagram','x','twitter','tiktok','threads','reddit'], finance:['paypal','stripe','wise','revolut','bank','binance','momo','zalopay'], travel:['booking','agoda','airbnb','tripadvisor','expedia','traveloka'], education:['coursera','udemy','edx','cloudskillsboost','kaggle','duolingo'], productivity:['notion','slack','trello','asana','clickup','figma','canva'], entertainment:['netflix','spotify','youtube','steam','epicgames','twitch'], other:[] };
-export function detectCategory(domainKeyword: string, hostname = ''): AliasCategory { const haystack=`${domainKeyword} ${hostname}`.toLowerCase(); for (const [cat, words] of Object.entries(CATEGORY_MAP) as [AliasCategory,string[]][]) if (words.some(w=>haystack.includes(w))) return cat; return 'other'; }
-export function labelForCategory(category: AliasCategory): string { return category === 'other' ? 'Alias' : category[0].toUpperCase()+category.slice(1); }
+import type { AliasCategory } from "../types/alias";
+export const CATEGORY_MAP: Record<AliasCategory, string[]> = {
+  shopping: [
+    "amazon",
+    "shopee",
+    "lazada",
+    "tiki",
+    "ebay",
+    "aliexpress",
+    "etsy",
+    "temu",
+  ],
+  developer: [
+    "github",
+    "gitlab",
+    "bitbucket",
+    "npmjs",
+    "vercel",
+    "netlify",
+    "cloudflare",
+    "docker",
+    "stackoverflow",
+  ],
+  career: [
+    "linkedin",
+    "topcv",
+    "vietnamworks",
+    "indeed",
+    "glassdoor",
+    "wellfound",
+  ],
+  social: [
+    "facebook",
+    "instagram",
+    "x",
+    "twitter",
+    "tiktok",
+    "threads",
+    "reddit",
+  ],
+  finance: [
+    "paypal",
+    "stripe",
+    "wise",
+    "revolut",
+    "bank",
+    "binance",
+    "momo",
+    "zalopay",
+  ],
+  travel: ["booking", "agoda", "airbnb", "tripadvisor", "expedia", "traveloka"],
+  education: [
+    "coursera",
+    "udemy",
+    "edx",
+    "cloudskillsboost",
+    "kaggle",
+    "duolingo",
+  ],
+  productivity: [
+    "notion",
+    "slack",
+    "trello",
+    "asana",
+    "clickup",
+    "figma",
+    "canva",
+  ],
+  entertainment: [
+    "netflix",
+    "spotify",
+    "youtube",
+    "steam",
+    "epicgames",
+    "twitch",
+  ],
+  other: [],
+};
+export function detectCategory(
+  domainKeyword: string,
+  hostname = "",
+): AliasCategory {
+  const haystack = `${domainKeyword} ${hostname}`.toLowerCase();
+  for (const [cat, words] of Object.entries(CATEGORY_MAP) as [
+    AliasCategory,
+    string[],
+  ][])
+    if (words.some((w) => haystack.includes(w))) return cat;
+  return "other";
+}
+export function labelForCategory(category: AliasCategory): string {
+  return category === "other"
+    ? "Alias"
+    : category[0].toUpperCase() + category.slice(1);
+}

@@ -1,10 +1,99 @@
-import type { SiteAlias, AliasStatus } from '../types/alias'; import type { AliasSettings, AliasStorageSchema } from '../types/settings'; import { nowIso } from './date';
-export const STORAGE_KEYS = { SITE_ALIASES:'siteAliases', SETTINGS:'settings', RECENT_ALIASES:'recentAliases', FAVORITE_ALIASES:'favoriteAliases' } as const;
-export const DEFAULT_SETTINGS: AliasSettings = { baseEmails:[], defaultAliasFormat:'domain', theme:'system', autoDetectCategory:true, autofillFocusedInputFirst:true, fallbackToCopyWhenNoInput:true, gmailAccountIndex:0 };
-export async function getActiveBaseEmail(): Promise<string> { const r:any=await browser.storage.local.get(['settings','email_accounts','base_email']); const s=(r.settings || {}) as AliasSettings; if(s.defaultBaseEmail) return s.defaultBaseEmail; if(s.baseEmails?.[0]) return s.baseEmails[0]; const active=Array.isArray(r.email_accounts) ? r.email_accounts.find((a:any)=>a.isActive) : null; return active?.email || r.base_email || ''; }
-export async function loadAliasData(): Promise<AliasStorageSchema> { const r:any=await browser.storage.local.get(Object.values(STORAGE_KEYS)); return { siteAliases:(r.siteAliases || {}) as Record<string, SiteAlias>, settings:{...DEFAULT_SETTINGS, ...((r.settings || {}) as Partial<AliasSettings>)}, recentAliases:(r.recentAliases || []) as SiteAlias[], favoriteAliases:(r.favoriteAliases || []) as SiteAlias[] }; }
-export async function migrateStorageIfNeeded() { const r:any=await browser.storage.local.get(['settings','email_accounts','base_email','backup_before_alias_manager_migration']); const settings={...DEFAULT_SETTINGS, ...(r.settings || {})}; const emails=new Set(settings.baseEmails || []); if(Array.isArray(r.email_accounts)) r.email_accounts.forEach((a:any)=>a.email && emails.add(a.email)); if(r.base_email) emails.add(r.base_email); const next={...settings, baseEmails:[...emails], defaultBaseEmail:settings.defaultBaseEmail || [...emails][0]}; if(!r.backup_before_alias_manager_migration) await browser.storage.local.set({backup_before_alias_manager_migration:r}); await browser.storage.local.set({settings:next}); }
-export async function saveSiteAlias(alias: SiteAlias) { const data=await loadAliasData(); const siteAliases={...data.siteAliases, [alias.hostname]: alias}; const recentAliases=[alias, ...data.recentAliases.filter(a=>a.id!==alias.id)].slice(0,50); await browser.storage.local.set({siteAliases, recentAliases}); }
-export async function touchAlias(hostname:string): Promise<SiteAlias | null> { const data=await loadAliasData(); const a=data.siteAliases[hostname]; if(!a) return null; const updated={...a,lastUsedAt:nowIso(),updatedAt:nowIso(),useCount:(a.useCount||0)+1}; await saveSiteAlias(updated); return updated; }
-export async function updateAliasStatus(hostname:string,status:AliasStatus){ const data=await loadAliasData(); const a=data.siteAliases[hostname]; if(a) await saveSiteAlias({...a,status,updatedAt:nowIso()}); }
-export async function deleteSiteAlias(hostname:string){ const data=await loadAliasData(); delete data.siteAliases[hostname]; await browser.storage.local.set({siteAliases:data.siteAliases}); }
+import type { SiteAlias, AliasStatus } from "../types/alias";
+import type { AliasSettings, AliasStorageSchema } from "../types/settings";
+import { nowIso } from "./date";
+export const STORAGE_KEYS = {
+  SITE_ALIASES: "siteAliases",
+  SETTINGS: "settings",
+  RECENT_ALIASES: "recentAliases",
+  FAVORITE_ALIASES: "favoriteAliases",
+} as const;
+export const DEFAULT_SETTINGS: AliasSettings = {
+  baseEmails: [],
+  defaultAliasFormat: "domain",
+  theme: "system",
+  autoDetectCategory: true,
+  autofillFocusedInputFirst: true,
+  fallbackToCopyWhenNoInput: true,
+  gmailAccountIndex: 0,
+};
+export async function getActiveBaseEmail(): Promise<string> {
+  const r: any = await browser.storage.local.get([
+    "settings",
+    "email_accounts",
+    "base_email",
+  ]);
+  const s = (r.settings || {}) as AliasSettings;
+  if (s.defaultBaseEmail) return s.defaultBaseEmail;
+  if (s.baseEmails?.[0]) return s.baseEmails[0];
+  const active = Array.isArray(r.email_accounts)
+    ? r.email_accounts.find((a: any) => a.isActive)
+    : null;
+  return active?.email || r.base_email || "";
+}
+export async function loadAliasData(): Promise<AliasStorageSchema> {
+  const r: any = await browser.storage.local.get(Object.values(STORAGE_KEYS));
+  return {
+    siteAliases: (r.siteAliases || {}) as Record<string, SiteAlias>,
+    settings: {
+      ...DEFAULT_SETTINGS,
+      ...((r.settings || {}) as Partial<AliasSettings>),
+    },
+    recentAliases: (r.recentAliases || []) as SiteAlias[],
+    favoriteAliases: (r.favoriteAliases || []) as SiteAlias[],
+  };
+}
+export async function migrateStorageIfNeeded() {
+  const r: any = await browser.storage.local.get([
+    "settings",
+    "email_accounts",
+    "base_email",
+    "backup_before_alias_manager_migration",
+  ]);
+  const settings = { ...DEFAULT_SETTINGS, ...(r.settings || {}) };
+  const emails = new Set(settings.baseEmails || []);
+  if (Array.isArray(r.email_accounts))
+    r.email_accounts.forEach((a: any) => a.email && emails.add(a.email));
+  if (r.base_email) emails.add(r.base_email);
+  const next = {
+    ...settings,
+    baseEmails: [...emails],
+    defaultBaseEmail: settings.defaultBaseEmail || [...emails][0],
+  };
+  if (!r.backup_before_alias_manager_migration)
+    await browser.storage.local.set({
+      backup_before_alias_manager_migration: r,
+    });
+  await browser.storage.local.set({ settings: next });
+}
+export async function saveSiteAlias(alias: SiteAlias) {
+  const data = await loadAliasData();
+  const siteAliases = { ...data.siteAliases, [alias.hostname]: alias };
+  const recentAliases = [
+    alias,
+    ...data.recentAliases.filter((a) => a.id !== alias.id),
+  ].slice(0, 50);
+  await browser.storage.local.set({ siteAliases, recentAliases });
+}
+export async function touchAlias(hostname: string): Promise<SiteAlias | null> {
+  const data = await loadAliasData();
+  const a = data.siteAliases[hostname];
+  if (!a) return null;
+  const updated = {
+    ...a,
+    lastUsedAt: nowIso(),
+    updatedAt: nowIso(),
+    useCount: (a.useCount || 0) + 1,
+  };
+  await saveSiteAlias(updated);
+  return updated;
+}
+export async function updateAliasStatus(hostname: string, status: AliasStatus) {
+  const data = await loadAliasData();
+  const a = data.siteAliases[hostname];
+  if (a) await saveSiteAlias({ ...a, status, updatedAt: nowIso() });
+}
+export async function deleteSiteAlias(hostname: string) {
+  const data = await loadAliasData();
+  delete data.siteAliases[hostname];
+  await browser.storage.local.set({ siteAliases: data.siteAliases });
+}

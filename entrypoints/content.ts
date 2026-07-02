@@ -1,11 +1,15 @@
-import { autofillEmail } from '../src/utils/autofill';
+import { autofillEmail } from "../src/utils/autofill";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
   main() {
     // Listen for messages from background script and popup.
     browser.runtime.onMessage.addListener((message) => {
-      if ((message.action === "fillEmail" || message.action === "autofillAlias") && message.email) {
+      if (
+        (message.action === "fillEmail" ||
+          message.action === "autofillAlias") &&
+        message.email
+      ) {
         const ok = autofillEmail(message.email);
         const activeElement = document.activeElement;
 

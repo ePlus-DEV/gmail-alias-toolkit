@@ -1,7 +1,10 @@
-import { getHostnameFromUrl, normalizeDomain } from '../src/utils/domain';
-import { detectCategory } from '../src/utils/categoryDetector';
-import { buildPlusAlias, generateAliasSuggestions } from '../src/utils/aliasGenerator';
-import { loadAliasData, touchAlias } from '../src/utils/storage';
+import { getHostnameFromUrl, normalizeDomain } from "../src/utils/domain";
+import { detectCategory } from "../src/utils/categoryDetector";
+import {
+  buildPlusAlias,
+  generateAliasSuggestions,
+} from "../src/utils/aliasGenerator";
+import { loadAliasData, touchAlias } from "../src/utils/storage";
 
 export default defineBackground(() => {
   console.log("Gmail Alias Toolkit background started");
@@ -27,7 +30,7 @@ export default defineBackground(() => {
       (key) =>
         key.startsWith("gmail_alias_recent_") ||
         key.startsWith("alias_stats_") ||
-        key === "email_accounts"
+        key === "email_accounts",
     );
     if (shouldUpdateBadge) {
       await updateBadge();
@@ -155,7 +158,7 @@ export default defineBackground(() => {
 
     if (result.email_accounts && Array.isArray(result.email_accounts)) {
       const activeAccount = result.email_accounts.find(
-        (acc: any) => acc.isActive
+        (acc: any) => acc.isActive,
       );
       if (activeAccount) {
         baseEmail = activeAccount.email;
@@ -166,10 +169,19 @@ export default defineBackground(() => {
 
     const [username, domain] = baseEmail.split("@");
     let emailToFill = "";
-    const siteAliasMenuIds = new Set(["insert-suggested-alias", "copy-suggested-alias", "use-previous-alias", "generate-random-alias"]);
+    const siteAliasMenuIds = new Set([
+      "insert-suggested-alias",
+      "copy-suggested-alias",
+      "use-previous-alias",
+      "generate-random-alias",
+    ]);
 
     if (siteAliasMenuIds.has(String(info.menuItemId))) {
-      emailToFill = await resolveWebsiteAlias(String(info.menuItemId), tab.url, baseEmail);
+      emailToFill = await resolveWebsiteAlias(
+        String(info.menuItemId),
+        tab.url,
+        baseEmail,
+      );
     } else if (info.menuItemId === "fill-random-email") {
       // Generate random email
       const format = result.app_settings?.randomFormat || "private-mail";
@@ -180,14 +192,14 @@ export default defineBackground(() => {
           const chars = "abcdefghijklmnopqrstuvwxyz";
           randomTag = Array.from(
             { length: 8 },
-            () => chars[Math.floor(Math.random() * chars.length)]
+            () => chars[Math.floor(Math.random() * chars.length)],
           ).join("");
           break;
         case "alphanumeric":
           const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
           randomTag = Array.from(
             { length: 10 },
-            () => alphanum[Math.floor(Math.random() * alphanum.length)]
+            () => alphanum[Math.floor(Math.random() * alphanum.length)],
           ).join("");
           break;
         case "words":
@@ -239,11 +251,16 @@ export default defineBackground(() => {
         await navigator.clipboard.writeText(emailToFill).catch(() => undefined);
       } else {
         // Send message to content script to fill the input
-        const response = await browser.tabs.sendMessage(tab.id, {
-          action: "autofillAlias",
-          email: emailToFill,
-        }).catch(() => ({ ok: false }));
-        if (!response?.ok) await navigator.clipboard.writeText(emailToFill).catch(() => undefined);
+        const response = await browser.tabs
+          .sendMessage(tab.id, {
+            action: "autofillAlias",
+            email: emailToFill,
+          })
+          .catch(() => ({ ok: false }));
+        if (!response?.ok)
+          await navigator.clipboard
+            .writeText(emailToFill)
+            .catch(() => undefined);
       }
 
       const hostname = tab.url ? getHostnameFromUrl(tab.url) : null;
@@ -251,11 +268,10 @@ export default defineBackground(() => {
     }
   });
 
-
   async function resolveWebsiteAlias(
     menuItemId: string,
     tabUrl: string | undefined,
-    baseEmail: string
+    baseEmail: string,
   ): Promise<string> {
     const hostname = tabUrl ? getHostnameFromUrl(tabUrl) : null;
     const existingAliases = await loadAliasData().catch(() => null);
@@ -274,7 +290,7 @@ export default defineBackground(() => {
     if (menuItemId === "generate-random-alias") {
       return buildPlusAlias(
         baseEmail,
-        `${keyword}-${Math.random().toString(36).slice(2, 6)}`
+        `${keyword}-${Math.random().toString(36).slice(2, 6)}`,
       );
     }
 
@@ -312,7 +328,7 @@ export default defineBackground(() => {
         Array.isArray(accountResult.email_accounts)
       ) {
         const activeAccount = accountResult.email_accounts.find(
-          (acc: any) => acc.isActive
+          (acc: any) => acc.isActive,
         );
         if (activeAccount) {
           activeEmail = activeAccount.email;
@@ -324,7 +340,7 @@ export default defineBackground(() => {
       // Get history for active account
       const historyKey = getAccountStorageKey(
         activeEmail,
-        "gmail_alias_recent"
+        "gmail_alias_recent",
       );
       const statsKey = getAccountStorageKey(activeEmail, "alias_stats");
       const result = await browser.storage.local.get([historyKey, statsKey]);
@@ -345,16 +361,16 @@ export default defineBackground(() => {
           const today = new Date(
             now.getFullYear(),
             now.getMonth(),
-            now.getDate()
+            now.getDate(),
           ).getTime();
           count = recentAliases.filter((a: any) => a.timestamp >= today).length;
           break;
         case "week":
           const weekAgo = new Date(
-            now.getTime() - 7 * 24 * 60 * 60 * 1000
+            now.getTime() - 7 * 24 * 60 * 60 * 1000,
           ).getTime();
           count = recentAliases.filter(
-            (a: any) => a.timestamp >= weekAgo
+            (a: any) => a.timestamp >= weekAgo,
           ).length;
           break;
       }
@@ -392,7 +408,7 @@ export default defineBackground(() => {
       Array.isArray(accountResult.email_accounts)
     ) {
       const activeAccount = accountResult.email_accounts.find(
-        (acc: any) => acc.isActive
+        (acc: any) => acc.isActive,
       );
       if (activeAccount) {
         activeEmail = activeAccount.email;
