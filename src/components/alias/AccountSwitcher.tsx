@@ -8,6 +8,7 @@ import {
   SelectContent,
   SelectItem,
 } from "src/components/motion/select";
+import { Tooltip } from "src/components/motion/tooltip";
 import { t } from "../../../lib/i18n";
 
 export interface EmailAccount {
@@ -77,15 +78,17 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
             </SelectContent>
           </Select>
         </div>
-        <Button
-          onClick={onToggleAddAccount}
-          size="icon"
-          ripple
-          className="h-10 w-10 shrink-0 rounded-2xl"
-          title={t("addNewAccount")}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        <Tooltip content={t("addNewAccount")} side="left">
+          <Button
+            onClick={onToggleAddAccount}
+            size="icon"
+            ripple
+            className="h-10 w-10 shrink-0 rounded-2xl"
+            aria-label={t("addNewAccount")}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </Tooltip>
       </div>
       {showAddAccount && (
         <div className="mt-3 space-y-2 border-t border-border/70 pt-3 dark:border-border/70">

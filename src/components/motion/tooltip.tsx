@@ -5,12 +5,14 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion
 import {
   cloneElement,
   isValidElement,
+  useEffect,
   useId,
   useRef,
   useState,
   type ReactElement,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { EASE_OUT } from "src/lib/ease";
 import { useHoverCapable } from "src/lib/hooks/use-hover-capable";
 import { cn } from "src/lib/utils";
@@ -28,11 +30,10 @@ export interface TooltipProps {
   wrapperClassName?: string;
 }
 
-const wrapperClasses: Record<Side, string> = {
-  top: "bottom-full left-1/2 mb-2 -translate-x-1/2",
-  bottom: "top-full left-1/2 mt-2 -translate-x-1/2",
-  left: "right-full top-1/2 mr-2 -translate-y-1/2",
-  right: "left-full top-1/2 ml-2 -translate-y-1/2",
+type TooltipPosition = {
+  top: number;
+  left: number;
+  transform: string;
 };
 
 const transformOrigin: Record<Side, string> = {
@@ -100,10 +101,60 @@ let lastHiddenAt = 0;
 
 export function Tooltip({ content, children, side = "top", delay = 120, className, wrapperClassName }: TooltipProps) {
   const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState<TooltipPosition | null>(null);
   const id = useId();
+  const wrapperRef = useRef<HTMLSpanElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reduce = useReducedMotion();
   const canHover = useHoverCapable();
+
+  useEffect(() => {
+    if (!open) return;
+
+    const updatePosition = () => {
+      const node = wrapperRef.current;
+      if (!node) return;
+
+      const rect = node.getBoundingClientRect();
+      const gap = 8;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const next: Record<Side, TooltipPosition> = {
+        top: {
+          top: rect.top - gap,
+          left: centerX,
+          transform: "translate(-50%, -100%)",
+        },
+        right: {
+          top: centerY,
+          left: rect.right + gap,
+          transform: "translate(0, -50%)",
+        },
+        bottom: {
+          top: rect.bottom + gap,
+          left: centerX,
+          transform: "translate(-50%, 0)",
+        },
+        left: {
+          top: centerY,
+          left: rect.left - gap,
+          transform: "translate(-100%, -50%)",
+        },
+      };
+
+      setPosition(next[side]);
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open, side]);
 
   const show = () => {
     if (!canHover) return;
@@ -133,32 +184,44 @@ export function Tooltip({ content, children, side = "top", delay = 120, classNam
   const variants = reduce ? REDUCED_VARIANTS : buildVariants(side);
 
   return (
-    <span className={cn("relative inline-flex align-middle", wrapperClassName)}>
+    <span ref={wrapperRef} className={cn("relative inline-flex align-middle", wrapperClassName)}>
       {trigger}
-      <AnimatePresence mode="wait">
-        {open ? (
-          <span className={cn("pointer-events-none absolute z-50", wrapperClasses[side])}>
-            <motion.span
-              id={id}
-              role="tooltip"
-              variants={variants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              style={{
-                transformOrigin: transformOrigin[side],
-                willChange: "transform, opacity, filter",
-              }}
-              className={cn(
-                "block whitespace-nowrap rounded-lg border border-border bg-popover/85 px-2.5 py-1 text-xs font-medium text-popover-foreground shadow-2xl backdrop-blur-xl",
-                className,
-              )}
-            >
-              {content}
-            </motion.span>
-          </span>
-        ) : null}
-      </AnimatePresence>
+      {typeof document === "undefined"
+        ? null
+        : createPortal(
+            <AnimatePresence mode="wait">
+              {open && position ? (
+                <span
+                  className="pointer-events-none fixed z-[9999]"
+                  style={{
+                    top: position.top,
+                    left: position.left,
+                    transform: position.transform,
+                  }}
+                >
+                  <motion.span
+                    id={id}
+                    role="tooltip"
+                    variants={variants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    style={{
+                      transformOrigin: transformOrigin[side],
+                      willChange: "transform, opacity, filter",
+                    }}
+                    className={cn(
+                      "block whitespace-nowrap rounded-lg border border-border bg-popover/85 px-2.5 py-1 text-xs font-medium text-popover-foreground shadow-2xl backdrop-blur-xl",
+                      className,
+                    )}
+                  >
+                    {content}
+                  </motion.span>
+                </span>
+              ) : null}
+            </AnimatePresence>,
+            document.body,
+          )}
     </span>
   );
 }

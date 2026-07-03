@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "src/components/motion/select";
+import { Tooltip } from "src/components/motion/tooltip";
 import {
   generateAlias,
   generateRandomString,
@@ -236,38 +237,40 @@ export default function GeneratorTabs({
                       <span className="text-xs text-muted-foreground">
                         {t("totalCount", String(generatedRandomList.length))}
                       </span>
-                      <Button
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(
-                              generatedRandomList.join("\n"),
-                            );
-                            saveRecentAliases(generatedRandomList);
-                            if (showNotifications) {
-                              setToastMessage(
-                                t(
-                                  "copiedAliases",
-                                  String(generatedRandomList.length),
-                                ),
+                      <Tooltip content={t("copyToClipboard")} side="top">
+                        <Button
+                          onClick={async () => {
+                            try {
+                              await navigator.clipboard.writeText(
+                                generatedRandomList.join("\n"),
                               );
+                              saveRecentAliases(generatedRandomList);
+                              if (showNotifications) {
+                                setToastMessage(
+                                  t(
+                                    "copiedAliases",
+                                    String(generatedRandomList.length),
+                                  ),
+                                );
+                              }
+                            } catch {
+                              if (showNotifications) {
+                                setToastMessage(t("failedToCopy"));
+                              }
                             }
-                          } catch {
-                            if (showNotifications) {
-                              setToastMessage(t("failedToCopy"));
-                            }
-                          }
-                          setTimeout(
-                            () => setToastMessage(null),
-                            showNotifications ? 2000 : 0,
-                          );
-                        }}
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs text-primary hover:text-primary font-medium"
-                        title={t("copyToClipboard")}
-                      >
-                        {t("copyAll")}
-                      </Button>
+                            setTimeout(
+                              () => setToastMessage(null),
+                              showNotifications ? 2000 : 0,
+                            );
+                          }}
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs text-primary hover:text-primary font-medium"
+                          aria-label={t("copyToClipboard")}
+                        >
+                          {t("copyAll")}
+                        </Button>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>
@@ -280,27 +283,29 @@ export default function GeneratorTabs({
                       <div className="flex-1 font-mono text-xs text-foreground truncate">
                         {email}
                       </div>
-                      <Button
-                        onClick={() => copyToClipboard(email)}
-                        variant="ghost"
-                        size="icon"
-                        className="p-1.5 text-primary hover:bg-primary/15 rounded transition-colors flex-shrink-0"
-                        title={t("copy")}
-                      >
-                        <svg
-                          className="w-3.5 h-3.5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      <Tooltip content={t("copy")}>
+                        <Button
+                          onClick={() => copyToClipboard(email)}
+                          variant="ghost"
+                          size="icon"
+                          className="p-1.5 text-primary hover:bg-primary/15 rounded transition-colors flex-shrink-0"
+                          aria-label={t("copy")}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </Button>
+                          <svg
+                            className="w-3.5 h-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </Button>
+                      </Tooltip>
                     </div>
                   ))}
                 </div>
@@ -375,19 +380,21 @@ export default function GeneratorTabs({
                 </strong>
                 @{baseEmail.split("@")[1]}
               </span>
-              <Button
-                onClick={() =>
-                  copyToClipboard(
-                    `${baseEmail.split("@")[0]}+your-tag@${baseEmail.split("@")[1]}`,
-                  )
-                }
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 flex-shrink-0 text-muted-foreground hover:text-primary"
-                title={t("copyExample")}
-              >
-                <Copy className="h-3.5 w-3.5" />
-              </Button>
+              <Tooltip content={t("copyExample")}>
+                <Button
+                  onClick={() =>
+                    copyToClipboard(
+                      `${baseEmail.split("@")[0]}+your-tag@${baseEmail.split("@")[1]}`,
+                    )
+                  }
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 flex-shrink-0 text-muted-foreground hover:text-primary"
+                  aria-label={t("copyExample")}
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                </Button>
+              </Tooltip>
             </div>
           </div>
         )}

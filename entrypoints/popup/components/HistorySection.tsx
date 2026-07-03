@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "src/components/motion/select";
 import { Checkbox } from "src/components/motion/checkbox";
+import { Tooltip } from "src/components/motion/tooltip";
 import { t } from "../../../lib/i18n";
 
 interface Alias {
@@ -88,40 +89,46 @@ export default function HistorySection({
         <div className="flex items-center gap-1">
           {viewMode === "all" && recentAliases.length > 0 && (
             <>
-              <Button
-                onClick={() => exportAliases("csv")}
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
-                title={t("exportAsCsv")}
-              >
-                CSV
-              </Button>
-              <Button
-                onClick={() => exportAliases("json")}
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
-                title={t("exportAsJson")}
-              >
-                JSON
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsSelectMode(!isSelectMode);
-                  setSelectedAliases(new Set());
-                }}
-                variant={isSelectMode ? "primary" : "ghost"}
-                size="sm"
-                className={`h-7 px-2 text-xs transition-colors ${
-                  isSelectMode
-                    ? "bg-primary/15 text-primary"
-                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
-                }`}
-                title={t("selectAliases")}
-              >
-                {t("select")}
-              </Button>
+              <Tooltip content={t("exportAsCsv")}>
+                <Button
+                  onClick={() => exportAliases("csv")}
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
+                  aria-label={t("exportAsCsv")}
+                >
+                  CSV
+                </Button>
+              </Tooltip>
+              <Tooltip content={t("exportAsJson")}>
+                <Button
+                  onClick={() => exportAliases("json")}
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
+                  aria-label={t("exportAsJson")}
+                >
+                  JSON
+                </Button>
+              </Tooltip>
+              <Tooltip content={t("selectAliases")}>
+                <Button
+                  onClick={() => {
+                    setIsSelectMode(!isSelectMode);
+                    setSelectedAliases(new Set());
+                  }}
+                  variant={isSelectMode ? "primary" : "ghost"}
+                  size="sm"
+                  className={`h-7 px-2 text-xs transition-colors ${
+                    isSelectMode
+                      ? "bg-primary/15 text-primary"
+                      : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                  }`}
+                  aria-label={t("selectAliases")}
+                >
+                  {t("select")}
+                </Button>
+              </Tooltip>
             </>
           )}
           <span className="text-xs text-muted-foreground">
@@ -479,74 +486,14 @@ function AliasRow({
       <span className="text-sm text-foreground dark:text-foreground font-mono break-all flex-1">
         {alias.email}
       </span>
-      <Button
-        onClick={onShowQR}
-        variant="ghost"
-        size="icon"
-        className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none transition-colors"
-        title={t("showQrCode")}
-      >
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      <Tooltip content={t("showQrCode")}>
+        <Button
+          onClick={onShowQR}
+          variant="ghost"
+          size="icon"
+          className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none transition-colors"
+          aria-label={t("showQrCode")}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5c0 1.933-1.567 3.5-3.5 3.5S13 17.433 13 15.5 14.567 12 16.5 12s3.5 1.567 3.5 3.5zM4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"
-          />
-        </svg>
-      </Button>
-      <Button
-        onClick={onToggleFavorite}
-        variant="ghost"
-        size="icon"
-        className={`p-1.5 focus:outline-none transition-colors ${
-          isFavorited
-            ? "text-accent hover:text-accent"
-            : "text-muted-foreground hover:text-accent"
-        }`}
-        title={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
-      >
-        <svg
-          className="w-4 h-4"
-          fill={isFavorited ? "currentColor" : "none"}
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-          />
-        </svg>
-      </Button>
-      <Button
-        onClick={onCopy}
-        variant="ghost"
-        size="icon"
-        className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none focus:text-primary transition-colors"
-        title={t("copyToClipboard")}
-      >
-        {isCopied ? (
-          <svg
-            className="w-4 h-4 text-primary"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        ) : (
           <svg
             className="w-4 h-4"
             fill="none"
@@ -557,11 +504,81 @@ function AliasRow({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5c0 1.933-1.567 3.5-3.5 3.5S13 17.433 13 15.5 14.567 12 16.5 12s3.5 1.567 3.5 3.5zM4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"
             />
           </svg>
-        )}
-      </Button>
+        </Button>
+      </Tooltip>
+      <Tooltip
+        content={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
+      >
+        <Button
+          onClick={onToggleFavorite}
+          variant="ghost"
+          size="icon"
+          className={`p-1.5 focus:outline-none transition-colors ${
+            isFavorited
+              ? "text-accent hover:text-accent"
+              : "text-muted-foreground hover:text-accent"
+          }`}
+          aria-label={
+            isFavorited ? t("removeFromFavorites") : t("addToFavorites")
+          }
+        >
+          <svg
+            className="w-4 h-4"
+            fill={isFavorited ? "currentColor" : "none"}
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
+          </svg>
+        </Button>
+      </Tooltip>
+      <Tooltip content={t("copyToClipboard")}>
+        <Button
+          onClick={onCopy}
+          variant="ghost"
+          size="icon"
+          className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none focus:text-primary transition-colors"
+          aria-label={t("copyToClipboard")}
+        >
+          {isCopied ? (
+            <svg
+              className="w-4 h-4 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+          )}
+        </Button>
+      </Tooltip>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Settings, Sparkles } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
+import { Tooltip } from "src/components/motion/tooltip";
 import { t } from "../../../lib/i18n";
 
 export interface PopupHeaderProps {
@@ -26,15 +27,17 @@ export default function PopupHeader({ onOpenSettings }: PopupHeaderProps) {
               </p>
             </div>
           </div>
-          <Button
-            onClick={onOpenSettings}
-            variant="ghost"
-            size="icon"
-            className="shrink-0 rounded-2xl text-primary-foreground hover:bg-primary-foreground/15 focus-visible:ring-primary-foreground/60"
-            title={t("settings")}
-          >
-            <Settings className="h-5 w-5" aria-hidden="true" />
-          </Button>
+          <Tooltip content={t("settings")} side="left">
+            <Button
+              onClick={onOpenSettings}
+              variant="ghost"
+              size="icon"
+              className="shrink-0 rounded-2xl text-primary-foreground hover:bg-primary-foreground/15 focus-visible:ring-primary-foreground/60"
+              aria-label={t("settings")}
+            >
+              <Settings className="h-5 w-5" aria-hidden="true" />
+            </Button>
+          </Tooltip>
         </div>
       </div>
     </div>
