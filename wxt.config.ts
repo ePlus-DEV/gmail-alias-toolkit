@@ -1,15 +1,30 @@
 import { defineConfig } from "wxt";
 import { EventEmitter } from "events";
+import { fileURLToPath } from "node:url";
 
 // Fix EventEmitter maxListeners warning
 EventEmitter.defaultMaxListeners = 15;
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
+  vite: () => ({
+    define: {
+      "process.emit": "(() => {})",
+      "process.env": "{}",
+    },
+    resolve: {
+      alias: {
+        src: fileURLToPath(new URL("./src", import.meta.url)),
+      },
+    },
+  }),
   manifest: {
-    name: "Gmail Alias Toolkit",
-    description:
-      "Generate and manage Gmail aliases with plus addressing and presets",
+    name: "__MSG_extensionName__",
+    description: "__MSG_extensionDescription__",
+    default_locale: "en",
+    action: {
+      default_title: "__MSG_extensionName__",
+    },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
     host_permissions: ["<all_urls>"],
     browser_specific_settings: {
@@ -21,7 +36,7 @@ export default defineConfig({
         },
       },
     },
-  } as any,
+  },
   autoIcons: {
     developmentIndicator: "overlay",
   },

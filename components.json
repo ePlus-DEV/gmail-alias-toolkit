@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": false,
+  "tsx": true,
+  "iconLibrary": "lucide",
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "entrypoints/popup/style.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "src/components",
+    "ui": "src/components/ui",
+    "utils": "src/lib/utils",
+    "lib": "src/lib",
+    "hooks": "src/lib/hooks"
+  },
+  "registries": {
+    "@beui": "https://beui.dev/r/{name}.json"
+  }
+}

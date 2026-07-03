@@ -1,27 +1,44 @@
-# Description
+# Summary
 
-<!--- Please include a summary of the changes and the related issue. Please also include relevant motivation and context. List any dependencies that are required for this change. -->
+<!-- Briefly describe what this PR changes in Gmail Alias Toolkit. -->
 
-<!--- Fixes # (issue) -->
+Fixes #
 
-## What's new?
+## Type of Change
 
-<!--- What's new? -->
-
-## PR Type
-
-What kind of change does this PR introduce?
-
-- [ ] Bugfix
-- [ ] Feature
-- [ ] Code style update (formatting, local variables)
-- [ ] Refactoring (no functional changes, no api changes)
-- [ ] Build related changes
-- [ ] CI related changes
-- [ ] Documentation content changes
+- [ ] Bug fix
+- [ ] New feature
+- [ ] UI / UX update
+- [ ] Translation / i18n update
+- [ ] Refactor
 - [ ] Tests
-- [ ] Other
+- [ ] Build / CI / release
+- [ ] Documentation
 
-## Screenshots
+## Areas Touched
 
-<!--- N/A -->
+- [ ] Popup alias generator
+- [ ] Settings
+- [ ] Account management
+- [ ] Alias history / favorites / statistics
+- [ ] Gmail tricks
+- [ ] Context menu / background logic
+- [ ] Browser extension manifest / permissions
+- [ ] Other:
+
+## Testing
+
+- [ ] `yarn compile`
+- [ ] `yarn test`
+- [ ] `yarn build`
+- [ ] Loaded the extension locally and tested the changed flow
+- [ ] Tested light and dark mode, if UI changed
+- [ ] Checked translations, if user-facing text changed
+
+## Screenshots or Recording
+
+<!-- Add before/after screenshots or a short recording for UI changes. Write N/A if not applicable. -->
+
+## Notes for Reviewers
+
+<!-- Anything reviewers should pay attention to: browser differences, storage migration, permissions, known follow-up work, etc. -->

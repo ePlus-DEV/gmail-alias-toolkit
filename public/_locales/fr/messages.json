@@ -1,0 +1,697 @@
+{
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "Générez et gérez des alias Gmail avec l’adressage plus et des préréglages"
+  },
+  "headerSubtitle": {
+    "message": "Générez des alias avec l’adressage plus"
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "back": {
+    "message": "Retour"
+  },
+  "close": {
+    "message": "Fermer"
+  },
+  "cancel": {
+    "message": "Annuler"
+  },
+  "copy": {
+    "message": "Copier"
+  },
+  "copyAll": {
+    "message": "Tout copier"
+  },
+  "copyToClipboard": {
+    "message": "Copier dans le presse-papiers"
+  },
+  "activeGmailAddress": {
+    "message": "Adresse Gmail active"
+  },
+  "addNewAccount": {
+    "message": "Ajouter un nouveau compte"
+  },
+  "addAccount": {
+    "message": "Ajouter un compte"
+  },
+  "addNewAccountTitle": {
+    "message": "Ajouter un nouveau compte"
+  },
+  "emailPlaceholder": {
+    "message": "votre.email"
+  },
+  "accountLabelPlaceholder": {
+    "message": "Libellé (facultatif, ex. Travail, Personnel)"
+  },
+  "pressTabToAddGmail": {
+    "message": "Appuyez sur $KEY$ pour ajouter @gmail.com",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "Cela ne ressemble pas à une adresse Gmail. L’adressage plus fonctionne mieux avec Gmail."
+  },
+  "random": {
+    "message": "Aléatoire"
+  },
+  "customTags": {
+    "message": "Tags personnalisés"
+  },
+  "gmailTricks": {
+    "message": "Astuces Gmail"
+  },
+  "tabTagsShort": {
+    "message": "Tags"
+  },
+  "tabTricksShort": {
+    "message": "Astuces"
+  },
+  "generating": {
+    "message": "Génération"
+  },
+  "copied": {
+    "message": "Copié"
+  },
+  "switchToLightMode": {
+    "message": "Passer au mode clair"
+  },
+  "switchToDarkMode": {
+    "message": "Passer au mode sombre"
+  },
+  "aliasColumn": {
+    "message": "Alias"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - cliquer pour copier",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "Page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "Astuce points"
+  },
+  "plusTags": {
+    "message": "Tags +"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "Supprimer les points"
+  },
+  "dotPlus": {
+    "message": "Points + tags"
+  },
+  "allCombos": {
+    "message": "Toutes les combinaisons"
+  },
+  "numberOfVariations": {
+    "message": "Nombre de variantes"
+  },
+  "randomizeDotPositions": {
+    "message": "Positions des points aléatoires"
+  },
+  "sequential": {
+    "message": "Séquentiel"
+  },
+  "generateTricks": {
+    "message": "Générer les astuces"
+  },
+  "generatedVariations": {
+    "message": "Variantes générées"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Astuce Gmail :"
+  },
+  "gmailTrickInfo": {
+    "message": "Les points sont ignorés et tout ce qui suit + arrive dans la même boîte"
+  },
+  "format": {
+    "message": "Format"
+  },
+  "privateMailFormat": {
+    "message": "Private Mail (private-mail-xxxx)"
+  },
+  "randomCharactersFormat": {
+    "message": "Caractères aléatoires (abc123xy)"
+  },
+  "randomWordsFormat": {
+    "message": "Mots aléatoires (happy-fox-42)"
+  },
+  "timestampFormat": {
+    "message": "Horodatage (1234567890)"
+  },
+  "numberOfAliases": {
+    "message": "Nombre d’alias"
+  },
+  "generateRandomAliases": {
+    "message": "Générer $COUNT$ alias aléatoire(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "Alias générés"
+  },
+  "totalCount": {
+    "message": "$COUNT$ au total",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "$COUNT$ alias copiés !",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "Échec de la copie"
+  },
+  "formatPrivateMail": {
+    "message": "Format : private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 caractères aléatoires"
+  },
+  "formatWords": {
+    "message": "2 mots aléatoires"
+  },
+  "formatTimestamp": {
+    "message": "Horodatage Unix"
+  },
+  "tagPlaceholder": {
+    "message": "Saisir un tag (ex. shopping, travail)"
+  },
+  "generate": {
+    "message": "Générer"
+  },
+  "yourPresets": {
+    "message": "Vos préréglages"
+  },
+  "example": {
+    "message": "Exemple :"
+  },
+  "copyExample": {
+    "message": "Copier l’exemple"
+  },
+  "recentAliases": {
+    "message": "Alias récents"
+  },
+  "favorites": {
+    "message": "Favoris"
+  },
+  "exportAsCsv": {
+    "message": "Exporter en CSV"
+  },
+  "exportAsJson": {
+    "message": "Exporter en JSON"
+  },
+  "selectAliases": {
+    "message": "Sélectionner des alias"
+  },
+  "select": {
+    "message": "Sélectionner"
+  },
+  "starredCount": {
+    "message": "$COUNT$ favoris",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "Tout désélectionner"
+  },
+  "selectAll": {
+    "message": "Tout sélectionner"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ sélectionné(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "Supprimer $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "Tous ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "Favoris ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "Rechercher des alias..."
+  },
+  "allTags": {
+    "message": "Tous les tags"
+  },
+  "mostRecent": {
+    "message": "Les plus récents"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "Aucun favori pour le moment"
+  },
+  "starEmailsHint": {
+    "message": "Ajoutez des e-mails de votre historique aux favoris pour y accéder rapidement ici"
+  },
+  "noResultsFound": {
+    "message": "Aucun résultat trouvé"
+  },
+  "differentSearchHint": {
+    "message": "Essayez une autre recherche ou un autre filtre"
+  },
+  "showQrCode": {
+    "message": "Afficher le code QR"
+  },
+  "removeFromFavorites": {
+    "message": "Retirer des favoris"
+  },
+  "addToFavorites": {
+    "message": "Ajouter aux favoris"
+  },
+  "showingRange": {
+    "message": "Affichage de $START$ à $END$ sur $TOTAL$",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / page",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "Première page"
+  },
+  "previousPage": {
+    "message": "Page précédente"
+  },
+  "nextPage": {
+    "message": "Page suivante"
+  },
+  "lastPage": {
+    "message": "Dernière page"
+  },
+  "scanToCopyAlias": {
+    "message": "Scanner pour copier l’alias"
+  },
+  "general": {
+    "message": "Général"
+  },
+  "accounts": {
+    "message": "Comptes"
+  },
+  "changelog": {
+    "message": "Journal des modifications"
+  },
+  "appearanceDisplay": {
+    "message": "Apparence et affichage"
+  },
+  "theme": {
+    "message": "Thème"
+  },
+  "themeLight": {
+    "message": "Clair"
+  },
+  "themeDark": {
+    "message": "Sombre"
+  },
+  "themeAuto": {
+    "message": "Système (Auto)"
+  },
+  "badgeCounter": {
+    "message": "Compteur de badge"
+  },
+  "badgeNone": {
+    "message": "Aucun (masqué)"
+  },
+  "badgeTotal": {
+    "message": "Total dans l’historique"
+  },
+  "badgeAllTime": {
+    "message": "Total généré (tous temps)"
+  },
+  "badgeToday": {
+    "message": "Créés aujourd’hui"
+  },
+  "badgeWeek": {
+    "message": "Cette semaine"
+  },
+  "copyNotifications": {
+    "message": "Notifications de copie"
+  },
+  "aliasGeneration": {
+    "message": "Génération d’alias"
+  },
+  "randomAliasFormat": {
+    "message": "Format d’alias aléatoire"
+  },
+  "autoSaveLimit": {
+    "message": "Limite d’enregistrement automatique"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ alias",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "Préréglages personnalisés"
+  },
+  "label": {
+    "message": "Libellé"
+  },
+  "tag": {
+    "message": "Tag"
+  },
+  "addPreset": {
+    "message": "+ Ajouter un préréglage"
+  },
+  "dataManagement": {
+    "message": "Gestion des données"
+  },
+  "export": {
+    "message": "Exporter"
+  },
+  "import": {
+    "message": "Importer"
+  },
+  "clear": {
+    "message": "Effacer"
+  },
+  "resetSettings": {
+    "message": "Réinitialiser tous les paramètres par défaut"
+  },
+  "resetSettingsTitle": {
+    "message": "Réinitialiser les paramètres ?"
+  },
+  "resetSettingsMessage": {
+    "message": "Tous les paramètres seront restaurés à leur valeur par défaut."
+  },
+  "reset": {
+    "message": "Réinitialiser"
+  },
+  "clearHistoryTitle": {
+    "message": "Effacer les alias récents ?"
+  },
+  "clearHistoryMessage": {
+    "message": "Cela supprime tous les alias de la liste d’historique récent."
+  },
+  "emailAccounts": {
+    "message": "Comptes e-mail"
+  },
+  "manageAccountsDescription": {
+    "message": "Gérez vos comptes Gmail. Chaque compte possède son propre historique, ses statistiques et ses favoris."
+  },
+  "noAccountsFound": {
+    "message": "Aucun compte trouvé. Veuillez ajouter un compte depuis l’écran principal."
+  },
+  "emailAddress": {
+    "message": "Adresse e-mail"
+  },
+  "accountLabel": {
+    "message": "Libellé du compte"
+  },
+  "emailAddressPlaceholder": {
+    "message": "votre.email@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "La modification de l’e-mail migrera toutes les données vers la nouvelle adresse e-mail"
+  },
+  "saveChanges": {
+    "message": "Enregistrer les modifications"
+  },
+  "active": {
+    "message": "Actif"
+  },
+  "editAccount": {
+    "message": "Modifier le compte"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "Impossible de supprimer le dernier compte"
+  },
+  "deleteThisAccount": {
+    "message": "Supprimer ce compte"
+  },
+  "deleteAccountTitle": {
+    "message": "Supprimer le compte ?"
+  },
+  "deleteAccountMessage": {
+    "message": "Supprimer « $LABEL$ » ($EMAIL$) ?\n\nCela supprimera définitivement :\n- Tout l’historique de ce compte\n- Toutes les statistiques\n- Tous les favoris\n\nCette action est irréversible.",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "Supprimer"
+  },
+  "changeAccountEmailTitle": {
+    "message": "Changer l’e-mail du compte ?"
+  },
+  "changeAccountEmailMessage": {
+    "message": "Changer l’e-mail de\n$OLD_EMAIL$\nvers\n$NEW_EMAIL$ ?\n\nCela va :\n- Migrer tout l’historique, les statistiques et les favoris vers le nouvel e-mail\n- Mettre à jour l’e-mail du compte\n- Supprimer les données associées à l’ancien e-mail\n\nContinuer ?",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "Changer l’e-mail"
+  },
+  "menuRandomEmailAlias": {
+    "message": "Alias e-mail aléatoire"
+  },
+  "menuCustomTags": {
+    "message": "Tags personnalisés"
+  },
+  "menuNoPresets": {
+    "message": "Aucun préréglage - Ajoutez-en dans les paramètres"
+  },
+  "menuGmailTricks": {
+    "message": "Astuces Gmail"
+  },
+  "menuDotVariation": {
+    "message": "Variation avec points"
+  },
+  "menuGooglemailDomain": {
+    "message": "Domaine Googlemail"
+  },
+  "menuRemoveAllDots": {
+    "message": "Supprimer tous les points"
+  },
+  "toastPresetAdded": {
+    "message": "Préréglage ajouté"
+  },
+  "toastPresetRemoved": {
+    "message": "Préréglage supprimé"
+  },
+  "toastSettingsExported": {
+    "message": "Paramètres exportés"
+  },
+  "toastSettingsImported": {
+    "message": "Paramètres importés"
+  },
+  "toastImportFailed": {
+    "message": "Échec de l’importation - fichier invalide"
+  },
+  "toastSettingsReset": {
+    "message": "Paramètres réinitialisés par défaut"
+  },
+  "toastAccountSwitched": {
+    "message": "Compte changé"
+  },
+  "toastAccountDeleted": {
+    "message": "Compte supprimé"
+  },
+  "toastAccountUpdated": {
+    "message": "Compte mis à jour"
+  },
+  "toastAccountAdded": {
+    "message": "$LABEL$ ajouté",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "Le libellé ne peut pas être vide"
+  },
+  "errorInvalidEmail": {
+    "message": "Veuillez saisir une adresse e-mail valide"
+  },
+  "errorDuplicateEmail": {
+    "message": "Cette adresse e-mail est déjà utilisée par un autre compte"
+  },
+  "errorEnterEmail": {
+    "message": "Veuillez saisir une adresse e-mail"
+  },
+  "errorAccountExists": {
+    "message": "Ce compte existe déjà"
+  },
+  "toastQrFailed": {
+    "message": "Échec de la génération du code QR"
+  },
+  "toastExportedAliases": {
+    "message": "$COUNT$ alias exportés",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "$COUNT$ alias supprimés",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "Historique effacé"
+  },
+  "toastFavoriteAdded": {
+    "message": "Ajouté aux favoris"
+  },
+  "toastFavoriteRemoved": {
+    "message": "Retiré des favoris"
+  },
+  "toastCopiedEmail": {
+    "message": "$EMAIL$ copié",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "Échec de la copie"
+  },
+  "welcomeTitle": {
+    "message": "Bienvenue dans Gmail Alias Toolkit"
+  },
+  "welcomeSubtitle": {
+    "message": "Générez des alias e-mail illimités pour la confidentialité et l’organisation"
+  },
+  "letsGetStarted": {
+    "message": "Commençons"
+  },
+  "enterGmailAddress": {
+    "message": "Saisissez votre adresse Gmail"
+  },
+  "pressTabForGmail": {
+    "message": "Appuyez sur $KEY$ pour @gmail.com",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "Configuration en cours..."
+  },
+  "getStarted": {
+    "message": "Commencer"
+  },
+  "advancedSetup": {
+    "message": "Configuration avancée dans les paramètres"
+  },
+  "whatYouCanDo": {
+    "message": "Ce que vous pouvez faire :"
+  },
+  "featurePrivateEmail": {
+    "message": "Générateur d’e-mail privé"
+  },
+  "featureCustomTags": {
+    "message": "Tags et préréglages personnalisés"
+  },
+  "featureGmailTricks": {
+    "message": "Astuces Gmail avancées"
+  },
+  "welcomeFooter": {
+    "message": "Toutes les données sont stockées localement. Aucun suivi, aucun serveur."
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ enregistré(s)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "Cliquez sur l’étoile d’un alias dans l’historique pour l’ajouter ici"
+  }
+}

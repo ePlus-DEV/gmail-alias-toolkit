@@ -1,0 +1,56 @@
+name: Feature request
+description: Suggest an improvement for Gmail Alias Toolkit
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing an idea. Please describe the workflow you want to improve.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or workflow
+      description: What are you trying to do, and what feels slow, confusing, or missing?
+      placeholder: When generating aliases, I want to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior or UI you would like to see.
+      placeholder: Add a setting/button/filter that...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Popup alias generator
+        - Settings
+        - Account management
+        - Alias history / favorites / statistics
+        - Gmail tricks
+        - Context menu
+        - Translations / i18n
+        - Build / CI / release
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional. Mention any workaround or alternate design you considered.
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Mockups or screenshots
+      description: Optional. Add screenshots, sketches, or examples from similar tools.

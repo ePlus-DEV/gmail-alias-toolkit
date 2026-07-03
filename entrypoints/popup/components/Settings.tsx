@@ -1,7 +1,21 @@
-import { useState, useEffect } from 'react';
-import Toggle from './Toggle';
-import Button from './Button';
-import Input from './Input';
+// skipcq: JS-0415 - Settings sections keep related controls inline for readability in a constrained popup.
+import { useState, useEffect, useCallback } from "react";
+import Toggle from "./Toggle";
+import Button from "./Button";
+import Input from "./Input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
+import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
+import { Tooltip } from "src/components/motion/tooltip";
+import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
+import { AnimatedBadge } from "src/components/motion/animated-badge";
+import { getAccountStorageKey } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -25,52 +39,651 @@ interface EmailAccount {
 interface AppSettings {
   customPresets: CustomPreset[];
   maxHistory: number;
-  theme: 'light' | 'dark' | 'auto';
+  theme: "light" | "dark" | "auto";
   showNotifications: boolean;
-  badgeDisplay: 'none' | 'total' | 'today' | 'week' | 'all-time';
-  randomFormat: 'private-mail' | 'alphanumeric' | 'words' | 'timestamp';
+  badgeDisplay: "none" | "total" | "today" | "week" | "all-time";
+  randomFormat: "private-mail" | "alphanumeric" | "words" | "timestamp";
+}
+
+interface ConfirmationRequest {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  variant?: "primary" | "danger";
+  resolve: (confirmed: boolean) => void;
+}
+
+interface ChangelogChange {
+  type: "Added" | "Changed" | "Fixed";
+  items: string[];
+}
+
+interface ChangelogEntry {
+  version: string;
+  date: string;
+  changes: ChangelogChange[];
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
   maxHistory: 20,
-  theme: 'light',
+  theme: "light",
   showNotifications: true,
-  badgeDisplay: 'all-time',
-  randomFormat: 'private-mail',
+  badgeDisplay: "all-time",
+  randomFormat: "private-mail",
 };
 
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
+const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.2.0",
+    date: "2026-07-03",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Added Tailwind CSS v4, shadcn, and beUI motion components",
+          "Added Action Swap, Animated Badge, Bouncy Accordion, Theme Toggle, Tooltip, and Table integrations",
+          "Added dark mode toggle in the popup header",
+          "Added locale key coverage tests for all supported languages",
+        ],
+      },
+      {
+        type: "Changed",
+        items: [
+          "Redesigned popup, settings, generator tabs, Gmail tricks, history table, and changelog UI with a unified beUI style",
+          "Reworked Recent Aliases into a compact non-scrolling table with fixed action buttons",
+          "Improved dark mode contrast, spacing, hover states, tooltips, and responsive popup layout",
+          "Moved theme switching out of Settings and into the main popup header",
+          "Updated all supported locales with the new UI strings",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          '"Copy All" no longer undercounts statistics for generated aliases',
+          "Settings/QR modals no longer render outside the popup bounds",
+          "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
+          "Fixed missing imports and old component references after replacing legacy UI components",
+          "Fixed table overflow and hidden row action buttons in alias history",
+          "Fixed untranslated/fallback strings in the new UI",
+        ],
+      },
+    ],
+  },
+  {
+    version: "1.1.0",
+    date: "2025-12-30",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Gmail alias generation with plus addressing",
+          "Preset management",
+          "Keyboard shortcuts",
+          "Statistics tracking",
+        ],
+      },
+      { type: "Changed", items: ["Updated dependencies"] },
+      { type: "Fixed", items: ["Bug fixes and improvements"] },
+    ],
+  },
+  {
+    version: "1.0.0",
+    date: "2025-12-30",
+    changes: [{ type: "Added", items: ["Initial release"] }],
+  },
+];
 
-export default function Settings({ isOpen, onClose, onClearHistory }: SettingsProps) {
+interface SettingsPanelProps {
+  settings: AppSettings;
+  saveSettings: (settings: AppSettings) => Promise<void>;
+}
+
+/** Appearance and display settings shown inside the general accordion. */
+function AppearanceSettingsPanel({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="space-y-3">
+      <BadgeCounterField settings={settings} saveSettings={saveSettings} />
+      <CopyNotificationsField settings={settings} saveSettings={saveSettings} />
+    </div>
+  );
+}
+
+/** Badge counter setting field. */
+function BadgeCounterField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("badgeCounter")}
+      </label>
+      <Select
+        value={settings.badgeDisplay}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            badgeDisplay: value as AppSettings["badgeDisplay"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <BadgeCounterOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Badge counter select options. */
+function BadgeCounterOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="none">None (Hidden)</SelectItem>
+      <SelectItem value="total">Total in History</SelectItem>
+      <SelectItem value="all-time">Total Generated (All Time)</SelectItem>
+      <SelectItem value="today">Created Today</SelectItem>
+      <SelectItem value="week">This Week</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Copy notification toggle field. */
+function CopyNotificationsField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="flex items-center justify-between border-t border-border pt-3">
+      <label className="text-xs font-semibold text-foreground">
+        {t("copyNotifications")}
+      </label>
+      <Toggle
+        enabled={settings.showNotifications}
+        onChange={(enabled) =>
+          saveSettings({ ...settings, showNotifications: enabled })
+        }
+        label=""
+      />
+    </div>
+  );
+}
+
+/** Alias generation defaults shown inside the general accordion. */
+function AliasGenerationSettingsPanel({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="space-y-3">
+      <RandomAliasFormatField settings={settings} saveSettings={saveSettings} />
+      <AutoSaveLimitField settings={settings} saveSettings={saveSettings} />
+    </div>
+  );
+}
+
+/** Random alias format setting field. */
+function RandomAliasFormatField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("randomAliasFormat")}
+      </label>
+      <Select
+        value={settings.randomFormat}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            randomFormat: value as AppSettings["randomFormat"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <RandomAliasFormatOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Random alias format select options. */
+function RandomAliasFormatOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="private-mail">
+        Private Mail (e.g., private-mail-q2ga)
+      </SelectItem>
+      <SelectItem value="alphanumeric">
+        Random Characters (e.g., abc123xy)
+      </SelectItem>
+      <SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem>
+      <SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Auto-save limit setting field. */
+function AutoSaveLimitField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("autoSaveLimit")}
+      </label>
+      <Select
+        value={String(settings.maxHistory)}
+        onValueChange={(value) =>
+          saveSettings({ ...settings, maxHistory: Number(value) })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <AutoSaveLimitOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Auto-save limit select options. */
+function AutoSaveLimitOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="20">20 aliases</SelectItem>
+      <SelectItem value="50">50 aliases</SelectItem>
+      <SelectItem value="100">100 aliases</SelectItem>
+      <SelectItem value="200">200 aliases</SelectItem>
+      <SelectItem value="500">500 aliases</SelectItem>
+    </SelectContent>
+  );
+}
+
+interface AddAccountCardProps {
+  showAddAccount: boolean;
+  newAccountEmail: string;
+  newAccountLabel: string;
+  addAccountError: string;
+  focusOnMount: (el: HTMLInputElement | null) => void;
+  setShowAddAccount: (show: boolean) => void;
+  setNewAccountEmail: (value: string) => void;
+  setNewAccountLabel: (value: string) => void;
+  setAddAccountError: (value: string) => void;
+  handleAddAccount: () => void;
+}
+
+/** Account creation card used by the settings accounts tab. */
+function AddAccountCard({
+  showAddAccount,
+  newAccountEmail,
+  newAccountLabel,
+  addAccountError,
+  focusOnMount,
+  setShowAddAccount,
+  setNewAccountEmail,
+  setNewAccountLabel,
+  setAddAccountError,
+  handleAddAccount,
+}: AddAccountCardProps) {
+  /** Resets and hides the add-account form. */
+  const closeForm = () => {
+    setShowAddAccount(false);
+    setNewAccountEmail("");
+    setNewAccountLabel("");
+    setAddAccountError("");
+  };
+
+  return (
+    <div className="rounded-2xl border border-border bg-background p-3 shadow-soft">
+      {!showAddAccount ? (
+        <OpenAddAccountButton onClick={() => setShowAddAccount(true)} />
+      ) : (
+        <div className="space-y-3">
+          <AddAccountFormHeader onClose={closeForm} />
+          <AccountEmailInput
+            value={newAccountEmail}
+            setValue={setNewAccountEmail}
+            setError={setAddAccountError}
+            onEnter={handleAddAccount}
+            focusOnMount={focusOnMount}
+          />
+          {addAccountError && <AccountErrorMessage message={addAccountError} />}
+          {newAccountEmail && !newAccountEmail.includes("@") && <GmailHint />}
+          <Input
+            type="text"
+            value={newAccountLabel}
+            onChange={setNewAccountLabel}
+            placeholder={t("accountLabelPlaceholder")}
+          />
+          <Button
+            variant="ghost"
+            onClick={handleAddAccount}
+            disabled={!newAccountEmail.trim()}
+            className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {t("addAccount")}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Button that opens the add-account form. */
+function OpenAddAccountButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      variant="ghost"
+      onClick={onClick}
+      className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+    >
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      {t("addNewAccount")}
+    </Button>
+  );
+}
+
+/** Header row for the add-account form. */
+function AddAccountFormHeader({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="mb-2 flex items-center justify-between">
+      <h4 className="text-sm font-bold text-foreground">
+        {t("addNewAccountTitle")}
+      </h4>
+      <Tooltip content="Close" side="left">
+        <Button
+          variant="ghost"
+          onClick={onClose}
+          className="text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground"
+          aria-label="Close"
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+
+interface AccountEmailInputProps {
+  value: string;
+  setValue: (value: string) => void;
+  setError: (value: string) => void;
+  onEnter: () => void;
+  focusOnMount: (el: HTMLInputElement | null) => void;
+}
+
+/** Email input with Gmail suffix preview for username-only entries. */
+function AccountEmailInput({
+  value,
+  setValue,
+  setError,
+  onEnter,
+  focusOnMount,
+}: AccountEmailInputProps) {
+  return (
+    <div className="relative">
+      <Input
+        type="email"
+        value={value}
+        onChange={(nextValue) => {
+          setValue(nextValue);
+          setError("");
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") onEnter();
+        }}
+        onBlur={() => {
+          if (value && !value.includes("@")) setValue(`${value}@gmail.com`);
+        }}
+        placeholder={t("emailPlaceholder")}
+        ref={focusOnMount}
+      />
+      {value && !value.includes("@") && (
+        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+          @gmail.com
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Validation message for the add-account card. */
+function AccountErrorMessage({ message }: { message: string }) {
+  return (
+    <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2">
+      <p className="text-xs text-destructive">{message}</p>
+    </div>
+  );
+}
+
+/** Hint shown when a bare Gmail username is entered. */
+function GmailHint() {
+  return (
+    <p className="text-xs text-muted-foreground">
+      Press{" "}
+      <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-xs">
+        Tab
+      </kbd>{" "}
+      to add @gmail.com
+    </p>
+  );
+}
+
+/** Changelog tab content rendered from static release data. */
+function ChangelogPanel() {
+  return (
+    <div className="space-y-3">
+      {CHANGELOG.map((entry) => (
+        <ChangelogCard key={entry.version} entry={entry} />
+      ))}
+    </div>
+  );
+}
+
+/** Single changelog release card. */
+function ChangelogCard({ entry }: { entry: ChangelogEntry }) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-background shadow-soft">
+      <ChangelogCardHeader entry={entry} />
+      <div className="space-y-2.5 p-3">
+        {entry.changes.map((change) => (
+          <ChangelogChangeGroup
+            key={change.type}
+            change={change}
+            version={entry.version}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Header for one changelog release card. */
+function ChangelogCardHeader({ entry }: { entry: ChangelogEntry }) {
+  return (
+    <div className="flex items-center justify-between border-b border-border bg-muted/45 px-3.5 py-3">
+      <div className="flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+          <svg
+            className="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+            />
+          </svg>
+        </span>
+        <span className="text-sm font-bold text-foreground">
+          v{entry.version}
+        </span>
+      </div>
+      <AnimatedBadge
+        status="neutral"
+        size="sm"
+        showIcon={false}
+        contentKey={entry.date}
+        className="bg-background"
+      >
+        {entry.date}
+      </AnimatedBadge>
+    </div>
+  );
+}
+
+interface ChangelogChangeGroupProps {
+  change: ChangelogChange;
+  version: string;
+}
+
+/** One grouped change type inside a changelog card. */
+function ChangelogChangeGroup({ change, version }: ChangelogChangeGroupProps) {
+  return (
+    <div className="rounded-xl border border-border bg-card/70 p-2.5">
+      <div className="mb-2 flex items-center gap-2">
+        <span
+          className={`inline-flex h-2 w-2 rounded-full ${changeDotClass(change.type)}`}
+        />
+        <AnimatedBadge
+          status={changeBadgeStatus(change.type)}
+          size="sm"
+          showIcon={false}
+          contentKey={`${version}-${change.type}`}
+          className="text-[10px] uppercase tracking-wide"
+        >
+          {change.type}
+        </AnimatedBadge>
+      </div>
+      <ul className="space-y-1.5 text-xs leading-5 text-muted-foreground">
+        {change.items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-muted-foreground/60" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Dot color for changelog change type. */
+function changeDotClass(type: ChangelogChange["type"]) {
+  if (type === "Added") return "bg-emerald-500";
+  if (type === "Fixed") return "bg-rose-500";
+  return "bg-primary";
+}
+
+/** Animated badge status for changelog change type. */
+function changeBadgeStatus(type: ChangelogChange["type"]) {
+  if (type === "Added") return "success";
+  if (type === "Fixed") return "danger";
+  return "info";
+}
+
+/** Settings modal with general, accounts, presets, advanced, and changelog tabs. */
+export default function Settings({
+  isOpen,
+  onClose,
+  onClearHistory,
+}: SettingsProps) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
-  const [newPresetLabel, setNewPresetLabel] = useState('');
-  const [newPresetTag, setNewPresetTag] = useState('');
-  const [activeTab, setActiveTab] = useState<'general' | 'accounts' | 'presets' | 'advanced'>('general');
+  const [newPresetLabel, setNewPresetLabel] = useState("");
+  const [newPresetTag, setNewPresetTag] = useState("");
+  const [activeTab, setActiveTab] = useState<
+    "general" | "accounts" | "presets" | "advanced" | "changelog"
+  >("general");
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
-  const [editingLabel, setEditingLabel] = useState('');
-  const [editingEmail, setEditingEmail] = useState('');
-  const [version, setVersion] = useState('1.1.0');
+  const [editingLabel, setEditingLabel] = useState("");
+  const [editingEmail, setEditingEmail] = useState("");
+  const [version, setVersion] = useState("1.1.0");
   const [showAddAccount, setShowAddAccount] = useState(false);
-  const [newAccountEmail, setNewAccountEmail] = useState('');
-  const [newAccountLabel, setNewAccountLabel] = useState('');
-  const [addAccountError, setAddAccountError] = useState('');
+  const [newAccountEmail, setNewAccountEmail] = useState("");
+  const [newAccountLabel, setNewAccountLabel] = useState("");
+  const [addAccountError, setAddAccountError] = useState("");
+  const [toast, setToast] = useState<string | null>(null);
+  const [confirmation, setConfirmation] = useState<ConfirmationRequest | null>(
+    null,
+  );
+
+  const showToast = useCallback((msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2000);
+  }, []);
+
+  const askForConfirmation = useCallback(
+    (request: Omit<ConfirmationRequest, "resolve">) =>
+      new Promise<boolean>((resolve) => {
+        setConfirmation({ ...request, resolve });
+      }),
+    [],
+  );
+
+  const closeConfirmation = useCallback((confirmed: boolean) => {
+    setConfirmation((current) => {
+      current?.resolve(confirmed);
+      return null;
+    });
+  }, []);
 
   useEffect(() => {
     try {
       const manifest = browser.runtime.getManifest();
-      if (manifest && manifest.version) {
+      if (manifest?.version) {
         setVersion(manifest.version);
       }
     } catch (error) {
-      console.log('Could not get manifest version:', error);
+      console.log("Could not get manifest version:", error);
     }
   }, []);
+
+  /** Loads saved app settings from extension storage, merged over defaults. */
+  const loadSettings = async () => {
+    const result = await browser.storage.local.get("app_settings");
+    if (result.app_settings) {
+      setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
+    }
+  };
+
+  /** Loads the email accounts list from extension storage. */
+  const loadAccounts = async () => {
+    const result = await browser.storage.local.get("email_accounts");
+    if (result.email_accounts && Array.isArray(result.email_accounts)) {
+      setEmailAccounts(result.email_accounts);
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -79,25 +692,13 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     }
   }, [isOpen]);
 
-  const loadSettings = async () => {
-    const result = await browser.storage.local.get('app_settings');
-    if (result.app_settings) {
-      setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
-    }
-  };
-
-  const loadAccounts = async () => {
-    const result = await browser.storage.local.get('email_accounts');
-    if (result.email_accounts && Array.isArray(result.email_accounts)) {
-      setEmailAccounts(result.email_accounts);
-    }
-  };
-
+  /** Persists settings to extension storage and updates local state. */
   const saveSettings = async (newSettings: AppSettings) => {
     setSettings(newSettings);
     await browser.storage.local.set({ app_settings: newSettings });
   };
 
+  /** Adds a new custom preset from the label/tag form fields. */
   const handleAddPreset = () => {
     if (!newPresetLabel.trim() || !newPresetTag.trim()) return;
 
@@ -113,33 +714,39 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     };
 
     saveSettings(updatedSettings);
-    setNewPresetLabel('');
-    setNewPresetTag('');
+    setNewPresetLabel("");
+    setNewPresetTag("");
+    showToast(t("toastPresetAdded"));
   };
 
+  /** Removes a custom preset by id. */
   const handleRemovePreset = (id: string) => {
     const updatedSettings = {
       ...settings,
       customPresets: settings.customPresets.filter((p) => p.id !== id),
     };
     saveSettings(updatedSettings);
+    showToast(t("toastPresetRemoved"));
   };
 
+  /** Downloads the current settings as a JSON file. */
   const handleExportSettings = () => {
     const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `gmail-alias-settings-${Date.now()}.json`;
     link.click();
     URL.revokeObjectURL(url);
+    showToast(t("toastSettingsExported"));
   };
 
+  /** Imports settings from a user-selected JSON file. */
   const handleImportSettings = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
@@ -148,51 +755,96 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
         const text = await file.text();
         const imported = JSON.parse(text);
         saveSettings({ ...DEFAULT_SETTINGS, ...imported });
-      } catch (err) {
-        alert('Failed to import settings. Please check the file format.');
+        showToast(t("toastSettingsImported"));
+      } catch {
+        showToast(t("toastImportFailed"));
       }
     };
     input.click();
   };
 
-  const handleResetSettings = () => {
-    if (confirm('Are you sure you want to reset all settings to default?')) {
-      saveSettings(DEFAULT_SETTINGS);
+  /** Focuses an input once when it mounts (replaces autoFocus). */
+  const focusOnMount = useCallback((el: HTMLInputElement | null) => {
+    el?.focus();
+  }, []);
+
+  /** Resets all settings to defaults after user confirmation. */
+  const handleResetSettings = async () => {
+    const confirmed = await askForConfirmation({
+      title: t("resetSettingsTitle"),
+      message: t("resetSettingsMessage"),
+      confirmLabel: t("reset"),
+      variant: "danger",
+    });
+
+    if (!confirmed) return;
+
+    saveSettings(DEFAULT_SETTINGS);
+    showToast(t("toastSettingsReset"));
+  };
+
+  /** Clears recent aliases after user confirmation. */
+  const handleClearHistory = async () => {
+    const confirmed = await askForConfirmation({
+      title: t("clearHistoryTitle"),
+      message: t("clearHistoryMessage"),
+      confirmLabel: t("clear"),
+      variant: "danger",
+    });
+
+    if (confirmed) {
+      onClearHistory();
     }
   };
 
+  /** Marks the given account as active and updates the base email. */
   const handleSwitchAccount = async (accountId: string) => {
-    const updated = emailAccounts.map(acc => ({
+    const updated = emailAccounts.map((acc) => ({
       ...acc,
       isActive: acc.id === accountId,
     }));
     await browser.storage.local.set({ email_accounts: updated });
-    const activeAccount = updated.find(acc => acc.id === accountId);
+    const activeAccount = updated.find((acc) => acc.id === accountId);
     if (activeAccount) {
       await browser.storage.local.set({ base_email: activeAccount.email });
     }
     setEmailAccounts(updated);
+    showToast(t("toastAccountSwitched"));
   };
 
+  /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
     if (emailAccounts.length === 1) {
-      alert('Cannot delete the last account. You must have at least one account.');
+      showToast(t("cannotDeleteLastAccountTitle"));
       return;
     }
 
-    const confirmMsg = `Delete "${account.label}" (${account.email})?\n\nThis will permanently delete:\n• All history for this account\n• All statistics\n• All favorites\n\nThis action cannot be undone.`;
-    
-    if (!confirm(confirmMsg)) return;
+    const confirmMsg = t("deleteAccountMessage", [
+      account.label,
+      account.email,
+    ]);
+
+    const confirmed = await askForConfirmation({
+      title: t("deleteAccountTitle"),
+      message: confirmMsg,
+      confirmLabel: t("delete"),
+      variant: "danger",
+    });
+
+    if (!confirmed) return;
 
     // Delete account-specific data
-    const historyKey = getAccountStorageKey(account.email, 'gmail_alias_recent');
-    const statsKey = getAccountStorageKey(account.email, 'alias_stats');
-    const favoritesKey = getAccountStorageKey(account.email, 'favorites');
+    const historyKey = getAccountStorageKey(
+      account.email,
+      "gmail_alias_recent",
+    );
+    const statsKey = getAccountStorageKey(account.email, "alias_stats");
+    const favoritesKey = getAccountStorageKey(account.email, "favorites");
 
     await browser.storage.local.remove([historyKey, statsKey, favoritesKey]);
 
     // Remove from accounts list
-    let updated = emailAccounts.filter(acc => acc.id !== account.id);
+    let updated = emailAccounts.filter((acc) => acc.id !== account.id);
 
     // If we deleted the active account, make the first one active
     if (account.isActive && updated.length > 0) {
@@ -205,32 +857,36 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
 
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
+    showToast(t("toastAccountDeleted"));
   };
 
+  /** Enters edit mode for the given account. */
   const handleStartEdit = (account: EmailAccount) => {
     setEditingAccountId(account.id);
     setEditingLabel(account.label);
     setEditingEmail(account.email);
   };
 
+  /** Exits edit mode without saving. */
   const handleCancelEdit = () => {
     setEditingAccountId(null);
-    setEditingLabel('');
-    setEditingEmail('');
+    setEditingLabel("");
+    setEditingEmail("");
   };
 
+  /** Saves account edits, migrating stored data if the email changed. */
   const handleSaveEdit = async (accountId: string) => {
     if (!editingLabel.trim()) {
-      alert('Label cannot be empty');
+      showToast(t("errorLabelRequired"));
       return;
     }
 
-    if (!editingEmail.trim() || !editingEmail.includes('@')) {
-      alert('Please enter a valid email address');
+    if (!editingEmail.trim() || !editingEmail.includes("@")) {
+      showToast(t("errorInvalidEmail"));
       return;
     }
 
-    const account = emailAccounts.find(acc => acc.id === accountId);
+    const account = emailAccounts.find((acc) => acc.id === accountId);
     if (!account) return;
 
     const oldEmail = account.email;
@@ -239,27 +895,47 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     // Check if email changed
     if (oldEmail !== newEmail) {
       // Check if new email already exists in another account
-      const emailExists = emailAccounts.some(acc => acc.id !== accountId && acc.email === newEmail);
+      const emailExists = emailAccounts.some(
+        (acc) =>
+          acc.id !== accountId &&
+          acc.email.toLowerCase() === newEmail.toLowerCase(),
+      );
       if (emailExists) {
-        alert('This email address is already used by another account!');
+        showToast(t("errorDuplicateEmail"));
         return;
       }
 
-      const confirmMsg = `Change email from\n${oldEmail}\nto\n${newEmail}?\n\nThis will:\n• Migrate all history, statistics, and favorites to the new email\n• Update the account email\n• Delete data associated with the old email\n\nContinue?`;
-      
-      if (!confirm(confirmMsg)) return;
+      const confirmMsg = t("changeAccountEmailMessage", [oldEmail, newEmail]);
+
+      const confirmed = await askForConfirmation({
+        title: t("changeAccountEmailTitle"),
+        message: confirmMsg,
+        confirmLabel: t("changeEmail"),
+      });
+
+      if (!confirmed) return;
 
       // Migrate data from old email to new email
-      const oldHistoryKey = getAccountStorageKey(oldEmail, 'gmail_alias_recent');
-      const oldStatsKey = getAccountStorageKey(oldEmail, 'alias_stats');
-      const oldFavoritesKey = getAccountStorageKey(oldEmail, 'favorites');
+      const oldHistoryKey = getAccountStorageKey(
+        oldEmail,
+        "gmail_alias_recent",
+      );
+      const oldStatsKey = getAccountStorageKey(oldEmail, "alias_stats");
+      const oldFavoritesKey = getAccountStorageKey(oldEmail, "favorites");
 
-      const newHistoryKey = getAccountStorageKey(newEmail, 'gmail_alias_recent');
-      const newStatsKey = getAccountStorageKey(newEmail, 'alias_stats');
-      const newFavoritesKey = getAccountStorageKey(newEmail, 'favorites');
+      const newHistoryKey = getAccountStorageKey(
+        newEmail,
+        "gmail_alias_recent",
+      );
+      const newStatsKey = getAccountStorageKey(newEmail, "alias_stats");
+      const newFavoritesKey = getAccountStorageKey(newEmail, "favorites");
 
       // Get old data
-      const oldData = await browser.storage.local.get([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+      const oldData = await browser.storage.local.get([
+        oldHistoryKey,
+        oldStatsKey,
+        oldFavoritesKey,
+      ]);
 
       // Save to new keys
       await browser.storage.local.set({
@@ -269,7 +945,11 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
       });
 
       // Delete old keys
-      await browser.storage.local.remove([oldHistoryKey, oldStatsKey, oldFavoritesKey]);
+      await browser.storage.local.remove([
+        oldHistoryKey,
+        oldStatsKey,
+        oldFavoritesKey,
+      ]);
 
       // Update base_email if this is the active account
       if (account.isActive) {
@@ -278,486 +958,615 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
     }
 
     // Update account in list
-    const updated = emailAccounts.map(acc => 
-      acc.id === accountId ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() } : acc
+    const updated = emailAccounts.map((acc) =>
+      acc.id === accountId
+        ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() }
+        : acc,
     );
-    
+
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
     setEditingAccountId(null);
-    setEditingLabel('');
-    setEditingEmail('');
+    setEditingLabel("");
+    setEditingEmail("");
+    showToast(t("toastAccountUpdated"));
   };
 
+  /** Validates and adds a new email account. */
   const handleAddAccount = async () => {
     let email = newAccountEmail.trim();
-    
+
     if (!email) {
-      setAddAccountError('Please enter an email address');
+      setAddAccountError(t("errorEnterEmail"));
       return;
     }
 
     // Auto-add @gmail.com if only username provided
-    if (!email.includes('@')) {
-      email += '@gmail.com';
+    if (!email.includes("@")) {
+      email += "@gmail.com";
     }
 
     // Validate email format
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setAddAccountError('Please enter a valid email address');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setAddAccountError(t("errorInvalidEmail"));
       return;
     }
 
     // Check if account already exists
-    const exists = emailAccounts.some(acc => acc.email === email);
+    const exists = emailAccounts.some((acc) => acc.email === email);
     if (exists) {
-      setAddAccountError('This account already exists');
+      setAddAccountError(t("errorAccountExists"));
       return;
     }
 
-    // Create new account
+    // Create new account — only auto-activate if it's the first account
+    const isFirst = emailAccounts.length === 0;
     const newAccount: EmailAccount = {
       id: Date.now().toString(),
       email,
-      label: newAccountLabel.trim() || email.split('@')[0],
-      isActive: emailAccounts.length === 0, // Make first account active
+      label: newAccountLabel.trim() || email.split("@")[0],
+      isActive: isFirst,
     };
 
-    const updated = emailAccounts.length === 0 
-      ? [newAccount]
-      : [...emailAccounts.map(acc => ({ ...acc, isActive: false })), newAccount];
+    const updated = isFirst ? [newAccount] : [...emailAccounts, newAccount];
 
-    // Make new account active
-    updated[updated.length - 1].isActive = true;
-
-    await browser.storage.local.set({ 
+    await browser.storage.local.set({
       email_accounts: updated,
-      base_email: newAccount.email
+      ...(isFirst ? { base_email: newAccount.email } : {}),
     });
 
     setEmailAccounts(updated);
     setShowAddAccount(false);
-    setNewAccountEmail('');
-    setNewAccountLabel('');
-    setAddAccountError('');
+    setNewAccountEmail("");
+    setNewAccountLabel("");
+    setAddAccountError("");
+    showToast(t("toastAccountAdded", newAccount.label));
   };
 
   if (!isOpen) return null;
 
+  // skipcq: JS-0415
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+    // skipcq: JS-0415
+    <div className="absolute inset-0 z-50 flex bg-muted">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-muted">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <h2 className="text-xl font-bold">Settings</h2>
+        <div className="flex items-center justify-between border-b border-border bg-background px-3 py-3 text-foreground">
+          <div className="flex items-center gap-2">
+            <Tooltip content="Back" side="bottom">
+              <Button
+                variant="ghost"
+                onClick={onClose}
+                className="h-9 w-9 rounded-xl p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label="Back"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </Button>
+            </Tooltip>
+            <h2 className="text-base font-semibold">{t("settings")}</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+            v{version}
+          </span>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
-          <button
-            onClick={() => setActiveTab('general')}
-            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
-              activeTab === 'general'
-                ? 'border-b-3 border-blue-600 text-blue-700 bg-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+        <div className="border-b border-border bg-background px-3 py-2.5">
+          <div className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-muted/70 p-1">
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("general")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "general"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                />
               </svg>
-              <span>General</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('accounts')}
-            className={`flex-1 px-6 py-4 text-sm font-semibold transition-all ${
-              activeTab === 'accounts'
-                ? 'border-b-3 border-blue-600 text-blue-700 bg-white shadow-sm'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
-          >
-            <div className="flex items-center justify-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              {t("general")}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("accounts")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "accounts"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
               </svg>
-              <span>Accounts</span>
-            </div>
-          </button>
+              {t("accounts")}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("changelog")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "changelog"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {t("changelog")}
+            </Button>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <div className="flex-1 overflow-y-auto bg-muted p-3">
           {/* General Tab */}
-          {activeTab === 'general' && (
-            <div className="space-y-6">
-              {/* Appearance Section */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                  </svg>
-                  Appearance & Display
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Theme <span className="text-xs text-gray-500 font-normal">(Dark mode coming in next update)</span>
-                    </label>
-                    <select
-                      value={settings.theme}
-                      onChange={(e) => saveSettings({ ...settings, theme: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                      disabled
-                    >
-                      <option value="light">☀️ Light (Current)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Badge Counter
-                    </label>
-                    <p className="text-xs text-gray-500 mb-2">Display count on extension icon</p>
-                    <select
-                      value={settings.badgeDisplay}
-                      onChange={(e) => saveSettings({ ...settings, badgeDisplay: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                    >
-                      <option value="none">🚫 None (Hidden)</option>
-                      <option value="total">📊 Total in History</option>
-                      <option value="all-time">🏆 Total Generated (All Time)</option>
-                      <option value="today">📅 Created Today</option>
-                      <option value="week">📆 This Week</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div>
-                      <label className="text-sm font-semibold text-gray-700">Show Notifications</label>
-                      <p className="text-xs text-gray-500 mt-0.5">Copy confirmation messages</p>
-                    </div>
-                    <Toggle
-                      enabled={settings.showNotifications}
-                      onChange={(enabled) => saveSettings({ ...settings, showNotifications: enabled })}
-                      label=""
+          {activeTab === "general" && (
+            // skipcq: JS-0415
+            <BouncyAccordion
+              defaultValue="appearance"
+              className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft divide-y divide-border/70"
+              classNames={{
+                item: "bg-background data-[state=open]:bg-background",
+                trigger: "min-h-12 gap-3 px-3 hover:bg-muted/45",
+                icon: "h-7 w-7 rounded-lg",
+                title: "text-sm font-bold",
+                chevron: "text-muted-foreground",
+                content: "border-t border-border/70 bg-background",
+                description: "px-3 py-3 text-foreground",
+              }}
+              items={[
+                {
+                  id: "appearance",
+                  title: t("appearanceDisplay"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <AppearanceSettingsPanel
+                      settings={settings}
+                      saveSettings={saveSettings}
                     />
-                  </div>
-                </div>
-              </div>
-
-              {/* Alias Generation Section */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  Alias Generation
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Random Alias Format
-                    </label>
-                    <select
-                      value={settings.randomFormat}
-                      onChange={(e) => saveSettings({ ...settings, randomFormat: e.target.value as any })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                    >
-                      <option value="private-mail">🎯 Private Mail (e.g., private-mail-q2ga) ⭐</option>
-                      <option value="alphanumeric">🔤 Random Characters (e.g., abc123xy)</option>
-                      <option value="words">💬 Random Words (e.g., happy-fox-42)</option>
-                      <option value="timestamp">⏱️ Timestamp (e.g., lk9x2m3n)</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-2">Choose the format for random alias generation</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Auto-save Limit
-                    </label>
-                    <select
-                      value={settings.maxHistory}
-                      onChange={(e) => saveSettings({ ...settings, maxHistory: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                    >
-                      <option value={20}>20 aliases</option>
-                      <option value={50}>50 aliases</option>
-                      <option value={100}>100 aliases</option>
-                      <option value={200}>200 aliases</option>
-                      <option value={500}>500 aliases</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-2">Maximum number of aliases to auto-save to history</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Custom Presets Section */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
-                  Custom Presets
-                </h3>
-                <div className="space-y-3">
-                  <Input
-                    value={newPresetLabel}
-                    onChange={setNewPresetLabel}
-                    placeholder="Label (e.g., Newsletter)"
-                    label="Preset Label"
-                  />
-                  <Input
-                    value={newPresetTag}
-                    onChange={setNewPresetTag}
-                    placeholder="Tag (e.g., newsletter)"
-                    label="Tag Name"
-                  />
-                  <Button
-                    onClick={handleAddPreset}
-                    disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
-                    fullWidth
-                  >
-                    + Add Preset
-                  </Button>
-                </div>
-
-                {settings.customPresets.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <div className="text-xs font-semibold text-gray-700 mb-3">Your Presets ({settings.customPresets.length})</div>
-                    <div className="space-y-2">
-                      {settings.customPresets.map((preset) => (
-                        <div
-                          key={preset.id}
-                          className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow"
-                        >
-                          <div>
-                            <div className="text-sm font-semibold text-gray-900">{preset.label}</div>
-                            <div className="text-xs text-gray-600 font-mono mt-0.5">+{preset.tag}</div>
-                          </div>
-                          <button
-                            onClick={() => handleRemovePreset(preset.id)}
-                            className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
+                  ),
+                },
+                {
+                  id: "alias-generation",
+                  title: t("aliasGeneration"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <AliasGenerationSettingsPanel
+                      settings={settings}
+                      saveSettings={saveSettings}
+                    />
+                  ),
+                },
+                {
+                  id: "custom-presets",
+                  title: t("customPresets"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <Input
+                          value={newPresetLabel}
+                          onChange={setNewPresetLabel}
+                          placeholder={t("label")}
+                          className="min-w-0"
+                        />
+                        <Input
+                          value={newPresetTag}
+                          onChange={setNewPresetTag}
+                          placeholder={t("tag")}
+                          className="min-w-0"
+                        />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        onClick={handleAddPreset}
+                        disabled={
+                          !newPresetLabel.trim() || !newPresetTag.trim()
+                        }
+                        size="sm"
+                        fullWidth
+                        className="rounded-xl bg-primary/10 text-primary hover:bg-primary/15 disabled:bg-muted disabled:text-muted-foreground"
+                      >
+                        {t("addPreset")}
+                      </Button>
+                      {settings.customPresets.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-border space-y-1.5 max-h-28 overflow-y-auto">
+                          {settings.customPresets.map((preset) => (
+                            <div
+                              key={preset.id}
+                              className="flex items-center justify-between px-3 py-2 bg-muted/45 dark:bg-muted rounded-xl border border-border dark:border-border"
+                            >
+                              <div className="text-xs text-foreground">
+                                <span className="font-semibold">
+                                  {preset.label}
+                                </span>
+                                <span className="text-muted-foreground font-mono ml-1.5">
+                                  +{preset.tag}
+                                </span>
+                              </div>
+                              <Tooltip content="Remove preset" side="left">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => handleRemovePreset(preset.id)}
+                                  className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
+                                  aria-label="Remove preset"
+                                >
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
+                                  </svg>
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Data Management Section */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-                <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                  </svg>
-                  Data Management
-                </h3>
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      onClick={handleExportSettings}
-                      variant="secondary"
-                      fullWidth
-                      icon={
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                      }
-                    >
-                      Export
-                    </Button>
-                    <Button
-                      onClick={handleImportSettings}
-                      variant="secondary"
-                      fullWidth
-                      icon={
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                      }
-                    >
-                      Import
-                    </Button>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      if (confirm('Clear all recent aliases?')) {
-                        onClearHistory();
-                      }
-                    }}
-                    variant="danger"
-                    fullWidth
-                  >
-                    Clear History
-                  </Button>
-                </div>
-              </div>
-
-              {/* Danger Zone */}
-              <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg shadow-sm border-2 border-red-200 p-5">
-                <h3 className="text-base font-bold text-red-700 mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  Danger Zone
-                </h3>
-                <p className="text-xs text-red-600 mb-3">This action cannot be undone</p>
-                <Button
-                  onClick={handleResetSettings}
-                  variant="danger"
-                  fullWidth
-                >
-                  Reset All Settings to Default
-                </Button>
-              </div>
-            </div>
+                  ),
+                },
+                {
+                  id: "data-management",
+                  title: t("dataManagement"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-3">
+                        <Tooltip
+                          content={t("export")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleExportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("export")}
+                          >
+                            {t("export")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip
+                          content={t("import")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleImportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("import")}
+                          >
+                            {t("import")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip
+                          content={t("clear")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleClearHistory}
+                            variant="danger"
+                            size="sm"
+                            fullWidth
+                            className="bg-destructive/10 text-destructive hover:bg-destructive/15"
+                            aria-label={t("clear")}
+                          >
+                            {t("clear")}
+                          </Button>
+                        </Tooltip>
+                      </div>
+                      <Tooltip
+                        content={t("resetSettings")}
+                        side="bottom"
+                        wrapperClassName="w-full"
+                      >
+                        <Button
+                          variant="ghost"
+                          onClick={handleResetSettings}
+                          className="w-full rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:text-destructive font-medium py-1"
+                          aria-label={t("resetSettings")}
+                        >
+                          {t("resetSettings")}
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  ),
+                },
+              ]}
+            />
           )}
 
           {/* Accounts Tab */}
-          {activeTab === 'accounts' && (
+          {activeTab === "accounts" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Email Accounts</h3>
-                <p className="text-xs text-gray-600 mb-3">
-                  Manage your Gmail accounts. Each account has its own history, statistics, and favorites.
+                <h3 className="text-sm font-semibold text-foreground mb-3">
+                  {t("emailAccounts")}
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  {t("manageAccountsDescription")}
                 </p>
               </div>
 
               {emailAccounts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 text-sm">
-                  No accounts found. Please add an account from the main screen.
+                <div className="text-center py-8 text-muted-foreground text-sm">
+                  {t("noAccountsFound")}
                 </div>
               ) : (
                 <div className="space-y-2">
                   {emailAccounts.map((account) => (
                     <div
                       key={account.id}
-                      className={`rounded-lg border-2 transition-all ${
+                      className={`rounded-2xl border transition-all ${
                         account.isActive
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
+                          ? "border-primary/40 bg-primary/10"
+                          : "border-border bg-background hover:border-border dark:hover:border-border"
                       }`}
                     >
                       {editingAccountId === account.id ? (
                         // Edit mode
                         <div className="p-3 space-y-2">
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">Label</label>
-                            <input
+                            <label className="block text-xs font-medium text-foreground mb-1">
+                              {t("label")}
+                            </label>
+                            <Input
                               type="text"
                               value={editingLabel}
-                              onChange={(e) => setEditingLabel(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              placeholder="Account label"
-                              autoFocus
+                              onChange={setEditingLabel}
+                              placeholder={t("accountLabel")}
+                              ref={focusOnMount}
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 mb-1">Email Address</label>
-                            <input
+                            <label className="block text-xs font-medium text-foreground mb-1">
+                              {t("emailAddress")}
+                            </label>
+                            <Input
                               type="email"
                               value={editingEmail}
-                              onChange={(e) => setEditingEmail(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                              placeholder="your.email@gmail.com"
+                              onChange={setEditingEmail}
+                              placeholder={t("emailAddressPlaceholder")}
                             />
                             {editingEmail !== account.email && (
-                              <p className="text-xs text-orange-600 mt-1">
-                                ⚠️ Changing email will migrate all data to the new email address
+                              <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                                {t("emailChangeWarning")}
                               </p>
                             )}
                           </div>
                           <div className="flex gap-2 pt-1">
-                            <button
+                            <Button
+                              variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
-                              className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors"
+                              className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
-                              Save Changes
-                            </button>
-                            <button
+                              {t("saveChanges")}
+                            </Button>
+                            <Button
+                              variant="ghost"
                               onClick={handleCancelEdit}
-                              className="flex-1 px-3 py-1.5 bg-gray-200 text-gray-700 text-xs font-medium rounded hover:bg-gray-300 transition-colors"
+                              className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded-xl hover:bg-muted dark:hover:bg-muted transition-colors"
                             >
-                              Cancel
-                            </button>
+                              {t("cancel")}
+                            </Button>
                           </div>
                         </div>
                       ) : (
                         // View mode
+                        // skipcq: JS-0415
                         <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
                           <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                            <input
-                              type="radio"
-                              name="activeAccount"
-                              checked={account.isActive}
-                              onChange={() => handleSwitchAccount(account.id)}
-                              className="w-4 h-4 text-blue-600 focus:ring-blue-500 flex-shrink-0"
-                            />
+                            <RadioGroup
+                              value={account.isActive ? account.id : ""}
+                              onValueChange={() =>
+                                handleSwitchAccount(account.id)
+                              }
+                            >
+                              <RadioGroupItem value={account.id} />
+                            </RadioGroup>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-gray-900 truncate">
+                                <span className="text-sm font-semibold text-foreground truncate">
                                   {account.label}
                                 </span>
                                 {account.isActive && (
-                                  <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded flex-shrink-0">
-                                    Active
+                                  <span className="flex-shrink-0 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
+                                    {t("active")}
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-gray-600 truncate font-mono">
+                              <div className="text-xs text-muted-foreground truncate font-mono">
                                 {account.email}
                               </div>
                             </div>
                           </label>
-                          
+
                           {/* Action buttons */}
                           <div className="flex items-center gap-1 flex-shrink-0">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStartEdit(account);
-                              }}
-                              className="p-1.5 text-gray-600 hover:bg-gray-100 rounded transition-colors"
-                              title="Edit account"
+                            <Tooltip content={t("editAccount")} side="left">
+                              <Button
+                                variant="ghost"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStartEdit(account);
+                                }}
+                                className="p-1.5 text-muted-foreground hover:bg-muted dark:hover:bg-muted rounded transition-colors"
+                                aria-label={t("editAccount")}
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                  />
+                                </svg>
+                              </Button>
+                            </Tooltip>
+                            <Tooltip
+                              content={
+                                emailAccounts.length === 1
+                                  ? t("cannotDeleteLastAccountTitle")
+                                  : t("deleteThisAccount")
+                              }
+                              side="left"
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                              </svg>
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteAccount(account);
-                              }}
-                              className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                              title={emailAccounts.length === 1 ? "Cannot delete the last account" : "Delete this account"}
-                              disabled={emailAccounts.length === 1}
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                            </button>
+                              <Button
+                                variant="ghost"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteAccount(account);
+                                }}
+                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                aria-label={
+                                  emailAccounts.length === 1
+                                    ? t("cannotDeleteLastAccountTitle")
+                                    : t("deleteThisAccount")
+                                }
+                                disabled={emailAccounts.length === 1}
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
+                                </svg>
+                              </Button>
+                            </Tooltip>
                           </div>
                         </div>
                       )}
@@ -766,107 +1575,101 @@ export default function Settings({ isOpen, onClose, onClearHistory }: SettingsPr
                 </div>
               )}
 
-              {/* Add Account Section */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm border-2 border-blue-200 p-4">
-                {!showAddAccount ? (
-                  <button
-                    onClick={() => setShowAddAccount(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add New Account
-                  </button>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-bold text-gray-900">Add New Account</h4>
-                      <button
-                        onClick={() => {
-                          setShowAddAccount(false);
-                          setNewAccountEmail('');
-                          setNewAccountLabel('');
-                          setAddAccountError('');
-                        }}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                    
-                    <div className="relative">
-                      <input
-                        type="email"
-                        value={newAccountEmail}
-                        onChange={(e) => {
-                          setNewAccountEmail(e.target.value);
-                          setAddAccountError('');
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Tab' && newAccountEmail && !newAccountEmail.includes('@')) {
-                            e.preventDefault();
-                            setNewAccountEmail(newAccountEmail + '@gmail.com');
-                          }
-                          if (e.key === 'Enter') {
-                            handleAddAccount();
-                          }
-                        }}
-                        placeholder="your.email"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autoFocus
-                      />
-                      {newAccountEmail && !newAccountEmail.includes('@') && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
-                          @gmail.com
-                        </div>
-                      )}
-                    </div>
-                    
-                    {addAccountError && (
-                      <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-md">
-                        <p className="text-xs text-red-600">{addAccountError}</p>
-                      </div>
-                    )}
-                    
-                    <p className="text-xs text-gray-500">
-                      💡 Press <kbd className="px-1 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Tab</kbd> to add @gmail.com
-                    </p>
-                    
-                    <input
-                      type="text"
-                      value={newAccountLabel}
-                      onChange={(e) => setNewAccountLabel(e.target.value)}
-                      placeholder="Label (optional, e.g., Work, Personal)"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    
-                    <button
-                      onClick={handleAddAccount}
-                      disabled={!newAccountEmail.trim()}
-                      className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      Add Account
-                    </button>
-                  </div>
-                )}
-              </div>
+              <AddAccountCard
+                showAddAccount={showAddAccount}
+                newAccountEmail={newAccountEmail}
+                newAccountLabel={newAccountLabel}
+                addAccountError={addAccountError}
+                focusOnMount={focusOnMount}
+                setShowAddAccount={setShowAddAccount}
+                setNewAccountEmail={setNewAccountEmail}
+                setNewAccountLabel={setNewAccountLabel}
+                setAddAccountError={setAddAccountError}
+                handleAddAccount={handleAddAccount}
+              />
             </div>
           )}
+          {/* Changelog Tab */}
+          {activeTab === "changelog" && <ChangelogPanel />}
         </div>
 
-        {/* Footer */}
-        <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-6 py-3 border-t border-gray-300">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="font-medium">Gmail Alias Toolkit</span>
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-500">v{version}</span>
+        <div className="hidden">
+          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <img
+              src="/icons/32.png"
+              alt=""
+              className="w-6 h-6 rounded-md flex-shrink-0"
+            />
+            <span className="font-medium">{t("extensionName")}</span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              •
+            </span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              v{version}
+            </span>
           </div>
+        </div>
+      </div>
+
+      {/* Settings Toast - inside modal so it shows above the overlay */}
+      {toast && (
+        <div className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
+          {toast}
+        </div>
+      )}
+
+      {confirmation && (
+        <ConfirmationDialog
+          request={confirmation}
+          onCancel={() => closeConfirmation(false)}
+          onConfirm={() => closeConfirmation(true)}
+        />
+      )}
+    </div>
+  );
+}
+
+interface ConfirmationDialogProps {
+  request: ConfirmationRequest;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+/** Renders the blocking confirmation prompt used by destructive settings actions. */
+function ConfirmationDialog({
+  request,
+  onCancel,
+  onConfirm,
+}: ConfirmationDialogProps) {
+  const confirmClass =
+    request.variant === "danger"
+      ? "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-ring"
+      : "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-ring";
+
+  return (
+    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-40 p-4">
+      <div className="w-full max-w-sm rounded-lg bg-card p-4 shadow-xl">
+        <h3 className="text-sm font-bold text-foreground">{request.title}</h3>
+        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-muted-foreground dark:text-muted-foreground">
+          {request.message}
+        </p>
+        <div className="mt-4 flex justify-end gap-2">
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={onCancel}
+            className="rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring dark:bg-muted dark:text-foreground dark:hover:bg-muted"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={onConfirm}
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
+          >
+            {request.confirmLabel}
+          </Button>
         </div>
       </div>
     </div>

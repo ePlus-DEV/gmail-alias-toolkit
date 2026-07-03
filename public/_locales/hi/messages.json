@@ -1,0 +1,697 @@
+{
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "प्लस एड्रेसिंग और प्रीसेट के साथ Gmail उपनाम बनाएं और प्रबंधित करें"
+  },
+  "headerSubtitle": {
+    "message": "प्लस एड्रेसिंग के साथ उपनाम बनाएं"
+  },
+  "settings": {
+    "message": "सेटिंग्स"
+  },
+  "back": {
+    "message": "वापस"
+  },
+  "close": {
+    "message": "बंद करें"
+  },
+  "cancel": {
+    "message": "रद्द करें"
+  },
+  "copy": {
+    "message": "कॉपी करें"
+  },
+  "copyAll": {
+    "message": "सभी कॉपी करें"
+  },
+  "copyToClipboard": {
+    "message": "क्लिपबोर्ड पर कॉपी करें"
+  },
+  "activeGmailAddress": {
+    "message": "सक्रिय Gmail पता"
+  },
+  "addNewAccount": {
+    "message": "नया खाता जोड़ें"
+  },
+  "addAccount": {
+    "message": "खाता जोड़ें"
+  },
+  "addNewAccountTitle": {
+    "message": "नया खाता जोड़ें"
+  },
+  "emailPlaceholder": {
+    "message": "your.email"
+  },
+  "accountLabelPlaceholder": {
+    "message": "लेबल (वैकल्पिक, जैसे Work, Personal)"
+  },
+  "pressTabToAddGmail": {
+    "message": "@gmail.com जोड़ने के लिए $KEY$ दबाएं",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "यह Gmail पता नहीं लग रहा है। प्लस एड्रेसिंग Gmail के साथ सबसे अच्छी तरह काम करती है।"
+  },
+  "random": {
+    "message": "यादृच्छिक"
+  },
+  "customTags": {
+    "message": "कस्टम टैग"
+  },
+  "gmailTricks": {
+    "message": "Gmail ट्रिक्स"
+  },
+  "tabTagsShort": {
+    "message": "टैग"
+  },
+  "tabTricksShort": {
+    "message": "ट्रिक्स"
+  },
+  "generating": {
+    "message": "बनाया जा रहा है"
+  },
+  "copied": {
+    "message": "कॉपी हो गया"
+  },
+  "switchToLightMode": {
+    "message": "लाइट मोड पर जाएं"
+  },
+  "switchToDarkMode": {
+    "message": "डार्क मोड पर जाएं"
+  },
+  "aliasColumn": {
+    "message": "उपनाम"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - कॉपी करने के लिए क्लिक करें",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "पृष्ठ $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "डॉट ट्रिक"
+  },
+  "plusTags": {
+    "message": "प्लस (+) टैग"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "डॉट हटाएं"
+  },
+  "dotPlus": {
+    "message": "डॉट + प्लस"
+  },
+  "allCombos": {
+    "message": "सभी कॉम्बो"
+  },
+  "numberOfVariations": {
+    "message": "वेरिएशन की संख्या"
+  },
+  "randomizeDotPositions": {
+    "message": "डॉट की स्थिति रैंडम करें"
+  },
+  "sequential": {
+    "message": "क्रमवार"
+  },
+  "generateTricks": {
+    "message": "ट्रिक्स बनाएं"
+  },
+  "generatedVariations": {
+    "message": "बने हुए वेरिएशन"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Gmail ट्रिक:"
+  },
+  "gmailTrickInfo": {
+    "message": "डॉट्स को अनदेखा किया जाता है और + के बाद की हर चीज उसी इनबॉक्स में जाती है"
+  },
+  "format": {
+    "message": "फ़ॉर्मैट"
+  },
+  "privateMailFormat": {
+    "message": "Private Mail (private-mail-xxxx)"
+  },
+  "randomCharactersFormat": {
+    "message": "यादृच्छिक वर्ण (abc123xy)"
+  },
+  "randomWordsFormat": {
+    "message": "यादृच्छिक शब्द (happy-fox-42)"
+  },
+  "timestampFormat": {
+    "message": "टाइमस्टैम्प (1234567890)"
+  },
+  "numberOfAliases": {
+    "message": "उपनामों की संख्या"
+  },
+  "generateRandomAliases": {
+    "message": "$COUNT$ यादृच्छिक उपनाम बनाएं",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "बनाए गए उपनाम"
+  },
+  "totalCount": {
+    "message": "कुल $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "$COUNT$ उपनाम कॉपी किए गए!",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "कॉपी करने में विफल"
+  },
+  "formatPrivateMail": {
+    "message": "फ़ॉर्मैट: private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 यादृच्छिक वर्ण"
+  },
+  "formatWords": {
+    "message": "2 यादृच्छिक शब्द"
+  },
+  "formatTimestamp": {
+    "message": "Unix टाइमस्टैम्प"
+  },
+  "tagPlaceholder": {
+    "message": "टैग दर्ज करें (जैसे shopping, work)"
+  },
+  "generate": {
+    "message": "बनाएं"
+  },
+  "yourPresets": {
+    "message": "आपके प्रीसेट"
+  },
+  "example": {
+    "message": "उदाहरण:"
+  },
+  "copyExample": {
+    "message": "उदाहरण कॉपी करें"
+  },
+  "recentAliases": {
+    "message": "हाल के उपनाम"
+  },
+  "favorites": {
+    "message": "पसंदीदा"
+  },
+  "exportAsCsv": {
+    "message": "CSV के रूप में निर्यात करें"
+  },
+  "exportAsJson": {
+    "message": "JSON के रूप में निर्यात करें"
+  },
+  "selectAliases": {
+    "message": "उपनाम चुनें"
+  },
+  "select": {
+    "message": "चुनें"
+  },
+  "starredCount": {
+    "message": "$COUNT$ स्टार किए गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "सभी चयन हटाएं"
+  },
+  "selectAll": {
+    "message": "सभी चुनें"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ चुने गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "$COUNT$ हटाएं",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "सभी ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "पसंदीदा ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "उपनाम खोजें..."
+  },
+  "allTags": {
+    "message": "सभी टैग"
+  },
+  "mostRecent": {
+    "message": "सबसे हाल के"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "अभी कोई पसंदीदा नहीं"
+  },
+  "starEmailsHint": {
+    "message": "यहां तुरंत पहुंचने के लिए अपने इतिहास से ईमेल को स्टार करें"
+  },
+  "noResultsFound": {
+    "message": "कोई परिणाम नहीं मिला"
+  },
+  "differentSearchHint": {
+    "message": "कोई दूसरी खोज या फ़िल्टर आज़माएं"
+  },
+  "showQrCode": {
+    "message": "QR कोड दिखाएं"
+  },
+  "removeFromFavorites": {
+    "message": "पसंदीदा से हटाएं"
+  },
+  "addToFavorites": {
+    "message": "पसंदीदा में जोड़ें"
+  },
+  "showingRange": {
+    "message": "$TOTAL$ में से $START$-$END$ दिखाए जा रहे हैं",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / पेज",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "पहला पेज"
+  },
+  "previousPage": {
+    "message": "पिछला पेज"
+  },
+  "nextPage": {
+    "message": "अगला पेज"
+  },
+  "lastPage": {
+    "message": "अंतिम पेज"
+  },
+  "scanToCopyAlias": {
+    "message": "उपनाम कॉपी करने के लिए स्कैन करें"
+  },
+  "general": {
+    "message": "सामान्य"
+  },
+  "accounts": {
+    "message": "खाते"
+  },
+  "changelog": {
+    "message": "परिवर्तन लॉग"
+  },
+  "appearanceDisplay": {
+    "message": "दिखावट और प्रदर्शन"
+  },
+  "theme": {
+    "message": "थीम"
+  },
+  "themeLight": {
+    "message": "लाइट"
+  },
+  "themeDark": {
+    "message": "डार्क"
+  },
+  "themeAuto": {
+    "message": "सिस्टम (ऑटो)"
+  },
+  "badgeCounter": {
+    "message": "बैज काउंटर"
+  },
+  "badgeNone": {
+    "message": "कोई नहीं (छिपा हुआ)"
+  },
+  "badgeTotal": {
+    "message": "इतिहास में कुल"
+  },
+  "badgeAllTime": {
+    "message": "कुल बनाए गए (सभी समय)"
+  },
+  "badgeToday": {
+    "message": "आज बनाए गए"
+  },
+  "badgeWeek": {
+    "message": "इस सप्ताह"
+  },
+  "copyNotifications": {
+    "message": "कॉपी सूचनाएं"
+  },
+  "aliasGeneration": {
+    "message": "उपनाम बनाना"
+  },
+  "randomAliasFormat": {
+    "message": "यादृच्छिक उपनाम फ़ॉर्मैट"
+  },
+  "autoSaveLimit": {
+    "message": "ऑटो-सेव सीमा"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ उपनाम",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "कस्टम प्रीसेट"
+  },
+  "label": {
+    "message": "लेबल"
+  },
+  "tag": {
+    "message": "टैग"
+  },
+  "addPreset": {
+    "message": "+ प्रीसेट जोड़ें"
+  },
+  "dataManagement": {
+    "message": "डेटा प्रबंधन"
+  },
+  "export": {
+    "message": "निर्यात"
+  },
+  "import": {
+    "message": "आयात"
+  },
+  "clear": {
+    "message": "साफ़ करें"
+  },
+  "resetSettings": {
+    "message": "सभी सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें"
+  },
+  "resetSettingsTitle": {
+    "message": "सेटिंग्स रीसेट करें?"
+  },
+  "resetSettingsMessage": {
+    "message": "यह हर सेटिंग को उसके डिफ़ॉल्ट मान पर वापस कर देगा।"
+  },
+  "reset": {
+    "message": "रीसेट"
+  },
+  "clearHistoryTitle": {
+    "message": "हाल के उपनाम साफ़ करें?"
+  },
+  "clearHistoryMessage": {
+    "message": "यह हाल की इतिहास सूची से सभी उपनाम हटा देता है।"
+  },
+  "emailAccounts": {
+    "message": "ईमेल खाते"
+  },
+  "manageAccountsDescription": {
+    "message": "अपने Gmail खाते प्रबंधित करें। हर खाते का अपना इतिहास, आंकड़े और पसंदीदा होते हैं।"
+  },
+  "noAccountsFound": {
+    "message": "कोई खाता नहीं मिला। कृपया मुख्य स्क्रीन से खाता जोड़ें।"
+  },
+  "emailAddress": {
+    "message": "ईमेल पता"
+  },
+  "accountLabel": {
+    "message": "खाता लेबल"
+  },
+  "emailAddressPlaceholder": {
+    "message": "your.email@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "ईमेल बदलने पर सभी डेटा नए ईमेल पते पर माइग्रेट हो जाएगा"
+  },
+  "saveChanges": {
+    "message": "बदलाव सहेजें"
+  },
+  "active": {
+    "message": "सक्रिय"
+  },
+  "editAccount": {
+    "message": "खाता संपादित करें"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "अंतिम खाता हटाया नहीं जा सकता"
+  },
+  "deleteThisAccount": {
+    "message": "यह खाता हटाएं"
+  },
+  "deleteAccountTitle": {
+    "message": "खाता हटाएं?"
+  },
+  "deleteAccountMessage": {
+    "message": "“$LABEL$” ($EMAIL$) हटाएं?\n\nयह स्थायी रूप से हटाएगा:\n- इस खाते का पूरा इतिहास\n- सभी आंकड़े\n- सभी पसंदीदा\n\nयह कार्रवाई पूर्ववत नहीं की जा सकती।",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "हटाएं"
+  },
+  "changeAccountEmailTitle": {
+    "message": "खाते का ईमेल बदलें?"
+  },
+  "changeAccountEmailMessage": {
+    "message": "ईमेल बदलें\n$OLD_EMAIL$\nसे\n$NEW_EMAIL$\nमें?\n\nयह करेगा:\n- पूरा इतिहास, आंकड़े और पसंदीदा नए ईमेल में माइग्रेट करेगा\n- खाते का ईमेल अपडेट करेगा\n- पुराने ईमेल से जुड़े डेटा को हटा देगा\n\nजारी रखें?",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "ईमेल बदलें"
+  },
+  "menuRandomEmailAlias": {
+    "message": "यादृच्छिक ईमेल उपनाम"
+  },
+  "menuCustomTags": {
+    "message": "कस्टम टैग"
+  },
+  "menuNoPresets": {
+    "message": "कोई प्रीसेट नहीं - सेटिंग्स में जोड़ें"
+  },
+  "menuGmailTricks": {
+    "message": "Gmail ट्रिक्स"
+  },
+  "menuDotVariation": {
+    "message": "डॉट वैरिएशन"
+  },
+  "menuGooglemailDomain": {
+    "message": "Googlemail डोमेन"
+  },
+  "menuRemoveAllDots": {
+    "message": "सभी डॉट हटाएं"
+  },
+  "toastPresetAdded": {
+    "message": "प्रीसेट जोड़ा गया"
+  },
+  "toastPresetRemoved": {
+    "message": "प्रीसेट हटाया गया"
+  },
+  "toastSettingsExported": {
+    "message": "सेटिंग्स निर्यात की गईं"
+  },
+  "toastSettingsImported": {
+    "message": "सेटिंग्स आयात की गईं"
+  },
+  "toastImportFailed": {
+    "message": "आयात विफल - अमान्य फ़ाइल"
+  },
+  "toastSettingsReset": {
+    "message": "सेटिंग्स डिफ़ॉल्ट पर रीसेट की गईं"
+  },
+  "toastAccountSwitched": {
+    "message": "खाता बदला गया"
+  },
+  "toastAccountDeleted": {
+    "message": "खाता हटाया गया"
+  },
+  "toastAccountUpdated": {
+    "message": "खाता अपडेट किया गया"
+  },
+  "toastAccountAdded": {
+    "message": "$LABEL$ जोड़ा गया",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "लेबल खाली नहीं हो सकता"
+  },
+  "errorInvalidEmail": {
+    "message": "कृपया एक मान्य ईमेल पता दर्ज करें"
+  },
+  "errorDuplicateEmail": {
+    "message": "यह ईमेल पता पहले से किसी दूसरे खाते में उपयोग हो रहा है"
+  },
+  "errorEnterEmail": {
+    "message": "कृपया एक ईमेल पता दर्ज करें"
+  },
+  "errorAccountExists": {
+    "message": "यह खाता पहले से मौजूद है"
+  },
+  "toastQrFailed": {
+    "message": "QR कोड बनाने में विफल"
+  },
+  "toastExportedAliases": {
+    "message": "$COUNT$ उपनाम निर्यात किए गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "$COUNT$ उपनाम हटाए गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "इतिहास साफ़ किया गया"
+  },
+  "toastFavoriteAdded": {
+    "message": "पसंदीदा में जोड़ा गया"
+  },
+  "toastFavoriteRemoved": {
+    "message": "पसंदीदा से हटाया गया"
+  },
+  "toastCopiedEmail": {
+    "message": "$EMAIL$ कॉपी किया गया",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "कॉपी करने में विफल"
+  },
+  "welcomeTitle": {
+    "message": "Gmail Alias Toolkit में आपका स्वागत है"
+  },
+  "welcomeSubtitle": {
+    "message": "गोपनीयता और संगठन के लिए असीमित ईमेल उपनाम बनाएं"
+  },
+  "letsGetStarted": {
+    "message": "चलिए शुरू करें"
+  },
+  "enterGmailAddress": {
+    "message": "अपना Gmail पता दर्ज करें"
+  },
+  "pressTabForGmail": {
+    "message": "@gmail.com के लिए $KEY$ दबाएं",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "सेटअप हो रहा है..."
+  },
+  "getStarted": {
+    "message": "शुरू करें"
+  },
+  "advancedSetup": {
+    "message": "सेटिंग्स में उन्नत सेटअप"
+  },
+  "whatYouCanDo": {
+    "message": "आप क्या कर सकते हैं:"
+  },
+  "featurePrivateEmail": {
+    "message": "निजी ईमेल जनरेटर"
+  },
+  "featureCustomTags": {
+    "message": "कस्टम टैग और प्रीसेट"
+  },
+  "featureGmailTricks": {
+    "message": "Gmail एडवांस्ड ट्रिक्स"
+  },
+  "welcomeFooter": {
+    "message": "सारा डेटा स्थानीय रूप से संग्रहीत होता है। कोई ट्रैकिंग नहीं, कोई सर्वर नहीं।"
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ सहेजे गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "इसे यहां जोड़ने के लिए इतिहास में किसी भी उपनाम पर स्टार क्लिक करें"
+  }
+}

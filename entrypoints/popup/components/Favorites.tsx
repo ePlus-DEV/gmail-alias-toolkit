@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import Button from "./Button";
+import { Tooltip } from "src/components/motion/tooltip";
+import { getAccountStorageKey } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface Favorite {
   id: string;
@@ -11,14 +15,20 @@ interface FavoritesProps {
   onCopy: (email: string) => void;
 }
 
-// Helper to get account-specific storage key
-const getAccountStorageKey = (email: string, suffix: string) => {
-  const sanitized = email.replace(/[^a-zA-Z0-9]/g, '_');
-  return `${suffix}_${sanitized}`;
-};
-
+/** Lists the favorited aliases for the given base email with copy and remove actions. */
 export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
+
+  /** Loads favorites for the current account from extension storage. */
+  const loadFavorites = async () => {
+    const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
+    const result = await browser.storage.local.get(favoritesKey);
+    if (result[favoritesKey] && Array.isArray(result[favoritesKey])) {
+      setFavorites(result[favoritesKey] as Favorite[]);
+    } else {
+      setFavorites([]);
+    }
+  };
 
   useEffect(() => {
     loadFavorites();
@@ -26,10 +36,14 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
 
   useEffect(() => {
     // Listen for storage changes
-    const handleStorageChange = (changes: any) => {
+    const handleStorageChange = (
+      changes: Record<string, { newValue?: unknown; oldValue?: unknown }>,
+    ) => {
       // Check if any favorites key changed
       const changedKeys = Object.keys(changes);
-      const relevantChange = changedKeys.some(key => key.startsWith('favorites_'));
+      const relevantChange = changedKeys.some((key) =>
+        key.startsWith("favorites_"),
+      );
       if (relevantChange || changes.email_accounts) {
         loadFavorites();
       }
@@ -39,18 +53,9 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
 
-  const loadFavorites = async () => {
-    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
-    const result = await browser.storage.local.get(favoritesKey);
-    if (result[favoritesKey] && Array.isArray(result[favoritesKey])) {
-      setFavorites(result[favoritesKey] as Favorite[]);
-    } else {
-      setFavorites([]);
-    }
-  };
-
+  /** Removes an alias from favorites and persists the updated list. */
   const removeFavorite = async (email: string) => {
-    const favoritesKey = getAccountStorageKey(baseEmail, 'favorites');
+    const favoritesKey = getAccountStorageKey(baseEmail, "favorites");
     const updated = favorites.filter((f) => f.email !== email);
     setFavorites(updated);
     await browser.storage.local.set({ [favoritesKey]: updated });
@@ -58,61 +63,88 @@ export default function Favorites({ baseEmail, onCopy }: FavoritesProps) {
 
   if (favorites.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div className="bg-card rounded-lg shadow-sm border border-border p-4">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-sm font-semibold text-gray-900">⭐ Favorites</h2>
+          <h2 className="text-sm font-semibold text-foreground">
+            ⭐ Favorites
+          </h2>
         </div>
         <div className="text-center py-4">
-          <svg className="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          <svg
+            className="mx-auto h-8 w-8 text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
           </svg>
-          <p className="text-xs text-gray-500 mt-2">No favorites yet</p>
-          <p className="text-xs text-gray-400 mt-1">Click ⭐ on any alias in history to add it here</p>
+          <p className="text-xs text-muted-foreground mt-2">
+            {t("noFavoritesYet")}
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Click ⭐ on any alias in history to add it here
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div className="bg-card rounded-lg shadow-sm border border-border p-4">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-gray-900">⭐ Favorites</h2>
-        <span className="text-xs text-gray-500">{favorites.length} saved</span>
+        <h2 className="text-sm font-semibold text-foreground">⭐ Favorites</h2>
+        <span className="text-xs text-muted-foreground">
+          {t("favoritesSaved", String(favorites.length))}
+        </span>
       </div>
 
       <div className="space-y-2">
         {favorites.map((favorite) => {
           const tagMatch = favorite.email.match(/\+([^@]+)@/);
-          const tag = tagMatch ? tagMatch[1] : 'no-tag';
-          
+          const tag = tagMatch ? tagMatch[1] : "no-tag";
+
           return (
             <div
               key={favorite.id}
-              className="group flex items-center gap-2 p-2.5 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-md hover:shadow-sm transition-all"
+              className="group flex items-center gap-2 rounded-md border border-accent/20 bg-accent/10 p-2.5 transition-all hover:shadow-sm"
             >
-              <button
+              <Button
                 onClick={() => onCopy(favorite.email)}
+                variant="ghost"
                 className="flex-1 text-left min-w-0"
               >
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-xs font-medium text-orange-700 bg-orange-100 px-2 py-0.5 rounded">
+                  <span className="rounded bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent">
                     {tag}
                   </span>
                 </div>
-                <div className="text-xs text-gray-700 font-mono truncate">
+                <div className="truncate font-mono text-xs text-foreground">
                   {favorite.email}
                 </div>
-              </button>
-              
-              <button
-                onClick={() => removeFavorite(favorite.email)}
-                className="p-1.5 text-yellow-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors opacity-0 group-hover:opacity-100"
-                title="Remove from favorites"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                </svg>
-              </button>
+              </Button>
+
+              <Tooltip content={t("removeFromFavorites")} side="left">
+                <Button
+                  onClick={() => removeFavorite(favorite.email)}
+                  variant="ghost"
+                  size="icon"
+                  className="p-1.5 text-accent opacity-0 transition-colors hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+                  aria-label={t("removeFromFavorites")}
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                </Button>
+              </Tooltip>
             </div>
           );
         })}
