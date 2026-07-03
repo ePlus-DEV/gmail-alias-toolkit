@@ -18,7 +18,13 @@ import { EASE_OUT, SPRING_PRESS } from "src/lib/ease";
 import { cn } from "src/lib/utils";
 import { useHoverCapable } from "src/lib/hooks/use-hover-capable";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "ghost"
+  | "outline"
+  | "danger"
+  | "success";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 export interface ButtonProps extends Omit<
@@ -30,6 +36,8 @@ export interface ButtonProps extends Omit<
   pressScale?: number;
   /** Spawn a Material-style ripple from the press point. Off by default. */
   ripple?: boolean;
+  fullWidth?: boolean;
+  icon?: ReactNode;
   children?: ReactNode;
 }
 
@@ -41,6 +49,10 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
   ghost: "text-muted-foreground hover:text-foreground hover:bg-primary/5",
   outline:
     "border border-border bg-transparent text-foreground hover:bg-primary/5",
+  danger:
+    "bg-destructive/10 text-destructive hover:bg-destructive/20 dark:hover:bg-destructive/15",
+  success:
+    "bg-accent/10 text-accent hover:bg-accent/20 dark:hover:bg-accent/15",
 };
 
 const SIZE_CLASS: Record<ButtonSize, string> = {
@@ -57,6 +69,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "md",
       pressScale = 0.93,
       ripple = false,
+      fullWidth = false,
+      icon,
+      disabled,
       className,
       children,
       onPointerDown,
@@ -97,6 +112,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         whileHover={reduce || !canHover ? undefined : { scale: 1.02 }}
         transition={SPRING_PRESS}
         onPointerDown={handlePointerDown}
+        disabled={disabled}
         className={cn(
           "inline-flex items-center justify-center font-medium select-none",
           "transition-colors",
@@ -104,6 +120,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ripple && "relative overflow-hidden",
           VARIANT_CLASS[variant],
           SIZE_CLASS[size],
+          fullWidth && "w-full",
+          disabled && "opacity-50",
           className,
         )}
         {...rest}
@@ -133,6 +151,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 />
               ))}
             </AnimatePresence>
+          </span>
+        ) : null}
+        {icon ? (
+          <span className="inline-grid shrink-0 place-items-center">
+            {icon}
           </span>
         ) : null}
         {children}

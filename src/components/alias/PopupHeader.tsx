@@ -1,5 +1,5 @@
 import { Settings, Sparkles } from "lucide-react";
-import { Button } from "../ui";
+import { Button } from "src/components/motion/button/base";
 import { t } from "../../../lib/i18n";
 
 export interface PopupHeaderProps {

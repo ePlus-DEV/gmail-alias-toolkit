@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import { BarChart3, Check, Clock, Mail, X } from "lucide-react";
-import { NumberAnimation, StatCard } from "../../../src/components/ui";
+import { AnimatedNumber } from "src/components/motion/animated-number";
 import { getAccountStorageKey } from "../utils";
 
 interface Stats {
@@ -23,6 +24,26 @@ type StorageChanges = Record<
   string,
   { newValue?: unknown; oldValue?: unknown }
 >;
+
+interface StatCardProps {
+  icon: ReactNode;
+  value: ReactNode;
+  label: string;
+}
+
+function StatCard({ icon, value, label }: StatCardProps) {
+  return (
+    <div className="rounded-xl border border-border bg-card/85 p-3 shadow-sm">
+      <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        {icon}
+      </div>
+      <div className="truncate text-lg font-bold text-foreground">{value}</div>
+      <p className="mt-0.5 truncate text-[11px] font-medium text-muted-foreground">
+        {label}
+      </p>
+    </div>
+  );
+}
 
 /** Collapsible panel showing alias usage statistics for the active account. */
 export default function Statistics() {
@@ -153,17 +174,17 @@ export default function Statistics() {
       <div className="grid grid-cols-2 gap-2">
         <StatCard
           icon={<Mail className="h-4 w-4" />}
-          value={<NumberAnimation value={stats.totalGenerated} />}
+          value={<AnimatedNumber value={stats.totalGenerated} />}
           label="Total Generated"
         />
         <StatCard
           icon={<Check className="h-4 w-4" />}
-          value={<NumberAnimation value={stats.createdToday} />}
+          value={<AnimatedNumber value={stats.createdToday} />}
           label="Created Today"
         />
         <StatCard
           icon={<Clock className="h-4 w-4" />}
-          value={<NumberAnimation value={stats.createdThisWeek} />}
+          value={<AnimatedNumber value={stats.createdThisWeek} />}
           label="This Week"
         />
         <StatCard

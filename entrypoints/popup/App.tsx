@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Button, Card, Toast } from "../../src/components/ui";
+import { AnimatedToastStack } from "src/components/motion/animated-toast-stack";
 import PopupHeader from "../../src/components/alias/PopupHeader";
 import AccountSwitcher from "../../src/components/alias/AccountSwitcher";
 import QRCode from "qrcode";
@@ -731,7 +731,7 @@ function App() {
 
           {/* Main Content */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-4">
-            <Card className="divide-y divide-gray-200/70 overflow-hidden dark:divide-gray-700/70">
+            <div className="divide-y divide-gray-200/70 overflow-hidden rounded-xl border border-border bg-card shadow-soft backdrop-blur dark:divide-gray-700/70">
               <AccountSwitcher
                 baseEmail={baseEmail}
                 emailAccounts={emailAccounts}
@@ -832,10 +832,25 @@ function App() {
 
               {/* Statistics - Collapsible */}
               <Statistics />
-            </Card>
+            </div>
 
             {/* Toast Notification */}
-            {toastMessage && <Toast message={toastMessage} />}
+            {toastMessage ? (
+              <AnimatedToastStack
+                toasts={[
+                  {
+                    id: "popup-toast",
+                    title: toastMessage,
+                    status: "info",
+                    duration: 0,
+                    dismissible: false,
+                  },
+                ]}
+                placement="absolute"
+                position="bottom-center"
+                className="bottom-4"
+              />
+            ) : null}
           </div>
         </>
       )}

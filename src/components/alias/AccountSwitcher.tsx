@@ -1,12 +1,13 @@
 import { Mail, Plus, Tag, UserRound } from "lucide-react";
-import { Button, Input } from "../ui";
+import { Button } from "src/components/motion/button/base";
+import { Input } from "src/components/motion/input";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../ui/Select";
+} from "src/components/motion/select";
 import { t } from "../../../lib/i18n";
 
 export interface EmailAccount {

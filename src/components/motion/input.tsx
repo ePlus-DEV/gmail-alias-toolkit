@@ -9,7 +9,9 @@ import {
 } from "motion/react";
 import {
   useEffect,
+  forwardRef,
   useId,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
@@ -46,21 +48,24 @@ export interface InputProps extends Omit<
   className?: string;
 }
 
-export function Input({
-  label,
-  value: valueProp,
-  defaultValue,
-  onChange,
-  error,
-  success,
-  leftIcon,
-  rightIcon,
-  className,
-  disabled,
-  id: idProp,
-  type,
-  ...rest
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    label,
+    value: valueProp,
+    defaultValue,
+    onChange,
+    error,
+    success,
+    leftIcon,
+    rightIcon,
+    className,
+    disabled,
+    id: idProp,
+    type,
+    ...rest
+  },
+  ref,
+) {
   // Password masks characters as dots, so a plain-text mirror can't measure the
   // caret position. Use the native caret there; the gliding caret is for text.
   const customCaret = type !== "password";
@@ -80,6 +85,7 @@ export function Input({
   const fieldRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const mirrorRef = useRef<HTMLSpanElement>(null);
+  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
   const hasError = Boolean(error);
   const errorMessage = typeof error === "string" ? error : null;
@@ -175,6 +181,7 @@ export function Input({
             "peer h-full w-full bg-transparent text-base leading-6 text-foreground outline-none",
             customCaret ? "caret-transparent" : "caret-foreground",
             "placeholder:text-muted-foreground/60",
+            "disabled:opacity-50",
             disabled && "cursor-not-allowed",
           )}
           {...rest}
@@ -268,4 +275,4 @@ export function Input({
       </AnimatePresence>
     </div>
   );
-}
+});

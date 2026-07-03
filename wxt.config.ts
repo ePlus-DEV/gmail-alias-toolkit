@@ -1,5 +1,6 @@
 import { defineConfig } from "wxt";
 import { EventEmitter } from "events";
+import { fileURLToPath } from "node:url";
 
 // Fix EventEmitter maxListeners warning
 EventEmitter.defaultMaxListeners = 15;
@@ -10,6 +11,11 @@ export default defineConfig({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
+    },
+    resolve: {
+      alias: {
+        src: fileURLToPath(new URL("./src", import.meta.url)),
+      },
     },
   }),
   manifest: {
