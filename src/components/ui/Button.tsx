@@ -44,7 +44,7 @@ type Ripple = { id: number; x: number; y: number; size: number };
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-soft hover:from-blue-700 hover:to-violet-700",
+    "bg-blue-600 text-white shadow-soft hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700",
   secondary:
     "border border-gray-200/80 bg-white/85 text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700/80 dark:bg-gray-800/85 dark:text-gray-200 dark:hover:bg-gray-700/80",
   ghost:
@@ -58,10 +58,10 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-8 rounded-xl px-3 text-xs gap-1.5",
-  md: "h-10 rounded-xl px-4 text-sm gap-2",
-  lg: "h-12 rounded-2xl px-5 text-base gap-2",
-  icon: "h-10 w-10 rounded-xl p-0",
+  sm: "h-8 rounded-lg px-3 text-xs gap-1.5",
+  md: "h-10 rounded-lg px-4 text-sm gap-2",
+  lg: "h-12 rounded-xl px-5 text-base gap-2",
+  icon: "h-10 w-10 rounded-lg p-0",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
