@@ -47,8 +47,8 @@ const variants: Record<ButtonVariant, string> = {
     "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90 dark:hover:bg-primary/80",
   secondary:
     "border border-border bg-card text-foreground shadow-sm hover:bg-card/80",
-  ghost: "text-foreground hover:bg-muted",
-  outline: "border border-border bg-transparent text-foreground hover:bg-muted",
+  ghost: "text-muted-foreground hover:text-foreground hover:bg-primary/5",
+  outline: "border border-border bg-transparent text-foreground hover:bg-primary/5",
   danger:
     "bg-destructive/10 text-destructive hover:bg-destructive/20 dark:hover:bg-destructive/15",
   success:
@@ -114,7 +114,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         transition={SPRING_PRESS}
         onPointerDown={handlePointerDown}
         className={cn(
-          "inline-flex items-center justify-center font-semibold select-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-offset-gray-950",
+          "inline-flex items-center justify-center font-semibold select-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-offset-background",
           ripple && "relative overflow-hidden",
           variants[variant],
           sizes[size],
