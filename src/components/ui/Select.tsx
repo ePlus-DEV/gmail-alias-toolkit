@@ -174,10 +174,7 @@ export interface SelectTriggerProps {
   children: ReactNode;
 }
 
-export function SelectTrigger({
-  className,
-  children,
-}: SelectTriggerProps) {
+export function SelectTrigger({ className, children }: SelectTriggerProps) {
   const ctx = useSelectContext("SelectTrigger");
   const isTop = ctx.placement === "top";
   const kf = ctx.open ? [0, 0, 12] : [12, 0, 12];
@@ -235,10 +232,7 @@ export interface SelectValueProps {
   className?: string;
 }
 
-export function SelectValue({
-  placeholder,
-  className,
-}: SelectValueProps) {
+export function SelectValue({ placeholder, className }: SelectValueProps) {
   const ctx = useSelectContext("SelectValue");
   const label = ctx.labelFor(ctx.value);
   return (
@@ -258,10 +252,7 @@ export interface SelectContentProps {
   children: ReactNode;
 }
 
-export function SelectContent({
-  className,
-  children,
-}: SelectContentProps) {
+export function SelectContent({ className, children }: SelectContentProps) {
   const ctx = useSelectContext("SelectContent");
   const innerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
