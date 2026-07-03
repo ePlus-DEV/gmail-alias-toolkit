@@ -1,0 +1,96 @@
+name: Bug report
+description: Report a problem with Gmail Alias Toolkit
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - hoangsvit
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Gmail Alias Toolkit. Please include enough detail for us to reproduce the issue.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug and the part of the extension affected.
+      placeholder: The popup/settings page/history table does...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps that trigger the issue.
+      placeholder: |
+        1. Open the extension popup
+        2. Select Custom Tags
+        3. Enter ...
+        4. See ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: I expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: Instead...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Microsoft Edge
+        - Brave
+        - Firefox
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser version
+      placeholder: "Example: Chrome 126.0.6478.127"
+
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      placeholder: "Example: v1.2.0"
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Theme
+      options:
+        - Light
+        - Dark
+        - System
+        - Not sure
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or recording
+      description: Drag screenshots, recordings, or console errors here if available.
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Include anything else that may help, such as imported settings, locale, or whether this happens after reload.
