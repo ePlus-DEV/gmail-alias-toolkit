@@ -7,7 +7,13 @@ export { default as EmptyState } from "./EmptyState";
 export { default as Input } from "./Input";
 export { default as NumberAnimation } from "./NumberAnimation";
 export { default as SectionHeader } from "./SectionHeader";
-export { default as Select } from "./Select";
+export {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "./Select";
 export { default as StatCard } from "./StatCard";
 export { default as Tabs } from "./Tabs";
 export { default as Toast } from "./Toast";

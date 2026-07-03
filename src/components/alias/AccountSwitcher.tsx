@@ -1,5 +1,12 @@
 import { Mail, Plus, Tag, UserRound } from "lucide-react";
-import { Button, Input, Select } from "../ui";
+import { Button, Input } from "../ui";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../ui/Select";
 import { t } from "../../../lib/i18n";
 
 export interface EmailAccount {
@@ -46,25 +53,29 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
   return (
     <div className="p-4">
       <div className="flex gap-2">
-        <Select
-          label={t("activeGmailAddress")}
-          value={baseEmail}
-          onChange={(event) => onSelectAccount(event.target.value)}
-          leftIcon={<Mail className="h-4 w-4" />}
-          containerClassName="min-w-0 flex-1"
-          className="truncate"
-        >
-          {emailAccounts.length > 0 ? (
-            emailAccounts.map((account) => (
-              <option key={account.id} value={account.email}>
-                {account.label ? `${account.label} - ` : ""}
-                {account.email}
-              </option>
-            ))
-          ) : (
-            <option value={baseEmail}>{baseEmail}</option>
-          )}
-        </Select>
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+            {t("activeGmailAddress")}
+          </label>
+          <Select value={baseEmail} onValueChange={onSelectAccount}>
+            <SelectTrigger className="flex items-center gap-2">
+              <Mail className="h-4 w-4 shrink-0 text-gray-400" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {emailAccounts.length > 0 ? (
+                emailAccounts.map((account) => (
+                  <SelectItem key={account.id} value={account.email}>
+                    {account.label ? `${account.label} - ` : ""}
+                    {account.email}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value={baseEmail}>{baseEmail}</SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        </div>
         <Button
           onClick={onToggleAddAccount}
           size="icon"
