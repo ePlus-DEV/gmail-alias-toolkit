@@ -63,8 +63,8 @@ export interface TableProps<T> {
   onDeleteColumn?: (columnKey: string, index: number) => void;
   /** Fixed row height in px — required for virtualization. */
   rowHeight?: number;
-  /** Scroll viewport height in px. */
-  height?: number;
+  /** Scroll viewport height in px, or "auto" to render without an internal scroller. */
+  height?: number | "auto";
   /** Rows rendered above/below the viewport. */
   overscan?: number;
   /** Fires when the viewport scrolls near the bottom — load the next page. */

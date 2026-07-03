@@ -57,6 +57,9 @@ export function Table<T>({
 }: TableProps<T>) {
   const reduce = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const autoHeight = height === "auto";
+  const viewportHeight =
+    height === "auto" ? Math.max(rowHeight, data.length * rowHeight + rowHeight) : height;
   const thRefs: HeaderCellRefs = useRef<
     Record<string, HTMLTableCellElement | null>
   >({});
@@ -109,11 +112,15 @@ export function Table<T>({
     overscan,
   });
 
-  const virtualItems = virtualizer.getVirtualItems();
+  const virtualItems = autoHeight ? [] : virtualizer.getVirtualItems();
+  const visibleIndexes = autoHeight
+    ? sortedRows.map((_, index) => index)
+    : virtualItems.map((item) => item.index);
   const totalSize = virtualizer.getTotalSize();
-  const paddingTop = virtualItems.length > 0 ? virtualItems[0].start : 0;
+  const paddingTop =
+    !autoHeight && virtualItems.length > 0 ? virtualItems[0].start : 0;
   const paddingBottom =
-    virtualItems.length > 0
+    !autoHeight && virtualItems.length > 0
       ? totalSize - virtualItems[virtualItems.length - 1].end
       : 0;
 
@@ -181,8 +188,8 @@ export function Table<T>({
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="overflow-auto"
-        style={{ height }}
+        className={autoHeight ? "overflow-visible" : "overflow-auto"}
+        style={autoHeight ? undefined : { height: viewportHeight }}
       >
         <table
           className={cn("border-collapse", sized ? "w-max min-w-full" : "min-w-full")}
@@ -234,7 +241,7 @@ export function Table<T>({
             {sortedRows.length === 0 ? (
               loading ? (
                 <SkeletonRows
-                  count={Math.max(1, Math.ceil(height / rowHeight))}
+                  count={Math.max(1, Math.ceil(viewportHeight / rowHeight))}
                   columns={orderedColumns}
                   selectable={selectable}
                   rowHeight={rowHeight}
@@ -256,8 +263,8 @@ export function Table<T>({
                     <td colSpan={leadColumns + 1} />
                   </tr>
                 ) : null}
-                {virtualItems.map((vItem) => {
-                  const entry = sortedRows[vItem.index];
+                {visibleIndexes.map((rowIndex) => {
+                  const entry = sortedRows[rowIndex];
                   const isSelected = selected.has(entry.id);
                   return (
                     <tr
@@ -269,7 +276,7 @@ export function Table<T>({
                       style={{ height: rowHeight }}
                       onPointerEnter={
                         hasRowMenu
-                          ? () => activateRow(entry.id, vItem.index)
+                          ? () => activateRow(entry.id, rowIndex)
                           : undefined
                       }
                       onPointerLeave={hasRowMenu ? deactivateRow : undefined}
@@ -285,7 +292,7 @@ export function Table<T>({
                             <Checkbox
                               checked={isSelected}
                               onCheckedChange={() => toggleRow(entry.id)}
-                              aria-label={`Select row ${vItem.index + 1}`}
+                              aria-label={`Select row ${rowIndex + 1}`}
                             />
                           </div>
                         </td>
@@ -294,14 +301,14 @@ export function Table<T>({
                         <td
                           key={column.key}
                           className={cn(
-                            "truncate px-4 text-foreground",
+                            "px-2 text-foreground",
                             alignText(column.align),
                           )}
                         >
                           {!column.cell && column.editable ? (
                             <EditableCell
                               value={String(readCell(entry.row, column) ?? "")}
-                              label={`${column.key} for row ${vItem.index + 1}`}
+                              label={`${column.key} for row ${rowIndex + 1}`}
                               onChange={(next) =>
                                 onCellEdit?.(entry.id, column.key, next)
                               }

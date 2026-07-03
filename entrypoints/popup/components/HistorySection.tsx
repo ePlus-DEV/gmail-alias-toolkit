@@ -29,6 +29,14 @@ interface Alias {
   timestamp: number;
 }
 
+function shortenEmail(email: string) {
+  const [local, domain] = email.split("@");
+  if (!local || !domain || email.length <= 30) return email;
+  const visibleLocal =
+    local.length > 20 ? `${local.slice(0, 14)}...${local.slice(-4)}` : local;
+  return `${visibleLocal}@${domain}`;
+}
+
 interface HistorySectionProps {
   recentAliases: Alias[];
   favorites: string[];
@@ -105,52 +113,50 @@ export default function HistorySection({
               : t("starredCount", String(favorites.length))}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-1 rounded-xl bg-muted p-1">
-          {viewMode === "all" && recentAliases.length > 0 && (
-            <>
-              <Tooltip content={t("exportAsCsv")}>
-                <Button
-                  onClick={() => exportAliases("csv")}
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 rounded-lg px-2 text-[11px] text-muted-foreground hover:bg-background hover:text-primary"
-                  aria-label={t("exportAsCsv")}
-                >
-                  CSV
-                </Button>
-              </Tooltip>
-              <Tooltip content={t("exportAsJson")}>
-                <Button
-                  onClick={() => exportAliases("json")}
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 rounded-lg px-2 text-[11px] text-muted-foreground hover:bg-background hover:text-primary"
-                  aria-label={t("exportAsJson")}
-                >
-                  JSON
-                </Button>
-              </Tooltip>
-              <Tooltip content={t("selectAliases")}>
-                <Button
-                  onClick={() => {
-                    setIsSelectMode(!isSelectMode);
-                    setSelectedAliases(new Set());
-                  }}
-                  variant={isSelectMode ? "primary" : "ghost"}
-                  size="sm"
-                  className={`h-7 rounded-lg px-2 text-[11px] transition-colors ${
-                    isSelectMode
-                      ? "bg-background text-primary shadow-sm"
-                      : "text-muted-foreground hover:bg-background hover:text-primary"
-                  }`}
-                  aria-label={t("selectAliases")}
-                >
-                  {t("select")}
-                </Button>
-              </Tooltip>
-            </>
-          )}
-        </div>
+        {viewMode === "all" && recentAliases.length > 0 && (
+          <div className="flex shrink-0 items-center gap-1 rounded-xl border border-border bg-background p-1 shadow-sm">
+            <Tooltip content={t("exportAsCsv")}>
+              <Button
+                onClick={() => exportAliases("csv")}
+                variant="ghost"
+                size="sm"
+                className="h-7 rounded-lg px-2 text-[11px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label={t("exportAsCsv")}
+              >
+                CSV
+              </Button>
+            </Tooltip>
+            <Tooltip content={t("exportAsJson")}>
+              <Button
+                onClick={() => exportAliases("json")}
+                variant="ghost"
+                size="sm"
+                className="h-7 rounded-lg px-2 text-[11px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label={t("exportAsJson")}
+              >
+                JSON
+              </Button>
+            </Tooltip>
+            <Tooltip content={t("selectAliases")}>
+              <Button
+                onClick={() => {
+                  setIsSelectMode(!isSelectMode);
+                  setSelectedAliases(new Set());
+                }}
+                variant={isSelectMode ? "primary" : "ghost"}
+                size="sm"
+                className={`h-7 rounded-lg px-2 text-[11px] transition-colors ${
+                  isSelectMode
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+                aria-label={t("selectAliases")}
+              >
+                {t("select")}
+              </Button>
+            </Tooltip>
+          </div>
+        )}
       </div>
 
       {/* Bulk delete bar */}
@@ -338,7 +344,6 @@ export default function HistorySection({
         isSelectMode={isSelectMode}
         selectedAliases={selectedAliases}
         toggleSelectAlias={toggleSelectAlias}
-        copiedEmail={copiedEmail}
         favorites={favorites}
         toggleFavorite={toggleFavorite}
         copyToClipboard={copyToClipboard}
@@ -359,7 +364,6 @@ function HistoryList({
   isSelectMode,
   selectedAliases,
   toggleSelectAlias,
-  copiedEmail,
   favorites,
   toggleFavorite,
   copyToClipboard,
@@ -374,7 +378,6 @@ function HistoryList({
   isSelectMode: boolean;
   selectedAliases: Set<string>;
   toggleSelectAlias: (email: string) => void;
-  copiedEmail: string | null;
   favorites: string[];
   toggleFavorite: (email: string) => void;
   copyToClipboard: (email: string) => Promise<void>;
@@ -386,10 +389,6 @@ function HistoryList({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedAliases = filteredAliases.slice(startIndex, endIndex);
-  const tableHeight = Math.min(
-    288,
-    Math.max(96, paginatedAliases.length * 44 + 44),
-  );
   const columns = useMemo<TableColumn<Alias>[]>(
     () => [
       ...(isSelectMode
@@ -397,7 +396,7 @@ function HistoryList({
             {
               key: "select",
               header: "",
-              width: "40px",
+              width: "36px",
               align: "center" as const,
               cell: (alias: Alias) => (
                 <Checkbox
@@ -412,32 +411,37 @@ function HistoryList({
       {
         key: "email",
         header: "Alias",
-        sortable: true,
-        width: isSelectMode ? "178px" : "218px",
+        width: isSelectMode ? "142px" : "180px",
         cell: (alias) => (
-          <span className="block truncate font-mono text-[12px] text-foreground">
-            {alias.email}
-          </span>
+          <Tooltip content={`${alias.email} - click to copy`} side="top">
+            <button
+              type="button"
+              onClick={() => copyToClipboard(alias.email)}
+              className="block max-w-full cursor-pointer truncate rounded px-1 py-0.5 text-left font-mono text-[12px] text-foreground transition-colors hover:bg-muted"
+              aria-label={t("copyToClipboard")}
+            >
+              {shortenEmail(alias.email)}
+            </button>
+          </Tooltip>
         ),
         sortValue: (alias) => alias.email,
       },
       {
         key: "actions",
         header: "",
-        width: "104px",
-        align: "right",
+        width: "58px",
+        align: "left",
         cell: (alias) => {
-          const isCopied = copiedEmail === alias.email;
           const isFavorited = favorites.includes(alias.email);
 
           return (
-            <div className="flex items-center justify-end gap-0.5 rounded-lg bg-muted/60 p-0.5">
+            <div className="flex w-max items-center gap-1 rounded-md border border-border bg-background p-0.5 shadow-sm">
               <Tooltip content={t("showQrCode")}>
                 <Button
                   onClick={() => setQrAlias(alias.email)}
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:outline-none"
+                  className="h-[22px] w-[22px] rounded p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:outline-none"
                   aria-label={t("showQrCode")}
                 >
                   <QrCode className="h-3.5 w-3.5" />
@@ -452,7 +456,7 @@ function HistoryList({
                   onClick={() => toggleFavorite(alias.email)}
                   variant="ghost"
                   size="icon"
-                  className={`h-7 w-7 rounded-md p-0 transition-colors hover:bg-background focus:outline-none ${
+                  className={`h-[22px] w-[22px] rounded p-0 transition-colors hover:bg-background focus:outline-none ${
                     isFavorited
                       ? "text-accent hover:text-accent"
                       : "text-muted-foreground hover:text-accent"
@@ -469,28 +473,12 @@ function HistoryList({
                   />
                 </Button>
               </Tooltip>
-              <Tooltip content={t("copyToClipboard")}>
-                <Button
-                  onClick={() => copyToClipboard(alias.email)}
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:text-primary focus:outline-none"
-                  aria-label={t("copyToClipboard")}
-                >
-                  {isCopied ? (
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                  ) : (
-                    <Copy className="h-3.5 w-3.5" />
-                  )}
-                </Button>
-              </Tooltip>
             </div>
           );
         },
       },
     ],
     [
-      copiedEmail,
       copyToClipboard,
       favorites,
       isSelectMode,
@@ -553,10 +541,10 @@ function HistoryList({
         columns={columns}
         getRowId={(alias) => alias.email}
         rowHeight={44}
-        height={tableHeight}
+        height="auto"
         defaultSort={null}
         emptyState={t("noResultsFound")}
-        className="rounded-xl"
+        className="rounded-xl bg-card shadow-sm [&>div]:overflow-x-hidden [&_td]:min-w-0 [&_td]:px-2 [&_th]:bg-muted/80 [&_th]:px-2 [&_th]:text-foreground"
       />
 
       {totalPages > 1 && (
