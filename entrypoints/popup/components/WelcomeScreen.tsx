@@ -396,11 +396,8 @@ function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
 /** Renders the welcome screen footer message. */
 function WelcomeFooter() {
   return (
-    <p className="text-center text-xs text-muted-foreground">{t("welcomeFooter")}</p>
+    <p className="text-center text-xs text-muted-foreground">
+      {t("welcomeFooter")}
+    </p>
   );
 }
-
-
-
-
-

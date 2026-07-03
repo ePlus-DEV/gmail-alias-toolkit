@@ -1,8 +1,19 @@
 "use client";
 // beui.dev/components/motion/tabs
 
-import { motion, MotionConfig, useReducedMotion, type Transition } from "motion/react";
-import { createContext, useContext, useId, useState, type ReactNode } from "react";
+import {
+  motion,
+  MotionConfig,
+  useReducedMotion,
+  type Transition,
+} from "motion/react";
+import {
+  createContext,
+  useContext,
+  useId,
+  useState,
+  type ReactNode,
+} from "react";
 import { EASE_OUT } from "src/lib/ease";
 import { cn } from "src/lib/utils";
 
@@ -77,7 +88,13 @@ const listClasses: Record<Variant, string> = {
   segment: "inline-flex items-center gap-0 rounded-lg bg-card p-0.5",
 };
 
-export function TabsList({ children, className }: { children: ReactNode; className?: string }) {
+export function TabsList({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   const { variant } = useTabs();
   return (
     <div role="tablist" className={cn(listClasses[variant], className)}>
@@ -109,19 +126,21 @@ export function TabsTrigger({
         onClick={() => setValue(value)}
         className={cn(
           "relative isolate px-3 pb-2.5 pt-1 -mb-px text-sm font-medium transition-colors min-h-[44px] inline-flex cursor-pointer items-center",
-          active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+          active
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground",
           className,
         )}
       >
         {children}
         {active ? (
-        <motion.span
-          layoutId={layoutId}
-          className={cn(
-            "absolute -bottom-px left-0 right-0 h-px bg-primary",
-            indicatorClassName,
-          )}
-        />
+          <motion.span
+            layoutId={layoutId}
+            className={cn(
+              "absolute -bottom-px left-0 right-0 h-px bg-primary",
+              indicatorClassName,
+            )}
+          />
         ) : null}
       </button>
     );
@@ -151,7 +170,9 @@ export function TabsTrigger({
         onClick={() => setValue(value)}
         className={cn(
           "relative z-10 inline-flex cursor-pointer items-center justify-center whitespace-nowrap bg-transparent px-3.5 py-1.5 text-sm font-medium transition-colors outline-none",
-          active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+          active
+            ? "text-primary-foreground"
+            : "text-muted-foreground hover:text-foreground",
           radius,
           className,
         )}
@@ -162,7 +183,15 @@ export function TabsTrigger({
   );
 }
 
-export function TabsContent({ value, children, className }: { value: string; children: ReactNode; className?: string }) {
+export function TabsContent({
+  value,
+  children,
+  className,
+}: {
+  value: string;
+  children: ReactNode;
+  className?: string;
+}) {
   const { value: current } = useTabs();
   const reduce = useReducedMotion();
   const active = current === value;

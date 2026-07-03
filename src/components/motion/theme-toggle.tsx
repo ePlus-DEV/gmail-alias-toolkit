@@ -18,8 +18,10 @@ export type RectStart =
   | "center"
   | "bottom-up";
 
-export interface ThemeToggleProps
-  extends Omit<ComponentPropsWithoutRef<"button">, "children" | "onClick"> {
+export interface ThemeToggleProps extends Omit<
+  ComponentPropsWithoutRef<"button">,
+  "children" | "onClick"
+> {
   /** Animation variant. Default: "rectangle". */
   variant?: ThemeVariant;
   /** Origin direction for the reveal. Default: "bottom-up". */
@@ -70,21 +72,21 @@ html[data-beui-vt="circle-blur"]::view-transition-new(root) {
 `;
 
 const RECT_FROM: Record<RectStart, string> = {
-  "top-left":    "inset(0 100% 100% 0)",
-  "top-right":   "inset(0 0 100% 100%)",
+  "top-left": "inset(0 100% 100% 0)",
+  "top-right": "inset(0 0 100% 100%)",
   "bottom-left": "inset(100% 100% 0 0)",
-  "bottom-right":"inset(100% 0 0 100%)",
-  center:        "inset(50% 50% 50% 50%)",
-  "bottom-up":   "inset(100% 0 0 0)",
+  "bottom-right": "inset(100% 0 0 100%)",
+  center: "inset(50% 50% 50% 50%)",
+  "bottom-up": "inset(100% 0 0 0)",
 };
 
 const CIRCLE_ORIGIN: Record<RectStart, string> = {
-  "top-left":    "0% 0%",
-  "top-right":   "100% 0%",
+  "top-left": "0% 0%",
+  "top-right": "100% 0%",
   "bottom-left": "0% 100%",
-  "bottom-right":"100% 100%",
-  center:        "50% 50%",
-  "bottom-up":   "50% 100%",
+  "bottom-right": "100% 100%",
+  center: "50% 50%",
+  "bottom-up": "50% 100%",
 };
 
 export function useThemeToggle({
@@ -170,9 +172,14 @@ export function ThemeToggle({
   return (
     <button
       type="button"
-      aria-label={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={
+        mounted && isDark ? "Switch to light mode" : "Switch to dark mode"
+      }
       onClick={toggle}
-      className={cn("flex cursor-pointer items-center justify-center", className)}
+      className={cn(
+        "flex cursor-pointer items-center justify-center",
+        className,
+      )}
       {...rest}
     >
       {mounted ? (

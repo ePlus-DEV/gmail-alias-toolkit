@@ -1,8 +1,19 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion, type HTMLMotionProps, type Variants } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type HTMLMotionProps,
+  type Variants,
+} from "motion/react";
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { EASE_OUT, EASE_OUT_CSS, SPRING_PRESS, SPRING_SWAP } from "src/lib/ease";
+import {
+  EASE_OUT,
+  EASE_OUT_CSS,
+  SPRING_PRESS,
+  SPRING_SWAP,
+} from "src/lib/ease";
 import { cn } from "src/lib/utils";
 
 export type ActionSwapItem = {
@@ -12,7 +23,11 @@ export type ActionSwapItem = {
   ariaLabel?: string;
 };
 
-export type ActionSwapButtonVariant = "primary" | "secondary" | "outline" | "ghost";
+export type ActionSwapButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "ghost";
 export type ActionSwapButtonSize = "sm" | "md" | "lg" | "icon";
 export type ActionSwapAnimation = "blur" | "roll" | "cascade";
 
@@ -144,7 +159,8 @@ const ICON_VARIANTS: Record<CoreAnimation, Variants> = {
 const VARIANT_CLASS: Record<ActionSwapButtonVariant, string> = {
   primary: "bg-primary text-primary-foreground hover:bg-primary/90",
   secondary: "border border-border bg-card text-foreground hover:border-border",
-  outline: "border border-border bg-transparent text-foreground hover:bg-primary/5",
+  outline:
+    "border border-border bg-transparent text-foreground hover:bg-primary/5",
   ghost: "text-muted-foreground hover:bg-primary/5 hover:text-foreground",
 };
 
@@ -168,7 +184,9 @@ export function ActionSwapText({
   useLayoutEffect(() => {
     const nextWidth = measureRef.current?.offsetWidth;
     if (!nextWidth) return;
-    setWidth((currentWidth) => (currentWidth === nextWidth ? currentWidth : nextWidth));
+    setWidth((currentWidth) =>
+      currentWidth === nextWidth ? currentWidth : nextWidth,
+    );
   });
 
   // Cascade needs a plain string to split into letters; non-string content
@@ -180,7 +198,10 @@ export function ActionSwapText({
 
   return (
     <span
-      className={cn("relative inline-block overflow-hidden whitespace-nowrap align-bottom", className)}
+      className={cn(
+        "relative inline-block overflow-hidden whitespace-nowrap align-bottom",
+        className,
+      )}
       style={{
         width,
         transition: reduce ? undefined : `width 220ms ${EASE_OUT_CSS}`,
@@ -226,7 +247,11 @@ export function ActionSwapText({
             key={`${animation}-${value}`}
             variants={TEXT_VARIANTS[coreAnimation]}
             initial={reduce ? false : "initial"}
-            animate={reduce ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : "animate"}
+            animate={
+              reduce
+                ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }
+                : "animate"
+            }
             exit={reduce ? undefined : "exit"}
             className="absolute left-0 top-0 inline-block will-change-[opacity,filter,transform]"
           >
@@ -250,14 +275,23 @@ export function ActionSwapIcon({
     animation === "cascade" ? "roll" : animation;
 
   return (
-    <span className={cn("relative inline-grid shrink-0 place-items-center overflow-hidden", className)}>
+    <span
+      className={cn(
+        "relative inline-grid shrink-0 place-items-center overflow-hidden",
+        className,
+      )}
+    >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={`${animation}-${value}`}
           aria-hidden
           variants={ICON_VARIANTS[coreAnimation]}
           initial={reduce ? false : "initial"}
-          animate={reduce ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : "animate"}
+          animate={
+            reduce
+              ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }
+              : "animate"
+          }
           exit={reduce ? undefined : "exit"}
           className="col-start-1 row-start-1 inline-flex items-center justify-center will-change-[opacity,filter,transform]"
         >
@@ -284,16 +318,28 @@ export function ActionSwapButton({
   ...rest
 }: ActionSwapButtonProps) {
   const reduce = useReducedMotion();
-  const [internalValue, setInternalValue] = useState(defaultValue ?? items[0]?.id);
+  const [internalValue, setInternalValue] = useState(
+    defaultValue ?? items[0]?.id,
+  );
   const currentValue = value ?? internalValue;
-  const activeIndex = Math.max(0, items.findIndex((item) => item.id === currentValue));
+  const activeIndex = Math.max(
+    0,
+    items.findIndex((item) => item.id === currentValue),
+  );
   const activeItem = items[activeIndex] ?? items[0];
   const hasIcon = items.some((item) => item.icon);
-  const nextItem = cycle && items.length > 0 ? items[(activeIndex + 1) % items.length] : undefined;
+  const nextItem =
+    cycle && items.length > 0
+      ? items[(activeIndex + 1) % items.length]
+      : undefined;
 
   if (!activeItem) return null;
 
-  const accessibleLabel = activeItem.ariaLabel ?? (iconOnly && typeof activeItem.label === "string" ? activeItem.label : undefined);
+  const accessibleLabel =
+    activeItem.ariaLabel ??
+    (iconOnly && typeof activeItem.label === "string"
+      ? activeItem.label
+      : undefined);
 
   return (
     <motion.button
@@ -318,7 +364,11 @@ export function ActionSwapButton({
       {...rest}
     >
       {hasIcon ? (
-        <ActionSwapIcon value={activeItem.id} animation={animation} className="h-4 w-4">
+        <ActionSwapIcon
+          value={activeItem.id}
+          animation={animation}
+          className="h-4 w-4"
+        >
           {activeItem.icon ?? null}
         </ActionSwapIcon>
       ) : null}

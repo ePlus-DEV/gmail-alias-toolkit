@@ -6,7 +6,12 @@ import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "src/lib/utils";
 
 // Heavy, deliberate thumb — high mass keeps the travel weighty without wobble.
-const THUMB_SPRING = { type: "spring", stiffness: 800, damping: 80, mass: 4 } as const;
+const THUMB_SPRING = {
+  type: "spring",
+  stiffness: 800,
+  damping: 80,
+  mass: 4,
+} as const;
 
 export interface SwitchProps {
   checked: boolean;
@@ -16,7 +21,13 @@ export interface SwitchProps {
   className?: string;
 }
 
-export function Switch({ checked, onCheckedChange, disabled, label, className }: SwitchProps) {
+export function Switch({
+  checked,
+  onCheckedChange,
+  disabled,
+  label,
+  className,
+}: SwitchProps) {
   const id = useId();
   const thumbRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -70,15 +81,15 @@ export function Switch({ checked, onCheckedChange, disabled, label, className }:
           >
             {/* Stretch toward the destination while active. */}
             <div
-              className={cn(
-                "size-5",
-                squish && (checked ? "ml-1" : "mr-1"),
-              )}
+              className={cn("size-5", squish && (checked ? "ml-1" : "mr-1"))}
             />
           </motion.div>
         </motion.button>
         {label ? (
-          <label htmlFor={id} className="cursor-pointer text-sm text-foreground">
+          <label
+            htmlFor={id}
+            className="cursor-pointer text-sm text-foreground"
+          >
             {label}
           </label>
         ) : null}

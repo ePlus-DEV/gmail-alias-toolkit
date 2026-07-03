@@ -308,20 +308,20 @@ export default function HistorySection({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t("allTags")}</SelectItem>
-            {Array.from(
-              new Set(
-                recentAliases
-                  .map((a) => {
-                    const match = a.email.match(/\+([^@]+)@/);
-                    return match ? match[1] : null;
-                  })
-                  .filter((t): t is string => t !== null),
-              ),
-            ).map((tag) => (
-              <SelectItem key={tag} value={tag}>
-                {tag}
-              </SelectItem>
-            ))}
+              {Array.from(
+                new Set(
+                  recentAliases
+                    .map((a) => {
+                      const match = a.email.match(/\+([^@]+)@/);
+                      return match ? match[1] : null;
+                    })
+                    .filter((t): t is string => t !== null),
+                ),
+              ).map((tag) => (
+                <SelectItem key={tag} value={tag}>
+                  {tag}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -471,9 +471,7 @@ function HistoryList({
                       : "text-muted-foreground hover:text-accent"
                   }`}
                   aria-label={
-                    isFavorited
-                      ? t("removeFromFavorites")
-                      : t("addToFavorites")
+                    isFavorited ? t("removeFromFavorites") : t("addToFavorites")
                   }
                 >
                   <Star
@@ -736,8 +734,7 @@ function Pagination({
             className="h-8 w-8 rounded-lg p-0 text-[0] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
             aria-label={t("firstPage")}
           >
-            <ChevronsLeft className="h-3.5 w-3.5" />
-            ⟪
+            <ChevronsLeft className="h-3.5 w-3.5" />⟪
           </Button>
           <Button
             onClick={() => setCurrentPage(currentPage - 1)}
@@ -747,8 +744,7 @@ function Pagination({
             className="h-8 w-8 rounded-lg p-0 text-[0] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
             aria-label={t("previousPage")}
           >
-            <ChevronLeft className="h-3.5 w-3.5" />
-            ←
+            <ChevronLeft className="h-3.5 w-3.5" />←
           </Button>
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -765,9 +761,7 @@ function Pagination({
                 return (
                   <div key={page} className="flex items-center gap-1">
                     {showEllipsis && (
-                      <span className="px-1 text-muted-foreground">
-                        ...
-                      </span>
+                      <span className="px-1 text-muted-foreground">...</span>
                     )}
                     <Button
                       onClick={() => setCurrentPage(page)}
@@ -794,8 +788,7 @@ function Pagination({
             className="h-8 w-8 rounded-lg p-0 text-[0] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
             aria-label={t("nextPage")}
           >
-            <ChevronRight className="h-3.5 w-3.5" />
-            →
+            <ChevronRight className="h-3.5 w-3.5" />→
           </Button>
           <Button
             onClick={() => setCurrentPage(totalPages)}
@@ -805,14 +798,10 @@ function Pagination({
             className="h-8 w-8 rounded-lg p-0 text-[0] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
             aria-label={t("lastPage")}
           >
-            <ChevronsRight className="h-3.5 w-3.5" />
-            ⟫
+            <ChevronsRight className="h-3.5 w-3.5" />⟫
           </Button>
         </div>
       </div>
     </div>
   );
 }
-
-
-

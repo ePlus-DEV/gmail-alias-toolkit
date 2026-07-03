@@ -146,6 +146,3 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
     </div>
   );
 }
-
-
-

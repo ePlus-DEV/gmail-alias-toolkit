@@ -370,9 +370,3 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     </div>
   );
 }
-
-
-
-
-
-

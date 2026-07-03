@@ -17,9 +17,7 @@ export function useRowSelection<T>({
   );
   const selected = useMemo(
     () =>
-      selectedRowIds !== undefined
-        ? new Set(selectedRowIds)
-        : internalSelected,
+      selectedRowIds !== undefined ? new Set(selectedRowIds) : internalSelected,
     [selectedRowIds, internalSelected],
   );
 

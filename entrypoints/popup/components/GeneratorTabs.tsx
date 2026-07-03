@@ -1,7 +1,15 @@
 import GmailTricks from "./GmailTricks";
 import Button from "./Button";
 import Input from "./Input";
-import { AtSign, Check, Copy, LoaderCircle, Shuffle, Tag, Zap } from "lucide-react";
+import {
+  AtSign,
+  Check,
+  Copy,
+  LoaderCircle,
+  Shuffle,
+  Tag,
+  Zap,
+} from "lucide-react";
 import { useState } from "react";
 import {
   Select,
@@ -189,9 +197,7 @@ export default function GeneratorTabs({
                   min="1"
                   value={String(randomEmailCount)}
                   onChange={(value) =>
-                    setRandomEmailCount(
-                      Math.max(1, parseInt(value) || 10),
-                    )
+                    setRandomEmailCount(Math.max(1, parseInt(value) || 10))
                   }
                   className="w-full"
                 />
@@ -439,6 +445,3 @@ export default function GeneratorTabs({
     </div>
   );
 }
-
-
-

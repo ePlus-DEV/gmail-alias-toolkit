@@ -59,6 +59,3 @@ describe("Toggle", () => {
     expect(screen.getByRole("switch")).toHaveClass("bg-muted");
   });
 });
-
-
-

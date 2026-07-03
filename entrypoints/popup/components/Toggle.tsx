@@ -16,19 +16,12 @@ export default function Toggle({
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-foreground">
-          {label}
-        </p>
+        <p className="text-sm font-semibold text-foreground">{label}</p>
         {description ? (
-          <p className="text-xs text-muted-foreground">
-            {description}
-          </p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         ) : null}
       </div>
       <Switch checked={enabled} onCheckedChange={onChange} />
     </div>
   );
 }
-
-
-

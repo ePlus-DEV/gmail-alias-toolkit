@@ -25,7 +25,11 @@ import { cn } from "src/lib/utils";
 
 // Spring with bounce powers the unfold/separation; per-property timings in the
 // content choreograph it (see SelectContent). Mirrors bouncy-accordion's feel.
-const CHEVRON_TRANSITION: Transition = { type: "spring", duration: 0.4, bounce: 0.3 };
+const CHEVRON_TRANSITION: Transition = {
+  type: "spring",
+  duration: 0.4,
+  bounce: 0.3,
+};
 
 const LIST_VARIANTS: Variants = {
   hidden: {},

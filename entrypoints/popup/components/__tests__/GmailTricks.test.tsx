@@ -11,7 +11,8 @@ describe("GmailTricks", () => {
       dotTrick: "Dot Trick",
       generateTricks: "Generate Tricks",
       generatedVariations: "Generated Variations",
-      gmailTrickInfo: "Dots are ignored and everything after + goes to the same inbox",
+      gmailTrickInfo:
+        "Dots are ignored and everything after + goes to the same inbox",
       gmailTrickInfoLabel: "Gmail trick:",
       googlemail: "Googlemail",
       numberOfVariations: "Number of variations",
@@ -105,6 +106,3 @@ describe("GmailTricks", () => {
     expect(onCopy).toHaveBeenCalledWith("a+newsletter@gmail.com");
   });
 });
-
-
-

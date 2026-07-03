@@ -61,9 +61,7 @@ describe("t", () => {
       if (locale === "en") continue;
 
       const localeKeys = Object.keys(readMessages(locale)).sort();
-      expect(localeKeys, `${locale} keys should match en`).toEqual(
-        englishKeys,
-      );
+      expect(localeKeys, `${locale} keys should match en`).toEqual(englishKeys);
     }
   });
 });

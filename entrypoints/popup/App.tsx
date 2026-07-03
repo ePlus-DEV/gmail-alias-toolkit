@@ -111,7 +111,9 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark" | "auto">("light");
 
   const applyTheme = useCallback((nextTheme: "light" | "dark" | "auto") => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
     document.documentElement.classList.toggle(
       "dark",
       nextTheme === "dark" || (nextTheme === "auto" && prefersDark),
@@ -918,6 +920,3 @@ function App() {
 }
 
 export default App;
-
-
-

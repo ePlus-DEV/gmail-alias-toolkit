@@ -1,7 +1,12 @@
 "use client";
 // beui.dev/components/motion/tooltip
 
-import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Variants,
+} from "motion/react";
 import {
   cloneElement,
   isValidElement,
@@ -99,7 +104,14 @@ const REDUCED_VARIANTS: Variants = {
 const WARM_WINDOW_MS = 300;
 let lastHiddenAt = 0;
 
-export function Tooltip({ content, children, side = "top", delay = 120, className, wrapperClassName }: TooltipProps) {
+export function Tooltip({
+  content,
+  children,
+  side = "top",
+  delay = 120,
+  className,
+  wrapperClassName,
+}: TooltipProps) {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<TooltipPosition | null>(null);
   const id = useId();
@@ -173,18 +185,24 @@ export function Tooltip({ content, children, side = "top", delay = 120, classNam
 
   if (!isValidElement(children)) return children;
 
-  const trigger = cloneElement(children as ReactElement<Record<string, unknown>>, {
-    onMouseEnter: show,
-    onMouseLeave: hide,
-    onFocus: show,
-    onBlur: hide,
-    "aria-describedby": id,
-  });
+  const trigger = cloneElement(
+    children as ReactElement<Record<string, unknown>>,
+    {
+      onMouseEnter: show,
+      onMouseLeave: hide,
+      onFocus: show,
+      onBlur: hide,
+      "aria-describedby": id,
+    },
+  );
 
   const variants = reduce ? REDUCED_VARIANTS : buildVariants(side);
 
   return (
-    <span ref={wrapperRef} className={cn("relative inline-flex align-middle", wrapperClassName)}>
+    <span
+      ref={wrapperRef}
+      className={cn("relative inline-flex align-middle", wrapperClassName)}
+    >
       {trigger}
       {typeof document === "undefined"
         ? null

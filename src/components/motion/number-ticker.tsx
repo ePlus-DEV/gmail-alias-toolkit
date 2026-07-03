@@ -166,9 +166,7 @@ function Digit({
         initial={{ y: 0 }}
         animate={{ y: `-${digit * DIGIT_HEIGHT_EM}em` }}
         transition={
-          reduce
-            ? { duration: 0 }
-            : { duration, delay, ease: EASE_OUT }
+          reduce ? { duration: 0 } : { duration, delay, ease: EASE_OUT }
         }
         className="absolute inset-x-0 top-0 flex flex-col items-center will-change-[transform,filter]"
       >

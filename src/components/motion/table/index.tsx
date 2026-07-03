@@ -59,7 +59,9 @@ export function Table<T>({
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoHeight = height === "auto";
   const viewportHeight =
-    height === "auto" ? Math.max(rowHeight, data.length * rowHeight + rowHeight) : height;
+    height === "auto"
+      ? Math.max(rowHeight, data.length * rowHeight + rowHeight)
+      : height;
   const thRefs: HeaderCellRefs = useRef<
     Record<string, HTMLTableCellElement | null>
   >({});
@@ -161,9 +163,10 @@ export function Table<T>({
   }, []);
 
   const rowRefs = useRef<Record<string, HTMLTableRowElement | null>>({});
-  const [activeRow, setActiveRow] = useState<{ id: string; index: number } | null>(
-    null,
-  );
+  const [activeRow, setActiveRow] = useState<{
+    id: string;
+    index: number;
+  } | null>(null);
   const rowTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activateRow = useCallback((id: string, index: number) => {
     if (rowTimer.current) clearTimeout(rowTimer.current);
@@ -192,7 +195,10 @@ export function Table<T>({
         style={autoHeight ? undefined : { height: viewportHeight }}
       >
         <table
-          className={cn("border-collapse", sized ? "w-max min-w-full" : "min-w-full")}
+          className={cn(
+            "border-collapse",
+            sized ? "w-max min-w-full" : "min-w-full",
+          )}
           style={{ tableLayout: "fixed" }}
         >
           <colgroup>

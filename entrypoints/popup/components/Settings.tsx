@@ -533,7 +533,8 @@ export default function Settings({
         <div className="flex items-center justify-between border-b border-border bg-background px-3 py-3 text-foreground">
           <div className="flex items-center gap-2">
             <Tooltip content="Back" side="bottom">
-              <Button variant="ghost"
+              <Button
+                variant="ghost"
                 onClick={onClose}
                 className="h-9 w-9 rounded-xl p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
                 aria-label="Back"
@@ -563,7 +564,8 @@ export default function Settings({
         {/* Tabs */}
         <div className="border-b border-border bg-background px-3 py-2.5">
           <div className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-muted/70 p-1">
-            <Button variant="ghost"
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab("general")}
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "general"
@@ -586,7 +588,8 @@ export default function Settings({
               </svg>
               {t("general")}
             </Button>
-            <Button variant="ghost"
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab("accounts")}
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "accounts"
@@ -609,7 +612,8 @@ export default function Settings({
               </svg>
               {t("accounts")}
             </Button>
-            <Button variant="ghost"
+            <Button
+              variant="ghost"
               onClick={() => setActiveTab("changelog")}
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "changelog"
@@ -658,8 +662,18 @@ export default function Settings({
                   title: t("appearanceDisplay"),
                   icon: (
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
-                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+                        />
                       </svg>
                     </span>
                   ),
@@ -669,7 +683,31 @@ export default function Settings({
                         <label className="block text-xs font-semibold text-foreground mb-1.5">
                           {t("badgeCounter")}
                         </label>
-                        <Select value={settings.badgeDisplay} onValueChange={(value) => saveSettings({ ...settings, badgeDisplay: value as AppSettings["badgeDisplay"] })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="none">None (Hidden)</SelectItem><SelectItem value="total">Total in History</SelectItem><SelectItem value="all-time">Total Generated (All Time)</SelectItem><SelectItem value="today">Created Today</SelectItem><SelectItem value="week">This Week</SelectItem></SelectContent></Select>
+                        <Select
+                          value={settings.badgeDisplay}
+                          onValueChange={(value) =>
+                            saveSettings({
+                              ...settings,
+                              badgeDisplay:
+                                value as AppSettings["badgeDisplay"],
+                            })
+                          }
+                        >
+                          <SelectTrigger className="rounded-xl bg-background shadow-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">None (Hidden)</SelectItem>
+                            <SelectItem value="total">
+                              Total in History
+                            </SelectItem>
+                            <SelectItem value="all-time">
+                              Total Generated (All Time)
+                            </SelectItem>
+                            <SelectItem value="today">Created Today</SelectItem>
+                            <SelectItem value="week">This Week</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="flex items-center justify-between border-t border-border pt-3">
                         <label className="text-xs font-semibold text-foreground">
@@ -694,8 +732,18 @@ export default function Settings({
                   title: t("aliasGeneration"),
                   icon: (
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
-                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
                       </svg>
                     </span>
                   ),
@@ -705,13 +753,59 @@ export default function Settings({
                         <label className="block text-xs font-semibold text-foreground mb-1.5">
                           {t("randomAliasFormat")}
                         </label>
-                        <Select value={settings.randomFormat} onValueChange={(value) => saveSettings({ ...settings, randomFormat: value as AppSettings["randomFormat"] })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="private-mail">Private Mail (e.g., private-mail-q2ga)</SelectItem><SelectItem value="alphanumeric">Random Characters (e.g., abc123xy)</SelectItem><SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem><SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem></SelectContent></Select>
+                        <Select
+                          value={settings.randomFormat}
+                          onValueChange={(value) =>
+                            saveSettings({
+                              ...settings,
+                              randomFormat:
+                                value as AppSettings["randomFormat"],
+                            })
+                          }
+                        >
+                          <SelectTrigger className="rounded-xl bg-background shadow-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="private-mail">
+                              Private Mail (e.g., private-mail-q2ga)
+                            </SelectItem>
+                            <SelectItem value="alphanumeric">
+                              Random Characters (e.g., abc123xy)
+                            </SelectItem>
+                            <SelectItem value="words">
+                              Random Words (e.g., happy-fox-42)
+                            </SelectItem>
+                            <SelectItem value="timestamp">
+                              Timestamp (e.g., lk9x2m3n)
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-foreground mb-1.5">
                           {t("autoSaveLimit")}
                         </label>
-                        <Select value={String(settings.maxHistory)} onValueChange={(value) => saveSettings({ ...settings, maxHistory: Number(value) })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="20">20 aliases</SelectItem><SelectItem value="50">50 aliases</SelectItem><SelectItem value="100">100 aliases</SelectItem><SelectItem value="200">200 aliases</SelectItem><SelectItem value="500">500 aliases</SelectItem></SelectContent></Select>
+                        <Select
+                          value={String(settings.maxHistory)}
+                          onValueChange={(value) =>
+                            saveSettings({
+                              ...settings,
+                              maxHistory: Number(value),
+                            })
+                          }
+                        >
+                          <SelectTrigger className="rounded-xl bg-background shadow-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="20">20 aliases</SelectItem>
+                            <SelectItem value="50">50 aliases</SelectItem>
+                            <SelectItem value="100">100 aliases</SelectItem>
+                            <SelectItem value="200">200 aliases</SelectItem>
+                            <SelectItem value="500">500 aliases</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                   ),
@@ -721,8 +815,18 @@ export default function Settings({
                   title: t("customPresets"),
                   icon: (
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
-                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
                       </svg>
                     </span>
                   ),
@@ -742,9 +846,12 @@ export default function Settings({
                           className="min-w-0"
                         />
                       </div>
-                      <Button variant="ghost"
+                      <Button
+                        variant="ghost"
                         onClick={handleAddPreset}
-                        disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
+                        disabled={
+                          !newPresetLabel.trim() || !newPresetTag.trim()
+                        }
                         size="sm"
                         fullWidth
                         className="rounded-xl bg-primary/10 text-primary hover:bg-primary/15 disabled:bg-muted disabled:text-muted-foreground"
@@ -767,13 +874,24 @@ export default function Settings({
                                 </span>
                               </div>
                               <Tooltip content="Remove preset" side="left">
-                                <Button variant="ghost"
+                                <Button
+                                  variant="ghost"
                                   onClick={() => handleRemovePreset(preset.id)}
                                   className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
                                   aria-label="Remove preset"
                                 >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
                                   </svg>
                                 </Button>
                               </Tooltip>
@@ -789,32 +907,84 @@ export default function Settings({
                   title: t("dataManagement"),
                   icon: (
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
-                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                        />
                       </svg>
                     </span>
                   ),
                   description: (
                     <div className="space-y-3">
                       <div className="grid grid-cols-3 gap-3">
-                        <Tooltip content={t("export")} side="top" wrapperClassName="w-full">
-                          <Button onClick={handleExportSettings} variant="secondary" size="sm" fullWidth className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70" aria-label={t("export")}>
+                        <Tooltip
+                          content={t("export")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleExportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("export")}
+                          >
                             {t("export")}
                           </Button>
                         </Tooltip>
-                        <Tooltip content={t("import")} side="top" wrapperClassName="w-full">
-                          <Button onClick={handleImportSettings} variant="secondary" size="sm" fullWidth className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70" aria-label={t("import")}>
+                        <Tooltip
+                          content={t("import")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleImportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("import")}
+                          >
                             {t("import")}
                           </Button>
                         </Tooltip>
-                        <Tooltip content={t("clear")} side="top" wrapperClassName="w-full">
-                          <Button onClick={handleClearHistory} variant="danger" size="sm" fullWidth className="bg-destructive/10 text-destructive hover:bg-destructive/15" aria-label={t("clear")}>
+                        <Tooltip
+                          content={t("clear")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleClearHistory}
+                            variant="danger"
+                            size="sm"
+                            fullWidth
+                            className="bg-destructive/10 text-destructive hover:bg-destructive/15"
+                            aria-label={t("clear")}
+                          >
                             {t("clear")}
                           </Button>
                         </Tooltip>
                       </div>
-                      <Tooltip content={t("resetSettings")} side="bottom" wrapperClassName="w-full">
-                        <Button variant="ghost" onClick={handleResetSettings} className="w-full rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:text-destructive font-medium py-1" aria-label={t("resetSettings")}>
+                      <Tooltip
+                        content={t("resetSettings")}
+                        side="bottom"
+                        wrapperClassName="w-full"
+                      >
+                        <Button
+                          variant="ghost"
+                          onClick={handleResetSettings}
+                          className="w-full rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:text-destructive font-medium py-1"
+                          aria-label={t("resetSettings")}
+                        >
                           {t("resetSettings")}
                         </Button>
                       </Tooltip>
@@ -859,13 +1029,24 @@ export default function Settings({
                             <label className="block text-xs font-medium text-foreground mb-1">
                               {t("label")}
                             </label>
-                            <Input type="text" value={editingLabel} onChange={setEditingLabel} placeholder={t("accountLabel")} ref={focusOnMount} />
+                            <Input
+                              type="text"
+                              value={editingLabel}
+                              onChange={setEditingLabel}
+                              placeholder={t("accountLabel")}
+                              ref={focusOnMount}
+                            />
                           </div>
                           <div>
                             <label className="block text-xs font-medium text-foreground mb-1">
                               {t("emailAddress")}
                             </label>
-                            <Input type="email" value={editingEmail} onChange={setEditingEmail} placeholder={t("emailAddressPlaceholder")} />
+                            <Input
+                              type="email"
+                              value={editingEmail}
+                              onChange={setEditingEmail}
+                              placeholder={t("emailAddressPlaceholder")}
+                            />
                             {editingEmail !== account.email && (
                               <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
                                 {t("emailChangeWarning")}
@@ -873,13 +1054,15 @@ export default function Settings({
                             )}
                           </div>
                           <div className="flex gap-2 pt-1">
-                            <Button variant="ghost"
+                            <Button
+                              variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
                               className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                               {t("saveChanges")}
                             </Button>
-                            <Button variant="ghost"
+                            <Button
+                              variant="ghost"
                               onClick={handleCancelEdit}
                               className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded-xl hover:bg-muted dark:hover:bg-muted transition-colors"
                             >
@@ -893,7 +1076,14 @@ export default function Settings({
                         <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
                           <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                            <RadioGroup value={account.isActive ? account.id : ""} onValueChange={() => handleSwitchAccount(account.id)}><RadioGroupItem value={account.id} /></RadioGroup>
+                            <RadioGroup
+                              value={account.isActive ? account.id : ""}
+                              onValueChange={() =>
+                                handleSwitchAccount(account.id)
+                              }
+                            >
+                              <RadioGroupItem value={account.id} />
+                            </RadioGroup>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-semibold text-foreground truncate">
@@ -914,7 +1104,8 @@ export default function Settings({
                           {/* Action buttons */}
                           <div className="flex items-center gap-1 flex-shrink-0">
                             <Tooltip content={t("editAccount")} side="left">
-                              <Button variant="ghost"
+                              <Button
+                                variant="ghost"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleStartEdit(account);
@@ -945,7 +1136,8 @@ export default function Settings({
                               }
                               side="left"
                             >
-                              <Button variant="ghost"
+                              <Button
+                                variant="ghost"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleDeleteAccount(account);
@@ -984,7 +1176,8 @@ export default function Settings({
               {/* Add Account Section */}
               <div className="rounded-2xl border border-border bg-background p-3 shadow-soft">
                 {!showAddAccount ? (
-                  <Button variant="ghost"
+                  <Button
+                    variant="ghost"
                     onClick={() => setShowAddAccount(true)}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors"
                   >
@@ -1010,7 +1203,8 @@ export default function Settings({
                         {t("addNewAccountTitle")}
                       </h4>
                       <Tooltip content="Close" side="left">
-                        <Button variant="ghost"
+                        <Button
+                          variant="ghost"
                           onClick={() => {
                             setShowAddAccount(false);
                             setNewAccountEmail("");
@@ -1038,7 +1232,29 @@ export default function Settings({
                     </div>
 
                     <div className="relative">
-                      <Input type="email" value={newAccountEmail} onChange={(value) => { setNewAccountEmail(value); setAddAccountError(""); }} onKeyDown={(e) => { if (e.key === "Enter") { handleAddAccount(); } }} onBlur={() => { if (newAccountEmail && !newAccountEmail.includes("@")) { setNewAccountEmail(`${newAccountEmail}@gmail.com`); } }} placeholder={t("emailPlaceholder")} ref={focusOnMount} />
+                      <Input
+                        type="email"
+                        value={newAccountEmail}
+                        onChange={(value) => {
+                          setNewAccountEmail(value);
+                          setAddAccountError("");
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            handleAddAccount();
+                          }
+                        }}
+                        onBlur={() => {
+                          if (
+                            newAccountEmail &&
+                            !newAccountEmail.includes("@")
+                          ) {
+                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
+                          }
+                        }}
+                        placeholder={t("emailPlaceholder")}
+                        ref={focusOnMount}
+                      />
                       {newAccountEmail && !newAccountEmail.includes("@") && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs pointer-events-none">
                           @gmail.com
@@ -1064,9 +1280,15 @@ export default function Settings({
                       </p>
                     )}
 
-                    <Input type="text" value={newAccountLabel} onChange={setNewAccountLabel} placeholder={t("accountLabelPlaceholder")} />
+                    <Input
+                      type="text"
+                      value={newAccountLabel}
+                      onChange={setNewAccountLabel}
+                      placeholder={t("accountLabelPlaceholder")}
+                    />
 
-                    <Button variant="ghost"
+                    <Button
+                      variant="ghost"
                       onClick={handleAddAccount}
                       disabled={!newAccountEmail.trim()}
                       className="w-full px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -1090,8 +1312,18 @@ export default function Settings({
                   <div className="flex items-center justify-between border-b border-border bg-muted/45 px-3.5 py-3">
                     <div className="flex items-center gap-2">
                       <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+                          />
                         </svg>
                       </span>
                       <span className="text-sm font-bold text-foreground">
@@ -1165,8 +1397,12 @@ export default function Settings({
               className="w-6 h-6 rounded-md flex-shrink-0"
             />
             <span className="font-medium">{t("extensionName")}</span>
-            <span className="text-muted-foreground dark:text-muted-foreground">•</span>
-            <span className="text-muted-foreground dark:text-muted-foreground">v{version}</span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              •
+            </span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              v{version}
+            </span>
           </div>
         </div>
       </div>
@@ -1209,21 +1445,21 @@ function ConfirmationDialog({
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-40 p-4">
       <div className="w-full max-w-sm rounded-lg bg-card p-4 shadow-xl">
-        <h3 className="text-sm font-bold text-foreground">
-          {request.title}
-        </h3>
+        <h3 className="text-sm font-bold text-foreground">{request.title}</h3>
         <p className="mt-2 whitespace-pre-line text-xs leading-5 text-muted-foreground dark:text-muted-foreground">
           {request.message}
         </p>
         <div className="mt-4 flex justify-end gap-2">
-          <Button variant="ghost"
+          <Button
+            variant="ghost"
             type="button"
             onClick={onCancel}
             className="rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring dark:bg-muted dark:text-foreground dark:hover:bg-muted"
           >
             Cancel
           </Button>
-          <Button variant="ghost"
+          <Button
+            variant="ghost"
             type="button"
             onClick={onConfirm}
             className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
@@ -1235,12 +1471,3 @@ function ConfirmationDialog({
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
