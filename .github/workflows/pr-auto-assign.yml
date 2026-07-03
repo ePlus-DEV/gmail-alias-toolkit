@@ -1,6 +1,6 @@
 name: pr-auto-assign
 on:
-  pull_request:
+  pull_request_target:
     types: [opened]
 
 permissions:
@@ -11,7 +11,12 @@ jobs:
   assign:
     runs-on: ubuntu-latest
     steps:
+      - name: Skip Dependabot pull requests
+        if: ${{github.actor == 'dependabot[bot]'}}
+        run: echo "Dependabot pull requests are handled by dependabot-auto-merge."
+
       - name: Verify bot identity
+        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           BOT_LOGIN="$(gh api user --jq .login)"
           test "$BOT_LOGIN" = "eplus-bot"
@@ -19,6 +24,7 @@ jobs:
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Upsert welcome comment
+        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           COMMENT_ID="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
             --paginate \
@@ -48,6 +54,7 @@ jobs:
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Add pull request labels
+        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           add_label() {
             local name="$1"
@@ -96,6 +103,7 @@ jobs:
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Assign PR author
+        if: ${{github.actor != 'dependabot[bot]'}}
         run: gh pr edit "$PR_NUMBER" --add-assignee "$PR_AUTHOR" --repo "$GITHUB_REPOSITORY"
         env:
           PR_NUMBER: ${{github.event.pull_request.number}}
@@ -103,6 +111,7 @@ jobs:
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Request eplus-bot review
+        if: ${{github.actor != 'dependabot[bot]'}}
         run: gh pr edit "$PR_NUMBER" --add-reviewer eplus-bot --repo "$GITHUB_REPOSITORY"
         env:
           PR_NUMBER: ${{github.event.pull_request.number}}

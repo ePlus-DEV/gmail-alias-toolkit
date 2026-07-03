@@ -39,6 +39,12 @@ jobs:
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
+      - name: Wait for pull request checks
+        run: gh pr checks "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --watch --interval 10
+        env:
+          PR_NUMBER: ${{steps.pr.outputs.number}}
+          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+
       - name: Approve pull request
         run: |
           APPROVED_FOR_HEAD="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" \
@@ -61,6 +67,36 @@ jobs:
             --jq ".[] | select(.user.login == \"eplus-bot\" and (.body | contains(\"$COMMENT_MARKER\"))) | .id" \
             | tail -n 1)"
 
+          REFRESH_COUNT="1"
+          if [ -n "$COMMENT_ID" ]; then
+            OLD_REFRESH_COUNT="$(gh api "repos/$GITHUB_REPOSITORY/issues/comments/$COMMENT_ID" \
+              --jq '.body' \
+              | sed -n 's/^Approval refresh: #\([0-9][0-9]*\)$/\1/p' \
+              | tail -n 1)"
+
+            if [ -n "$OLD_REFRESH_COUNT" ]; then
+              REFRESH_COUNT="$((OLD_REFRESH_COUNT + 1))"
+            else
+              REFRESH_COUNT="2"
+            fi
+          fi
+
+          APPROVAL_COMMENT="$(cat <<EOF
+$COMMENT_MARKER
+
+![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)
+
+Approved by @eplus-bot after all pull request checks passed.
+
+Approval refresh: #$REFRESH_COUNT
+CI updated: $CI_UPDATED_AT
+CI attempt: #$CI_RUN_ATTEMPT
+Approval workflow: #$APPROVAL_RUN_NUMBER.$APPROVAL_RUN_ATTEMPT
+
+CI run: $CI_RUN_URL
+EOF
+          )"
+
           if [ -n "$COMMENT_ID" ]; then
             gh api \
               --method PATCH \
@@ -75,15 +111,9 @@ jobs:
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
           COMMENT_MARKER: "<!-- eplus-bot-ci-approval -->"
-          APPROVAL_COMMENT: |
-            <!-- eplus-bot-ci-approval -->
-
-            ![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)
-
-            Approved by @eplus-bot after CI passed.
-
-            Updated: ${{ github.event.workflow_run.updated_at }}
-            Run attempt: #${{ github.event.workflow_run.run_attempt }}
-
-            CI run: ${{ github.event.workflow_run.html_url }}
+          CI_UPDATED_AT: ${{ github.event.workflow_run.updated_at }}
+          CI_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          CI_RUN_URL: ${{ github.event.workflow_run.html_url }}
+          APPROVAL_RUN_NUMBER: ${{ github.run_number }}
+          APPROVAL_RUN_ATTEMPT: ${{ github.run_attempt }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
