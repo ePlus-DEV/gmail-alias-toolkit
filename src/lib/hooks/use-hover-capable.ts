@@ -11,7 +11,7 @@ export function useHoverCapable() {
   const [canHover, setCanHover] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
+    if (typeof window === "undefined" || !window.matchMedia) return undefined;
     const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
     /** Syncs component state with the current hover-capable media query. */
     const update = () => {
