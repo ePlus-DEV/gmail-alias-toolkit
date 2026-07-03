@@ -23,157 +23,25 @@ recent alias history without sending your data anywhere.
 - No remote API is required for alias generation.
 - Permissions are limited to storage, clipboard writes, context menus, and page access required by the extension context menu.
 
-## Tech Stack
-
-- WXT and Manifest V3
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- shadcn and beUI motion components
-- Vitest and Testing Library
-
-## Requirements
-
-- Node.js 24 or newer
-- Yarn 4.14.1
-
-## Development
-
-Install dependencies:
-
-```bash
-yarn install
-```
-
-Prepare WXT types:
-
-```bash
-yarn exec wxt prepare
-```
-
-Run the Chrome development build:
-
-```bash
-yarn dev
-```
-
-Run the Firefox development build:
-
-```bash
-yarn dev:firefox
-```
-
-## Build
-
-Build for Chrome:
-
-```bash
-yarn build
-```
-
-Build for Firefox:
-
-```bash
-yarn build:firefox
-```
-
-Create distributable archives:
-
-```bash
-yarn zip
-yarn zip:firefox
-```
-
 ## Load Locally
 
-1. Run `yarn dev` or `yarn build`.
+1. Build or run the extension locally.
 2. Open `chrome://extensions/`.
 3. Enable Developer mode.
 4. Click Load unpacked.
 5. Select `.output/chrome-mv3`.
 
-For Firefox, use the WXT Firefox output from `yarn dev:firefox` or
-`yarn build:firefox`.
-
-## Quality Checks
-
-Run TypeScript checks:
-
-```bash
-yarn compile
-```
-
-Run tests:
-
-```bash
-yarn test
-```
-
-Run tests in watch mode:
-
-```bash
-yarn test:watch
-```
-
-## Project Structure
-
-```text
-gmail-alias-toolkit/
-  entrypoints/
-    background.ts
-    content.ts
-    popup/
-      App.tsx
-      main.tsx
-      components/
-      utils.ts
-  src/
-    components/
-      alias/
-      motion/
-    lib/
-  public/
-    _locales/
-  tests/
-    setup.ts
-    lib/
-    popup/
-  wxt.config.ts
-  vitest.config.ts
-  tsconfig.json
-```
-
-## Tests
-
-All test files live in `tests/`:
-
-- `tests/lib` covers shared library behavior such as i18n.
-- `tests/popup` covers popup utilities and UI components.
-- `tests/setup.ts` configures Testing Library, `browser`, and clipboard mocks.
+For development and build commands, see `CONTRIBUTING.md`.
 
 ## Internationalization
 
-The extension uses browser i18n messages from `public/_locales`.
-Current locale coverage includes English, Vietnamese, French, German, Hindi,
-Japanese, and Simplified Chinese. The test suite checks that every non-English
-locale has the same message keys as English.
-
-## GitHub Automation
-
-The repository includes GitHub Actions for:
-
-- CI builds on pull requests and pushes to `main`.
-- PR welcome comments and automatic labels.
-- PR assignment and bot review requests.
-- CI-based approval comments.
-- Release and Dependabot workflows.
+The extension supports English, Vietnamese, French, German, Hindi, Japanese,
+and Simplified Chinese.
 
 ## Contributing
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Run `yarn compile` and `yarn test`.
-4. Open a pull request with screenshots or recordings for UI changes.
+Please read `CONTRIBUTING.md` for local setup, checks, project structure, and
+pull request expectations.
 
 ## License
 
