@@ -13,7 +13,7 @@ export default function Card({
       whileHover={reduce ? undefined : { scale: 1.01 }}
       transition={SPRING_PRESS}
       className={cn(
-        "rounded-2xl border border-white/70 bg-white/80 shadow-soft backdrop-blur dark:border-gray-700/70 dark:bg-gray-900/70",
+        "rounded-xl border border-gray-200/80 bg-white/85 shadow-soft backdrop-blur dark:border-gray-700/80 dark:bg-gray-900/70",
         className,
       )}
     >
