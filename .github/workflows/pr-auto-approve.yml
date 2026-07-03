@@ -80,11 +80,15 @@ jobs:
             | tail -n 1)"
 
           if [ -z "$APPROVED_FOR_HEAD" ]; then
-            gh pr review --approve "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+            gh pr review --approve "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$APPROVAL_REVIEW_BODY"
           fi
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          APPROVAL_REVIEW_BODY: |
+            Approved by @eplus-bot after all pull request checks passed.
+
+            CI run: ${{ github.event.workflow_run.html_url }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Upsert CI approval comment
