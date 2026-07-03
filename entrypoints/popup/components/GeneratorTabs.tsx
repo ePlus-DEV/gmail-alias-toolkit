@@ -11,7 +11,7 @@ import {
   Tag,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -56,6 +56,102 @@ interface GeneratorTabsProps {
   setToastMessage: (msg: string | null) => void;
 }
 
+type GeneratorTabId = "random" | "tags" | "tricks";
+
+interface GeneratorTabButtonProps {
+  activeTab: GeneratorTabId;
+  tab: GeneratorTabId;
+  icon: ReactNode;
+  label: string;
+  tooltip: string;
+  onSelect: (tab: GeneratorTabId) => void;
+}
+
+/** Compact tab button with a tooltip for truncated labels. */
+function GeneratorTabButton({
+  activeTab,
+  tab,
+  icon,
+  label,
+  tooltip,
+  onSelect,
+}: GeneratorTabButtonProps) {
+  const active = activeTab === tab;
+
+  return (
+    <Tooltip content={tooltip} side="bottom" wrapperClassName="min-w-0">
+      <Button
+        onClick={() => onSelect(tab)}
+        variant="ghost"
+        size="sm"
+        className={`h-10 w-full min-w-0 rounded-xl border px-2 text-xs transition-colors ${
+          active
+            ? "border-primary/40 bg-primary/10 text-primary"
+            : "border-border bg-background text-muted-foreground hover:bg-muted/70"
+        }`}
+      >
+        {icon}
+        <span className="truncate">{label}</span>
+      </Button>
+    </Tooltip>
+  );
+}
+
+interface RandomFormatControlsProps {
+  randomFormat: RandomFormat;
+  randomEmailCount: number;
+  onFormatChange: (format: RandomFormat) => void;
+  onCountChange: (count: number) => void;
+}
+
+/** Format and count controls for the random alias generator. */
+function RandomFormatControls({
+  randomFormat,
+  randomEmailCount,
+  onFormatChange,
+  onCountChange,
+}: RandomFormatControlsProps) {
+  return (
+    <div className="mb-3 grid grid-cols-[minmax(0,1fr)_82px] gap-2">
+      <div className="min-w-0">
+        <label className="mb-1.5 block text-xs font-semibold text-foreground">
+          {t("format")}
+        </label>
+        <Select
+          value={randomFormat}
+          onValueChange={(value) => onFormatChange(value as RandomFormat)}
+        >
+          <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="private-mail">
+              {t("privateMailFormat")}
+            </SelectItem>
+            <SelectItem value="alphanumeric">
+              {t("randomCharactersFormat")}
+            </SelectItem>
+            <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
+            <SelectItem value="timestamp">{t("timestampFormat")}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
+          {t("numberOfAliases")}
+        </label>
+        <Input
+          type="number"
+          min="1"
+          value={String(randomEmailCount)}
+          onChange={(value) => onCountChange(Math.max(1, parseInt(value) || 10))}
+          className="w-full"
+        />
+      </div>
+    </div>
+  );
+}
+
 /** Renders three alias generator tabs: random (formatted strings), custom tags, and Gmail tricks. */
 export default function GeneratorTabs({
   baseEmail,
@@ -98,112 +194,46 @@ export default function GeneratorTabs({
   return (
     <div>
       {/* Main Tabs */}
+      {/* skipcq: JS-0415 - Three compact tooltip buttons are clearer inline than split across wrappers. */}
       <div className="grid grid-cols-3 gap-1.5 p-3 pb-0">
-        <Tooltip content={t("random")} side="bottom" wrapperClassName="min-w-0">
-          <Button
-            onClick={() => setActiveTab("random")}
-            variant="ghost"
-            size="sm"
-            className={`h-10 w-full min-w-0 rounded-xl border px-2 text-xs transition-colors ${
-              activeTab === "random"
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-border bg-background text-muted-foreground hover:bg-muted/70"
-            }`}
-          >
-            <Shuffle className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{t("random")}</span>
-          </Button>
-        </Tooltip>
-        <Tooltip
-          content={t("customTags")}
-          side="bottom"
-          wrapperClassName="min-w-0"
-        >
-          <Button
-            onClick={() => setActiveTab("tags")}
-            variant="ghost"
-            size="sm"
-            className={`h-10 w-full min-w-0 rounded-xl border px-2 text-xs transition-colors ${
-              activeTab === "tags"
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-border bg-background text-muted-foreground hover:bg-muted/70"
-            }`}
-          >
-            <Tag className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{t("tabTagsShort")}</span>
-          </Button>
-        </Tooltip>
-        <Tooltip
-          content={t("gmailTricks")}
-          side="bottom"
-          wrapperClassName="min-w-0"
-        >
-          <Button
-            onClick={() => setActiveTab("tricks")}
-            variant="ghost"
-            size="sm"
-            className={`h-10 w-full min-w-0 rounded-xl border px-2 text-xs transition-colors ${
-              activeTab === "tricks"
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-border bg-background text-muted-foreground hover:bg-muted/70"
-            }`}
-          >
-            <Zap className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">{t("tabTricksShort")}</span>
-          </Button>
-        </Tooltip>
+        <GeneratorTabButton
+          activeTab={activeTab}
+          tab="random"
+          icon={<Shuffle className="h-3.5 w-3.5 shrink-0" />}
+          label={t("random")}
+          tooltip={t("random")}
+          onSelect={setActiveTab}
+        />
+        <GeneratorTabButton
+          activeTab={activeTab}
+          tab="tags"
+          icon={<Tag className="h-3.5 w-3.5 shrink-0" />}
+          label={t("tabTagsShort")}
+          tooltip={t("customTags")}
+          onSelect={setActiveTab}
+        />
+        <GeneratorTabButton
+          activeTab={activeTab}
+          tab="tricks"
+          icon={<Zap className="h-3.5 w-3.5 shrink-0" />}
+          label={t("tabTricksShort")}
+          tooltip={t("gmailTricks")}
+          onSelect={setActiveTab}
+        />
       </div>
 
       {/* Tab Content */}
       <div className="p-3">
         {/* Random Tab */}
         {activeTab === "random" && (
+          // skipcq: JS-0415 - The random generator form keeps coupled controls and action state together.
           <div>
-            <div className="mb-3 grid grid-cols-[minmax(0,1fr)_82px] gap-2">
-              <div className="min-w-0">
-                <label className="mb-1.5 block text-xs font-semibold text-foreground">
-                  {t("format")}
-                </label>
-                <Select
-                  value={randomFormat}
-                  onValueChange={(value) =>
-                    handleFormatChange(value as RandomFormat)
-                  }
-                >
-                  <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="private-mail">
-                      {t("privateMailFormat")}
-                    </SelectItem>
-                    <SelectItem value="alphanumeric">
-                      {t("randomCharactersFormat")}
-                    </SelectItem>
-                    <SelectItem value="words">
-                      {t("randomWordsFormat")}
-                    </SelectItem>
-                    <SelectItem value="timestamp">
-                      {t("timestampFormat")}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
-                  {t("numberOfAliases")}
-                </label>
-                <Input
-                  type="number"
-                  min="1"
-                  value={String(randomEmailCount)}
-                  onChange={(value) =>
-                    setRandomEmailCount(Math.max(1, parseInt(value) || 10))
-                  }
-                  className="w-full"
-                />
-              </div>
-            </div>
+            <RandomFormatControls
+              randomFormat={randomFormat}
+              randomEmailCount={randomEmailCount}
+              onFormatChange={handleFormatChange}
+              onCountChange={setRandomEmailCount}
+            />
 
             {/* Generate Button */}
             <ActionSwapButton

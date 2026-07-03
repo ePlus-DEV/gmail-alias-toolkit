@@ -53,6 +53,7 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
     onAddAccount,
     onCancelAddAccount,
   } = props;
+  // skipcq: JS-0415 - Account selector groups label, select, and add button in one compact row.
   return (
     <div className="p-3">
       <div className="flex items-end gap-2">

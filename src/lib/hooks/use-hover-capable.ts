@@ -12,11 +12,14 @@ export function useHoverCapable() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => setCanHover(mq.matches);
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    /** Syncs component state with the current hover-capable media query. */
+    const update = () => setCanHover(mediaQuery.matches);
     update();
-    mq.addEventListener?.("change", update);
-    return () => mq.removeEventListener?.("change", update);
+    mediaQuery.addEventListener?.("change", update);
+    return () => {
+      mediaQuery.removeEventListener?.("change", update);
+    };
   }, []);
 
   return canHover;

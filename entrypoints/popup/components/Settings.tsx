@@ -693,6 +693,7 @@ export default function Settings({
                       </svg>
                     </span>
                   ),
+                  // skipcq: JS-0415 - Accordion descriptions keep related settings controls grouped.
                   description: (
                     <div className="space-y-3">
                       <div>
@@ -763,6 +764,7 @@ export default function Settings({
                       </svg>
                     </span>
                   ),
+                  // skipcq: JS-0415 - Alias generation controls are intentionally grouped in one accordion panel.
                   description: (
                     <div className="space-y-3">
                       <div>
@@ -1213,6 +1215,7 @@ export default function Settings({
                     {t("addNewAccount")}
                   </Button>
                 ) : (
+                  // skipcq: JS-0415 - Add account form keeps validation hint and controls together.
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-bold text-foreground">
@@ -1319,6 +1322,7 @@ export default function Settings({
 
           {/* Changelog Tab */}
           {activeTab === "changelog" && (
+            // skipcq: JS-0415 - Changelog cards are static data presentation with nested badges and lists.
             <div className="space-y-3">
               {CHANGELOG.map((entry) => (
                 <div

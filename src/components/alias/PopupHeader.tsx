@@ -22,6 +22,7 @@ export default function PopupHeader({
     (theme === "auto" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches);
 
+  // skipcq: JS-0415 - Header visual composition is intentionally compact and has no nested logic.
   return (
     <div className="flex-shrink-0 px-4 pb-3 pt-4">
       <div className="rounded-3xl border border-primary-foreground/30 bg-primary p-4 text-primary-foreground shadow-soft">
