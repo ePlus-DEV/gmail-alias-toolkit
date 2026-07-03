@@ -1,7 +1,19 @@
+// skipcq: JS-0415 - Settings sections keep related controls inline for readability in a constrained popup.
 import { useState, useEffect, useCallback } from "react";
 import Toggle from "./Toggle";
 import Button from "./Button";
 import Input from "./Input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
+import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
+import { Tooltip } from "src/components/motion/tooltip";
+import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
+import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
 
@@ -41,6 +53,17 @@ interface ConfirmationRequest {
   resolve: (confirmed: boolean) => void;
 }
 
+interface ChangelogChange {
+  type: "Added" | "Changed" | "Fixed";
+  items: string[];
+}
+
+interface ChangelogEntry {
+  version: string;
+  date: string;
+  changes: ChangelogChange[];
+}
+
 const DEFAULT_SETTINGS: AppSettings = {
   customPresets: [],
   maxHistory: 20,
@@ -50,20 +73,28 @@ const DEFAULT_SETTINGS: AppSettings = {
   randomFormat: "private-mail",
 };
 
-const CHANGELOG: {
-  version: string;
-  date: string;
-  changes: { type: "Added" | "Changed" | "Fixed"; items: string[] }[];
-}[] = [
+const CHANGELOG: ChangelogEntry[] = [
   {
     version: "1.2.0",
-    date: "2026-07-01",
+    date: "2026-07-03",
     changes: [
+      {
+        type: "Added",
+        items: [
+          "Added Tailwind CSS v4, shadcn, and beUI motion components",
+          "Added Action Swap, Animated Badge, Bouncy Accordion, Theme Toggle, Tooltip, and Table integrations",
+          "Added dark mode toggle in the popup header",
+          "Added locale key coverage tests for all supported languages",
+        ],
+      },
       {
         type: "Changed",
         items: [
-          "Redesigned popup and settings UI with a unified card layout",
-          "Fixed popup height so only content scrolls, not the whole page",
+          "Redesigned popup, settings, generator tabs, Gmail tricks, history table, and changelog UI with a unified beUI style",
+          "Reworked Recent Aliases into a compact non-scrolling table with fixed action buttons",
+          "Improved dark mode contrast, spacing, hover states, tooltips, and responsive popup layout",
+          "Moved theme switching out of Settings and into the main popup header",
+          "Updated all supported locales with the new UI strings",
         ],
       },
       {
@@ -72,6 +103,9 @@ const CHANGELOG: {
           '"Copy All" no longer undercounts statistics for generated aliases',
           "Settings/QR modals no longer render outside the popup bounds",
           "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
+          "Fixed missing imports and old component references after replacing legacy UI components",
+          "Fixed table overflow and hidden row action buttons in alias history",
+          "Fixed untranslated/fallback strings in the new UI",
         ],
       },
     ],
@@ -99,6 +133,490 @@ const CHANGELOG: {
     changes: [{ type: "Added", items: ["Initial release"] }],
   },
 ];
+
+interface SettingsPanelProps {
+  settings: AppSettings;
+  saveSettings: (settings: AppSettings) => Promise<void>;
+}
+
+/** Appearance and display settings shown inside the general accordion. */
+function AppearanceSettingsPanel({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="space-y-3">
+      <BadgeCounterField settings={settings} saveSettings={saveSettings} />
+      <CopyNotificationsField
+        settings={settings}
+        saveSettings={saveSettings}
+      />
+    </div>
+  );
+}
+
+/** Badge counter setting field. */
+function BadgeCounterField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("badgeCounter")}
+      </label>
+      <Select
+        value={settings.badgeDisplay}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            badgeDisplay: value as AppSettings["badgeDisplay"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <BadgeCounterOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Badge counter select options. */
+function BadgeCounterOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="none">None (Hidden)</SelectItem>
+      <SelectItem value="total">Total in History</SelectItem>
+      <SelectItem value="all-time">Total Generated (All Time)</SelectItem>
+      <SelectItem value="today">Created Today</SelectItem>
+      <SelectItem value="week">This Week</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Copy notification toggle field. */
+function CopyNotificationsField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="flex items-center justify-between border-t border-border pt-3">
+      <label className="text-xs font-semibold text-foreground">
+        {t("copyNotifications")}
+      </label>
+      <Toggle
+        enabled={settings.showNotifications}
+        onChange={(enabled) =>
+          saveSettings({ ...settings, showNotifications: enabled })
+        }
+        label=""
+      />
+    </div>
+  );
+}
+
+/** Alias generation defaults shown inside the general accordion. */
+function AliasGenerationSettingsPanel({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="space-y-3">
+      <RandomAliasFormatField
+        settings={settings}
+        saveSettings={saveSettings}
+      />
+      <AutoSaveLimitField settings={settings} saveSettings={saveSettings} />
+    </div>
+  );
+}
+
+/** Random alias format setting field. */
+function RandomAliasFormatField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("randomAliasFormat")}
+      </label>
+      <Select
+        value={settings.randomFormat}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            randomFormat: value as AppSettings["randomFormat"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <RandomAliasFormatOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Random alias format select options. */
+function RandomAliasFormatOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="private-mail">
+        Private Mail (e.g., private-mail-q2ga)
+      </SelectItem>
+      <SelectItem value="alphanumeric">
+        Random Characters (e.g., abc123xy)
+      </SelectItem>
+      <SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem>
+      <SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Auto-save limit setting field. */
+function AutoSaveLimitField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("autoSaveLimit")}
+      </label>
+      <Select
+        value={String(settings.maxHistory)}
+        onValueChange={(value) =>
+          saveSettings({ ...settings, maxHistory: Number(value) })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <AutoSaveLimitOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Auto-save limit select options. */
+function AutoSaveLimitOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="20">20 aliases</SelectItem>
+      <SelectItem value="50">50 aliases</SelectItem>
+      <SelectItem value="100">100 aliases</SelectItem>
+      <SelectItem value="200">200 aliases</SelectItem>
+      <SelectItem value="500">500 aliases</SelectItem>
+    </SelectContent>
+  );
+}
+
+interface AddAccountCardProps {
+  showAddAccount: boolean;
+  newAccountEmail: string;
+  newAccountLabel: string;
+  addAccountError: string;
+  focusOnMount: (el: HTMLInputElement | null) => void;
+  setShowAddAccount: (show: boolean) => void;
+  setNewAccountEmail: (value: string) => void;
+  setNewAccountLabel: (value: string) => void;
+  setAddAccountError: (value: string) => void;
+  handleAddAccount: () => void;
+}
+
+/** Account creation card used by the settings accounts tab. */
+function AddAccountCard({
+  showAddAccount,
+  newAccountEmail,
+  newAccountLabel,
+  addAccountError,
+  focusOnMount,
+  setShowAddAccount,
+  setNewAccountEmail,
+  setNewAccountLabel,
+  setAddAccountError,
+  handleAddAccount,
+}: AddAccountCardProps) {
+  /** Resets and hides the add-account form. */
+  const closeForm = () => {
+    setShowAddAccount(false);
+    setNewAccountEmail("");
+    setNewAccountLabel("");
+    setAddAccountError("");
+  };
+
+  return (
+    <div className="rounded-2xl border border-border bg-background p-3 shadow-soft">
+      {!showAddAccount ? (
+        <OpenAddAccountButton onClick={() => setShowAddAccount(true)} />
+      ) : (
+        <div className="space-y-3">
+          <AddAccountFormHeader onClose={closeForm} />
+          <AccountEmailInput
+            value={newAccountEmail}
+            setValue={setNewAccountEmail}
+            setError={setAddAccountError}
+            onEnter={handleAddAccount}
+            focusOnMount={focusOnMount}
+          />
+          {addAccountError && <AccountErrorMessage message={addAccountError} />}
+          {newAccountEmail && !newAccountEmail.includes("@") && <GmailHint />}
+          <Input
+            type="text"
+            value={newAccountLabel}
+            onChange={setNewAccountLabel}
+            placeholder={t("accountLabelPlaceholder")}
+          />
+          <Button
+            variant="ghost"
+            onClick={handleAddAccount}
+            disabled={!newAccountEmail.trim()}
+            className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {t("addAccount")}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Button that opens the add-account form. */
+function OpenAddAccountButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      variant="ghost"
+      onClick={onClick}
+      className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+    >
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      {t("addNewAccount")}
+    </Button>
+  );
+}
+
+/** Header row for the add-account form. */
+function AddAccountFormHeader({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="mb-2 flex items-center justify-between">
+      <h4 className="text-sm font-bold text-foreground">
+        {t("addNewAccountTitle")}
+      </h4>
+      <Tooltip content="Close" side="left">
+        <Button
+          variant="ghost"
+          onClick={onClose}
+          className="text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground"
+          aria-label="Close"
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+
+interface AccountEmailInputProps {
+  value: string;
+  setValue: (value: string) => void;
+  setError: (value: string) => void;
+  onEnter: () => void;
+  focusOnMount: (el: HTMLInputElement | null) => void;
+}
+
+/** Email input with Gmail suffix preview for username-only entries. */
+function AccountEmailInput({
+  value,
+  setValue,
+  setError,
+  onEnter,
+  focusOnMount,
+}: AccountEmailInputProps) {
+  return (
+    <div className="relative">
+      <Input
+        type="email"
+        value={value}
+        onChange={(nextValue) => {
+          setValue(nextValue);
+          setError("");
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") onEnter();
+        }}
+        onBlur={() => {
+          if (value && !value.includes("@")) setValue(`${value}@gmail.com`);
+        }}
+        placeholder={t("emailPlaceholder")}
+        ref={focusOnMount}
+      />
+      {value && !value.includes("@") && (
+        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+          @gmail.com
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Validation message for the add-account card. */
+function AccountErrorMessage({ message }: { message: string }) {
+  return (
+    <div className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2">
+      <p className="text-xs text-destructive">{message}</p>
+    </div>
+  );
+}
+
+/** Hint shown when a bare Gmail username is entered. */
+function GmailHint() {
+  return (
+    <p className="text-xs text-muted-foreground">
+      Press{" "}
+      <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-xs">
+        Tab
+      </kbd>{" "}
+      to add @gmail.com
+    </p>
+  );
+}
+
+/** Changelog tab content rendered from static release data. */
+function ChangelogPanel() {
+  return (
+    <div className="space-y-3">
+      {CHANGELOG.map((entry) => (
+        <ChangelogCard key={entry.version} entry={entry} />
+      ))}
+    </div>
+  );
+}
+
+/** Single changelog release card. */
+function ChangelogCard({ entry }: { entry: ChangelogEntry }) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-background shadow-soft">
+      <ChangelogCardHeader entry={entry} />
+      <div className="space-y-2.5 p-3">
+        {entry.changes.map((change) => (
+          <ChangelogChangeGroup
+            key={change.type}
+            change={change}
+            version={entry.version}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Header for one changelog release card. */
+function ChangelogCardHeader({ entry }: { entry: ChangelogEntry }) {
+  return (
+    <div className="flex items-center justify-between border-b border-border bg-muted/45 px-3.5 py-3">
+      <div className="flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+          <svg
+            className="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+            />
+          </svg>
+        </span>
+        <span className="text-sm font-bold text-foreground">
+          v{entry.version}
+        </span>
+      </div>
+      <AnimatedBadge
+        status="neutral"
+        size="sm"
+        showIcon={false}
+        contentKey={entry.date}
+        className="bg-background"
+      >
+        {entry.date}
+      </AnimatedBadge>
+    </div>
+  );
+}
+
+interface ChangelogChangeGroupProps {
+  change: ChangelogChange;
+  version: string;
+}
+
+/** One grouped change type inside a changelog card. */
+function ChangelogChangeGroup({ change, version }: ChangelogChangeGroupProps) {
+  return (
+    <div className="rounded-xl border border-border bg-card/70 p-2.5">
+      <div className="mb-2 flex items-center gap-2">
+        <span
+          className={`inline-flex h-2 w-2 rounded-full ${changeDotClass(change.type)}`}
+        />
+        <AnimatedBadge
+          status={changeBadgeStatus(change.type)}
+          size="sm"
+          showIcon={false}
+          contentKey={`${version}-${change.type}`}
+          className="text-[10px] uppercase tracking-wide"
+        >
+          {change.type}
+        </AnimatedBadge>
+      </div>
+      <ul className="space-y-1.5 text-xs leading-5 text-muted-foreground">
+        {change.items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-muted-foreground/60" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Dot color for changelog change type. */
+function changeDotClass(type: ChangelogChange["type"]) {
+  if (type === "Added") return "bg-emerald-500";
+  if (type === "Fixed") return "bg-rose-500";
+  return "bg-primary";
+}
+
+/** Animated badge status for changelog change type. */
+function changeBadgeStatus(type: ChangelogChange["type"]) {
+  if (type === "Added") return "success";
+  if (type === "Fixed") return "danger";
+  return "info";
+}
 
 /** Settings modal with general, accounts, presets, advanced, and changelog tabs. */
 export default function Settings({
@@ -516,18 +1034,54 @@ export default function Settings({
   // skipcq: JS-0415
   return (
     // skipcq: JS-0415
-    <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+    <div className="absolute inset-0 z-50 flex bg-muted">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-muted">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-border bg-background px-3 py-3 text-foreground">
           <div className="flex items-center gap-2">
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-              title="Back"
+            <Tooltip content="Back" side="bottom">
+              <Button
+                variant="ghost"
+                onClick={onClose}
+                className="h-9 w-9 rounded-xl p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label="Back"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </Button>
+            </Tooltip>
+            <h2 className="text-base font-semibold">{t("settings")}</h2>
+          </div>
+          <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+            v{version}
+          </span>
+        </div>
+
+        {/* Tabs */}
+        <div className="border-b border-border bg-background px-3 py-2.5">
+          <div className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-muted/70 p-1">
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("general")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "general"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -536,118 +1090,87 @@ export default function Settings({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
                 />
               </svg>
-            </button>
-            <h2 className="text-lg font-bold">{t("settings")}</h2>
+              {t("general")}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("accounts")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "accounts"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              {t("accounts")}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setActiveTab("changelog")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "changelog"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {t("changelog")}
+            </Button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-2 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-          <button
-            onClick={() => setActiveTab("general")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "general"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            {t("general")}
-          </button>
-          <button
-            onClick={() => setActiveTab("accounts")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "accounts"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            {t("accounts")}
-          </button>
-          <button
-            onClick={() => setActiveTab("changelog")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "changelog"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            {t("changelog")}
-          </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+        <div className="flex-1 overflow-y-auto bg-muted p-3">
           {/* General Tab */}
           {activeTab === "general" && (
             // skipcq: JS-0415
-            <div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
-                {/* Appearance Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+            <BouncyAccordion
+              defaultValue="appearance"
+              className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft divide-y divide-border/70"
+              classNames={{
+                item: "bg-background data-[state=open]:bg-background",
+                trigger: "min-h-12 gap-3 px-3 hover:bg-muted/45",
+                icon: "h-7 w-7 rounded-lg",
+                title: "text-sm font-bold",
+                chevron: "text-muted-foreground",
+                content: "border-t border-border/70 bg-background",
+                description: "px-3 py-3 text-foreground",
+              }}
+              items={[
+                {
+                  id: "appearance",
+                  title: t("appearanceDisplay"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -660,87 +1183,21 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    {t("appearanceDisplay")}
-                  </h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        {t("theme")}
-                      </label>
-                      <select
-                        value={settings.theme}
-                        onChange={(e) => {
-                          const newTheme = e.target.value as
-                            | "light"
-                            | "dark"
-                            | "auto";
-                          saveSettings({ ...settings, theme: newTheme });
-                          const prefersDark = window.matchMedia(
-                            "(prefers-color-scheme: dark)",
-                          ).matches;
-                          document.documentElement.classList.toggle(
-                            "dark",
-                            newTheme === "dark" ||
-                              (newTheme === "auto" && prefersDark),
-                          );
-                        }}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="light">☀️ Light</option>
-                        <option value="dark">🌙 Dark</option>
-                        <option value="auto">🖥️ System (Auto)</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        {t("badgeCounter")}
-                      </label>
-                      <select
-                        value={settings.badgeDisplay}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            badgeDisplay: e.target
-                              .value as AppSettings["badgeDisplay"],
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="none">🚫 None (Hidden)</option>
-                        <option value="total">📊 Total in History</option>
-                        <option value="all-time">
-                          🏆 Total Generated (All Time)
-                        </option>
-                        <option value="today">📅 Created Today</option>
-                        <option value="week">📆 This Week</option>
-                      </select>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        {t("copyNotifications")}
-                      </label>
-                      <Toggle
-                        enabled={settings.showNotifications}
-                        onChange={(enabled) =>
-                          saveSettings({
-                            ...settings,
-                            showNotifications: enabled,
-                          })
-                        }
-                        label=""
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Alias Generation Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  ),
+                  description: (
+                    <AppearanceSettingsPanel
+                      settings={settings}
+                      saveSettings={saveSettings}
+                    />
+                  ),
+                },
+                {
+                  id: "alias-generation",
+                  title: t("aliasGeneration"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -753,69 +1210,21 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    {t("aliasGeneration")}
-                  </h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        {t("randomAliasFormat")}
-                      </label>
-                      <select
-                        value={settings.randomFormat}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            randomFormat: e.target
-                              .value as AppSettings["randomFormat"],
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="private-mail">
-                          🎯 Private Mail (e.g., private-mail-q2ga) ⭐
-                        </option>
-                        <option value="alphanumeric">
-                          🔤 Random Characters (e.g., abc123xy)
-                        </option>
-                        <option value="words">
-                          💬 Random Words (e.g., happy-fox-42)
-                        </option>
-                        <option value="timestamp">
-                          ⏱️ Timestamp (e.g., lk9x2m3n)
-                        </option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                        {t("autoSaveLimit")}
-                      </label>
-                      <select
-                        value={settings.maxHistory}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            maxHistory: Number(e.target.value),
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value={20}>20 aliases</option>
-                        <option value={50}>50 aliases</option>
-                        <option value={100}>100 aliases</option>
-                        <option value={200}>200 aliases</option>
-                        <option value={500}>500 aliases</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Custom Presets Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  ),
+                  description: (
+                    <AliasGenerationSettingsPanel
+                      settings={settings}
+                      saveSettings={saveSettings}
+                    />
+                  ),
+                },
+                {
+                  id: "custom-presets",
+                  title: t("customPresets"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -828,76 +1237,86 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    {t("customPresets")}
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <Input
-                        value={newPresetLabel}
-                        onChange={setNewPresetLabel}
-                        placeholder={t("label")}
-                      />
-                      <Input
-                        value={newPresetTag}
-                        onChange={setNewPresetTag}
-                        placeholder={t("tag")}
-                      />
-                    </div>
-                    <Button
-                      onClick={handleAddPreset}
-                      disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
-                      size="sm"
-                      fullWidth
-                    >
-                      {t("addPreset")}
-                    </Button>
-                  </div>
-
-                  {settings.customPresets.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 max-h-28 overflow-y-auto">
-                      {settings.customPresets.map((preset) => (
-                        <div
-                          key={preset.id}
-                          className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600"
-                        >
-                          <div className="text-xs text-gray-900 dark:text-gray-100">
-                            <span className="font-semibold">
-                              {preset.label}
-                            </span>
-                            <span className="text-gray-500 dark:text-gray-400 font-mono ml-1.5">
-                              +{preset.tag}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => handleRemovePreset(preset.id)}
-                            className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors flex-shrink-0"
-                          >
-                            <svg
-                              className="w-3.5 h-3.5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <Input
+                          value={newPresetLabel}
+                          onChange={setNewPresetLabel}
+                          placeholder={t("label")}
+                          className="min-w-0"
+                        />
+                        <Input
+                          value={newPresetTag}
+                          onChange={setNewPresetTag}
+                          placeholder={t("tag")}
+                          className="min-w-0"
+                        />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        onClick={handleAddPreset}
+                        disabled={
+                          !newPresetLabel.trim() || !newPresetTag.trim()
+                        }
+                        size="sm"
+                        fullWidth
+                        className="rounded-xl bg-primary/10 text-primary hover:bg-primary/15 disabled:bg-muted disabled:text-muted-foreground"
+                      >
+                        {t("addPreset")}
+                      </Button>
+                      {settings.customPresets.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-border space-y-1.5 max-h-28 overflow-y-auto">
+                          {settings.customPresets.map((preset) => (
+                            <div
+                              key={preset.id}
+                              className="flex items-center justify-between px-3 py-2 bg-muted/45 dark:bg-muted rounded-xl border border-border dark:border-border"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
+                              <div className="text-xs text-foreground">
+                                <span className="font-semibold">
+                                  {preset.label}
+                                </span>
+                                <span className="text-muted-foreground font-mono ml-1.5">
+                                  +{preset.tag}
+                                </span>
+                              </div>
+                              <Tooltip content="Remove preset" side="left">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => handleRemovePreset(preset.id)}
+                                  className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
+                                  aria-label="Remove preset"
+                                >
+                                  <svg
+                                    className="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
+                                  </svg>
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
-                </div>
-
-                {/* Data Management Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  ),
+                },
+                {
+                  id: "data-management",
+                  title: t("dataManagement"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="h-3.5 w-3.5"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -910,59 +1329,94 @@ export default function Settings({
                         />
                       </svg>
                     </span>
-                    {t("dataManagement")}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Button
-                      onClick={handleExportSettings}
-                      variant="secondary"
-                      size="sm"
-                      fullWidth
-                    >
-                      {t("export")}
-                    </Button>
-                    <Button
-                      onClick={handleImportSettings}
-                      variant="secondary"
-                      size="sm"
-                      fullWidth
-                    >
-                      {t("import")}
-                    </Button>
-                    <Button
-                      onClick={handleClearHistory}
-                      variant="danger"
-                      size="sm"
-                      fullWidth
-                    >
-                      {t("clear")}
-                    </Button>
-                  </div>
-                  <button
-                    onClick={handleResetSettings}
-                    className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
-                  >
-                    {t("resetSettings")}
-                  </button>
-                </div>
-              </div>
-            </div>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-3">
+                        <Tooltip
+                          content={t("export")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleExportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("export")}
+                          >
+                            {t("export")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip
+                          content={t("import")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleImportSettings}
+                            variant="secondary"
+                            size="sm"
+                            fullWidth
+                            className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70"
+                            aria-label={t("import")}
+                          >
+                            {t("import")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip
+                          content={t("clear")}
+                          side="top"
+                          wrapperClassName="w-full"
+                        >
+                          <Button
+                            onClick={handleClearHistory}
+                            variant="danger"
+                            size="sm"
+                            fullWidth
+                            className="bg-destructive/10 text-destructive hover:bg-destructive/15"
+                            aria-label={t("clear")}
+                          >
+                            {t("clear")}
+                          </Button>
+                        </Tooltip>
+                      </div>
+                      <Tooltip
+                        content={t("resetSettings")}
+                        side="bottom"
+                        wrapperClassName="w-full"
+                      >
+                        <Button
+                          variant="ghost"
+                          onClick={handleResetSettings}
+                          className="w-full rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:text-destructive font-medium py-1"
+                          aria-label={t("resetSettings")}
+                        >
+                          {t("resetSettings")}
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  ),
+                },
+              ]}
+            />
           )}
 
           {/* Accounts Tab */}
           {activeTab === "accounts" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <h3 className="text-sm font-semibold text-foreground mb-3">
                   {t("emailAccounts")}
                 </h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                <p className="text-xs text-muted-foreground mb-3">
                   {t("manageAccountsDescription")}
                 </p>
               </div>
 
               {emailAccounts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+                <div className="text-center py-8 text-muted-foreground text-sm">
                   {t("noAccountsFound")}
                 </div>
               ) : (
@@ -970,37 +1424,35 @@ export default function Settings({
                   {emailAccounts.map((account) => (
                     <div
                       key={account.id}
-                      className={`rounded-lg border-2 transition-all ${
+                      className={`rounded-2xl border transition-all ${
                         account.isActive
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40"
-                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
+                          ? "border-primary/40 bg-primary/10"
+                          : "border-border bg-background hover:border-border dark:hover:border-border"
                       }`}
                     >
                       {editingAccountId === account.id ? (
                         // Edit mode
                         <div className="p-3 space-y-2">
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label className="block text-xs font-medium text-foreground mb-1">
                               {t("label")}
                             </label>
-                            <input
+                            <Input
                               type="text"
                               value={editingLabel}
-                              onChange={(e) => setEditingLabel(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                              onChange={setEditingLabel}
                               placeholder={t("accountLabel")}
                               ref={focusOnMount}
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label className="block text-xs font-medium text-foreground mb-1">
                               {t("emailAddress")}
                             </label>
-                            <input
+                            <Input
                               type="email"
                               value={editingEmail}
-                              onChange={(e) => setEditingEmail(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                              onChange={setEditingEmail}
                               placeholder={t("emailAddressPlaceholder")}
                             />
                             {editingEmail !== account.email && (
@@ -1010,18 +1462,20 @@ export default function Settings({
                             )}
                           </div>
                           <div className="flex gap-2 pt-1">
-                            <button
+                            <Button
+                              variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
-                              className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors"
+                              className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                               {t("saveChanges")}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant="ghost"
                               onClick={handleCancelEdit}
-                              className="flex-1 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                              className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded-xl hover:bg-muted dark:hover:bg-muted transition-colors"
                             >
                               {t("cancel")}
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       ) : (
@@ -1030,25 +1484,26 @@ export default function Settings({
                         <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
                           <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                            <input
-                              type="radio"
-                              name="activeAccount"
-                              checked={account.isActive}
-                              onChange={() => handleSwitchAccount(account.id)}
-                              className="w-4 h-4 text-blue-600 focus:ring-blue-500 flex-shrink-0"
-                            />
+                            <RadioGroup
+                              value={account.isActive ? account.id : ""}
+                              onValueChange={() =>
+                                handleSwitchAccount(account.id)
+                              }
+                            >
+                              <RadioGroupItem value={account.id} />
+                            </RadioGroup>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                <span className="text-sm font-semibold text-foreground truncate">
                                   {account.label}
                                 </span>
                                 {account.isActive && (
-                                  <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded flex-shrink-0">
+                                  <span className="flex-shrink-0 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
                                     {t("active")}
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-gray-600 dark:text-gray-400 truncate font-mono">
+                              <div className="text-xs text-muted-foreground truncate font-mono">
                                 {account.email}
                               </div>
                             </div>
@@ -1056,55 +1511,68 @@ export default function Settings({
 
                           {/* Action buttons */}
                           <div className="flex items-center gap-1 flex-shrink-0">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStartEdit(account);
-                              }}
-                              className="p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                              title={t("editAccount")}
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                            <Tooltip content={t("editAccount")} side="left">
+                              <Button
+                                variant="ghost"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStartEdit(account);
+                                }}
+                                className="p-1.5 text-muted-foreground hover:bg-muted dark:hover:bg-muted rounded transition-colors"
+                                aria-label={t("editAccount")}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteAccount(account);
-                              }}
-                              className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                              title={
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                  />
+                                </svg>
+                              </Button>
+                            </Tooltip>
+                            <Tooltip
+                              content={
                                 emailAccounts.length === 1
                                   ? t("cannotDeleteLastAccountTitle")
                                   : t("deleteThisAccount")
                               }
-                              disabled={emailAccounts.length === 1}
+                              side="left"
                             >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                              <Button
+                                variant="ghost"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteAccount(account);
+                                }}
+                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                aria-label={
+                                  emailAccounts.length === 1
+                                    ? t("cannotDeleteLastAccountTitle")
+                                    : t("deleteThisAccount")
+                                }
+                                disabled={emailAccounts.length === 1}
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                            </button>
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
+                                </svg>
+                              </Button>
+                            </Tooltip>
                           </div>
                         </div>
                       )}
@@ -1113,192 +1581,45 @@ export default function Settings({
                 </div>
               )}
 
-              {/* Add Account Section */}
-              <div className="bg-blue-50 dark:bg-blue-950/40 rounded-lg shadow-sm border border-blue-200 dark:border-blue-900/60 p-4">
-                {!showAddAccount ? (
-                  <button
-                    onClick={() => setShowAddAccount(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors shadow-sm"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                    {t("addNewAccount")}
-                  </button>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                        {t("addNewAccountTitle")}
-                      </h4>
-                      <button
-                        onClick={() => {
-                          setShowAddAccount(false);
-                          setNewAccountEmail("");
-                          setNewAccountLabel("");
-                          setAddAccountError("");
-                        }}
-                        className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <div className="relative">
-                      <input
-                        type="email"
-                        value={newAccountEmail}
-                        onChange={(e) => {
-                          setNewAccountEmail(e.target.value);
-                          setAddAccountError("");
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            handleAddAccount();
-                          }
-                        }}
-                        onBlur={() => {
-                          if (
-                            newAccountEmail &&
-                            !newAccountEmail.includes("@")
-                          ) {
-                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
-                          }
-                        }}
-                        placeholder={t("emailPlaceholder")}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        ref={focusOnMount}
-                      />
-                      {newAccountEmail && !newAccountEmail.includes("@") && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
-                          @gmail.com
-                        </div>
-                      )}
-                    </div>
-
-                    {addAccountError && (
-                      <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-md">
-                        <p className="text-xs text-red-600 dark:text-red-400">
-                          {addAccountError}
-                        </p>
-                      </div>
-                    )}
-
-                    {newAccountEmail && !newAccountEmail.includes("@") && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        💡 Press{" "}
-                        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
-                          Tab
-                        </kbd>{" "}
-                        to add @gmail.com
-                      </p>
-                    )}
-
-                    <input
-                      type="text"
-                      value={newAccountLabel}
-                      onChange={(e) => setNewAccountLabel(e.target.value)}
-                      placeholder={t("accountLabelPlaceholder")}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    />
-
-                    <button
-                      onClick={handleAddAccount}
-                      disabled={!newAccountEmail.trim()}
-                      className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-md hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      {t("addAccount")}
-                    </button>
-                  </div>
-                )}
-              </div>
+              <AddAccountCard
+                showAddAccount={showAddAccount}
+                newAccountEmail={newAccountEmail}
+                newAccountLabel={newAccountLabel}
+                addAccountError={addAccountError}
+                focusOnMount={focusOnMount}
+                setShowAddAccount={setShowAddAccount}
+                setNewAccountEmail={setNewAccountEmail}
+                setNewAccountLabel={setNewAccountLabel}
+                setAddAccountError={setAddAccountError}
+                handleAddAccount={handleAddAccount}
+              />
             </div>
           )}
-
           {/* Changelog Tab */}
-          {activeTab === "changelog" && (
-            <div className="space-y-3">
-              {CHANGELOG.map((entry) => (
-                <div
-                  key={entry.version}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                      v{entry.version}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {entry.date}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {entry.changes.map((change) => (
-                      <div key={change.type}>
-                        <span
-                          className={`inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 ${
-                            change.type === "Added"
-                              ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
-                              : change.type === "Fixed"
-                                ? "bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400"
-                                : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400"
-                          }`}
-                        >
-                          {change.type}
-                        </span>
-                        <ul className="text-xs text-gray-600 dark:text-gray-400 list-disc list-inside space-y-0.5">
-                          {change.items.map((item) => (
-                            <li key={item}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          {activeTab === "changelog" && <ChangelogPanel />}
         </div>
 
-        {/* Footer */}
-        <div className="bg-gray-100 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+        <div className="hidden">
+          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <img
               src="/icons/32.png"
               alt=""
               className="w-6 h-6 rounded-md flex-shrink-0"
             />
             <span className="font-medium">{t("extensionName")}</span>
-            <span className="text-gray-400 dark:text-gray-600">•</span>
-            <span className="text-gray-500 dark:text-gray-500">v{version}</span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              •
+            </span>
+            <span className="text-muted-foreground dark:text-muted-foreground">
+              v{version}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Settings Toast - inside modal so it shows above the overlay */}
       {toast && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap z-10">
+        <div className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
           {toast}
         </div>
       )}
@@ -1328,33 +1649,33 @@ function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   const confirmClass =
     request.variant === "danger"
-      ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
-      : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500";
+      ? "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-ring"
+      : "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-ring";
 
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-40 p-4">
-      <div className="w-full max-w-sm rounded-lg bg-white p-4 shadow-xl dark:bg-gray-800">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-          {request.title}
-        </h3>
-        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-gray-600 dark:text-gray-300">
+      <div className="w-full max-w-sm rounded-lg bg-card p-4 shadow-xl">
+        <h3 className="text-sm font-bold text-foreground">{request.title}</h3>
+        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-muted-foreground dark:text-muted-foreground">
           {request.message}
         </p>
         <div className="mt-4 flex justify-end gap-2">
-          <button
+          <Button
+            variant="ghost"
             type="button"
             onClick={onCancel}
-            className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring dark:bg-muted dark:text-foreground dark:hover:bg-muted"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             type="button"
             onClick={onConfirm}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
           >
             {request.confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

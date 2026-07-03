@@ -67,6 +67,82 @@
   "gmailTricks": {
     "message": "Gmail の便利機能"
   },
+  "tabTagsShort": {
+    "message": "タグ"
+  },
+  "tabTricksShort": {
+    "message": "小技"
+  },
+  "generating": {
+    "message": "生成中"
+  },
+  "copied": {
+    "message": "コピー済み"
+  },
+  "switchToLightMode": {
+    "message": "ライトモードに切り替え"
+  },
+  "switchToDarkMode": {
+    "message": "ダークモードに切り替え"
+  },
+  "aliasColumn": {
+    "message": "エイリアス"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - クリックしてコピー",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "$PAGE$ページ",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "ドットの小技"
+  },
+  "plusTags": {
+    "message": "プラス（+）タグ"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "ドットを削除"
+  },
+  "dotPlus": {
+    "message": "ドット + プラス"
+  },
+  "allCombos": {
+    "message": "すべての組み合わせ"
+  },
+  "numberOfVariations": {
+    "message": "バリエーション数"
+  },
+  "randomizeDotPositions": {
+    "message": "ドット位置をランダム化"
+  },
+  "sequential": {
+    "message": "順番"
+  },
+  "generateTricks": {
+    "message": "小技を生成"
+  },
+  "generatedVariations": {
+    "message": "生成されたバリエーション"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Gmailの小技:"
+  },
+  "gmailTrickInfo": {
+    "message": "ドットは無視され、+ 以降はすべて同じ受信トレイに届きます"
+  },
   "format": {
     "message": "形式"
   },
@@ -108,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "✓ $COUNT$ 件のエイリアスをコピーしました！",
+    "message": "$COUNT$ 件のエイリアスをコピーしました！",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -116,7 +192,7 @@
     }
   },
   "failedToCopy": {
-    "message": "✗ コピーに失敗しました"
+    "message": "コピーに失敗しました"
   },
   "formatPrivateMail": {
     "message": "形式：private-mail-xxxx"
@@ -475,34 +551,34 @@
     "message": "すべてのドットを削除"
   },
   "toastPresetAdded": {
-    "message": "✓ プリセットを追加しました"
+    "message": "プリセットを追加しました"
   },
   "toastPresetRemoved": {
-    "message": "✓ プリセットを削除しました"
+    "message": "プリセットを削除しました"
   },
   "toastSettingsExported": {
-    "message": "✓ 設定をエクスポートしました"
+    "message": "設定をエクスポートしました"
   },
   "toastSettingsImported": {
-    "message": "✓ 設定をインポートしました"
+    "message": "設定をインポートしました"
   },
   "toastImportFailed": {
-    "message": "✗ インポートに失敗しました - 無効なファイル"
+    "message": "インポートに失敗しました - 無効なファイル"
   },
   "toastSettingsReset": {
-    "message": "✓ 設定をデフォルトに戻しました"
+    "message": "設定をデフォルトに戻しました"
   },
   "toastAccountSwitched": {
-    "message": "✓ アカウントを切り替えました"
+    "message": "アカウントを切り替えました"
   },
   "toastAccountDeleted": {
-    "message": "✓ アカウントを削除しました"
+    "message": "アカウントを削除しました"
   },
   "toastAccountUpdated": {
-    "message": "✓ アカウントを更新しました"
+    "message": "アカウントを更新しました"
   },
   "toastAccountAdded": {
-    "message": "✓ $LABEL$ を追加しました",
+    "message": "$LABEL$ を追加しました",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -525,10 +601,10 @@
     "message": "このアカウントは既に存在します"
   },
   "toastQrFailed": {
-    "message": "✗ QR コードの生成に失敗しました"
+    "message": "QR コードの生成に失敗しました"
   },
   "toastExportedAliases": {
-    "message": "✓ $COUNT$ 件のエイリアスをエクスポートしました",
+    "message": "$COUNT$ 件のエイリアスをエクスポートしました",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -536,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "✓ $COUNT$ 件のエイリアスを削除しました",
+    "message": "$COUNT$ 件のエイリアスを削除しました",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -544,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "✓ 履歴をクリアしました"
+    "message": "履歴をクリアしました"
   },
   "toastFavoriteAdded": {
-    "message": "✓ お気に入りに追加しました"
+    "message": "お気に入りに追加しました"
   },
   "toastFavoriteRemoved": {
-    "message": "✓ お気に入りから削除しました"
+    "message": "お気に入りから削除しました"
   },
   "toastCopiedEmail": {
-    "message": "✓ $EMAIL$ をコピーしました",
+    "message": "$EMAIL$ をコピーしました",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -561,7 +637,7 @@
     }
   },
   "toastCopyFailed": {
-    "message": "✗ コピーに失敗しました"
+    "message": "コピーに失敗しました"
   },
   "welcomeTitle": {
     "message": "Gmail Alias Toolkit へようこそ"

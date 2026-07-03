@@ -67,6 +67,82 @@
   "gmailTricks": {
     "message": "Gmail ट्रिक्स"
   },
+  "tabTagsShort": {
+    "message": "टैग"
+  },
+  "tabTricksShort": {
+    "message": "ट्रिक्स"
+  },
+  "generating": {
+    "message": "बनाया जा रहा है"
+  },
+  "copied": {
+    "message": "कॉपी हो गया"
+  },
+  "switchToLightMode": {
+    "message": "लाइट मोड पर जाएं"
+  },
+  "switchToDarkMode": {
+    "message": "डार्क मोड पर जाएं"
+  },
+  "aliasColumn": {
+    "message": "उपनाम"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - कॉपी करने के लिए क्लिक करें",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "पृष्ठ $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "डॉट ट्रिक"
+  },
+  "plusTags": {
+    "message": "प्लस (+) टैग"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "डॉट हटाएं"
+  },
+  "dotPlus": {
+    "message": "डॉट + प्लस"
+  },
+  "allCombos": {
+    "message": "सभी कॉम्बो"
+  },
+  "numberOfVariations": {
+    "message": "वेरिएशन की संख्या"
+  },
+  "randomizeDotPositions": {
+    "message": "डॉट की स्थिति रैंडम करें"
+  },
+  "sequential": {
+    "message": "क्रमवार"
+  },
+  "generateTricks": {
+    "message": "ट्रिक्स बनाएं"
+  },
+  "generatedVariations": {
+    "message": "बने हुए वेरिएशन"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Gmail ट्रिक:"
+  },
+  "gmailTrickInfo": {
+    "message": "डॉट्स को अनदेखा किया जाता है और + के बाद की हर चीज उसी इनबॉक्स में जाती है"
+  },
   "format": {
     "message": "फ़ॉर्मैट"
   },
@@ -108,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "✓ $COUNT$ उपनाम कॉपी किए गए!",
+    "message": "$COUNT$ उपनाम कॉपी किए गए!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -116,7 +192,7 @@
     }
   },
   "failedToCopy": {
-    "message": "✗ कॉपी करने में विफल"
+    "message": "कॉपी करने में विफल"
   },
   "formatPrivateMail": {
     "message": "फ़ॉर्मैट: private-mail-xxxx"
@@ -475,34 +551,34 @@
     "message": "सभी डॉट हटाएं"
   },
   "toastPresetAdded": {
-    "message": "✓ प्रीसेट जोड़ा गया"
+    "message": "प्रीसेट जोड़ा गया"
   },
   "toastPresetRemoved": {
-    "message": "✓ प्रीसेट हटाया गया"
+    "message": "प्रीसेट हटाया गया"
   },
   "toastSettingsExported": {
-    "message": "✓ सेटिंग्स निर्यात की गईं"
+    "message": "सेटिंग्स निर्यात की गईं"
   },
   "toastSettingsImported": {
-    "message": "✓ सेटिंग्स आयात की गईं"
+    "message": "सेटिंग्स आयात की गईं"
   },
   "toastImportFailed": {
-    "message": "✗ आयात विफल - अमान्य फ़ाइल"
+    "message": "आयात विफल - अमान्य फ़ाइल"
   },
   "toastSettingsReset": {
-    "message": "✓ सेटिंग्स डिफ़ॉल्ट पर रीसेट की गईं"
+    "message": "सेटिंग्स डिफ़ॉल्ट पर रीसेट की गईं"
   },
   "toastAccountSwitched": {
-    "message": "✓ खाता बदला गया"
+    "message": "खाता बदला गया"
   },
   "toastAccountDeleted": {
-    "message": "✓ खाता हटाया गया"
+    "message": "खाता हटाया गया"
   },
   "toastAccountUpdated": {
-    "message": "✓ खाता अपडेट किया गया"
+    "message": "खाता अपडेट किया गया"
   },
   "toastAccountAdded": {
-    "message": "✓ $LABEL$ जोड़ा गया",
+    "message": "$LABEL$ जोड़ा गया",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -525,10 +601,10 @@
     "message": "यह खाता पहले से मौजूद है"
   },
   "toastQrFailed": {
-    "message": "✗ QR कोड बनाने में विफल"
+    "message": "QR कोड बनाने में विफल"
   },
   "toastExportedAliases": {
-    "message": "✓ $COUNT$ उपनाम निर्यात किए गए",
+    "message": "$COUNT$ उपनाम निर्यात किए गए",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -536,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "✓ $COUNT$ उपनाम हटाए गए",
+    "message": "$COUNT$ उपनाम हटाए गए",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -544,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "✓ इतिहास साफ़ किया गया"
+    "message": "इतिहास साफ़ किया गया"
   },
   "toastFavoriteAdded": {
-    "message": "✓ पसंदीदा में जोड़ा गया"
+    "message": "पसंदीदा में जोड़ा गया"
   },
   "toastFavoriteRemoved": {
-    "message": "✓ पसंदीदा से हटाया गया"
+    "message": "पसंदीदा से हटाया गया"
   },
   "toastCopiedEmail": {
-    "message": "✓ $EMAIL$ कॉपी किया गया",
+    "message": "$EMAIL$ कॉपी किया गया",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -561,7 +637,7 @@
     }
   },
   "toastCopyFailed": {
-    "message": "✗ कॉपी करने में विफल"
+    "message": "कॉपी करने में विफल"
   },
   "welcomeTitle": {
     "message": "Gmail Alias Toolkit में आपका स्वागत है"
@@ -596,7 +672,7 @@
     "message": "आप क्या कर सकते हैं:"
   },
   "featurePrivateEmail": {
-    "message": "Private Email Generator"
+    "message": "निजी ईमेल जनरेटर"
   },
   "featureCustomTags": {
     "message": "कस्टम टैग और प्रीसेट"

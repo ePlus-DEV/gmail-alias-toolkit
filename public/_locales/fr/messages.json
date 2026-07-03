@@ -67,6 +67,82 @@
   "gmailTricks": {
     "message": "Astuces Gmail"
   },
+  "tabTagsShort": {
+    "message": "Tags"
+  },
+  "tabTricksShort": {
+    "message": "Astuces"
+  },
+  "generating": {
+    "message": "Génération"
+  },
+  "copied": {
+    "message": "Copié"
+  },
+  "switchToLightMode": {
+    "message": "Passer au mode clair"
+  },
+  "switchToDarkMode": {
+    "message": "Passer au mode sombre"
+  },
+  "aliasColumn": {
+    "message": "Alias"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - cliquer pour copier",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "Page $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "Astuce points"
+  },
+  "plusTags": {
+    "message": "Tags +"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "Supprimer les points"
+  },
+  "dotPlus": {
+    "message": "Points + tags"
+  },
+  "allCombos": {
+    "message": "Toutes les combinaisons"
+  },
+  "numberOfVariations": {
+    "message": "Nombre de variantes"
+  },
+  "randomizeDotPositions": {
+    "message": "Positions des points aléatoires"
+  },
+  "sequential": {
+    "message": "Séquentiel"
+  },
+  "generateTricks": {
+    "message": "Générer les astuces"
+  },
+  "generatedVariations": {
+    "message": "Variantes générées"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Astuce Gmail :"
+  },
+  "gmailTrickInfo": {
+    "message": "Les points sont ignorés et tout ce qui suit + arrive dans la même boîte"
+  },
   "format": {
     "message": "Format"
   },
@@ -108,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "✓ $COUNT$ alias copiés !",
+    "message": "$COUNT$ alias copiés !",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -116,7 +192,7 @@
     }
   },
   "failedToCopy": {
-    "message": "✗ Échec de la copie"
+    "message": "Échec de la copie"
   },
   "formatPrivateMail": {
     "message": "Format : private-mail-xxxx"
@@ -475,34 +551,34 @@
     "message": "Supprimer tous les points"
   },
   "toastPresetAdded": {
-    "message": "✓ Préréglage ajouté"
+    "message": "Préréglage ajouté"
   },
   "toastPresetRemoved": {
-    "message": "✓ Préréglage supprimé"
+    "message": "Préréglage supprimé"
   },
   "toastSettingsExported": {
-    "message": "✓ Paramètres exportés"
+    "message": "Paramètres exportés"
   },
   "toastSettingsImported": {
-    "message": "✓ Paramètres importés"
+    "message": "Paramètres importés"
   },
   "toastImportFailed": {
-    "message": "✗ Échec de l’importation - fichier invalide"
+    "message": "Échec de l’importation - fichier invalide"
   },
   "toastSettingsReset": {
-    "message": "✓ Paramètres réinitialisés par défaut"
+    "message": "Paramètres réinitialisés par défaut"
   },
   "toastAccountSwitched": {
-    "message": "✓ Compte changé"
+    "message": "Compte changé"
   },
   "toastAccountDeleted": {
-    "message": "✓ Compte supprimé"
+    "message": "Compte supprimé"
   },
   "toastAccountUpdated": {
-    "message": "✓ Compte mis à jour"
+    "message": "Compte mis à jour"
   },
   "toastAccountAdded": {
-    "message": "✓ $LABEL$ ajouté",
+    "message": "$LABEL$ ajouté",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -525,10 +601,10 @@
     "message": "Ce compte existe déjà"
   },
   "toastQrFailed": {
-    "message": "✗ Échec de la génération du code QR"
+    "message": "Échec de la génération du code QR"
   },
   "toastExportedAliases": {
-    "message": "✓ $COUNT$ alias exportés",
+    "message": "$COUNT$ alias exportés",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -536,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "✓ $COUNT$ alias supprimés",
+    "message": "$COUNT$ alias supprimés",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -544,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "✓ Historique effacé"
+    "message": "Historique effacé"
   },
   "toastFavoriteAdded": {
-    "message": "✓ Ajouté aux favoris"
+    "message": "Ajouté aux favoris"
   },
   "toastFavoriteRemoved": {
-    "message": "✓ Retiré des favoris"
+    "message": "Retiré des favoris"
   },
   "toastCopiedEmail": {
-    "message": "✓ $EMAIL$ copié",
+    "message": "$EMAIL$ copié",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -561,7 +637,7 @@
     }
   },
   "toastCopyFailed": {
-    "message": "✗ Échec de la copie"
+    "message": "Échec de la copie"
   },
   "welcomeTitle": {
     "message": "Bienvenue dans Gmail Alias Toolkit"

@@ -67,6 +67,82 @@
   "gmailTricks": {
     "message": "Gmail 技巧"
   },
+  "tabTagsShort": {
+    "message": "标签"
+  },
+  "tabTricksShort": {
+    "message": "技巧"
+  },
+  "generating": {
+    "message": "正在生成"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "switchToLightMode": {
+    "message": "切换到浅色模式"
+  },
+  "switchToDarkMode": {
+    "message": "切换到深色模式"
+  },
+  "aliasColumn": {
+    "message": "别名"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - 点击复制",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "第 $PAGE$ 页",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "点号技巧"
+  },
+  "plusTags": {
+    "message": "加号（+）标签"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "移除点号"
+  },
+  "dotPlus": {
+    "message": "点号 + 加号"
+  },
+  "allCombos": {
+    "message": "所有组合"
+  },
+  "numberOfVariations": {
+    "message": "变体数量"
+  },
+  "randomizeDotPositions": {
+    "message": "随机点号位置"
+  },
+  "sequential": {
+    "message": "顺序"
+  },
+  "generateTricks": {
+    "message": "生成技巧"
+  },
+  "generatedVariations": {
+    "message": "已生成的变体"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Gmail 技巧："
+  },
+  "gmailTrickInfo": {
+    "message": "点号会被忽略，+ 后面的所有内容都会进入同一个收件箱"
+  },
   "format": {
     "message": "格式"
   },
@@ -108,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "✓ 已复制 $COUNT$ 个别名！",
+    "message": "已复制 $COUNT$ 个别名！",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -116,7 +192,7 @@
     }
   },
   "failedToCopy": {
-    "message": "✗ 复制失败"
+    "message": "复制失败"
   },
   "formatPrivateMail": {
     "message": "格式：private-mail-xxxx"
@@ -475,34 +551,34 @@
     "message": "移除所有点号"
   },
   "toastPresetAdded": {
-    "message": "✓ 已添加预设"
+    "message": "已添加预设"
   },
   "toastPresetRemoved": {
-    "message": "✓ 已移除预设"
+    "message": "已移除预设"
   },
   "toastSettingsExported": {
-    "message": "✓ 设置已导出"
+    "message": "设置已导出"
   },
   "toastSettingsImported": {
-    "message": "✓ 设置已导入"
+    "message": "设置已导入"
   },
   "toastImportFailed": {
-    "message": "✗ 导入失败 - 文件无效"
+    "message": "导入失败 - 文件无效"
   },
   "toastSettingsReset": {
-    "message": "✓ 设置已重置为默认值"
+    "message": "设置已重置为默认值"
   },
   "toastAccountSwitched": {
-    "message": "✓ 已切换账户"
+    "message": "已切换账户"
   },
   "toastAccountDeleted": {
-    "message": "✓ 账户已删除"
+    "message": "账户已删除"
   },
   "toastAccountUpdated": {
-    "message": "✓ 账户已更新"
+    "message": "账户已更新"
   },
   "toastAccountAdded": {
-    "message": "✓ 已添加 $LABEL$",
+    "message": "已添加 $LABEL$",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -525,10 +601,10 @@
     "message": "此账户已存在"
   },
   "toastQrFailed": {
-    "message": "✗ 生成二维码失败"
+    "message": "生成二维码失败"
   },
   "toastExportedAliases": {
-    "message": "✓ 已导出 $COUNT$ 个别名",
+    "message": "已导出 $COUNT$ 个别名",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -536,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "✓ 已删除 $COUNT$ 个别名",
+    "message": "已删除 $COUNT$ 个别名",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -544,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "✓ 历史记录已清除"
+    "message": "历史记录已清除"
   },
   "toastFavoriteAdded": {
-    "message": "✓ 已添加到收藏"
+    "message": "已添加到收藏"
   },
   "toastFavoriteRemoved": {
-    "message": "✓ 已从收藏中移除"
+    "message": "已从收藏中移除"
   },
   "toastCopiedEmail": {
-    "message": "✓ 已复制 $EMAIL$",
+    "message": "已复制 $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -561,7 +637,7 @@
     }
   },
   "toastCopyFailed": {
-    "message": "✗ 复制失败"
+    "message": "复制失败"
   },
   "welcomeTitle": {
     "message": "欢迎使用 Gmail Alias Toolkit"

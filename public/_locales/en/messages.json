@@ -29,6 +29,36 @@
   "random": { "message": "Random" },
   "customTags": { "message": "Custom Tags" },
   "gmailTricks": { "message": "Gmail Tricks" },
+  "tabTagsShort": { "message": "Tags" },
+  "tabTricksShort": { "message": "Tricks" },
+  "generating": { "message": "Generating" },
+  "copied": { "message": "Copied" },
+  "switchToLightMode": { "message": "Switch to light mode" },
+  "switchToDarkMode": { "message": "Switch to dark mode" },
+  "aliasColumn": { "message": "Alias" },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - click to copy",
+    "placeholders": { "email": { "content": "$1" } }
+  },
+  "pageLabel": {
+    "message": "Page $PAGE$",
+    "placeholders": { "page": { "content": "$1" } }
+  },
+  "dotTrick": { "message": "Dot Trick" },
+  "plusTags": { "message": "Plus (+) Tags" },
+  "googlemail": { "message": "Googlemail" },
+  "removeDots": { "message": "Remove Dots" },
+  "dotPlus": { "message": "Dot + Plus" },
+  "allCombos": { "message": "All Combos" },
+  "numberOfVariations": { "message": "Number of variations" },
+  "randomizeDotPositions": { "message": "Randomize dot positions" },
+  "sequential": { "message": "Sequential" },
+  "generateTricks": { "message": "Generate Tricks" },
+  "generatedVariations": { "message": "Generated Variations" },
+  "gmailTrickInfoLabel": { "message": "Gmail trick:" },
+  "gmailTrickInfo": {
+    "message": "Dots are ignored and everything after + goes to the same inbox"
+  },
   "format": { "message": "Format" },
   "privateMailFormat": { "message": "Private Mail (private-mail-xxxx)" },
   "randomCharactersFormat": { "message": "Random Characters (abc123xy)" },
@@ -48,10 +78,10 @@
     "placeholders": { "count": { "content": "$1" } }
   },
   "copiedAliases": {
-    "message": "✓ Copied $COUNT$ aliases!",
+    "message": "Copied $COUNT$ aliases!",
     "placeholders": { "count": { "content": "$1" } }
   },
-  "failedToCopy": { "message": "✗ Failed to copy" },
+  "failedToCopy": { "message": "Failed to copy" },
   "formatPrivateMail": { "message": "Format: private-mail-xxxx" },
   "formatAlphanumeric": { "message": "8 random characters" },
   "formatWords": { "message": "2 random words" },
@@ -204,17 +234,17 @@
   "menuDotVariation": { "message": "Dot Variation" },
   "menuGooglemailDomain": { "message": "Googlemail Domain" },
   "menuRemoveAllDots": { "message": "Remove All Dots" },
-  "toastPresetAdded": { "message": "✓ Preset added" },
-  "toastPresetRemoved": { "message": "✓ Preset removed" },
-  "toastSettingsExported": { "message": "✓ Settings exported" },
-  "toastSettingsImported": { "message": "✓ Settings imported" },
-  "toastImportFailed": { "message": "✗ Import failed - invalid file" },
-  "toastSettingsReset": { "message": "✓ Settings reset to default" },
-  "toastAccountSwitched": { "message": "✓ Account switched" },
-  "toastAccountDeleted": { "message": "✓ Account deleted" },
-  "toastAccountUpdated": { "message": "✓ Account updated" },
+  "toastPresetAdded": { "message": "Preset added" },
+  "toastPresetRemoved": { "message": "Preset removed" },
+  "toastSettingsExported": { "message": "Settings exported" },
+  "toastSettingsImported": { "message": "Settings imported" },
+  "toastImportFailed": { "message": "Import failed - invalid file" },
+  "toastSettingsReset": { "message": "Settings reset to default" },
+  "toastAccountSwitched": { "message": "Account switched" },
+  "toastAccountDeleted": { "message": "Account deleted" },
+  "toastAccountUpdated": { "message": "Account updated" },
   "toastAccountAdded": {
-    "message": "✓ $LABEL$ added",
+    "message": "$LABEL$ added",
     "placeholders": { "label": { "content": "$1" } }
   },
   "errorLabelRequired": { "message": "Label cannot be empty" },
@@ -224,23 +254,23 @@
   },
   "errorEnterEmail": { "message": "Please enter an email address" },
   "errorAccountExists": { "message": "This account already exists" },
-  "toastQrFailed": { "message": "✗ Failed to generate QR code" },
+  "toastQrFailed": { "message": "Failed to generate QR code" },
   "toastExportedAliases": {
-    "message": "✓ Exported $COUNT$ aliases",
+    "message": "Exported $COUNT$ aliases",
     "placeholders": { "count": { "content": "$1" } }
   },
   "toastDeletedAliases": {
-    "message": "✓ Deleted $COUNT$ aliases",
+    "message": "Deleted $COUNT$ aliases",
     "placeholders": { "count": { "content": "$1" } }
   },
-  "toastHistoryCleared": { "message": "✓ History cleared" },
-  "toastFavoriteAdded": { "message": "✓ Added to favorites" },
-  "toastFavoriteRemoved": { "message": "✓ Removed from favorites" },
+  "toastHistoryCleared": { "message": "History cleared" },
+  "toastFavoriteAdded": { "message": "Added to favorites" },
+  "toastFavoriteRemoved": { "message": "Removed from favorites" },
   "toastCopiedEmail": {
-    "message": "✓ Copied $EMAIL$",
+    "message": "Copied $EMAIL$",
     "placeholders": { "email": { "content": "$1" } }
   },
-  "toastCopyFailed": { "message": "✗ Failed to copy" },
+  "toastCopyFailed": { "message": "Failed to copy" },
   "welcomeTitle": { "message": "Welcome to Gmail Alias Toolkit" },
   "welcomeSubtitle": {
     "message": "Generate unlimited email aliases for privacy and organization"

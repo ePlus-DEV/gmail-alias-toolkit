@@ -1,4 +1,26 @@
+// skipcq: JS-0415 - Popup tab panels are intentionally colocated for compact UI state flow.
 import GmailTricks from "./GmailTricks";
+import Button from "./Button";
+import Input from "./Input";
+import {
+  AtSign,
+  Check,
+  Copy,
+  LoaderCircle,
+  Shuffle,
+  Tag,
+  Zap,
+} from "lucide-react";
+import { useState, type ReactNode } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
+import { ActionSwapButton } from "src/components/motion/action-swap";
+import { Tooltip } from "src/components/motion/tooltip";
 import {
   generateAlias,
   generateRandomString,
@@ -34,6 +56,321 @@ interface GeneratorTabsProps {
   setToastMessage: (msg: string | null) => void;
 }
 
+type GeneratorTabId = "random" | "tags" | "tricks";
+
+interface GeneratorTabButtonProps {
+  activeTab: GeneratorTabId;
+  tab: GeneratorTabId;
+  icon: ReactNode;
+  label: string;
+  tooltip: string;
+  onSelect: (tab: GeneratorTabId) => void;
+}
+
+/** Compact tab button with a tooltip for truncated labels. */
+function GeneratorTabButton({
+  activeTab,
+  tab,
+  icon,
+  label,
+  tooltip,
+  onSelect,
+}: GeneratorTabButtonProps) {
+  const active = activeTab === tab;
+
+  return (
+    <Tooltip content={tooltip} side="bottom" wrapperClassName="min-w-0">
+      <Button
+        onClick={() => onSelect(tab)}
+        variant="ghost"
+        size="sm"
+        className={`h-10 w-full min-w-0 rounded-xl border px-2 text-xs transition-colors ${
+          active
+            ? "border-primary/40 bg-primary/10 text-primary"
+            : "border-border bg-background text-muted-foreground hover:bg-muted/70"
+        }`}
+      >
+        {icon}
+        <span className="truncate">{label}</span>
+      </Button>
+    </Tooltip>
+  );
+}
+
+interface GeneratorTabBarProps {
+  activeTab: GeneratorTabId;
+  onSelect: (tab: GeneratorTabId) => void;
+}
+
+/** Top-level generator tab navigation with tooltip labels. */
+function GeneratorTabBar({ activeTab, onSelect }: GeneratorTabBarProps) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5 p-3 pb-0">
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="random"
+        icon={<Shuffle className="h-3.5 w-3.5 shrink-0" />}
+        label={t("random")}
+        tooltip={t("random")}
+        onSelect={onSelect}
+      />
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="tags"
+        icon={<Tag className="h-3.5 w-3.5 shrink-0" />}
+        label={t("tabTagsShort")}
+        tooltip={t("customTags")}
+        onSelect={onSelect}
+      />
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="tricks"
+        icon={<Zap className="h-3.5 w-3.5 shrink-0" />}
+        label={t("tabTricksShort")}
+        tooltip={t("gmailTricks")}
+        onSelect={onSelect}
+      />
+    </div>
+  );
+}
+
+interface RandomFormatControlsProps {
+  randomFormat: RandomFormat;
+  randomEmailCount: number;
+  onFormatChange: (format: RandomFormat) => void;
+  onCountChange: (count: number) => void;
+}
+
+/** Format and count controls for the random alias generator. */
+function RandomFormatControls({
+  randomFormat,
+  randomEmailCount,
+  onFormatChange,
+  onCountChange,
+}: RandomFormatControlsProps) {
+  return (
+    <div className="mb-3 grid grid-cols-[minmax(0,1fr)_82px] gap-2">
+      <RandomFormatSelect
+        randomFormat={randomFormat}
+        onFormatChange={onFormatChange}
+      />
+      <RandomAliasCountInput
+        randomEmailCount={randomEmailCount}
+        onCountChange={onCountChange}
+      />
+    </div>
+  );
+}
+
+interface RandomFormatSelectProps {
+  randomFormat: RandomFormat;
+  onFormatChange: (format: RandomFormat) => void;
+}
+
+/** Selects the random alias format. */
+function RandomFormatSelect({
+  randomFormat,
+  onFormatChange,
+}: RandomFormatSelectProps) {
+  return (
+    <div className="min-w-0">
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("format")}
+      </label>
+      <Select
+        value={randomFormat}
+        onValueChange={(value) => onFormatChange(value as RandomFormat)}
+      >
+        <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <RandomFormatOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Options for the random format select. */
+function RandomFormatOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="private-mail">{t("privateMailFormat")}</SelectItem>
+      <SelectItem value="alphanumeric">
+        {t("randomCharactersFormat")}
+      </SelectItem>
+      <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
+      <SelectItem value="timestamp">{t("timestampFormat")}</SelectItem>
+    </SelectContent>
+  );
+}
+
+interface RandomAliasCountInputProps {
+  randomEmailCount: number;
+  onCountChange: (count: number) => void;
+}
+
+/** Numeric input for random alias batch size. */
+function RandomAliasCountInput({
+  randomEmailCount,
+  onCountChange,
+}: RandomAliasCountInputProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
+        {t("numberOfAliases")}
+      </label>
+      <Input
+        type="number"
+        min="1"
+        value={String(randomEmailCount)}
+        onChange={(value) => onCountChange(Math.max(1, parseInt(value) || 10))}
+        className="w-full"
+      />
+    </div>
+  );
+}
+
+interface RandomAliasListProps {
+  generatedRandomList: string[];
+  showNotifications: boolean;
+  copyToClipboard: (email: string) => Promise<void>;
+  saveRecentAliases: (emails: string[]) => void;
+  setToastMessage: (msg: string | null) => void;
+}
+
+/** Shows generated aliases with copy actions. */
+function RandomAliasList({
+  generatedRandomList,
+  showNotifications,
+  copyToClipboard,
+  saveRecentAliases,
+  setToastMessage,
+}: RandomAliasListProps) {
+  if (generatedRandomList.length === 0) return null;
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-border">
+      <RandomAliasListHeader
+        generatedRandomList={generatedRandomList}
+        showNotifications={showNotifications}
+        saveRecentAliases={saveRecentAliases}
+        setToastMessage={setToastMessage}
+      />
+      <div className="max-h-64 overflow-y-auto">
+        {generatedRandomList.map((email) => (
+          <RandomAliasRow
+            key={email}
+            email={email}
+            copyToClipboard={copyToClipboard}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface RandomAliasListHeaderProps {
+  generatedRandomList: string[];
+  showNotifications: boolean;
+  saveRecentAliases: (emails: string[]) => void;
+  setToastMessage: (msg: string | null) => void;
+}
+
+/** Header and bulk-copy action for generated aliases. */
+function RandomAliasListHeader({
+  generatedRandomList,
+  showNotifications,
+  saveRecentAliases,
+  setToastMessage,
+}: RandomAliasListHeaderProps) {
+  /** Copies all generated aliases and records them in recent history. */
+  const copyAllAliases = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedRandomList.join("\n"));
+      saveRecentAliases(generatedRandomList);
+      if (showNotifications) {
+        setToastMessage(t("copiedAliases", String(generatedRandomList.length)));
+      }
+    } catch {
+      if (showNotifications) {
+        setToastMessage(t("failedToCopy"));
+      }
+    }
+    setTimeout(() => setToastMessage(null), showNotifications ? 2000 : 0);
+  };
+
+  return (
+    <div className="border-b border-border bg-muted/40 px-3 py-2">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-foreground">
+          {t("generatedAliases")}
+        </span>
+        <RandomAliasListActions
+          count={generatedRandomList.length}
+          onCopyAll={copyAllAliases}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface RandomAliasListActionsProps {
+  count: number;
+  onCopyAll: () => void;
+}
+
+/** Count and bulk-copy action for generated aliases. */
+function RandomAliasListActions({
+  count,
+  onCopyAll,
+}: RandomAliasListActionsProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-muted-foreground">
+        {t("totalCount", String(count))}
+      </span>
+      <Tooltip content={t("copyToClipboard")} side="top">
+        <Button
+          onClick={onCopyAll}
+          variant="ghost"
+          size="sm"
+          className="text-xs font-medium text-primary hover:text-primary"
+          aria-label={t("copyToClipboard")}
+        >
+          {t("copyAll")}
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+
+interface RandomAliasRowProps {
+  email: string;
+  copyToClipboard: (email: string) => Promise<void>;
+}
+
+/** Single generated alias row with copy action. */
+function RandomAliasRow({ email, copyToClipboard }: RandomAliasRowProps) {
+  return (
+    <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 transition-colors last:border-b-0 hover:bg-muted/40 dark:border-border dark:hover:bg-muted/50">
+      <div className="flex-1 truncate font-mono text-xs text-foreground">
+        {email}
+      </div>
+      <Tooltip content={t("copy")}>
+        <Button
+          onClick={() => copyToClipboard(email)}
+          variant="ghost"
+          size="icon"
+          className="flex-shrink-0 rounded p-1.5 text-primary transition-colors hover:bg-primary/15"
+          aria-label={t("copy")}
+        >
+          <Copy className="h-3.5 w-3.5" />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+
 /** Renders three alias generator tabs: random (formatted strings), custom tags, and Gmail tricks. */
 export default function GeneratorTabs({
   baseEmail,
@@ -56,6 +393,10 @@ export default function GeneratorTabs({
   saveRecentAliases,
   setToastMessage,
 }: GeneratorTabsProps) {
+  const [randomActionState, setRandomActionState] = useState<
+    "idle" | "generating" | "done"
+  >("idle");
+
   /** Updates random format setting and persists to storage. */
   const handleFormatChange = async (newFormat: RandomFormat) => {
     setRandomFormat(newFormat);
@@ -72,125 +413,25 @@ export default function GeneratorTabs({
   return (
     <div>
       {/* Main Tabs */}
-      <div className="flex gap-2 p-3.5 pb-0">
-        <button
-          onClick={() => setActiveTab("random")}
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
-            activeTab === "random"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4h4l4 4m0 0l4-4h4m0 16h-4l-4-4m0 0l-4 4H4m0-8h4m8 0h4"
-            />
-          </svg>
-          {t("random")}
-        </button>
-        <button
-          onClick={() => setActiveTab("tags")}
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
-            activeTab === "tags"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-            />
-          </svg>
-          {t("customTags")}
-        </button>
-        <button
-          onClick={() => setActiveTab("tricks")}
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
-            activeTab === "tricks"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
-          }`}
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
-          {t("gmailTricks")}
-        </button>
-      </div>
+      <GeneratorTabBar activeTab={activeTab} onSelect={setActiveTab} />
 
       {/* Tab Content */}
-      <div className="p-3.5 dark:bg-gray-800">
+      <div className="p-3">
         {/* Random Tab */}
         {activeTab === "random" && (
+          // skipcq: JS-0415 - The random generator form keeps coupled controls and action state together.
           <div>
-            {/* Format Selector */}
-            <div className="mb-3">
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t("format")}
-              </label>
-              <select
-                value={randomFormat}
-                onChange={(e) =>
-                  handleFormatChange(e.target.value as RandomFormat)
-                }
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              >
-                <option value="private-mail">{t("privateMailFormat")}</option>
-                <option value="alphanumeric">
-                  {t("randomCharactersFormat")}
-                </option>
-                <option value="words">{t("randomWordsFormat")}</option>
-                <option value="timestamp">{t("timestampFormat")}</option>
-              </select>
-            </div>
-
-            {/* Number of Emails */}
-            <div className="mb-3 flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {t("numberOfAliases")}
-              </label>
-              <input
-                type="number"
-                min="1"
-                value={randomEmailCount}
-                onChange={(e) =>
-                  setRandomEmailCount(
-                    Math.max(1, parseInt(e.target.value) || 10),
-                  )
-                }
-                className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-            </div>
+            <RandomFormatControls
+              randomFormat={randomFormat}
+              randomEmailCount={randomEmailCount}
+              onFormatChange={handleFormatChange}
+              onCountChange={setRandomEmailCount}
+            />
 
             {/* Generate Button */}
-            <button
+            <ActionSwapButton
               onClick={() => {
+                setRandomActionState("generating");
                 setGeneratedRandomList([]);
                 const aliases: string[] = [];
                 const timestamp = Date.now();
@@ -208,113 +449,51 @@ export default function GeneratorTabs({
                   if (aliases.length > 0) {
                     setGeneratedRandomList(aliases);
                     copyToClipboard(aliases[0]);
+                    setRandomActionState("done");
+                    setTimeout(() => setRandomActionState("idle"), 1400);
+                  } else {
+                    setRandomActionState("idle");
                   }
                 }, 0);
               }}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
-            >
-              <div className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                {t("generateRandomAliases", [
-                  String(randomEmailCount),
-                  randomEmailCount > 1 ? "es" : "",
-                ])}
-              </div>
-            </button>
+              disabled={randomActionState === "generating"}
+              items={[
+                {
+                  id: "idle",
+                  icon: <Shuffle className="h-4 w-4" />,
+                  label: t("generateRandomAliases", [
+                    String(randomEmailCount),
+                    randomEmailCount > 1 ? "es" : "",
+                  ]),
+                },
+                {
+                  id: "generating",
+                  icon: <LoaderCircle className="h-4 w-4 animate-spin" />,
+                  label: t("generating"),
+                },
+                {
+                  id: "done",
+                  icon: <Check className="h-4 w-4" />,
+                  label: t("copied"),
+                },
+              ]}
+              value={randomActionState}
+              cycle={false}
+              variant="primary"
+              size="md"
+              animation="roll"
+              className="mb-2.5 h-10 w-full rounded-xl px-4 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
+            />
 
-            {/* Generated Emails List */}
-            {generatedRandomList.length > 0 && (
-              // skipcq: JS-0415
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 dark:bg-gray-900 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      {t("generatedAliases")}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("totalCount", String(generatedRandomList.length))}
-                      </span>
-                      <button
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(
-                              generatedRandomList.join("\n"),
-                            );
-                            saveRecentAliases(generatedRandomList);
-                            if (showNotifications) {
-                              setToastMessage(
-                                t(
-                                  "copiedAliases",
-                                  String(generatedRandomList.length),
-                                ),
-                              );
-                            }
-                          } catch {
-                            if (showNotifications) {
-                              setToastMessage(t("failedToCopy"));
-                            }
-                          }
-                          setTimeout(
-                            () => setToastMessage(null),
-                            showNotifications ? 2000 : 0,
-                          );
-                        }}
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
-                        title={t("copyToClipboard")}
-                      >
-                        {t("copyAll")}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="max-h-64 overflow-y-auto">
-                  {generatedRandomList.map((email) => (
-                    <div
-                      key={email}
-                      className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-                    >
-                      <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">
-                        {email}
-                      </div>
-                      <button
-                        onClick={() => copyToClipboard(email)}
-                        className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors flex-shrink-0"
-                        title={t("copy")}
-                      >
-                        <svg
-                          className="w-3.5 h-3.5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <RandomAliasList
+              generatedRandomList={generatedRandomList}
+              showNotifications={showNotifications}
+              copyToClipboard={copyToClipboard}
+              saveRecentAliases={saveRecentAliases}
+              setToastMessage={setToastMessage}
+            />
 
-            <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+            <div className="mt-1 text-center text-[11px] text-muted-foreground">
               {randomFormat === "private-mail"
                 ? t("formatPrivateMail")
                 : randomFormat === "alphanumeric"
@@ -329,93 +508,73 @@ export default function GeneratorTabs({
         {/* Custom Tags Tab */}
         {activeTab === "tags" && (
           // skipcq: JS-0415
-          <div>
-            <div className="flex gap-2 mb-3">
-              <div className="relative flex-1">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                    />
-                  </svg>
-                </div>
-                <input
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-border bg-background p-2.5 shadow-sm">
+              <div className="grid grid-cols-[minmax(0,1fr)_92px] gap-2">
+                <Input
                   type="text"
                   value={customTag}
-                  onChange={(e) => setCustomTag(e.target.value)}
+                  onChange={setCustomTag}
                   onKeyDown={handleKeyPress}
-                  className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full"
                   placeholder={t("tagPlaceholder")}
+                  leftIcon={<AtSign className="h-4 w-4" />}
                 />
+                <Button
+                  onClick={handleCustomGenerate}
+                  disabled={!customTag.trim()}
+                  ripple
+                  className="h-10 rounded-xl px-3 text-sm font-semibold"
+                >
+                  {t("generate")}
+                </Button>
               </div>
-              <button
-                onClick={handleCustomGenerate}
-                disabled={!customTag.trim()}
-                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {t("generate")}
-              </button>
             </div>
 
             {/* Custom Presets - Quick Access */}
             {customPresets.length > 0 && (
-              <div className="mb-3">
-                <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="rounded-2xl border border-border bg-background p-2.5 shadow-sm">
+                <div className="mb-2 text-xs font-semibold text-foreground">
                   {t("yourPresets")}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {customPresets.map((preset) => (
-                    <button
+                    <Button
                       key={preset.id}
                       onClick={() => handlePresetClick(preset.tag)}
-                      className="px-3 py-1.5 bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-full border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 rounded-full border-border bg-muted px-3 text-xs font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                     >
                       {preset.label}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-              <span>
-                {t("example")} {baseEmail.split("@")[0]}+
-                <strong className="text-gray-700 dark:text-gray-300">
-                  your-tag
-                </strong>
-                @{baseEmail.split("@")[1]}
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/55 px-3 py-2 text-xs text-muted-foreground">
+              <span className="min-w-0 flex-1 truncate">
+                {t("example")}{" "}
+                <span className="font-mono text-foreground">
+                  {baseEmail.split("@")[0]}+your-tag@{baseEmail.split("@")[1]}
+                </span>
               </span>
-              <button
-                onClick={() =>
-                  copyToClipboard(
-                    `${baseEmail.split("@")[0]}+your-tag@${baseEmail.split("@")[1]}`,
-                  )
-                }
-                className="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 flex-shrink-0"
-                title={t("copyExample")}
-              >
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <Tooltip content={t("copyExample")}>
+                <Button
+                  onClick={() =>
+                    copyToClipboard(
+                      `${baseEmail.split("@")[0]}+your-tag@${baseEmail.split("@")[1]}`,
+                    )
+                  }
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 flex-shrink-0 rounded-lg text-muted-foreground hover:bg-background hover:text-primary"
+                  aria-label={t("copyExample")}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-              </button>
+                  <Copy className="h-3.5 w-3.5" />
+                </Button>
+              </Tooltip>
             </div>
           </div>
         )}

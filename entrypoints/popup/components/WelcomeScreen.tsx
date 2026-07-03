@@ -1,4 +1,8 @@
 import { useCallback, useState, ReactNode } from "react";
+import { UserRound } from "lucide-react";
+import Button from "./Button";
+import Input from "./Input";
+import { TextReveal } from "src/components/motion/text-reveal";
 import {
   validateEmail as validateEmailPure,
   getAccountStorageKey,
@@ -120,7 +124,7 @@ export default function WelcomeScreen({
 
   // skipcq: JS-0415
   return (
-    <div className="flex items-center justify-center p-4 bg-gray-50">
+    <div className="flex items-center justify-center bg-muted/40 p-4">
       <div className="max-w-md w-full">
         <WelcomeHeader />
         <WelcomeCard>
@@ -155,8 +159,25 @@ function WelcomeHeader() {
         alt=""
         className="w-12 h-12 rounded-xl mb-2 mx-auto"
       />
-      <h1 className="text-lg font-bold text-gray-900">{t("welcomeTitle")}</h1>
-      <p className="text-xs text-gray-600 mt-0.5">{t("welcomeSubtitle")}</p>
+      <TextReveal
+        as="h1"
+        text={t("welcomeTitle")}
+        split="word"
+        stagger={0.055}
+        blur={8}
+        yOffset="32%"
+        className="text-lg font-bold text-foreground"
+      />
+      <TextReveal
+        as="p"
+        text={t("welcomeSubtitle")}
+        split="word"
+        stagger={0.025}
+        delay={0.16}
+        blur={6}
+        yOffset="24%"
+        className="mt-0.5 text-xs text-muted-foreground"
+      />
     </div>
   );
 }
@@ -177,48 +198,34 @@ function WelcomeForm({
 
   return (
     <div className="p-4">
-      <h2 className="text-sm font-semibold text-gray-900 mb-2.5">
+      <h2 className="mb-2.5 text-sm font-semibold text-foreground">
         {t("letsGetStarted")}
       </h2>
 
-      <label className="block text-xs font-medium text-gray-700 mb-1.5">
+      <label className="mb-1.5 block text-xs font-medium text-foreground">
         {t("enterGmailAddress")}
       </label>
 
       <div className="relative mb-1.5">
-        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-            />
-          </svg>
-        </div>
-        <input
+        <Input
           type="email"
           value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
+          onChange={onEmailChange}
           onBlur={onBlur}
           onKeyDown={onKeyPress}
           placeholder={t("emailPlaceholder")}
-          className={`w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 transition-colors ${
+          leftIcon={<UserRound className="h-4 w-4" />}
+          className={`w-full ${
             validationError && !isWarning
-              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+              ? "text-destructive"
               : validationError && isWarning
-                ? "border-amber-300 focus:ring-amber-500 focus:border-amber-500"
-                : "border-blue-500 focus:ring-blue-500 focus:border-transparent"
+                ? "text-accent"
+                : ""
           }`}
           ref={focusOnMount}
         />
         {email && !email.includes("@") && !validationError && (
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
+          <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
             @gmail.com
           </div>
         )}
@@ -228,8 +235,8 @@ function WelcomeForm({
         <div
           className={`mb-2 p-1.5 rounded-full text-xs text-center ${
             isWarning
-              ? "bg-amber-50 text-amber-700 border border-amber-200"
-              : "bg-red-50 text-red-700 border border-red-200"
+              ? "bg-accent/10 text-accent border border-accent/25"
+              : "bg-destructive/10 text-destructive border border-destructive/30"
           }`}
         >
           {validationError}
@@ -237,28 +244,30 @@ function WelcomeForm({
       )}
 
       {!email.includes("@") && (
-        <p className="text-xs text-gray-500 mb-2.5 flex items-center gap-1.5">
+        <p className="mb-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
           <span>💡</span> {t("pressTabForGmail", "Tab").split("Tab")[0]}
-          <kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded text-xs font-mono">
+          <kbd className="px-1.5 py-0.5 bg-muted border border-border rounded text-xs font-mono">
             Tab
           </kbd>
           {t("pressTabForGmail", "Tab").split("Tab")[1]}
         </p>
       )}
 
-      <button
+      <Button
         onClick={onSubmit}
         disabled={
           !email.trim() || (validationError && !isWarning) || isSubmitting
         }
-        className="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-1"
+        ripple
+        className="w-full px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-1"
       >
         {isSubmitting ? t("settingUp") : t("getStarted")}
-      </button>
+      </Button>
 
-      <button
+      <Button
         onClick={onOpenSettings}
-        className="w-full flex items-center justify-center gap-1.5 px-6 py-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium rounded-full hover:bg-blue-50 transition-colors"
+        variant="ghost"
+        className="w-full flex items-center justify-center gap-1.5 px-6 py-1.5 text-xs text-primary hover:text-primary font-medium rounded-full hover:bg-primary/10 transition-colors"
       >
         <svg
           className="w-3.5 h-3.5"
@@ -280,7 +289,7 @@ function WelcomeForm({
           />
         </svg>
         {t("advancedSetup")}
-      </button>
+      </Button>
     </div>
   );
 }
@@ -288,7 +297,7 @@ function WelcomeForm({
 /** Wraps the welcome form sections in the shared first-run card. */
 function WelcomeCard({ children }: WelcomeCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 divide-y divide-gray-200 mb-2.5">
+    <div className="mb-2.5 divide-y divide-border rounded-xl border border-border bg-card shadow-sm">
       {children}
     </div>
   );
@@ -298,14 +307,14 @@ function WelcomeCard({ children }: WelcomeCardProps) {
 function WelcomeFeatures() {
   return (
     <div className="p-3.5">
-      <h3 className="text-xs font-semibold text-gray-900 mb-2">
+      <h3 className="mb-2 text-xs font-semibold text-foreground">
         {t("whatYouCanDo")}
       </h3>
       <div className="space-y-1.5">
         <FeatureItem
           icon={
             <svg
-              className="w-3.5 h-3.5 text-blue-600"
+              className="w-3.5 h-3.5 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -318,13 +327,13 @@ function WelcomeFeatures() {
               />
             </svg>
           }
-          bgColor="bg-blue-50"
+          bgColor="bg-primary/10"
           label={t("featurePrivateEmail")}
         />
         <FeatureItem
           icon={
             <svg
-              className="w-3.5 h-3.5 text-green-600"
+              className="h-3.5 w-3.5 text-accent"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -337,13 +346,13 @@ function WelcomeFeatures() {
               />
             </svg>
           }
-          bgColor="bg-green-50"
+          bgColor="bg-accent/10"
           label={t("featureCustomTags")}
         />
         <FeatureItem
           icon={
             <svg
-              className="w-3.5 h-3.5 text-purple-600"
+              className="h-3.5 w-3.5 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -356,7 +365,7 @@ function WelcomeFeatures() {
               />
             </svg>
           }
-          bgColor="bg-purple-50"
+          bgColor="bg-primary/10"
           label={t("featureGmailTricks")}
         />
       </div>
@@ -373,13 +382,13 @@ interface FeatureItemProps {
 /** Renders one compact welcome feature row. */
 function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
   return (
-    <div className="flex items-center gap-2.5 px-3 py-1.5 border border-gray-200 rounded-full">
+    <div className="flex items-center gap-2.5 rounded-full border border-border px-3 py-1.5">
       <span
         className={`w-6 h-6 rounded-md ${bgColor} flex items-center justify-center flex-shrink-0`}
       >
         {icon}
       </span>
-      <span className="text-xs font-medium text-gray-900">{label}</span>
+      <span className="text-xs font-medium text-foreground">{label}</span>
     </div>
   );
 }
@@ -387,6 +396,8 @@ function FeatureItem({ icon, bgColor, label }: FeatureItemProps) {
 /** Renders the welcome screen footer message. */
 function WelcomeFooter() {
   return (
-    <p className="text-center text-xs text-gray-500">{t("welcomeFooter")}</p>
+    <p className="text-center text-xs text-muted-foreground">
+      {t("welcomeFooter")}
+    </p>
   );
 }
