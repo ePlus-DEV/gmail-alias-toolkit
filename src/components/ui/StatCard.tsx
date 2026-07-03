@@ -17,7 +17,7 @@ export default function StatCard({
     <motion.div
       whileHover={reduce ? undefined : { scale: 1.02, y: -2 }}
       transition={SPRING_PRESS}
-      className="rounded-2xl border border-gray-200/80 bg-white/70 p-3 shadow-sm dark:border-gray-700/80 dark:bg-gray-800/60"
+      className="rounded-xl border border-gray-200/80 bg-white/85 p-3 shadow-sm dark:border-gray-700/80 dark:bg-gray-800/70"
     >
       <motion.div
         whileHover={reduce ? undefined : { scale: 1.1 }}

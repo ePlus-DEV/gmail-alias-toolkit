@@ -18,7 +18,7 @@ export default function EmptyState({
       initial={reduce ? undefined : { opacity: 0, y: 10 }}
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
       transition={SPRING_PRESS}
-      className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/70 px-4 py-6 text-center dark:border-gray-700 dark:bg-gray-900/50"
+      className="rounded-xl border border-dashed border-gray-200/80 bg-gray-50/70 px-4 py-6 text-center dark:border-gray-700/80 dark:bg-gray-900/50"
     >
       <motion.div
         whileHover={reduce ? undefined : { scale: 1.1 }}
