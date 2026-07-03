@@ -1,20 +1,36 @@
 # Gmail Alias Toolkit
 
-Generate, copy, and manage Gmail aliases from a small browser extension popup.
-The extension helps you create plus-addressed aliases such as
-`name+shopping@gmail.com`, Gmail dot-trick variations, custom presets, and
-recent alias history without sending your data anywhere.
+A lightweight browser extension that generates, manages, and organizes Gmail aliases directly from your browser. Create plus-addressed aliases (`name+shopping@gmail.com`), Gmail dot-trick variations, custom presets, and maintain a searchable history—all without sending your data anywhere.
 
 ## Features
 
-- Random alias generator with private-mail, alphanumeric, words, and timestamp formats.
-- Custom tag generator with user-defined presets.
-- Gmail tricks for dot variations, plus tags, googlemail aliases, and combinations.
-- Recent aliases table with search, tag filtering, sorting, favorites, QR codes, and CSV/JSON export.
-- Multi-account support with isolated history, statistics, and favorites per account.
-- Settings for badge counter, random format, auto-save limit, notifications, presets, accounts, and data import/export.
-- Popup header theme toggle with light and dark mode.
-- Localized UI with locale key parity tests.
+### Alias Generation
+
+- Random alias generator supporting multiple formats: private-mail, alphanumeric, words, and timestamp-based.
+- Custom tag generator with user-defined presets for organized alias creation.
+- Gmail tricks: dot variations, plus tags, googlemail aliases, and smart combinations.
+
+### Alias Management
+
+- Recent aliases table with full-featured search, tag filtering, and sorting.
+- Favorites marking and QR code generation for quick sharing.
+- Bulk export in CSV and JSON formats for backup and analysis.
+
+### Multi-Account Support
+
+- Isolated history, statistics, and favorites per account.
+- Seamless account switching without data leakage.
+
+### Customization & Accessibility
+
+- Configurable settings: badge counter display, random format selection, auto-save limits, and notifications.
+- Preset management for frequently used alias patterns.
+- Light and dark mode theme toggle.
+- Full data import/export for migration and backup.
+
+### Internationalization
+
+- Complete localization with automatic UI translation across all interfaces.
 
 ## Privacy
 
@@ -33,11 +49,6 @@ recent alias history without sending your data anywhere.
 
 For development and build commands, see `CONTRIBUTING.md`.
 
-## Internationalization
-
-The extension supports English, Vietnamese, French, German, Hindi, Japanese,
-and Simplified Chinese.
-
 ## Contributing
 
 Please read `CONTRIBUTING.md` for local setup, checks, project structure, and
@@ -49,8 +60,8 @@ MIT. See `LICENSE.md`.
 
 ## Support
 
-- Issues: https://github.com/ePlus-DEV/gmail-alias-toolkit/issues
-- Discussions: https://github.com/ePlus-DEV/gmail-alias-toolkit/discussions
+- Issues: [github.com/ePlus-DEV/gmail-alias-toolkit/issues](https://github.com/ePlus-DEV/gmail-alias-toolkit/issues)
+- Discussions: [github.com/ePlus-DEV/gmail-alias-toolkit/discussions](https://github.com/ePlus-DEV/gmail-alias-toolkit/discussions)
 - Email: dev@eplus.dev
 
 ## Version
