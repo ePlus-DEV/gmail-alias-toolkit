@@ -147,10 +147,7 @@ function AppearanceSettingsPanel({
   return (
     <div className="space-y-3">
       <BadgeCounterField settings={settings} saveSettings={saveSettings} />
-      <CopyNotificationsField
-        settings={settings}
-        saveSettings={saveSettings}
-      />
+      <CopyNotificationsField settings={settings} saveSettings={saveSettings} />
     </div>
   );
 }
@@ -221,10 +218,7 @@ function AliasGenerationSettingsPanel({
 }: SettingsPanelProps) {
   return (
     <div className="space-y-3">
-      <RandomAliasFormatField
-        settings={settings}
-        saveSettings={saveSettings}
-      />
+      <RandomAliasFormatField settings={settings} saveSettings={saveSettings} />
       <AutoSaveLimitField settings={settings} saveSettings={saveSettings} />
     </div>
   );
