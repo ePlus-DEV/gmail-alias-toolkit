@@ -44,17 +44,17 @@ type Ripple = { id: number; x: number; y: number; size: number };
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-blue-600 text-white shadow-soft hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700",
+    "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90 dark:hover:bg-primary/80",
   secondary:
-    "border border-gray-200/80 bg-white/85 text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-700/80 dark:bg-gray-800/85 dark:text-gray-200 dark:hover:bg-gray-700/80",
+    "border border-border bg-card text-foreground shadow-sm hover:bg-card/80",
   ghost:
-    "text-gray-600 hover:bg-gray-100/80 dark:text-gray-300 dark:hover:bg-gray-800/80",
+    "text-foreground hover:bg-muted",
   outline:
-    "border border-gray-200/80 bg-transparent text-gray-700 hover:bg-blue-50/70 dark:border-gray-700/80 dark:text-gray-200 dark:hover:bg-blue-950/30",
+    "border border-border bg-transparent text-foreground hover:bg-muted",
   danger:
-    "bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-900/50",
+    "bg-destructive/10 text-destructive hover:bg-destructive/20 dark:hover:bg-destructive/15",
   success:
-    "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-900/50",
+    "bg-accent/10 text-accent hover:bg-accent/20 dark:hover:bg-accent/15",
 };
 
 const sizes: Record<ButtonSize, string> = {
