@@ -8,40 +8,40 @@
   --foreground: 0 0% 3.6%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 3.6%;
-  --primary: 217.2 91.2% 59.8%;
+  --primary: 217 92% 59%;
   --primary-foreground: 210 40% 98%;
-  --secondary: 217.2 32.6% 17.5%;
+  --secondary: 217 32% 17%;
   --secondary-foreground: 210 40% 98%;
-  --destructive: 0 84.2% 60.2%;
+  --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 217.2 91.2% 59.8%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 16 86% 67%;
   --accent-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 217.2 91.2% 59.8%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 217 92% 59%;
 }
 
 /* beUI Design Tokens - Dark Mode */
 .dark {
-  --background: 222.2 84% 4.9%;
+  --background: 222 84% 5%;
   --foreground: 210 40% 98%;
-  --card: 217.2 32.6% 17.5%;
+  --card: 0 0% 13%;
   --card-foreground: 210 40% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 91.2% 59.8%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 62.8% 30.6%;
+  --primary: 217 92% 59%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 92% 59%;
+  --secondary-foreground: 222 47% 11%;
+  --destructive: 0 63% 31%;
   --destructive-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 91.2% 59.8%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 217.2 91.2% 59.8%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 16 86% 67%;
+  --accent-foreground: 222 47% 11%;
+  --border: 0 0% 20%;
+  --input: 0 0% 13%;
+  --ring: 217 92% 59%;
 }
 
 * {
