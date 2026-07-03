@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { t } from "./i18n";
+import { t } from "../../lib/i18n";
 
 describe("t", () => {
   afterEach(() => {

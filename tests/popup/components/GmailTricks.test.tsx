@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, it, expect, vi } from "vitest";
-import GmailTricks from "../GmailTricks";
+import GmailTricks from "../../../entrypoints/popup/components/GmailTricks";
 
 describe("GmailTricks", () => {
   beforeEach(() => {

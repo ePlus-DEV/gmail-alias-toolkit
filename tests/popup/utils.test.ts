@@ -8,7 +8,7 @@ import {
   generateDotVariations,
   getDotVariationCandidates,
   filterAliases,
-} from "./utils";
+} from "../../entrypoints/popup/utils";
 
 // ─── getAccountStorageKey ────────────────────────────────────────────────────
 

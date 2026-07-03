@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import Toggle from "../Toggle";
+import Toggle from "../../../entrypoints/popup/components/Toggle";
 
 describe("Toggle", () => {
   it("renders label", () => {
