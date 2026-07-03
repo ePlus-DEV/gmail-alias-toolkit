@@ -9,17 +9,12 @@ export type AnimatedBadgeStatus = "info" | "success" | "warning" | "danger" | "n
 export type AnimatedBadgeSize = "sm" | "md";
 
 const statusStyles = {
-  info: "border-blue-200/80 bg-blue-50 text-blue-700 dark:border-blue-800/50 dark:bg-blue-950/40 dark:text-blue-300",
-  success:
-    "border-emerald-200/80 bg-emerald-50 text-emerald-700 dark:border-emerald-800/50 dark:bg-emerald-950/40 dark:text-emerald-300",
-  warning:
-    "border-amber-200/80 bg-amber-50 text-amber-700 dark:border-amber-800/50 dark:bg-amber-950/40 dark:text-amber-300",
-  danger:
-    "border-red-200/80 bg-red-50 text-red-700 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-300",
-  neutral:
-    "border-gray-200/80 bg-gray-50 text-gray-700 dark:border-gray-800/50 dark:bg-gray-950/40 dark:text-gray-300",
-  loading:
-    "border-blue-200/80 bg-blue-50 text-blue-700 dark:border-blue-800/50 dark:bg-blue-950/40 dark:text-blue-300",
+  info: "border-border bg-primary/10 text-primary",
+  success: "border-border bg-accent/10 text-accent",
+  warning: "border-border bg-destructive/10 text-destructive",
+  danger: "border-border bg-destructive/10 text-destructive",
+  neutral: "border-border bg-muted text-muted-foreground",
+  loading: "border-border bg-primary/10 text-primary",
 };
 
 const sizeStyles = {
