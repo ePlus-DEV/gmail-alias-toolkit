@@ -1,4 +1,13 @@
 import GmailTricks from "./GmailTricks";
+import Button from "./Button";
+import Input from "./Input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
 import {
   generateAlias,
   generateRandomString,
@@ -73,12 +82,13 @@ export default function GeneratorTabs({
     <div>
       {/* Main Tabs */}
       <div className="flex gap-2 p-3.5 pb-0">
-        <button
+        <Button
           onClick={() => setActiveTab("random")}
+          variant="outline"
           className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
             activeTab === "random"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
           }`}
         >
           <svg
@@ -95,13 +105,14 @@ export default function GeneratorTabs({
             />
           </svg>
           {t("random")}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab("tags")}
+          variant="outline"
           className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
             activeTab === "tags"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
           }`}
         >
           <svg
@@ -118,13 +129,14 @@ export default function GeneratorTabs({
             />
           </svg>
           {t("customTags")}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab("tricks")}
+          variant="outline"
           className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
             activeTab === "tricks"
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
-              : "border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600"
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
           }`}
         >
           <svg
@@ -141,55 +153,63 @@ export default function GeneratorTabs({
             />
           </svg>
           {t("gmailTricks")}
-        </button>
+        </Button>
       </div>
 
       {/* Tab Content */}
-      <div className="p-3.5 dark:bg-gray-800">
+      <div className="p-3.5">
         {/* Random Tab */}
         {activeTab === "random" && (
           <div>
             {/* Format Selector */}
             <div className="mb-3">
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-xs font-medium text-foreground mb-2">
                 {t("format")}
               </label>
-              <select
+              <Select
                 value={randomFormat}
-                onChange={(e) =>
-                  handleFormatChange(e.target.value as RandomFormat)
+                onValueChange={(value) =>
+                  handleFormatChange(value as RandomFormat)
                 }
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
-                <option value="private-mail">{t("privateMailFormat")}</option>
-                <option value="alphanumeric">
-                  {t("randomCharactersFormat")}
-                </option>
-                <option value="words">{t("randomWordsFormat")}</option>
-                <option value="timestamp">{t("timestampFormat")}</option>
-              </select>
+                <SelectTrigger className="rounded-full bg-card">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="private-mail">
+                    {t("privateMailFormat")}
+                  </SelectItem>
+                  <SelectItem value="alphanumeric">
+                    {t("randomCharactersFormat")}
+                  </SelectItem>
+                  <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
+                  <SelectItem value="timestamp">
+                    {t("timestampFormat")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Number of Emails */}
             <div className="mb-3 flex items-center gap-3">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-foreground">
                 {t("numberOfAliases")}
               </label>
-              <input
+              <Input
                 type="number"
                 min="1"
-                value={randomEmailCount}
-                onChange={(e) =>
+                value={String(randomEmailCount)}
+                onChange={(value) =>
                   setRandomEmailCount(
-                    Math.max(1, parseInt(e.target.value) || 10),
+                    Math.max(1, parseInt(value) || 10),
                   )
                 }
-                className="w-20 px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="w-20"
               />
             </div>
 
             {/* Generate Button */}
-            <button
+            <Button
               onClick={() => {
                 setGeneratedRandomList([]);
                 const aliases: string[] = [];
@@ -211,7 +231,8 @@ export default function GeneratorTabs({
                   }
                 }, 0);
               }}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors mb-3"
+              ripple
+              className="w-full bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring transition-colors mb-3"
             >
               <div className="flex items-center justify-center gap-2">
                 <svg
@@ -232,22 +253,22 @@ export default function GeneratorTabs({
                   randomEmailCount > 1 ? "es" : "",
                 ])}
               </div>
-            </button>
+            </Button>
 
             {/* Generated Emails List */}
             {generatedRandomList.length > 0 && (
               // skipcq: JS-0415
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                <div className="bg-gray-50 dark:bg-gray-900 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+              <div className="border border-border rounded-lg overflow-hidden">
+                <div className="bg-muted/40 px-3 py-2 border-b border-border">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                    <span className="text-xs font-semibold text-foreground">
                       {t("generatedAliases")}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-muted-foreground">
                         {t("totalCount", String(generatedRandomList.length))}
                       </span>
-                      <button
+                      <Button
                         onClick={async () => {
                           try {
                             await navigator.clipboard.writeText(
@@ -272,11 +293,13 @@ export default function GeneratorTabs({
                             showNotifications ? 2000 : 0,
                           );
                         }}
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
+                        variant="ghost"
+                        size="sm"
+                        className="text-xs text-primary hover:text-primary font-medium"
                         title={t("copyToClipboard")}
                       >
                         {t("copyAll")}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -284,14 +307,16 @@ export default function GeneratorTabs({
                   {generatedRandomList.map((email) => (
                     <div
                       key={email}
-                      className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="flex items-center gap-2 px-3 py-2.5 border-b border-border dark:border-border last:border-b-0 hover:bg-muted/40 dark:hover:bg-muted/50 transition-colors"
                     >
-                      <div className="flex-1 font-mono text-xs text-gray-900 dark:text-gray-100 truncate">
+                      <div className="flex-1 font-mono text-xs text-foreground truncate">
                         {email}
                       </div>
-                      <button
+                      <Button
                         onClick={() => copyToClipboard(email)}
-                        className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors flex-shrink-0"
+                        variant="ghost"
+                        size="icon"
+                        className="p-1.5 text-primary hover:bg-primary/15 rounded transition-colors flex-shrink-0"
                         title={t("copy")}
                       >
                         <svg
@@ -307,14 +332,14 @@ export default function GeneratorTabs({
                             d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                           />
                         </svg>
-                      </button>
+                      </Button>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+            <div className="mt-2 text-xs text-muted-foreground text-center">
               {randomFormat === "private-mail"
                 ? t("formatPrivateMail")
                 : randomFormat === "alphanumeric"
@@ -332,7 +357,7 @@ export default function GeneratorTabs({
           <div>
             <div className="flex gap-2 mb-3">
               <div className="relative flex-1">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500">
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -347,59 +372,64 @@ export default function GeneratorTabs({
                     />
                   </svg>
                 </div>
-                <input
+                <Input
                   type="text"
                   value={customTag}
-                  onChange={(e) => setCustomTag(e.target.value)}
+                  onChange={setCustomTag}
                   onKeyDown={handleKeyPress}
-                  className="w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="w-full"
                   placeholder={t("tagPlaceholder")}
                 />
               </div>
-              <button
+              <Button
                 onClick={handleCustomGenerate}
                 disabled={!customTag.trim()}
-                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                ripple
+                className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {t("generate")}
-              </button>
+              </Button>
             </div>
 
             {/* Custom Presets - Quick Access */}
             {customPresets.length > 0 && (
               <div className="mb-3">
-                <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <div className="text-xs font-medium text-foreground mb-2">
                   {t("yourPresets")}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {customPresets.map((preset) => (
-                    <button
+                    <Button
                       key={preset.id}
                       onClick={() => handlePresetClick(preset.tag)}
-                      className="px-3 py-1.5 bg-white dark:bg-gray-700 text-blue-700 dark:text-blue-400 text-xs font-medium rounded-full border border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                      variant="outline"
+                      size="sm"
+                      className="px-3 py-1.5 bg-card text-primary text-xs font-medium rounded-full border border-primary/30 hover:bg-primary/10 transition-colors"
                     >
                       {preset.label}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
               <span>
                 {t("example")} {baseEmail.split("@")[0]}+
-                <strong className="text-gray-700 dark:text-gray-300">
+                <strong className="text-foreground">
                   your-tag
                 </strong>
                 @{baseEmail.split("@")[1]}
               </span>
-              <button
+              <Button
                 onClick={() =>
                   copyToClipboard(
                     `${baseEmail.split("@")[0]}+your-tag@${baseEmail.split("@")[1]}`,
                   )
                 }
-                className="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 flex-shrink-0"
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-primary flex-shrink-0"
                 title={t("copyExample")}
               >
                 <svg
@@ -415,7 +445,7 @@ export default function GeneratorTabs({
                     d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                   />
                 </svg>
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -430,3 +460,6 @@ export default function GeneratorTabs({
     </div>
   );
 }
+
+
+

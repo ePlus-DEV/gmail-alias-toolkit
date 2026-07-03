@@ -16,11 +16,11 @@ export default function Toggle({
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+        <p className="text-sm font-semibold text-foreground">
           {label}
         </p>
         {description ? (
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-muted-foreground">
             {description}
           </p>
         ) : null}
@@ -29,3 +29,6 @@ export default function Toggle({
     </div>
   );
 }
+
+
+

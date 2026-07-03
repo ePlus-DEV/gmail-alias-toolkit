@@ -67,3 +67,6 @@ describe("GmailTricks", () => {
     expect(onCopy).toHaveBeenCalledWith("a+newsletter@gmail.com");
   });
 });
+
+
+

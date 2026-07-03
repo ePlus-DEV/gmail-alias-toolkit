@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatedToastStack } from "src/components/motion/animated-toast-stack";
+import Button from "./components/Button";
 import PopupHeader from "../../src/components/alias/PopupHeader";
 import AccountSwitcher from "../../src/components/alias/AccountSwitcher";
 import QRCode from "qrcode";
@@ -731,7 +732,7 @@ function App() {
 
           {/* Main Content */}
           <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-4">
-            <div className="divide-y divide-gray-200/70 overflow-hidden rounded-xl border border-border bg-card shadow-soft backdrop-blur dark:divide-gray-700/70">
+            <div className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border bg-card shadow-soft backdrop-blur dark:divide-border">
               <AccountSwitcher
                 baseEmail={baseEmail}
                 emailAccounts={emailAccounts}
@@ -862,29 +863,30 @@ function App() {
           onClick={() => setQrAlias(null)}
         >
           <div
-            className="flex flex-col items-center gap-4 rounded-3xl border border-white/70 bg-white/90 p-6 shadow-2xl backdrop-blur dark:border-gray-700/70 dark:bg-gray-900/90"
+            className="flex flex-col items-center gap-4 rounded-3xl border border-border bg-card/95 p-6 shadow-2xl backdrop-blur"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+            <h3 className="text-sm font-semibold text-foreground">
               {t("scanToCopyAlias")}
             </h3>
             <canvas ref={qrCanvasRef} className="rounded-lg" />
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-mono text-center max-w-[200px] break-all">
+            <p className="text-xs text-muted-foreground font-mono text-center max-w-[200px] break-all">
               {qrAlias}
             </p>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={() => copyToClipboard(qrAlias)}
-                className="rounded-xl bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700"
+                className="rounded-xl bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 {t("copy")}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setQrAlias(null)}
-                className="rounded-xl bg-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                variant="secondary"
+                className="rounded-xl bg-muted px-4 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted dark:bg-muted dark:text-foreground dark:hover:bg-muted"
               >
                 {t("close")}
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -901,3 +903,6 @@ function App() {
 }
 
 export default App;
+
+
+

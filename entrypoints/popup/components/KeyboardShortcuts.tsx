@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./Button";
 
 /** Button that opens a modal listing available keyboard shortcuts. */
 export default function KeyboardShortcuts() {
@@ -16,9 +17,10 @@ export default function KeyboardShortcuts() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => setIsOpen(true)}
-        className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+        variant="ghost"
+        className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
       >
         <svg
           className="w-3 h-3"
@@ -34,7 +36,7 @@ export default function KeyboardShortcuts() {
           />
         </svg>
         Keyboard Shortcuts
-      </button>
+      </Button>
 
       {isOpen && (
         // skipcq: JS-0415
@@ -43,17 +45,19 @@ export default function KeyboardShortcuts() {
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4"
+            className="bg-card rounded-lg shadow-xl max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-5 border-b border-gray-200">
+            <div className="p-5 border-b border-border">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-foreground">
                   Keyboard Shortcuts
                 </h3>
-                <button
+                <Button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-muted-foreground"
                 >
                   <svg
                     className="w-5 h-5"
@@ -68,7 +72,7 @@ export default function KeyboardShortcuts() {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                </button>
+                </Button>
               </div>
             </div>
             <div className="p-5 space-y-3">
@@ -78,14 +82,14 @@ export default function KeyboardShortcuts() {
                   className="flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-foreground">
                       {shortcut.description}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-muted-foreground">
                       {shortcut.context}
                     </div>
                   </div>
-                  <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-300 rounded">
+                  <kbd className="px-2 py-1 text-xs font-semibold text-foreground bg-muted border border-border rounded">
                     {shortcut.key}
                   </kbd>
                 </div>
@@ -97,3 +101,6 @@ export default function KeyboardShortcuts() {
     </>
   );
 }
+
+
+

@@ -1,4 +1,14 @@
 /** Recent aliases list with search, filter, pagination, and bulk selection. */
+import Button from "./Button";
+import Input from "./Input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
+import { Checkbox } from "src/components/motion/checkbox";
 import { t } from "../../../lib/i18n";
 
 interface Alias {
@@ -72,43 +82,49 @@ export default function HistorySection({
     <div className="p-3.5">
       {/* Header with title and action buttons */}
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <h2 className="text-sm font-semibold text-foreground">
           {viewMode === "all" ? t("recentAliases") : t("favorites")}
         </h2>
         <div className="flex items-center gap-1.5">
           {viewMode === "all" && recentAliases.length > 0 && (
             <>
-              <button
+              <Button
                 onClick={() => exportAliases("csv")}
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                variant="ghost"
+                size="sm"
+                className="text-xs text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded hover:bg-primary/10 transition-colors"
                 title={t("exportAsCsv")}
               >
                 CSV
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => exportAliases("json")}
-                className="text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors"
+                variant="ghost"
+                size="sm"
+                className="text-xs text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded hover:bg-primary/10 transition-colors"
                 title={t("exportAsJson")}
               >
                 JSON
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   setIsSelectMode(!isSelectMode);
                   setSelectedAliases(new Set());
                 }}
+                variant={isSelectMode ? "primary" : "ghost"}
+                size="sm"
                 className={`text-xs px-1.5 py-0.5 rounded transition-colors ${
                   isSelectMode
-                    ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300"
-                    : "text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40"
+                    ? "bg-primary/15 text-primary"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
                 }`}
                 title={t("selectAliases")}
               >
                 {t("select")}
-              </button>
+              </Button>
             </>
           )}
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-muted-foreground">
             {viewMode === "all"
               ? t("totalCount", String(recentAliases.length))
               : t("starredCount", String(favorites.length))}
@@ -118,8 +134,8 @@ export default function HistorySection({
 
       {/* Bulk delete bar */}
       {isSelectMode && (
-        <div className="mb-3 flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-950/40 rounded-lg">
-          <button
+        <div className="mb-3 flex items-center gap-2 p-2 bg-primary/10 rounded-lg">
+          <Button
             onClick={() => {
               if (selectedAliases.size === filteredAliases.length) {
                 setSelectedAliases(new Set());
@@ -129,36 +145,41 @@ export default function HistorySection({
                 );
               }
             }}
-            className="text-xs text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium"
+            variant="ghost"
+            size="sm"
+            className="text-xs font-medium text-primary hover:text-foreground"
           >
             {selectedAliases.size === filteredAliases.length
               ? t("deselectAll")
               : t("selectAll")}
-          </button>
-          <span className="text-xs text-gray-500 dark:text-gray-400 flex-1">
+          </Button>
+          <span className="text-xs text-muted-foreground flex-1">
             {t("selectedCount", String(selectedAliases.size))}
           </span>
-          <button
+          <Button
             onClick={deleteSelected}
             disabled={selectedAliases.size === 0}
-            className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            variant="danger"
+            size="sm"
+            className="rounded bg-destructive px-2 py-1 text-xs text-destructive-foreground transition-colors hover:bg-destructive/90 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t(
               "deleteCount",
               selectedAliases.size > 0 ? String(selectedAliases.size) : "",
             )}
-          </button>
+          </Button>
         </div>
       )}
 
       {/* View mode tabs */}
-      <div className="mb-3 flex gap-1 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <button
+      <div className="mb-3 flex gap-1 p-1 bg-muted rounded-lg">
+        <Button
           onClick={() => setViewMode("all")}
+          variant="ghost"
           className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
             viewMode === "all"
-              ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm"
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              ? "bg-card text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
           }`}
         >
           <div className="flex items-center justify-center gap-1.5">
@@ -177,13 +198,14 @@ export default function HistorySection({
             </svg>
             {t("allCount", String(recentAliases.length))}
           </div>
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setViewMode("favorites")}
+          variant="ghost"
           className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
             viewMode === "favorites"
-              ? "bg-white dark:bg-gray-800 text-yellow-600 dark:text-yellow-400 shadow-sm"
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              ? "bg-card text-yellow-600 dark:text-yellow-400 shadow-sm"
+              : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
           }`}
         >
           <div className="flex items-center justify-center gap-1.5">
@@ -202,23 +224,25 @@ export default function HistorySection({
             </svg>
             {t("favoritesCount", String(favorites.length))}
           </div>
-        </button>
+        </Button>
       </div>
 
       {/* Search and filters */}
       <div className="mb-3 space-y-2">
         <div className="relative">
-          <input
+          <Input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={setSearchQuery}
             placeholder={t("searchAliases")}
-            className="w-full pl-3 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="w-full"
           />
           {searchQuery && (
-            <button
+            <Button
               onClick={() => setSearchQuery("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground"
             >
               <svg
                 className="w-4 h-4"
@@ -233,17 +257,21 @@ export default function HistorySection({
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </Button>
           )}
         </div>
 
         <div className="flex gap-2">
-          <select
+          <Select
             value={filterTag}
-            onChange={(e) => setFilterTag(e.target.value)}
-            className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            onValueChange={setFilterTag}
+            className="flex-1"
           >
-            <option value="all">{t("allTags")}</option>
+            <SelectTrigger className="py-1.5 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("allTags")}</SelectItem>
             {Array.from(
               new Set(
                 recentAliases
@@ -254,22 +282,28 @@ export default function HistorySection({
                   .filter((t): t is string => t !== null),
               ),
             ).map((tag) => (
-              <option key={tag} value={tag}>
+              <SelectItem key={tag} value={tag}>
                 {tag}
-              </option>
+              </SelectItem>
             ))}
-          </select>
+            </SelectContent>
+          </Select>
 
-          <select
+          <Select
             value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value as "recent" | "alphabetical")
+            onValueChange={(value) =>
+              setSortBy(value as "recent" | "alphabetical")
             }
-            className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="flex-1"
           >
-            <option value="recent">{t("mostRecent")}</option>
-            <option value="alphabetical">{t("az")}</option>
-          </select>
+            <SelectTrigger className="py-1.5 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recent">{t("mostRecent")}</SelectItem>
+              <SelectItem value="alphabetical">{t("az")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -334,9 +368,9 @@ function HistoryList({
 
   if (filteredAliases.length === 0 && viewMode === "favorites") {
     return (
-      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-8 text-muted-foreground">
         <svg
-          className="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600"
+          className="w-12 h-12 mx-auto mb-3 text-muted-foreground dark:text-muted-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -356,9 +390,9 @@ function HistoryList({
 
   if (filteredAliases.length === 0) {
     return (
-      <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-6 text-muted-foreground">
         <svg
-          className="w-10 h-10 mx-auto mb-2 text-gray-300 dark:text-gray-600"
+          className="w-10 h-10 mx-auto mb-2 text-muted-foreground dark:text-muted-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -433,21 +467,23 @@ function AliasRow({
   onShowQR: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-0.5 px-2 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md group transition-colors">
+    <div className="flex items-center justify-between gap-0.5 px-2 py-1.5 hover:bg-muted/40 dark:hover:bg-muted rounded-md group transition-colors">
       {isSelectMode && (
-        <input
-          type="checkbox"
+        <Checkbox
           checked={isSelected}
-          onChange={onToggleSelect}
-          className="mr-1.5 w-4 h-4 accent-blue-600 flex-shrink-0"
+          onCheckedChange={onToggleSelect}
+          className="mr-1.5 flex-shrink-0"
+          aria-label={alias.email}
         />
       )}
-      <span className="text-sm text-gray-700 dark:text-gray-200 font-mono break-all flex-1">
+      <span className="text-sm text-foreground dark:text-foreground font-mono break-all flex-1">
         {alias.email}
       </span>
-      <button
+      <Button
         onClick={onShowQR}
-        className="p-1.5 text-gray-300 dark:text-gray-600 hover:text-blue-500 dark:hover:text-blue-400 focus:outline-none transition-colors"
+        variant="ghost"
+        size="icon"
+        className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none transition-colors"
         title={t("showQrCode")}
       >
         <svg
@@ -463,13 +499,15 @@ function AliasRow({
             d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5c0 1.933-1.567 3.5-3.5 3.5S13 17.433 13 15.5 14.567 12 16.5 12s3.5 1.567 3.5 3.5zM4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"
           />
         </svg>
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={onToggleFavorite}
+        variant="ghost"
+        size="icon"
         className={`p-1.5 focus:outline-none transition-colors ${
           isFavorited
             ? "text-yellow-500 hover:text-yellow-600"
-            : "text-gray-300 hover:text-yellow-500"
+            : "text-muted-foreground hover:text-yellow-500"
         }`}
         title={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
       >
@@ -486,10 +524,12 @@ function AliasRow({
             d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
           />
         </svg>
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={onCopy}
-        className="p-1.5 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 transition-colors"
+        variant="ghost"
+        size="icon"
+        className="p-1.5 text-muted-foreground hover:text-primary focus:outline-none focus:text-primary transition-colors"
         title={t("copyToClipboard")}
       >
         {isCopied ? (
@@ -521,7 +561,7 @@ function AliasRow({
             />
           </svg>
         )}
-      </button>
+      </Button>
     </div>
   );
 }
@@ -549,50 +589,59 @@ function Pagination({
   // skipcq: JS-0415
   return (
     // skipcq: JS-0415
-    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+    <div className="mt-4 pt-3 border-t border-border">
       <div className="flex flex-col gap-3">
         {/* Page info */}
         <div className="flex items-center justify-between">
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-muted-foreground">
             {t("showingRange", [
               String(startIndex + 1),
               String(Math.min(endIndex, totalItems)),
               String(totalItems),
             ])}
           </div>
-          <select
-            value={itemsPerPage}
-            onChange={(e) => {
-              setItemsPerPage(Number(e.target.value));
+          <Select
+            value={String(itemsPerPage)}
+            onValueChange={(value) => {
+              setItemsPerPage(Number(value));
               setCurrentPage(1);
             }}
-            className="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="w-24"
           >
-            <option value={5}>{t("perPage", "5")}</option>
-            <option value={10}>{t("perPage", "10")}</option>
-            <option value={20}>{t("perPage", "20")}</option>
-            <option value={50}>{t("perPage", "50")}</option>
-          </select>
+            <SelectTrigger className="px-2 py-1 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">{t("perPage", "5")}</SelectItem>
+              <SelectItem value="10">{t("perPage", "10")}</SelectItem>
+              <SelectItem value="20">{t("perPage", "20")}</SelectItem>
+              <SelectItem value="50">{t("perPage", "50")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Navigation buttons */}
         <div className="flex items-center justify-center gap-1">
-          <button
+          <Button
             onClick={() => setCurrentPage(1)}
             disabled={currentPage === 1}
-            className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
+            variant="ghost"
+            size="sm"
+            className="px-2 py-1 text-xs rounded hover:bg-muted dark:hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-foreground"
             title={t("firstPage")}
           >
             ⟪
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
+            variant="ghost"
+            size="sm"
+            className="px-2 py-1 text-xs rounded hover:bg-muted dark:hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-foreground"
             title={t("previousPage")}
           >
             ←
-          </button>
+          </Button>
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1)
               .filter(
@@ -608,42 +657,51 @@ function Pagination({
                 return (
                   <div key={page} className="flex items-center gap-1">
                     {showEllipsis && (
-                      <span className="px-1 text-gray-400 dark:text-gray-500">
+                      <span className="px-1 text-muted-foreground">
                         ...
                       </span>
                     )}
-                    <button
+                    <Button
                       onClick={() => setCurrentPage(page)}
+                      variant={currentPage === page ? "primary" : "ghost"}
+                      size="sm"
                       className={`min-w-[28px] px-2 py-1 text-xs rounded transition-colors ${
                         currentPage === page
-                          ? "bg-blue-600 text-white font-medium"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                          ? "bg-primary text-primary-foreground font-medium"
+                          : "hover:bg-muted dark:hover:bg-muted text-foreground"
                       }`}
                     >
                       {page}
-                    </button>
+                    </Button>
                   </div>
                 );
               })}
           </div>
-          <button
+          <Button
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
+            variant="ghost"
+            size="sm"
+            className="px-2 py-1 text-xs rounded hover:bg-muted dark:hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-foreground"
             title={t("nextPage")}
           >
             →
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setCurrentPage(totalPages)}
             disabled={currentPage === totalPages}
-            className="px-2 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-gray-700 dark:text-gray-300"
+            variant="ghost"
+            size="sm"
+            className="px-2 py-1 text-xs rounded hover:bg-muted dark:hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-foreground"
             title={t("lastPage")}
           >
             ⟫
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
+
+
+

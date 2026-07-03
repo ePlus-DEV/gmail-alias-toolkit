@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { BarChart3, Check, Clock, Mail, X } from "lucide-react";
 import { AnimatedNumber } from "src/components/motion/animated-number";
+import Button from "./Button";
 import { getAccountStorageKey } from "../utils";
 
 interface Stats {
@@ -143,15 +144,16 @@ export default function Statistics() {
 
   if (!isOpen) {
     return (
-      <button
+      <Button
         onClick={() => setIsOpen(true)}
-        className="w-full p-3.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+        variant="ghost"
+        className="w-full p-3.5 flex items-center justify-between hover:bg-muted/40 dark:hover:bg-muted/50 transition-colors"
       >
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="text-sm font-medium text-foreground">
           View Statistics
         </span>
-        <BarChart3 className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-      </button>
+        <BarChart3 className="h-4 w-4 text-muted-foreground" />
+      </Button>
     );
   }
 
@@ -160,15 +162,17 @@ export default function Statistics() {
     // skipcq: JS-0415
     <div className="p-3.5">
       <div className="flex items-center justify-between mb-2.5">
-        <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <h2 className="text-sm font-semibold text-foreground">
           Statistics
         </h2>
-        <button
+        <Button
           onClick={() => setIsOpen(false)}
-          className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground hover:text-muted-foreground dark:text-muted-foreground dark:hover:text-muted-foreground"
         >
           <X className="h-4 w-4" />
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -196,3 +200,6 @@ export default function Statistics() {
     </div>
   );
 }
+
+
+

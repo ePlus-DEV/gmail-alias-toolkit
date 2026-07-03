@@ -55,12 +55,12 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
     <div className="p-4">
       <div className="flex gap-2">
         <div className="min-w-0 flex-1 space-y-1.5">
-          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+          <label className="block text-xs font-semibold text-foreground">
             {t("activeGmailAddress")}
           </label>
           <Select value={baseEmail} onValueChange={onSelectAccount}>
             <SelectTrigger className="flex items-center gap-2">
-              <Mail className="h-4 w-4 shrink-0 text-gray-400" />
+              <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +88,7 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
         </Button>
       </div>
       {showAddAccount && (
-        <div className="mt-3 space-y-2 border-t border-gray-200/70 pt-3 dark:border-gray-700/70">
+        <div className="mt-3 space-y-2 border-t border-border/70 pt-3 dark:border-border/70">
           <Input
             type="email"
             value={newAccountEmail}
@@ -100,9 +100,9 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
             ref={focusOnMount}
           />
           {newAccountEmail && !newAccountEmail.includes("@") && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+            <p className="text-xs text-muted-foreground -mt-1">
               {t("pressTabToAddGmail", "Tab").split("Tab")[0]}
-              <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
+              <kbd className="px-1 py-0.5 bg-muted border border-border rounded text-xs font-mono">
                 Tab
               </kbd>
               {t("pressTabToAddGmail", "Tab").split("Tab")[1]}
@@ -143,3 +143,6 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
     </div>
   );
 }
+
+
+

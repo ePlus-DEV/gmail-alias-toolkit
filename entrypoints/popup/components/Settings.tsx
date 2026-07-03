@@ -2,6 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import Toggle from "./Toggle";
 import Button from "./Button";
 import Input from "./Input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/motion/select";
+import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
 
@@ -517,13 +525,13 @@ export default function Settings({
   return (
     // skipcq: JS-0415
     <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+      <div className="relative bg-card rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 flex items-center justify-between">
+        <div className="bg-primary text-primary-foreground px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <button
+            <Button variant="ghost"
               onClick={onClose}
-              className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-card hover:bg-opacity-20 rounded-lg transition-colors"
               title="Back"
             >
               <svg
@@ -539,12 +547,12 @@ export default function Settings({
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-            </button>
+            </Button>
             <h2 className="text-lg font-bold">{t("settings")}</h2>
           </div>
-          <button
+          <Button variant="ghost"
             onClick={onClose}
-            className="p-1.5 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-card hover:bg-opacity-20 rounded-lg transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -559,17 +567,17 @@ export default function Settings({
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
+          </Button>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-          <button
+        <div className="flex gap-2 px-4 py-3 border-b border-border">
+          <Button variant="ghost"
             onClick={() => setActiveTab("general")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "general"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
+                ? "text-primary border-b-2 border-primary dark:border-primary"
+                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
             }`}
           >
             <svg
@@ -586,13 +594,13 @@ export default function Settings({
               />
             </svg>
             {t("general")}
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost"
             onClick={() => setActiveTab("accounts")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "accounts"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
+                ? "text-primary border-b-2 border-primary dark:border-primary"
+                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
             }`}
           >
             <svg
@@ -609,13 +617,13 @@ export default function Settings({
               />
             </svg>
             {t("accounts")}
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost"
             onClick={() => setActiveTab("changelog")}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "changelog"
-                ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                : "text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200"
+                ? "text-primary border-b-2 border-primary dark:border-primary"
+                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
             }`}
           >
             <svg
@@ -632,22 +640,22 @@ export default function Settings({
               />
             </svg>
             {t("changelog")}
-          </button>
+          </Button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+        <div className="flex-1 overflow-y-auto p-4 bg-muted/40">
           {/* General Tab */}
           {activeTab === "general" && (
             // skipcq: JS-0415
             <div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700">
+              <div className="bg-card rounded-lg shadow-sm border border-border divide-y divide-border">
                 {/* Appearance Section */}
                 <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="w-3.5 h-3.5 text-primary"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -664,61 +672,21 @@ export default function Settings({
                   </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-foreground mb-1.5">
                         {t("theme")}
                       </label>
-                      <select
-                        value={settings.theme}
-                        onChange={(e) => {
-                          const newTheme = e.target.value as
-                            | "light"
-                            | "dark"
-                            | "auto";
-                          saveSettings({ ...settings, theme: newTheme });
-                          const prefersDark = window.matchMedia(
-                            "(prefers-color-scheme: dark)",
-                          ).matches;
-                          document.documentElement.classList.toggle(
-                            "dark",
-                            newTheme === "dark" ||
-                              (newTheme === "auto" && prefersDark),
-                          );
-                        }}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="light">☀️ Light</option>
-                        <option value="dark">🌙 Dark</option>
-                        <option value="auto">🖥️ System (Auto)</option>
-                      </select>
+                      <Select value={settings.theme} onValueChange={(value) => { const newTheme = value as "light" | "dark" | "auto"; saveSettings({ ...settings, theme: newTheme }); const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches; document.documentElement.classList.toggle("dark", newTheme === "dark" || (newTheme === "auto" && prefersDark)); }}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="light">Light</SelectItem><SelectItem value="dark">Dark</SelectItem><SelectItem value="auto">System (Auto)</SelectItem></SelectContent></Select>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-foreground mb-1.5">
                         {t("badgeCounter")}
                       </label>
-                      <select
-                        value={settings.badgeDisplay}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            badgeDisplay: e.target
-                              .value as AppSettings["badgeDisplay"],
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="none">🚫 None (Hidden)</option>
-                        <option value="total">📊 Total in History</option>
-                        <option value="all-time">
-                          🏆 Total Generated (All Time)
-                        </option>
-                        <option value="today">📅 Created Today</option>
-                        <option value="week">📆 This Week</option>
-                      </select>
+                      <Select value={settings.badgeDisplay} onValueChange={(value) => saveSettings({ ...settings, badgeDisplay: value as AppSettings["badgeDisplay"] })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="none">None (Hidden)</SelectItem><SelectItem value="total">Total in History</SelectItem><SelectItem value="all-time">Total Generated (All Time)</SelectItem><SelectItem value="today">Created Today</SelectItem><SelectItem value="week">This Week</SelectItem></SelectContent></Select>
                     </div>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                    <div className="flex items-center justify-between pt-3 border-t border-border">
+                      <label className="text-xs font-semibold text-foreground">
                         {t("copyNotifications")}
                       </label>
                       <Toggle
@@ -737,10 +705,10 @@ export default function Settings({
 
                 {/* Alias Generation Section */}
                 <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="w-3.5 h-3.5 text-primary"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -757,65 +725,27 @@ export default function Settings({
                   </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-foreground mb-1.5">
                         {t("randomAliasFormat")}
                       </label>
-                      <select
-                        value={settings.randomFormat}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            randomFormat: e.target
-                              .value as AppSettings["randomFormat"],
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value="private-mail">
-                          🎯 Private Mail (e.g., private-mail-q2ga) ⭐
-                        </option>
-                        <option value="alphanumeric">
-                          🔤 Random Characters (e.g., abc123xy)
-                        </option>
-                        <option value="words">
-                          💬 Random Words (e.g., happy-fox-42)
-                        </option>
-                        <option value="timestamp">
-                          ⏱️ Timestamp (e.g., lk9x2m3n)
-                        </option>
-                      </select>
+                      <Select value={settings.randomFormat} onValueChange={(value) => saveSettings({ ...settings, randomFormat: value as AppSettings["randomFormat"] })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="private-mail">Private Mail (e.g., private-mail-q2ga)</SelectItem><SelectItem value="alphanumeric">Random Characters (e.g., abc123xy)</SelectItem><SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem><SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem></SelectContent></Select>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-foreground mb-1.5">
                         {t("autoSaveLimit")}
                       </label>
-                      <select
-                        value={settings.maxHistory}
-                        onChange={(e) =>
-                          saveSettings({
-                            ...settings,
-                            maxHistory: Number(e.target.value),
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      >
-                        <option value={20}>20 aliases</option>
-                        <option value={50}>50 aliases</option>
-                        <option value={100}>100 aliases</option>
-                        <option value={200}>200 aliases</option>
-                        <option value={500}>500 aliases</option>
-                      </select>
+                      <Select value={String(settings.maxHistory)} onValueChange={(value) => saveSettings({ ...settings, maxHistory: Number(value) })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="20">20 aliases</SelectItem><SelectItem value="50">50 aliases</SelectItem><SelectItem value="100">100 aliases</SelectItem><SelectItem value="200">200 aliases</SelectItem><SelectItem value="500">500 aliases</SelectItem></SelectContent></Select>
                     </div>
                   </div>
                 </div>
 
                 {/* Custom Presets Section */}
                 <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="w-3.5 h-3.5 text-primary"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -843,7 +773,7 @@ export default function Settings({
                         placeholder={t("tag")}
                       />
                     </div>
-                    <Button
+                    <Button variant="ghost"
                       onClick={handleAddPreset}
                       disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
                       size="sm"
@@ -854,23 +784,23 @@ export default function Settings({
                   </div>
 
                   {settings.customPresets.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1.5 max-h-28 overflow-y-auto">
+                    <div className="mt-3 pt-3 border-t border-border space-y-1.5 max-h-28 overflow-y-auto">
                       {settings.customPresets.map((preset) => (
                         <div
                           key={preset.id}
-                          className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600"
+                          className="flex items-center justify-between px-3 py-2 bg-muted/40 dark:bg-muted rounded-full border border-border dark:border-border"
                         >
-                          <div className="text-xs text-gray-900 dark:text-gray-100">
+                          <div className="text-xs text-foreground">
                             <span className="font-semibold">
                               {preset.label}
                             </span>
-                            <span className="text-gray-500 dark:text-gray-400 font-mono ml-1.5">
+                            <span className="text-muted-foreground font-mono ml-1.5">
                               +{preset.tag}
                             </span>
                           </div>
-                          <button
+                          <Button variant="ghost"
                             onClick={() => handleRemovePreset(preset.id)}
-                            className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors flex-shrink-0"
+                            className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
                           >
                             <svg
                               className="w-3.5 h-3.5"
@@ -885,7 +815,7 @@ export default function Settings({
                                 d="M6 18L18 6M6 6l12 12"
                               />
                             </svg>
-                          </button>
+                          </Button>
                         </div>
                       ))}
                     </div>
@@ -894,10 +824,10 @@ export default function Settings({
 
                 {/* Data Management Section */}
                 <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center flex-shrink-0">
+                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <svg
-                        className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                        className="w-3.5 h-3.5 text-primary"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -938,12 +868,12 @@ export default function Settings({
                       {t("clear")}
                     </Button>
                   </div>
-                  <button
+                  <Button variant="ghost"
                     onClick={handleResetSettings}
-                    className="w-full mt-2 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium py-1"
+                    className="w-full mt-2 text-xs text-destructive hover:text-destructive/80 font-medium py-1"
                   >
                     {t("resetSettings")}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -953,16 +883,16 @@ export default function Settings({
           {activeTab === "accounts" && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <h3 className="text-sm font-semibold text-foreground mb-3">
                   {t("emailAccounts")}
                 </h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                <p className="text-xs text-muted-foreground mb-3">
                   {t("manageAccountsDescription")}
                 </p>
               </div>
 
               {emailAccounts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+                <div className="text-center py-8 text-muted-foreground text-sm">
                   {t("noAccountsFound")}
                 </div>
               ) : (
@@ -972,37 +902,24 @@ export default function Settings({
                       key={account.id}
                       className={`rounded-lg border-2 transition-all ${
                         account.isActive
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-950/40"
-                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-card hover:border-border dark:hover:border-border"
                       }`}
                     >
                       {editingAccountId === account.id ? (
                         // Edit mode
                         <div className="p-3 space-y-2">
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label className="block text-xs font-medium text-foreground mb-1">
                               {t("label")}
                             </label>
-                            <input
-                              type="text"
-                              value={editingLabel}
-                              onChange={(e) => setEditingLabel(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                              placeholder={t("accountLabel")}
-                              ref={focusOnMount}
-                            />
+                            <Input type="text" value={editingLabel} onChange={setEditingLabel} placeholder={t("accountLabel")} ref={focusOnMount} />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label className="block text-xs font-medium text-foreground mb-1">
                               {t("emailAddress")}
                             </label>
-                            <input
-                              type="email"
-                              value={editingEmail}
-                              onChange={(e) => setEditingEmail(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                              placeholder={t("emailAddressPlaceholder")}
-                            />
+                            <Input type="email" value={editingEmail} onChange={setEditingEmail} placeholder={t("emailAddressPlaceholder")} />
                             {editingEmail !== account.email && (
                               <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">
                                 {t("emailChangeWarning")}
@@ -1010,18 +927,18 @@ export default function Settings({
                             )}
                           </div>
                           <div className="flex gap-2 pt-1">
-                            <button
+                            <Button variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
-                              className="flex-1 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors"
+                              className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                               {t("saveChanges")}
-                            </button>
-                            <button
+                            </Button>
+                            <Button variant="ghost"
                               onClick={handleCancelEdit}
-                              className="flex-1 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                              className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded hover:bg-muted dark:hover:bg-muted transition-colors"
                             >
                               {t("cancel")}
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       ) : (
@@ -1030,25 +947,19 @@ export default function Settings({
                         <div className="flex items-center gap-2 p-3">
                           {/* Radio button to select active account */}
                           <label className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer">
-                            <input
-                              type="radio"
-                              name="activeAccount"
-                              checked={account.isActive}
-                              onChange={() => handleSwitchAccount(account.id)}
-                              className="w-4 h-4 text-blue-600 focus:ring-blue-500 flex-shrink-0"
-                            />
+                            <RadioGroup value={account.isActive ? account.id : ""} onValueChange={() => handleSwitchAccount(account.id)}><RadioGroupItem value={account.id} /></RadioGroup>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                <span className="text-sm font-semibold text-foreground truncate">
                                   {account.label}
                                 </span>
                                 {account.isActive && (
-                                  <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-medium rounded flex-shrink-0">
+                                  <span className="flex-shrink-0 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
                                     {t("active")}
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs text-gray-600 dark:text-gray-400 truncate font-mono">
+                              <div className="text-xs text-muted-foreground truncate font-mono">
                                 {account.email}
                               </div>
                             </div>
@@ -1056,12 +967,12 @@ export default function Settings({
 
                           {/* Action buttons */}
                           <div className="flex items-center gap-1 flex-shrink-0">
-                            <button
+                            <Button variant="ghost"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleStartEdit(account);
                               }}
-                              className="p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                              className="p-1.5 text-muted-foreground hover:bg-muted dark:hover:bg-muted rounded transition-colors"
                               title={t("editAccount")}
                             >
                               <svg
@@ -1077,13 +988,13 @@ export default function Settings({
                                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                                 />
                               </svg>
-                            </button>
-                            <button
+                            </Button>
+                            <Button variant="ghost"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteAccount(account);
                               }}
-                              className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                              className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                               title={
                                 emailAccounts.length === 1
                                   ? t("cannotDeleteLastAccountTitle")
@@ -1104,7 +1015,7 @@ export default function Settings({
                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                 />
                               </svg>
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       )}
@@ -1114,11 +1025,11 @@ export default function Settings({
               )}
 
               {/* Add Account Section */}
-              <div className="bg-blue-50 dark:bg-blue-950/40 rounded-lg shadow-sm border border-blue-200 dark:border-blue-900/60 p-4">
+              <div className="bg-primary/10 rounded-lg shadow-sm border border-primary/30 p-4">
                 {!showAddAccount ? (
-                  <button
+                  <Button variant="ghost"
                     onClick={() => setShowAddAccount(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-sm"
                   >
                     <svg
                       className="w-5 h-5"
@@ -1134,21 +1045,21 @@ export default function Settings({
                       />
                     </svg>
                     {t("addNewAccount")}
-                  </button>
+                  </Button>
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      <h4 className="text-sm font-bold text-foreground">
                         {t("addNewAccountTitle")}
                       </h4>
-                      <button
+                      <Button variant="ghost"
                         onClick={() => {
                           setShowAddAccount(false);
                           setNewAccountEmail("");
                           setNewAccountLabel("");
                           setAddAccountError("");
                         }}
-                        className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                        className="text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground"
                       >
                         <svg
                           className="w-4 h-4"
@@ -1163,74 +1074,45 @@ export default function Settings({
                             d="M6 18L18 6M6 6l12 12"
                           />
                         </svg>
-                      </button>
+                      </Button>
                     </div>
 
                     <div className="relative">
-                      <input
-                        type="email"
-                        value={newAccountEmail}
-                        onChange={(e) => {
-                          setNewAccountEmail(e.target.value);
-                          setAddAccountError("");
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            handleAddAccount();
-                          }
-                        }}
-                        onBlur={() => {
-                          if (
-                            newAccountEmail &&
-                            !newAccountEmail.includes("@")
-                          ) {
-                            setNewAccountEmail(`${newAccountEmail}@gmail.com`);
-                          }
-                        }}
-                        placeholder={t("emailPlaceholder")}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                        ref={focusOnMount}
-                      />
+                      <Input type="email" value={newAccountEmail} onChange={(value) => { setNewAccountEmail(value); setAddAccountError(""); }} onKeyDown={(e) => { if (e.key === "Enter") { handleAddAccount(); } }} onBlur={() => { if (newAccountEmail && !newAccountEmail.includes("@")) { setNewAccountEmail(`${newAccountEmail}@gmail.com`); } }} placeholder={t("emailPlaceholder")} ref={focusOnMount} />
                       {newAccountEmail && !newAccountEmail.includes("@") && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs pointer-events-none">
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs pointer-events-none">
                           @gmail.com
                         </div>
                       )}
                     </div>
 
                     {addAccountError && (
-                      <div className="px-3 py-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-md">
-                        <p className="text-xs text-red-600 dark:text-red-400">
+                      <div className="px-3 py-2 bg-destructive/10 border border-destructive/30 rounded-md">
+                        <p className="text-xs text-destructive">
                           {addAccountError}
                         </p>
                       </div>
                     )}
 
                     {newAccountEmail && !newAccountEmail.includes("@") && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-muted-foreground">
                         💡 Press{" "}
-                        <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-xs font-mono">
+                        <kbd className="px-1 py-0.5 bg-muted border border-border rounded text-xs font-mono">
                           Tab
                         </kbd>{" "}
                         to add @gmail.com
                       </p>
                     )}
 
-                    <input
-                      type="text"
-                      value={newAccountLabel}
-                      onChange={(e) => setNewAccountLabel(e.target.value)}
-                      placeholder={t("accountLabelPlaceholder")}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    />
+                    <Input type="text" value={newAccountLabel} onChange={setNewAccountLabel} placeholder={t("accountLabelPlaceholder")} />
 
-                    <button
+                    <Button variant="ghost"
                       onClick={handleAddAccount}
                       disabled={!newAccountEmail.trim()}
-                      className="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-md hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="w-full px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {t("addAccount")}
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -1243,13 +1125,13 @@ export default function Settings({
               {CHANGELOG.map((entry) => (
                 <div
                   key={entry.version}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3.5"
+                  className="bg-card rounded-lg shadow-sm border border-border p-3.5"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                    <span className="text-sm font-bold text-foreground">
                       v{entry.version}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className="text-xs text-muted-foreground">
                       {entry.date}
                     </span>
                   </div>
@@ -1261,13 +1143,13 @@ export default function Settings({
                             change.type === "Added"
                               ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
                               : change.type === "Fixed"
-                                ? "bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400"
-                                : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400"
+                                ? "bg-destructive/10 text-destructive"
+                                : "bg-primary/10 text-primary"
                           }`}
                         >
                           {change.type}
                         </span>
-                        <ul className="text-xs text-gray-600 dark:text-gray-400 list-disc list-inside space-y-0.5">
+                        <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5">
                           {change.items.map((item) => (
                             <li key={item}>{item}</li>
                           ))}
@@ -1282,23 +1164,23 @@ export default function Settings({
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-100 dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+        <div className="bg-muted px-6 py-3 border-t border-border">
+          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <img
               src="/icons/32.png"
               alt=""
               className="w-6 h-6 rounded-md flex-shrink-0"
             />
             <span className="font-medium">{t("extensionName")}</span>
-            <span className="text-gray-400 dark:text-gray-600">•</span>
-            <span className="text-gray-500 dark:text-gray-500">v{version}</span>
+            <span className="text-muted-foreground dark:text-muted-foreground">•</span>
+            <span className="text-muted-foreground dark:text-muted-foreground">v{version}</span>
           </div>
         </div>
       </div>
 
       {/* Settings Toast - inside modal so it shows above the overlay */}
       {toast && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap z-10">
+        <div className="absolute bottom-16 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
           {toast}
         </div>
       )}
@@ -1328,35 +1210,44 @@ function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   const confirmClass =
     request.variant === "danger"
-      ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
-      : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500";
+      ? "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-ring"
+      : "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-ring";
 
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center bg-black bg-opacity-40 p-4">
-      <div className="w-full max-w-sm rounded-lg bg-white p-4 shadow-xl dark:bg-gray-800">
-        <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+      <div className="w-full max-w-sm rounded-lg bg-card p-4 shadow-xl">
+        <h3 className="text-sm font-bold text-foreground">
           {request.title}
         </h3>
-        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-gray-600 dark:text-gray-300">
+        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-muted-foreground dark:text-muted-foreground">
           {request.message}
         </p>
         <div className="mt-4 flex justify-end gap-2">
-          <button
+          <Button variant="ghost"
             type="button"
             onClick={onCancel}
-            className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring dark:bg-muted dark:text-foreground dark:hover:bg-muted"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost"
             type="button"
             onClick={onConfirm}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 ${confirmClass}`}
           >
             {request.confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
