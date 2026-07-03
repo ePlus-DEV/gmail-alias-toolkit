@@ -250,9 +250,7 @@ function RandomAliasListHeader({
       await navigator.clipboard.writeText(generatedRandomList.join("\n"));
       saveRecentAliases(generatedRandomList);
       if (showNotifications) {
-        setToastMessage(
-          t("copiedAliases", String(generatedRandomList.length)),
-        );
+        setToastMessage(t("copiedAliases", String(generatedRandomList.length)));
       }
     } catch {
       if (showNotifications) {

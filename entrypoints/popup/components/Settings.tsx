@@ -140,7 +140,10 @@ interface SettingsPanelProps {
 }
 
 /** Appearance and display settings shown inside the general accordion. */
-function AppearanceSettingsPanel({ settings, saveSettings }: SettingsPanelProps) {
+function AppearanceSettingsPanel({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
   return (
     <div className="space-y-3">
       <div>
@@ -214,8 +217,12 @@ function AliasGenerationSettingsPanel({
             <SelectItem value="alphanumeric">
               Random Characters (e.g., abc123xy)
             </SelectItem>
-            <SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem>
-            <SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem>
+            <SelectItem value="words">
+              Random Words (e.g., happy-fox-42)
+            </SelectItem>
+            <SelectItem value="timestamp">
+              Timestamp (e.g., lk9x2m3n)
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -323,8 +330,18 @@ function OpenAddAccountButton({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
     >
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 4v16m8-8H4"
+        />
       </svg>
       {t("addNewAccount")}
     </Button>
@@ -345,8 +362,18 @@ function AddAccountFormHeader({ onClose }: { onClose: () => void }) {
           className="text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground"
           aria-label="Close"
         >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </Button>
       </Tooltip>
@@ -454,8 +481,18 @@ function ChangelogCardHeader({ entry }: { entry: ChangelogEntry }) {
     <div className="flex items-center justify-between border-b border-border bg-muted/45 px-3.5 py-3">
       <div className="flex items-center gap-2">
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
-          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+          <svg
+            className="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+            />
           </svg>
         </span>
         <span className="text-sm font-bold text-foreground">
@@ -485,7 +522,9 @@ function ChangelogChangeGroup({ change, version }: ChangelogChangeGroupProps) {
   return (
     <div className="rounded-xl border border-border bg-card/70 p-2.5">
       <div className="mb-2 flex items-center gap-2">
-        <span className={`inline-flex h-2 w-2 rounded-full ${changeDotClass(change.type)}`} />
+        <span
+          className={`inline-flex h-2 w-2 rounded-full ${changeDotClass(change.type)}`}
+        />
         <AnimatedBadge
           status={changeBadgeStatus(change.type)}
           size="sm"
