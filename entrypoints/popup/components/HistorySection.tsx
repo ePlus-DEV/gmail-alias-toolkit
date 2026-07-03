@@ -22,6 +22,7 @@ import {
 import { Checkbox } from "src/components/motion/checkbox";
 import { Tooltip } from "src/components/motion/tooltip";
 import { Table, type TableColumn } from "src/components/motion/table";
+import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { t } from "../../../lib/i18n";
 
 interface Alias {
@@ -107,11 +108,19 @@ export default function HistorySection({
           <h2 className="truncate text-sm font-semibold text-foreground">
             {viewMode === "all" ? t("recentAliases") : t("favorites")}
           </h2>
-          <p className="text-[11px] text-muted-foreground">
-            {viewMode === "all"
-              ? t("totalCount", String(recentAliases.length))
-              : t("starredCount", String(favorites.length))}
-          </p>
+          <div className="mt-1">
+            <AnimatedBadge
+              status={viewMode === "all" ? "neutral" : "warning"}
+              size="sm"
+              showIcon={false}
+              contentKey={`${viewMode}-${viewMode === "all" ? recentAliases.length : favorites.length}`}
+              className="h-5 px-1.5 text-[10px]"
+            >
+              {viewMode === "all"
+                ? t("totalCount", String(recentAliases.length))
+                : t("starredCount", String(favorites.length))}
+            </AnimatedBadge>
+          </div>
         </div>
         {viewMode === "all" && recentAliases.length > 0 && (
           <div className="flex shrink-0 items-center gap-1 rounded-xl border border-border bg-background p-1 shadow-sm">

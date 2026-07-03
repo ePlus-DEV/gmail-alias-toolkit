@@ -12,6 +12,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
 import { Tooltip } from "src/components/motion/tooltip";
 import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
+import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
 
@@ -1084,33 +1085,67 @@ export default function Settings({
               {CHANGELOG.map((entry) => (
                 <div
                   key={entry.version}
-                  className="bg-background rounded-2xl shadow-soft border border-border p-3.5"
+                  className="relative overflow-hidden rounded-2xl border border-border bg-background shadow-soft"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-bold text-foreground">
-                      v{entry.version}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between border-b border-border bg-muted/45 px-3.5 py-3">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3M4 11h16M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                        </svg>
+                      </span>
+                      <span className="text-sm font-bold text-foreground">
+                        v{entry.version}
+                      </span>
+                    </div>
+                    <AnimatedBadge
+                      status="neutral"
+                      size="sm"
+                      showIcon={false}
+                      contentKey={entry.date}
+                      className="bg-background"
+                    >
                       {entry.date}
-                    </span>
+                    </AnimatedBadge>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5 p-3">
                     {entry.changes.map((change) => (
-                      <div key={change.type}>
-                        <span
-                          className={`inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 ${
-                            change.type === "Added"
-                              ? "bg-accent/10 text-accent"
-                              : change.type === "Fixed"
-                                ? "bg-destructive/10 text-destructive"
-                                : "bg-primary/10 text-primary"
-                          }`}
-                        >
-                          {change.type}
-                        </span>
-                        <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5">
+                      <div
+                        key={change.type}
+                        className="rounded-xl border border-border bg-card/70 p-2.5"
+                      >
+                        <div className="mb-2 flex items-center gap-2">
+                          <span
+                            className={`inline-flex h-2 w-2 rounded-full ${
+                              change.type === "Added"
+                                ? "bg-emerald-500"
+                                : change.type === "Fixed"
+                                  ? "bg-rose-500"
+                                  : "bg-primary"
+                            }`}
+                          />
+                          <AnimatedBadge
+                            status={
+                              change.type === "Added"
+                                ? "success"
+                                : change.type === "Fixed"
+                                  ? "danger"
+                                  : "info"
+                            }
+                            size="sm"
+                            showIcon={false}
+                            contentKey={`${entry.version}-${change.type}`}
+                            className="text-[10px] uppercase tracking-wide"
+                          >
+                            {change.type}
+                          </AnimatedBadge>
+                        </div>
+                        <ul className="space-y-1.5 text-xs leading-5 text-muted-foreground">
                           {change.items.map((item) => (
-                            <li key={item}>{item}</li>
+                            <li key={item} className="flex gap-2">
+                              <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-muted-foreground/60" />
+                              <span>{item}</span>
+                            </li>
                           ))}
                         </ul>
                       </div>

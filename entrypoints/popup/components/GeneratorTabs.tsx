@@ -1,7 +1,8 @@
 import GmailTricks from "./GmailTricks";
 import Button from "./Button";
 import Input from "./Input";
-import { AtSign, Copy, Shuffle, Tag, Zap } from "lucide-react";
+import { AtSign, Check, Copy, LoaderCircle, Shuffle, Tag, Zap } from "lucide-react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "src/components/motion/select";
+import { ActionSwapButton } from "src/components/motion/action-swap";
 import { Tooltip } from "src/components/motion/tooltip";
 import {
   generateAlias,
@@ -67,6 +69,10 @@ export default function GeneratorTabs({
   saveRecentAliases,
   setToastMessage,
 }: GeneratorTabsProps) {
+  const [randomActionState, setRandomActionState] = useState<
+    "idle" | "generating" | "done"
+  >("idle");
+
   /** Updates random format setting and persists to storage. */
   const handleFormatChange = async (newFormat: RandomFormat) => {
     setRandomFormat(newFormat);
@@ -193,8 +199,9 @@ export default function GeneratorTabs({
             </div>
 
             {/* Generate Button */}
-            <Button
+            <ActionSwapButton
               onClick={() => {
+                setRandomActionState("generating");
                 setGeneratedRandomList([]);
                 const aliases: string[] = [];
                 const timestamp = Date.now();
@@ -212,32 +219,41 @@ export default function GeneratorTabs({
                   if (aliases.length > 0) {
                     setGeneratedRandomList(aliases);
                     copyToClipboard(aliases[0]);
+                    setRandomActionState("done");
+                    setTimeout(() => setRandomActionState("idle"), 1400);
+                  } else {
+                    setRandomActionState("idle");
                   }
                 }, 0);
               }}
-              ripple
-              className="mb-2.5 h-10 w-full rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
-            >
-              <div className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                {t("generateRandomAliases", [
-                  String(randomEmailCount),
-                  randomEmailCount > 1 ? "es" : "",
-                ])}
-              </div>
-            </Button>
+              disabled={randomActionState === "generating"}
+              items={[
+                {
+                  id: "idle",
+                  icon: <Shuffle className="h-4 w-4" />,
+                  label: t("generateRandomAliases", [
+                    String(randomEmailCount),
+                    randomEmailCount > 1 ? "es" : "",
+                  ]),
+                },
+                {
+                  id: "generating",
+                  icon: <LoaderCircle className="h-4 w-4 animate-spin" />,
+                  label: "Generating",
+                },
+                {
+                  id: "done",
+                  icon: <Check className="h-4 w-4" />,
+                  label: "Copied",
+                },
+              ]}
+              value={randomActionState}
+              cycle={false}
+              variant="primary"
+              size="md"
+              animation="roll"
+              className="mb-2.5 h-10 w-full rounded-xl px-4 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
+            />
 
             {/* Generated Emails List */}
             {generatedRandomList.length > 0 && (
