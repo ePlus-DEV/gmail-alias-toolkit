@@ -130,51 +130,52 @@ export default function GeneratorTabs({
         {/* Random Tab */}
         {activeTab === "random" && (
           <div>
-            {/* Format Selector */}
-            <div className="mb-3">
-              <label className="block text-xs font-medium text-foreground mb-2">
-                {t("format")}
-              </label>
-              <Select
-                value={randomFormat}
-                onValueChange={(value) =>
-                  handleFormatChange(value as RandomFormat)
-                }
-              >
-                <SelectTrigger className="rounded-full bg-card">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="private-mail">
-                    {t("privateMailFormat")}
-                  </SelectItem>
-                  <SelectItem value="alphanumeric">
-                    {t("randomCharactersFormat")}
-                  </SelectItem>
-                  <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
-                  <SelectItem value="timestamp">
-                    {t("timestampFormat")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Number of Emails */}
-            <div className="mb-3 flex items-center gap-3">
-              <label className="text-sm font-medium text-foreground">
-                {t("numberOfAliases")}
-              </label>
-              <Input
-                type="number"
-                min="1"
-                value={String(randomEmailCount)}
-                onChange={(value) =>
-                  setRandomEmailCount(
-                    Math.max(1, parseInt(value) || 10),
-                  )
-                }
-                className="w-20"
-              />
+            <div className="mb-3 grid grid-cols-[minmax(0,1fr)_82px] gap-2">
+              <div className="min-w-0">
+                <label className="mb-1.5 block text-xs font-semibold text-foreground">
+                  {t("format")}
+                </label>
+                <Select
+                  value={randomFormat}
+                  onValueChange={(value) =>
+                    handleFormatChange(value as RandomFormat)
+                  }
+                >
+                  <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="private-mail">
+                      {t("privateMailFormat")}
+                    </SelectItem>
+                    <SelectItem value="alphanumeric">
+                      {t("randomCharactersFormat")}
+                    </SelectItem>
+                    <SelectItem value="words">
+                      {t("randomWordsFormat")}
+                    </SelectItem>
+                    <SelectItem value="timestamp">
+                      {t("timestampFormat")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
+                  Count
+                </label>
+                <Input
+                  type="number"
+                  min="1"
+                  value={String(randomEmailCount)}
+                  onChange={(value) =>
+                    setRandomEmailCount(
+                      Math.max(1, parseInt(value) || 10),
+                    )
+                  }
+                  className="w-full"
+                />
+              </div>
             </div>
 
             {/* Generate Button */}
@@ -201,7 +202,7 @@ export default function GeneratorTabs({
                 }, 0);
               }}
               ripple
-              className="w-full bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring transition-colors mb-3"
+              className="mb-2.5 h-10 w-full rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <div className="flex items-center justify-center gap-2">
                 <svg
@@ -312,7 +313,7 @@ export default function GeneratorTabs({
               </div>
             )}
 
-            <div className="mt-2 text-xs text-muted-foreground text-center">
+            <div className="mt-1 text-center text-[11px] text-muted-foreground">
               {randomFormat === "private-mail"
                 ? t("formatPrivateMail")
                 : randomFormat === "alphanumeric"

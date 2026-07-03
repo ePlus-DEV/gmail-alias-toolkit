@@ -148,7 +148,7 @@ export function ThemeToggle({
       type="button"
       aria-label={mounted && isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={toggle}
-      className={cn("flex items-center justify-center", className)}
+      className={cn("flex cursor-pointer items-center justify-center", className)}
       {...rest}
     >
       {mounted ? (

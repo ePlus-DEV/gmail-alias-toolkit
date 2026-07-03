@@ -82,11 +82,18 @@ export default function HistorySection({
     // skipcq: JS-0415
     <div className="p-3">
       {/* Header with title and action buttons */}
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-foreground">
-          {viewMode === "all" ? t("recentAliases") : t("favorites")}
-        </h2>
-        <div className="flex items-center gap-1">
+      <div className="mb-2.5 flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <h2 className="truncate text-sm font-semibold text-foreground">
+            {viewMode === "all" ? t("recentAliases") : t("favorites")}
+          </h2>
+          <p className="text-[11px] text-muted-foreground">
+            {viewMode === "all"
+              ? t("totalCount", String(recentAliases.length))
+              : t("starredCount", String(favorites.length))}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-1 rounded-xl bg-muted p-1">
           {viewMode === "all" && recentAliases.length > 0 && (
             <>
               <Tooltip content={t("exportAsCsv")}>
@@ -94,7 +101,7 @@ export default function HistorySection({
                   onClick={() => exportAliases("csv")}
                   variant="ghost"
                   size="sm"
-                  className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
+                  className="h-7 rounded-lg px-2 text-[11px] text-muted-foreground hover:bg-background hover:text-primary"
                   aria-label={t("exportAsCsv")}
                 >
                   CSV
@@ -105,7 +112,7 @@ export default function HistorySection({
                   onClick={() => exportAliases("json")}
                   variant="ghost"
                   size="sm"
-                  className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
+                  className="h-7 rounded-lg px-2 text-[11px] text-muted-foreground hover:bg-background hover:text-primary"
                   aria-label={t("exportAsJson")}
                 >
                   JSON
@@ -119,10 +126,10 @@ export default function HistorySection({
                   }}
                   variant={isSelectMode ? "primary" : "ghost"}
                   size="sm"
-                  className={`h-7 px-2 text-xs transition-colors ${
+                  className={`h-7 rounded-lg px-2 text-[11px] transition-colors ${
                     isSelectMode
-                      ? "bg-primary/15 text-primary"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                      ? "bg-background text-primary shadow-sm"
+                      : "text-muted-foreground hover:bg-background hover:text-primary"
                   }`}
                   aria-label={t("selectAliases")}
                 >
@@ -131,11 +138,6 @@ export default function HistorySection({
               </Tooltip>
             </>
           )}
-          <span className="text-xs text-muted-foreground">
-            {viewMode === "all"
-              ? t("totalCount", String(recentAliases.length))
-              : t("starredCount", String(favorites.length))}
-          </span>
         </div>
       </div>
 
@@ -179,13 +181,13 @@ export default function HistorySection({
       )}
 
       {/* View mode tabs */}
-      <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
+      <div className="mb-2.5 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
         <Button
           onClick={() => setViewMode("all")}
           variant="ghost"
           className={`h-9 rounded-lg px-3 text-xs font-medium transition-all ${
             viewMode === "all"
-              ? "bg-card text-foreground shadow-sm"
+              ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
           }`}
         >
@@ -211,7 +213,7 @@ export default function HistorySection({
           variant="ghost"
           className={`h-9 rounded-lg px-3 text-xs font-medium transition-all ${
             viewMode === "favorites"
-              ? "bg-card text-accent shadow-sm"
+              ? "bg-background text-accent shadow-sm"
               : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
           }`}
         >
@@ -274,7 +276,7 @@ export default function HistorySection({
             onValueChange={setFilterTag}
             className="flex-1"
           >
-            <SelectTrigger className="min-h-9 rounded-xl py-1.5 text-xs">
+            <SelectTrigger className="min-h-9 rounded-xl bg-background py-1.5 text-xs shadow-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -303,7 +305,7 @@ export default function HistorySection({
             }
             className="flex-1"
           >
-            <SelectTrigger className="min-h-9 rounded-xl py-1.5 text-xs">
+            <SelectTrigger className="min-h-9 rounded-xl bg-background py-1.5 text-xs shadow-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

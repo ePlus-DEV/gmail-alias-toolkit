@@ -11,6 +11,7 @@ import {
 } from "src/components/motion/select";
 import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
 import { Tooltip } from "src/components/motion/tooltip";
+import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
 
@@ -525,15 +526,15 @@ export default function Settings({
   // skipcq: JS-0415
   return (
     // skipcq: JS-0415
-    <div className="absolute inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="relative bg-card rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+    <div className="absolute inset-0 z-50 flex bg-muted">
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-muted">
         {/* Header */}
-        <div className="bg-primary text-primary-foreground px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-border bg-background px-3 py-3 text-foreground">
           <div className="flex items-center gap-2">
             <Tooltip content="Back" side="bottom">
               <Button variant="ghost"
                 onClick={onClose}
-                className="p-1.5 hover:bg-card hover:bg-opacity-20 rounded-lg transition-colors"
+                className="h-9 w-9 rounded-xl p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
                 aria-label="Back"
               >
                 <svg
@@ -551,16 +552,26 @@ export default function Settings({
                 </svg>
               </Button>
             </Tooltip>
-            <h2 className="text-lg font-bold">{t("settings")}</h2>
+            <h2 className="text-base font-semibold">{t("settings")}</h2>
           </div>
-          <Tooltip content="Close" side="bottom">
+          <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+            v{version}
+          </span>
+        </div>
+
+        {/* Tabs */}
+        <div className="border-b border-border bg-background px-3 py-2.5">
+          <div className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-muted/70 p-1">
             <Button variant="ghost"
-              onClick={onClose}
-              className="p-1.5 hover:bg-card hover:bg-opacity-20 rounded-lg transition-colors"
-              aria-label="Close"
+              onClick={() => setActiveTab("general")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "general"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -569,339 +580,254 @@ export default function Settings({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
                 />
               </svg>
+              {t("general")}
             </Button>
-          </Tooltip>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-2 px-4 py-3 border-b border-border">
-          <Button variant="ghost"
-            onClick={() => setActiveTab("general")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "general"
-                ? "text-primary border-b-2 border-primary dark:border-primary"
-                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <Button variant="ghost"
+              onClick={() => setActiveTab("accounts")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "accounts"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-              />
-            </svg>
-            {t("general")}
-          </Button>
-          <Button variant="ghost"
-            onClick={() => setActiveTab("accounts")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "accounts"
-                ? "text-primary border-b-2 border-primary dark:border-primary"
-                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              {t("accounts")}
+            </Button>
+            <Button variant="ghost"
+              onClick={() => setActiveTab("changelog")}
+              className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
+                activeTab === "changelog"
+                  ? "bg-background text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            {t("accounts")}
-          </Button>
-          <Button variant="ghost"
-            onClick={() => setActiveTab("changelog")}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === "changelog"
-                ? "text-primary border-b-2 border-primary dark:border-primary"
-                : "text-muted-foreground border-b-2 border-transparent hover:text-foreground dark:hover:text-foreground"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            {t("changelog")}
-          </Button>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6M9 8h1m4 13H5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {t("changelog")}
+            </Button>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 bg-muted/40">
+        <div className="flex-1 overflow-y-auto bg-muted p-3">
           {/* General Tab */}
           {activeTab === "general" && (
             // skipcq: JS-0415
-            <div>
-              <div className="bg-card rounded-lg shadow-sm border border-border divide-y divide-border">
-                {/* Appearance Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-3.5 h-3.5 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-                        />
+            <BouncyAccordion
+              defaultValue="appearance"
+              className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft divide-y divide-border/70"
+              classNames={{
+                item: "bg-background data-[state=open]:bg-background",
+                trigger: "min-h-12 gap-3 px-3 hover:bg-muted/45",
+                icon: "h-7 w-7 rounded-lg",
+                title: "text-sm font-bold",
+                chevron: "text-muted-foreground",
+                content: "border-t border-border/70 bg-background",
+                description: "px-1 pt-3 text-foreground",
+              }}
+              items={[
+                {
+                  id: "appearance",
+                  title: t("appearanceDisplay"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                       </svg>
                     </span>
-                    {t("appearanceDisplay")}
-                  </h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-foreground mb-1.5">
-                        {t("theme")}
-                      </label>
-                      <Select value={settings.theme} onValueChange={(value) => { const newTheme = value as "light" | "dark" | "auto"; saveSettings({ ...settings, theme: newTheme }); const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches; document.documentElement.classList.toggle("dark", newTheme === "dark" || (newTheme === "auto" && prefersDark)); }}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="light">Light</SelectItem><SelectItem value="dark">Dark</SelectItem><SelectItem value="auto">System (Auto)</SelectItem></SelectContent></Select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-foreground mb-1.5">
-                        {t("badgeCounter")}
-                      </label>
-                      <Select value={settings.badgeDisplay} onValueChange={(value) => saveSettings({ ...settings, badgeDisplay: value as AppSettings["badgeDisplay"] })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="none">None (Hidden)</SelectItem><SelectItem value="total">Total in History</SelectItem><SelectItem value="all-time">Total Generated (All Time)</SelectItem><SelectItem value="today">Created Today</SelectItem><SelectItem value="week">This Week</SelectItem></SelectContent></Select>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-border">
-                      <label className="text-xs font-semibold text-foreground">
-                        {t("copyNotifications")}
-                      </label>
-                      <Toggle
-                        enabled={settings.showNotifications}
-                        onChange={(enabled) =>
-                          saveSettings({
-                            ...settings,
-                            showNotifications: enabled,
-                          })
-                        }
-                        label=""
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Alias Generation Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-3.5 h-3.5 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-foreground mb-1.5">
+                          {t("theme")}
+                        </label>
+                        <Select value={settings.theme} onValueChange={(value) => { const newTheme = value as "light" | "dark" | "auto"; saveSettings({ ...settings, theme: newTheme }); const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches; document.documentElement.classList.toggle("dark", newTheme === "dark" || (newTheme === "auto" && prefersDark)); }}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="light">Light</SelectItem><SelectItem value="dark">Dark</SelectItem><SelectItem value="auto">System (Auto)</SelectItem></SelectContent></Select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-foreground mb-1.5">
+                          {t("badgeCounter")}
+                        </label>
+                        <Select value={settings.badgeDisplay} onValueChange={(value) => saveSettings({ ...settings, badgeDisplay: value as AppSettings["badgeDisplay"] })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="none">None (Hidden)</SelectItem><SelectItem value="total">Total in History</SelectItem><SelectItem value="all-time">Total Generated (All Time)</SelectItem><SelectItem value="today">Created Today</SelectItem><SelectItem value="week">This Week</SelectItem></SelectContent></Select>
+                      </div>
+                      <div className="flex items-center justify-between pt-3 border-t border-border">
+                        <label className="text-xs font-semibold text-foreground">
+                          {t("copyNotifications")}
+                        </label>
+                        <Toggle
+                          enabled={settings.showNotifications}
+                          onChange={(enabled) =>
+                            saveSettings({
+                              ...settings,
+                              showNotifications: enabled,
+                            })
+                          }
+                          label=""
                         />
+                      </div>
+                    </div>
+                  ),
+                },
+                {
+                  id: "alias-generation",
+                  title: t("aliasGeneration"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </span>
-                    {t("aliasGeneration")}
-                  </h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-foreground mb-1.5">
-                        {t("randomAliasFormat")}
-                      </label>
-                      <Select value={settings.randomFormat} onValueChange={(value) => saveSettings({ ...settings, randomFormat: value as AppSettings["randomFormat"] })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="private-mail">Private Mail (e.g., private-mail-q2ga)</SelectItem><SelectItem value="alphanumeric">Random Characters (e.g., abc123xy)</SelectItem><SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem><SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem></SelectContent></Select>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-foreground mb-1.5">
+                          {t("randomAliasFormat")}
+                        </label>
+                        <Select value={settings.randomFormat} onValueChange={(value) => saveSettings({ ...settings, randomFormat: value as AppSettings["randomFormat"] })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="private-mail">Private Mail (e.g., private-mail-q2ga)</SelectItem><SelectItem value="alphanumeric">Random Characters (e.g., abc123xy)</SelectItem><SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem><SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem></SelectContent></Select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-foreground mb-1.5">
+                          {t("autoSaveLimit")}
+                        </label>
+                        <Select value={String(settings.maxHistory)} onValueChange={(value) => saveSettings({ ...settings, maxHistory: Number(value) })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="20">20 aliases</SelectItem><SelectItem value="50">50 aliases</SelectItem><SelectItem value="100">100 aliases</SelectItem><SelectItem value="200">200 aliases</SelectItem><SelectItem value="500">500 aliases</SelectItem></SelectContent></Select>
+                      </div>
                     </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-foreground mb-1.5">
-                        {t("autoSaveLimit")}
-                      </label>
-                      <Select value={String(settings.maxHistory)} onValueChange={(value) => saveSettings({ ...settings, maxHistory: Number(value) })}><SelectTrigger className="rounded-full bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="20">20 aliases</SelectItem><SelectItem value="50">50 aliases</SelectItem><SelectItem value="100">100 aliases</SelectItem><SelectItem value="200">200 aliases</SelectItem><SelectItem value="500">500 aliases</SelectItem></SelectContent></Select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Custom Presets Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-3.5 h-3.5 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                        />
+                  ),
+                },
+                {
+                  id: "custom-presets",
+                  title: t("customPresets"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent/10 text-accent ring-1 ring-accent/15">
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                       </svg>
                     </span>
-                    {t("customPresets")}
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <Input
-                        value={newPresetLabel}
-                        onChange={setNewPresetLabel}
-                        placeholder={t("label")}
-                      />
-                      <Input
-                        value={newPresetTag}
-                        onChange={setNewPresetTag}
-                        placeholder={t("tag")}
-                      />
-                    </div>
-                    <Button variant="ghost"
-                      onClick={handleAddPreset}
-                      disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
-                      size="sm"
-                      fullWidth
-                    >
-                      {t("addPreset")}
-                    </Button>
-                  </div>
-
-                  {settings.customPresets.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-border space-y-1.5 max-h-28 overflow-y-auto">
-                      {settings.customPresets.map((preset) => (
-                        <div
-                          key={preset.id}
-                          className="flex items-center justify-between px-3 py-2 bg-muted/40 dark:bg-muted rounded-full border border-border dark:border-border"
-                        >
-                          <div className="text-xs text-foreground">
-                            <span className="font-semibold">
-                              {preset.label}
-                            </span>
-                            <span className="text-muted-foreground font-mono ml-1.5">
-                              +{preset.tag}
-                            </span>
-                          </div>
-                          <Tooltip content="Remove preset" side="left">
-                            <Button variant="ghost"
-                              onClick={() => handleRemovePreset(preset.id)}
-                              className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
-                              aria-label="Remove preset"
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <Input
+                          value={newPresetLabel}
+                          onChange={setNewPresetLabel}
+                          placeholder={t("label")}
+                          className="min-w-0"
+                        />
+                        <Input
+                          value={newPresetTag}
+                          onChange={setNewPresetTag}
+                          placeholder={t("tag")}
+                          className="min-w-0"
+                        />
+                      </div>
+                      <Button variant="ghost"
+                        onClick={handleAddPreset}
+                        disabled={!newPresetLabel.trim() || !newPresetTag.trim()}
+                        size="sm"
+                        fullWidth
+                        className="rounded-xl bg-primary/10 text-primary hover:bg-primary/15 disabled:bg-muted disabled:text-muted-foreground"
+                      >
+                        {t("addPreset")}
+                      </Button>
+                      {settings.customPresets.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-border space-y-1.5 max-h-28 overflow-y-auto">
+                          {settings.customPresets.map((preset) => (
+                            <div
+                              key={preset.id}
+                              className="flex items-center justify-between px-3 py-2 bg-muted/45 dark:bg-muted rounded-xl border border-border dark:border-border"
                             >
-                              <svg
-                                className="w-3.5 h-3.5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </Button>
-                          </Tooltip>
+                              <div className="text-xs text-foreground">
+                                <span className="font-semibold">
+                                  {preset.label}
+                                </span>
+                                <span className="text-muted-foreground font-mono ml-1.5">
+                                  +{preset.tag}
+                                </span>
+                              </div>
+                              <Tooltip content="Remove preset" side="left">
+                                <Button variant="ghost"
+                                  onClick={() => handleRemovePreset(preset.id)}
+                                  className="p-1 text-destructive hover:bg-destructive/10 rounded-full transition-colors flex-shrink-0"
+                                  aria-label="Remove preset"
+                                >
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
-                </div>
-
-                {/* Data Management Section */}
-                <div className="p-3.5">
-                  <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                    <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-3.5 h-3.5 text-primary"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
-                        />
+                  ),
+                },
+                {
+                  id: "data-management",
+                  title: t("dataManagement"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                       </svg>
                     </span>
-                    {t("dataManagement")}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    <Tooltip content={t("export")} side="top" wrapperClassName="w-full">
-                      <Button
-                        onClick={handleExportSettings}
-                        variant="secondary"
-                        size="sm"
-                        fullWidth
-                        aria-label={t("export")}
-                      >
-                        {t("export")}
-                      </Button>
-                    </Tooltip>
-                    <Tooltip content={t("import")} side="top" wrapperClassName="w-full">
-                      <Button
-                        onClick={handleImportSettings}
-                        variant="secondary"
-                        size="sm"
-                        fullWidth
-                        aria-label={t("import")}
-                      >
-                        {t("import")}
-                      </Button>
-                    </Tooltip>
-                    <Tooltip content={t("clear")} side="top" wrapperClassName="w-full">
-                      <Button
-                        onClick={handleClearHistory}
-                        variant="danger"
-                        size="sm"
-                        fullWidth
-                        aria-label={t("clear")}
-                      >
-                        {t("clear")}
-                      </Button>
-                    </Tooltip>
-                  </div>
-                  <Tooltip
-                    content={t("resetSettings")}
-                    side="bottom"
-                    wrapperClassName="mt-2 w-full"
-                  >
-                    <Button variant="ghost"
-                      onClick={handleResetSettings}
-                      className="w-full text-xs text-destructive hover:text-destructive/80 font-medium py-1"
-                      aria-label={t("resetSettings")}
-                    >
-                      {t("resetSettings")}
-                    </Button>
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-3">
+                        <Tooltip content={t("export")} side="top" wrapperClassName="w-full">
+                          <Button onClick={handleExportSettings} variant="secondary" size="sm" fullWidth className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70" aria-label={t("export")}>
+                            {t("export")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip content={t("import")} side="top" wrapperClassName="w-full">
+                          <Button onClick={handleImportSettings} variant="secondary" size="sm" fullWidth className="border-border bg-background text-foreground shadow-sm hover:bg-muted/70" aria-label={t("import")}>
+                            {t("import")}
+                          </Button>
+                        </Tooltip>
+                        <Tooltip content={t("clear")} side="top" wrapperClassName="w-full">
+                          <Button onClick={handleClearHistory} variant="danger" size="sm" fullWidth className="bg-destructive/10 text-destructive hover:bg-destructive/15" aria-label={t("clear")}>
+                            {t("clear")}
+                          </Button>
+                        </Tooltip>
+                      </div>
+                      <Tooltip content={t("resetSettings")} side="bottom" wrapperClassName="w-full">
+                        <Button variant="ghost" onClick={handleResetSettings} className="w-full rounded-xl text-xs text-destructive hover:bg-destructive/10 hover:text-destructive font-medium py-1" aria-label={t("resetSettings")}>
+                          {t("resetSettings")}
+                        </Button>
+                      </Tooltip>
+                    </div>
+                  ),
+                },
+              ]}
+            />
           )}
 
           {/* Accounts Tab */}
@@ -925,10 +851,10 @@ export default function Settings({
                   {emailAccounts.map((account) => (
                     <div
                       key={account.id}
-                      className={`rounded-lg border-2 transition-all ${
+                      className={`rounded-2xl border transition-all ${
                         account.isActive
-                          ? "border-primary bg-primary/10"
-                          : "border-border bg-card hover:border-border dark:hover:border-border"
+                          ? "border-primary/40 bg-primary/10"
+                          : "border-border bg-background hover:border-border dark:hover:border-border"
                       }`}
                     >
                       {editingAccountId === account.id ? (
@@ -960,7 +886,7 @@ export default function Settings({
                             </Button>
                             <Button variant="ghost"
                               onClick={handleCancelEdit}
-                              className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded hover:bg-muted dark:hover:bg-muted transition-colors"
+                              className="flex-1 px-3 py-1.5 bg-muted dark:bg-muted text-foreground dark:text-foreground text-xs font-medium rounded-xl hover:bg-muted dark:hover:bg-muted transition-colors"
                             >
                               {t("cancel")}
                             </Button>
@@ -1061,11 +987,11 @@ export default function Settings({
               )}
 
               {/* Add Account Section */}
-              <div className="bg-primary/10 rounded-lg shadow-sm border border-primary/30 p-4">
+              <div className="rounded-2xl border border-border bg-background p-3 shadow-soft">
                 {!showAddAccount ? (
                   <Button variant="ghost"
                     onClick={() => setShowAddAccount(true)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors"
                   >
                     <svg
                       className="w-5 h-5"
@@ -1148,7 +1074,7 @@ export default function Settings({
                     <Button variant="ghost"
                       onClick={handleAddAccount}
                       disabled={!newAccountEmail.trim()}
-                      className="w-full px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="w-full px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-xl hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {t("addAccount")}
                     </Button>
@@ -1164,7 +1090,7 @@ export default function Settings({
               {CHANGELOG.map((entry) => (
                 <div
                   key={entry.version}
-                  className="bg-card rounded-lg shadow-sm border border-border p-3.5"
+                  className="bg-background rounded-2xl shadow-soft border border-border p-3.5"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-bold text-foreground">
@@ -1202,8 +1128,7 @@ export default function Settings({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="bg-muted px-6 py-3 border-t border-border">
+        <div className="hidden">
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <img
               src="/icons/32.png"
@@ -1219,7 +1144,7 @@ export default function Settings({
 
       {/* Settings Toast - inside modal so it shows above the overlay */}
       {toast && (
-        <div className="absolute bottom-16 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
+        <div className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg">
           {toast}
         </div>
       )}

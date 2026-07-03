@@ -114,7 +114,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         onPointerDown={handlePointerDown}
         disabled={disabled}
         className={cn(
-          "inline-flex items-center justify-center font-medium select-none",
+          "inline-flex cursor-pointer items-center justify-center font-medium select-none",
           "transition-colors",
           "disabled:pointer-events-none disabled:opacity-50",
           ripple && "relative overflow-hidden",
