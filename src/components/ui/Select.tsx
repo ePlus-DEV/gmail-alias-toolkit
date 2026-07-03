@@ -49,7 +49,8 @@ export default function Select({
           className={cn(
             "w-full appearance-none rounded-lg border bg-input px-3 py-2.5 pr-10 text-sm text-foreground shadow-sm outline-none transition-all",
             "border-border focus:border-ring focus:ring-2 focus:ring-ring/20",
-            error && "border-destructive ring-2 ring-destructive/10 focus:border-destructive focus:ring-destructive/20",
+            error &&
+              "border-destructive ring-2 ring-destructive/10 focus:border-destructive focus:ring-destructive/20",
             leftIcon && "pl-10",
             className,
           )}

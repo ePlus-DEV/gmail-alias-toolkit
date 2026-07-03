@@ -31,7 +31,10 @@ export default function SectionHeader({
         )}
       </motion.div>
       {action && (
-        <motion.div whileHover={reduce ? undefined : { scale: 1.05 }} transition={SPRING_PRESS}>
+        <motion.div
+          whileHover={reduce ? undefined : { scale: 1.05 }}
+          transition={SPRING_PRESS}
+        >
           {action}
         </motion.div>
       )}

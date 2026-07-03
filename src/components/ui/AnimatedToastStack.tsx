@@ -1,10 +1,23 @@
 // Source adapted from beUI Motion Animated Toast Stack: https://beui.dev/components/motion/animated-toast-stack
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Check, AlertCircle, Info, X, AlertTriangle, Loader } from "lucide-react";
+import {
+  Check,
+  AlertCircle,
+  Info,
+  X,
+  AlertTriangle,
+  Loader,
+} from "lucide-react";
 import { SPRING_PANEL } from "../../lib/ease";
 import { cn } from "../../lib/utils";
 
-export type ToastStatus = "success" | "error" | "info" | "warning" | "neutral" | "loading";
+export type ToastStatus =
+  | "success"
+  | "error"
+  | "info"
+  | "warning"
+  | "neutral"
+  | "loading";
 
 export interface ToastItem {
   id: string;
@@ -100,7 +113,11 @@ export default function AnimatedToastStack({
                 {isLoading ? (
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
                     <Icon className="h-4 w-4" />
                   </motion.div>

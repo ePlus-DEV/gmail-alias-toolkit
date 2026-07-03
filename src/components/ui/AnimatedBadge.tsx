@@ -5,7 +5,13 @@ import type { ReactNode } from "react";
 import { SPRING_PRESS } from "../../lib/ease";
 import { cn } from "../../lib/utils";
 
-export type AnimatedBadgeStatus = "info" | "success" | "warning" | "danger" | "neutral" | "loading";
+export type AnimatedBadgeStatus =
+  | "info"
+  | "success"
+  | "warning"
+  | "danger"
+  | "neutral"
+  | "loading";
 export type AnimatedBadgeSize = "sm" | "md";
 
 const statusStyles = {
