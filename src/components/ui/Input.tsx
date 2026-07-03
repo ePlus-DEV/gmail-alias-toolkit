@@ -1,11 +1,17 @@
 // Source adapted from beUI Motion Input: https://beui.dev/components/motion/input
-import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
-import { forwardRef, type ReactNode, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import {
+  forwardRef,
+  type InputHTMLAttributes,
+  type ReactNode,
+  useState,
+} from "react";
 import { Check, AlertCircle } from "lucide-react";
 import { SPRING_PRESS } from "../../lib/ease";
 import { cn } from "../../lib/utils";
 
-export interface InputProps extends Omit<HTMLMotionProps<"input">, "onChange"> {
+export interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;

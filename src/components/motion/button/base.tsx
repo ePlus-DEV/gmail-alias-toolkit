@@ -1,4 +1,5 @@
-// Source adapted from beUI Motion Button: https://beui.dev/components/motion/button
+"use client";
+
 import {
   AnimatePresence,
   motion,
@@ -13,50 +14,40 @@ import {
   useRef,
   useState,
 } from "react";
-import { EASE_OUT, SPRING_PRESS } from "../../lib/ease";
-import { cn } from "../../lib/utils";
-import { useHoverCapable } from "../../lib/hooks/use-hover-capable";
+import { EASE_OUT, SPRING_PRESS } from "src/lib/ease";
+import { cn } from "src/lib/utils";
+import { useHoverCapable } from "src/lib/hooks/use-hover-capable";
 
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "ghost"
-  | "outline"
-  | "danger"
-  | "success";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
-export interface ButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
+export interface ButtonProps extends Omit<
+  HTMLMotionProps<"button">,
+  "children"
+> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   pressScale?: number;
+  /** Spawn a Material-style ripple from the press point. Off by default. */
   ripple?: boolean;
-  fullWidth?: boolean;
-  icon?: ReactNode;
   children?: ReactNode;
 }
 
 type Ripple = { id: number; x: number; y: number; size: number };
 
-const variants: Record<ButtonVariant, string> = {
-  primary:
-    "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90 dark:hover:bg-primary/80",
-  secondary:
-    "border border-border bg-card text-foreground shadow-sm hover:bg-card/80",
+const VARIANT_CLASS: Record<ButtonVariant, string> = {
+  primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+  secondary: "border border-border bg-card text-foreground hover:border-border",
   ghost: "text-muted-foreground hover:text-foreground hover:bg-primary/5",
   outline:
     "border border-border bg-transparent text-foreground hover:bg-primary/5",
-  danger:
-    "bg-destructive/10 text-destructive hover:bg-destructive/20 dark:hover:bg-destructive/15",
-  success:
-    "bg-accent/10 text-accent hover:bg-accent/20 dark:hover:bg-accent/15",
 };
 
-const sizes: Record<ButtonSize, string> = {
-  sm: "h-8 rounded-lg px-3 text-xs gap-1.5",
-  md: "h-10 rounded-lg px-4 text-sm gap-2",
-  lg: "h-12 rounded-xl px-5 text-base gap-2",
-  icon: "h-10 w-10 rounded-lg p-0",
+const SIZE_CLASS: Record<ButtonSize, string> = {
+  sm: "h-8 px-3 text-xs gap-1.5 rounded-full",
+  md: "h-10 px-5 text-sm gap-2 rounded-full",
+  lg: "h-12 px-6 text-base gap-2 rounded-full",
+  icon: "h-8 w-8 rounded-lg",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -66,13 +57,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "md",
       pressScale = 0.93,
       ripple = false,
-      fullWidth = false,
-      icon,
       className,
       children,
       onPointerDown,
-      type = "button",
-      disabled,
       ...rest
     },
     ref,
@@ -81,6 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const canHover = useHoverCapable();
     const [ripples, setRipples] = useState<Ripple[]>([]);
     const nextId = useRef(0);
+
     const handlePointerDown = useCallback(
       (event: PointerEvent<HTMLButtonElement>) => {
         if (ripple && !reduce) {
@@ -98,25 +86,24 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }
         onPointerDown?.(event);
       },
-      [onPointerDown, reduce, ripple],
+      [ripple, reduce, onPointerDown],
     );
 
     return (
       <motion.button
         ref={ref}
-        type={type}
-        disabled={disabled}
+        type="button"
         whileTap={reduce ? undefined : { scale: pressScale }}
         whileHover={reduce || !canHover ? undefined : { scale: 1.02 }}
         transition={SPRING_PRESS}
         onPointerDown={handlePointerDown}
         className={cn(
-          "inline-flex items-center justify-center font-semibold select-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-offset-background",
+          "inline-flex items-center justify-center font-medium select-none",
+          "transition-colors",
+          "disabled:pointer-events-none disabled:opacity-50",
           ripple && "relative overflow-hidden",
-          variants[variant],
-          sizes[size],
-          fullWidth && "w-full",
-          disabled && "opacity-50",
+          VARIANT_CLASS[variant],
+          SIZE_CLASS[size],
           className,
         )}
         {...rest}
@@ -148,15 +135,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             </AnimatePresence>
           </span>
         ) : null}
-        {icon && (
-          <span className="inline-grid shrink-0 place-items-center">
-            {icon}
-          </span>
-        )}
         {children}
       </motion.button>
     );
   },
 );
-
-export default Button;
