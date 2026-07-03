@@ -5,6 +5,7 @@ import { Checkbox } from "src/components/motion/checkbox";
 import { Tooltip } from "src/components/motion/tooltip";
 import { Copy, Dices, Info, Zap } from "lucide-react";
 import { getDotVariationCandidates } from "../utils";
+import { t } from "../../../lib/i18n";
 
 interface GmailTricksProps {
   baseEmail: string;
@@ -222,42 +223,42 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           variant="outline"
           className={trickButtonClass(selectedTrick === "dot")}
         >
-          Dot Trick
+          {t("dotTrick")}
         </Button>
         <Button
           onClick={() => setSelectedTrick("plus")}
           variant="outline"
           className={trickButtonClass(selectedTrick === "plus")}
         >
-          Plus (+) Tags
+          {t("plusTags")}
         </Button>
         <Button
           onClick={() => setSelectedTrick("googlemail")}
           variant="outline"
           className={trickButtonClass(selectedTrick === "googlemail")}
         >
-          Googlemail
+          {t("googlemail")}
         </Button>
         <Button
           onClick={() => setSelectedTrick("nodots")}
           variant="outline"
           className={trickButtonClass(selectedTrick === "nodots")}
         >
-          Remove Dots
+          {t("removeDots")}
         </Button>
         <Button
           onClick={() => setSelectedTrick("dotplus")}
           variant="outline"
           className={trickButtonClass(selectedTrick === "dotplus")}
         >
-          Dot + Plus
+          {t("dotPlus")}
         </Button>
         <Button
           onClick={() => setSelectedTrick("combo")}
           variant="outline"
           className={trickButtonClass(selectedTrick === "combo")}
         >
-          All Combos
+          {t("allCombos")}
         </Button>
       </div>
 
@@ -265,7 +266,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
       <div className="mb-3 space-y-2">
         <div className="flex items-center gap-3">
           <label className="text-sm font-medium text-foreground">
-            Number of variations
+            {t("numberOfVariations")}
           </label>
           <Input
             type="number"
@@ -294,10 +295,10 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
               className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-foreground"
             >
               <Dices className="h-3.5 w-3.5 text-muted-foreground" />
-              Randomize dot positions
+              {t("randomizeDotPositions")}
             </label>
             <span className="ml-auto rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-              {randomizeDots ? "Random" : "Sequential"}
+              {randomizeDots ? t("random") : t("sequential")}
             </span>
           </div>
         )}
@@ -311,7 +312,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
       >
         <div className="flex items-center justify-center gap-2">
           <Zap className="h-4 w-4" />
-          Generate Tricks
+          {t("generateTricks")}
         </div>
       </Button>
 
@@ -321,10 +322,10 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           <div className="bg-muted/40 px-3 py-2 border-b border-border">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-foreground">
-                Generated Variations
+                {t("generatedVariations")}
               </span>
               <span className="text-xs text-muted-foreground">
-                {generatedTricks.length} total
+                {t("totalCount", String(generatedTricks.length))}
               </span>
             </div>
           </div>
@@ -337,13 +338,13 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
                 <div className="flex-1 font-mono text-xs text-foreground truncate">
                   {email}
                 </div>
-                <Tooltip content="Copy">
+                <Tooltip content={t("copy")}>
                   <Button
                     onClick={() => onCopy(email)}
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 flex-shrink-0 rounded-lg p-0 text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
-                    aria-label="Copy"
+                    aria-label={t("copy")}
                   >
                     <Copy className="h-3.5 w-3.5" />
                   </Button>
@@ -359,8 +360,10 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
         <div className="flex gap-2">
           <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
           <p className="text-[10px] leading-4 text-muted-foreground">
-            <strong className="text-foreground">Gmail trick:</strong> Dots are ignored & everything after +
-            goes to same inbox
+            <strong className="text-foreground">
+              {t("gmailTrickInfoLabel")}
+            </strong>{" "}
+            {t("gmailTrickInfo")}
           </p>
         </div>
       </div>

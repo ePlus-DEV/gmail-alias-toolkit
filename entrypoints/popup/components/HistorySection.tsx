@@ -419,10 +419,10 @@ function HistoryList({
         : []),
       {
         key: "email",
-        header: "Alias",
+        header: t("aliasColumn"),
         width: isSelectMode ? "142px" : "180px",
         cell: (alias) => (
-          <Tooltip content={`${alias.email} - click to copy`} side="top">
+          <Tooltip content={t("copyEmailTooltip", alias.email)} side="top">
             <button
               type="button"
               onClick={() => copyToClipboard(alias.email)}
@@ -778,7 +778,7 @@ function Pagination({
                           ? "bg-primary text-primary-foreground font-medium"
                           : "text-foreground hover:bg-muted"
                       }`}
-                      aria-label={`Page ${page}`}
+                      aria-label={t("pageLabel", String(page))}
                     >
                       {page}
                     </Button>

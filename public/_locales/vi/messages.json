@@ -29,6 +29,36 @@
   "random": { "message": "Ngẫu nhiên" },
   "customTags": { "message": "Tag tùy chỉnh" },
   "gmailTricks": { "message": "Mẹo Gmail" },
+  "tabTagsShort": { "message": "Tag" },
+  "tabTricksShort": { "message": "Mẹo" },
+  "generating": { "message": "Đang tạo" },
+  "copied": { "message": "Đã sao chép" },
+  "switchToLightMode": { "message": "Chuyển sang chế độ sáng" },
+  "switchToDarkMode": { "message": "Chuyển sang chế độ tối" },
+  "aliasColumn": { "message": "Bí danh" },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - bấm để sao chép",
+    "placeholders": { "email": { "content": "$1" } }
+  },
+  "pageLabel": {
+    "message": "Trang $PAGE$",
+    "placeholders": { "page": { "content": "$1" } }
+  },
+  "dotTrick": { "message": "Mẹo dấu chấm" },
+  "plusTags": { "message": "Tag dấu +" },
+  "googlemail": { "message": "Googlemail" },
+  "removeDots": { "message": "Bỏ dấu chấm" },
+  "dotPlus": { "message": "Chấm + tag" },
+  "allCombos": { "message": "Tất cả kiểu" },
+  "numberOfVariations": { "message": "Số biến thể" },
+  "randomizeDotPositions": { "message": "Ngẫu nhiên vị trí dấu chấm" },
+  "sequential": { "message": "Tuần tự" },
+  "generateTricks": { "message": "Tạo mẹo Gmail" },
+  "generatedVariations": { "message": "Biến thể đã tạo" },
+  "gmailTrickInfoLabel": { "message": "Mẹo Gmail:" },
+  "gmailTrickInfo": {
+    "message": "Gmail bỏ qua dấu chấm và mọi phần sau dấu + vẫn vào cùng hộp thư"
+  },
   "format": { "message": "Định dạng" },
   "privateMailFormat": { "message": "Private Mail (private-mail-xxxx)" },
   "randomCharactersFormat": { "message": "Ký tự ngẫu nhiên (abc123xy)" },
@@ -48,10 +78,10 @@
     "placeholders": { "count": { "content": "$1" } }
   },
   "copiedAliases": {
-    "message": "✓ Đã sao chép $COUNT$ bí danh!",
+    "message": "Đã sao chép $COUNT$ bí danh!",
     "placeholders": { "count": { "content": "$1" } }
   },
-  "failedToCopy": { "message": "✗ Sao chép thất bại" },
+  "failedToCopy": { "message": "Sao chép thất bại" },
   "formatPrivateMail": { "message": "Định dạng: private-mail-xxxx" },
   "formatAlphanumeric": { "message": "8 ký tự ngẫu nhiên" },
   "formatWords": { "message": "2 từ ngẫu nhiên" },
@@ -204,17 +234,17 @@
   "menuDotVariation": { "message": "Biến thể dấu chấm" },
   "menuGooglemailDomain": { "message": "Tên miền Googlemail" },
   "menuRemoveAllDots": { "message": "Xóa toàn bộ dấu chấm" },
-  "toastPresetAdded": { "message": "✓ Đã thêm mẫu" },
-  "toastPresetRemoved": { "message": "✓ Đã xóa mẫu" },
-  "toastSettingsExported": { "message": "✓ Đã xuất cài đặt" },
-  "toastSettingsImported": { "message": "✓ Đã nhập cài đặt" },
-  "toastImportFailed": { "message": "✗ Nhập thất bại - tệp không hợp lệ" },
-  "toastSettingsReset": { "message": "✓ Đã khôi phục cài đặt mặc định" },
-  "toastAccountSwitched": { "message": "✓ Đã chuyển tài khoản" },
-  "toastAccountDeleted": { "message": "✓ Đã xóa tài khoản" },
-  "toastAccountUpdated": { "message": "✓ Đã cập nhật tài khoản" },
+  "toastPresetAdded": { "message": "Đã thêm mẫu" },
+  "toastPresetRemoved": { "message": "Đã xóa mẫu" },
+  "toastSettingsExported": { "message": "Đã xuất cài đặt" },
+  "toastSettingsImported": { "message": "Đã nhập cài đặt" },
+  "toastImportFailed": { "message": "Nhập thất bại - tệp không hợp lệ" },
+  "toastSettingsReset": { "message": "Đã khôi phục cài đặt mặc định" },
+  "toastAccountSwitched": { "message": "Đã chuyển tài khoản" },
+  "toastAccountDeleted": { "message": "Đã xóa tài khoản" },
+  "toastAccountUpdated": { "message": "Đã cập nhật tài khoản" },
   "toastAccountAdded": {
-    "message": "✓ Đã thêm $LABEL$",
+    "message": "Đã thêm $LABEL$",
     "placeholders": { "label": { "content": "$1" } }
   },
   "errorLabelRequired": { "message": "Nhãn không được để trống" },
@@ -224,23 +254,23 @@
   },
   "errorEnterEmail": { "message": "Vui lòng nhập địa chỉ email" },
   "errorAccountExists": { "message": "Tài khoản này đã tồn tại" },
-  "toastQrFailed": { "message": "✗ Tạo mã QR thất bại" },
+  "toastQrFailed": { "message": "Tạo mã QR thất bại" },
   "toastExportedAliases": {
-    "message": "✓ Đã xuất $COUNT$ bí danh",
+    "message": "Đã xuất $COUNT$ bí danh",
     "placeholders": { "count": { "content": "$1" } }
   },
   "toastDeletedAliases": {
-    "message": "✓ Đã xóa $COUNT$ bí danh",
+    "message": "Đã xóa $COUNT$ bí danh",
     "placeholders": { "count": { "content": "$1" } }
   },
-  "toastHistoryCleared": { "message": "✓ Đã xóa lịch sử" },
-  "toastFavoriteAdded": { "message": "✓ Đã thêm vào yêu thích" },
-  "toastFavoriteRemoved": { "message": "✓ Đã bỏ khỏi yêu thích" },
+  "toastHistoryCleared": { "message": "Đã xóa lịch sử" },
+  "toastFavoriteAdded": { "message": "Đã thêm vào yêu thích" },
+  "toastFavoriteRemoved": { "message": "Đã bỏ khỏi yêu thích" },
   "toastCopiedEmail": {
-    "message": "✓ Đã sao chép $EMAIL$",
+    "message": "Đã sao chép $EMAIL$",
     "placeholders": { "email": { "content": "$1" } }
   },
-  "toastCopyFailed": { "message": "✗ Sao chép thất bại" },
+  "toastCopyFailed": { "message": "Sao chép thất bại" },
   "welcomeTitle": { "message": "Chào mừng đến với Bộ công cụ bí danh Gmail" },
   "welcomeSubtitle": {
     "message": "Tạo bí danh email không giới hạn để bảo vệ riêng tư và sắp xếp hộp thư"

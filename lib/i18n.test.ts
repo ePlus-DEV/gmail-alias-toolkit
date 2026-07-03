@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { t } from "./i18n";
 
@@ -45,5 +47,23 @@ describe("t", () => {
     });
 
     expect(t("safeFallback")).toBe("safeFallback");
+  });
+
+  it("keeps all locale message key sets aligned with English", () => {
+    const localesDir = join(process.cwd(), "public", "_locales");
+    const readMessages = (locale: string) =>
+      JSON.parse(
+        readFileSync(join(localesDir, locale, "messages.json"), "utf8"),
+      ) as Record<string, unknown>;
+    const englishKeys = Object.keys(readMessages("en")).sort();
+
+    for (const locale of readdirSync(localesDir)) {
+      if (locale === "en") continue;
+
+      const localeKeys = Object.keys(readMessages(locale)).sort();
+      expect(localeKeys, `${locale} keys should match en`).toEqual(
+        englishKeys,
+      );
+    }
   });
 });

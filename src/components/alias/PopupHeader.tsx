@@ -40,11 +40,17 @@ export default function PopupHeader({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
-            <Tooltip content={isDark ? "Light mode" : "Dark mode"} side="bottom">
+            <Tooltip
+              content={isDark ? t("switchToLightMode") : t("switchToDarkMode")}
+              side="bottom"
+            >
               <ThemeToggle
                 checked={isDark}
                 onCheckedChange={(checked) =>
                   onThemeChange(checked ? "dark" : "light")
+                }
+                aria-label={
+                  isDark ? t("switchToLightMode") : t("switchToDarkMode")
                 }
                 variant="circle-blur"
                 start="top-right"

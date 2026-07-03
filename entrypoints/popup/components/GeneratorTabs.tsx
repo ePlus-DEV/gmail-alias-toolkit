@@ -102,7 +102,7 @@ export default function GeneratorTabs({
             }`}
           >
             <Shuffle className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">Random</span>
+            <span className="truncate">{t("random")}</span>
           </Button>
         </Tooltip>
         <Tooltip
@@ -121,7 +121,7 @@ export default function GeneratorTabs({
             }`}
           >
             <Tag className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">Tags</span>
+            <span className="truncate">{t("tabTagsShort")}</span>
           </Button>
         </Tooltip>
         <Tooltip
@@ -140,7 +140,7 @@ export default function GeneratorTabs({
             }`}
           >
             <Zap className="h-3.5 w-3.5 shrink-0" />
-            <span className="truncate">Tricks</span>
+            <span className="truncate">{t("tabTricksShort")}</span>
           </Button>
         </Tooltip>
       </div>
@@ -182,7 +182,7 @@ export default function GeneratorTabs({
               </div>
               <div>
                 <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
-                  Count
+                  {t("numberOfAliases")}
                 </label>
                 <Input
                   type="number"
@@ -239,12 +239,12 @@ export default function GeneratorTabs({
                 {
                   id: "generating",
                   icon: <LoaderCircle className="h-4 w-4 animate-spin" />,
-                  label: "Generating",
+                  label: t("generating"),
                 },
                 {
                   id: "done",
                   icon: <Check className="h-4 w-4" />,
-                  label: "Copied",
+                  label: t("copied"),
                 },
               ]}
               value={randomActionState}
