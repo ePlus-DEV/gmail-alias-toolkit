@@ -7,6 +7,7 @@ export interface ToggleProps {
   description?: string;
 }
 
+/** Labeled switch row used by popup settings. */
 export default function Toggle({
   enabled,
   onChange,
