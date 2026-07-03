@@ -76,13 +76,13 @@ const CASCADE_STAGGER = 0.025;
 
 const CASCADE_LETTER_VARIANTS: Variants = {
   initial: { opacity: 0, y: "105%", filter: ROLL_BLUR },
-  animate: (delay: number = 0) => ({
+  animate: (delay = 0) => ({
     opacity: 1,
     y: "0%",
     filter: "blur(0px)",
     transition: { ...SPRING_SWAP, delay },
   }),
-  exit: (delay: number = 0) => ({
+  exit: (delay = 0) => ({
     opacity: 0,
     y: "-105%",
     filter: ROLL_BLUR,
@@ -171,6 +171,7 @@ const SIZE_CLASS: Record<ActionSwapButtonSize, string> = {
   icon: "h-10 w-10 rounded-full",
 };
 
+/** Animates text when the active action value changes. */
 export function ActionSwapText({
   value,
   children,
@@ -227,11 +228,11 @@ export function ActionSwapText({
               exit="exit"
               className="absolute left-0 top-0 inline-block whitespace-pre"
             >
-              {label.split("").map((char, i) => (
+              {label.split("").map((char, index) => (
                 <motion.span
                   // biome-ignore lint/suspicious/noArrayIndexKey: position is the slot identity — the letter at a position is exactly what rolls.
-                  key={i}
-                  custom={i * CASCADE_STAGGER}
+                  key={`${value}-${index}-${char}`}
+                  custom={index * CASCADE_STAGGER}
                   variants={CASCADE_LETTER_VARIANTS}
                   className="inline-block whitespace-pre will-change-[opacity,filter,transform]"
                 >
@@ -263,6 +264,7 @@ export function ActionSwapText({
   );
 }
 
+/** Animates an icon when the active action value changes. */
 export function ActionSwapIcon({
   value,
   children,
@@ -302,6 +304,7 @@ export function ActionSwapIcon({
   );
 }
 
+/** Button that swaps its label and icon between a small set of states. */
 export function ActionSwapButton({
   items,
   value,

@@ -27,22 +27,22 @@ export function Magnetic({
   const canHover = useHoverCapable();
   // Decorative cursor-follow: skip on touch (phantom hover) and reduced motion.
   const enabled = !reduce && canHover;
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, SPRING_MOUSE);
-  const sy = useSpring(y, SPRING_MOUSE);
+  const translateX = useMotionValue(0);
+  const translateY = useMotionValue(0);
+  const springX = useSpring(translateX, SPRING_MOUSE);
+  const springY = useSpring(translateY, SPRING_MOUSE);
 
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
-    if (!el || !enabled) return;
-    const rect = el.getBoundingClientRect();
-    x.set((e.clientX - rect.left - rect.width / 2) * strength);
-    y.set((e.clientY - rect.top - rect.height / 2) * strength);
+  const onMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const element = ref.current;
+    if (!element || !enabled) return;
+    const rect = element.getBoundingClientRect();
+    translateX.set((event.clientX - rect.left - rect.width / 2) * strength);
+    translateY.set((event.clientY - rect.top - rect.height / 2) * strength);
   };
 
   const onLeave = () => {
-    x.set(0);
-    y.set(0);
+    translateX.set(0);
+    translateY.set(0);
   };
 
   return (
@@ -50,7 +50,7 @@ export function Magnetic({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ x: sx, y: sy }}
+      style={{ x: springX, y: springY }}
       className={cn("inline-block", className)}
     >
       {children}

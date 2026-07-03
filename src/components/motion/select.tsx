@@ -281,10 +281,10 @@ export function SelectContent({ className, children }: SelectContentProps) {
     const node = innerRef.current;
     if (!trigger || !node) return;
     const rect = trigger.getBoundingClientRect();
-    const h = node.offsetHeight;
+    const nodeHeight = node.offsetHeight;
     const below = window.innerHeight - rect.bottom;
     const above = rect.top;
-    setPlacement(below < h + 16 && above > below ? "top" : "bottom");
+    setPlacement(below < nodeHeight + 16 && above > below ? "top" : "bottom");
   }, [open, ctx.triggerId, setPlacement]);
 
   // Specify EVERY corner + both margins each render. The near edge (facing the

@@ -1,3 +1,4 @@
+// skipcq: JS-0415 - Settings sections keep related controls inline for readability in a constrained popup.
 import { useState, useEffect, useCallback } from "react";
 import Toggle from "./Toggle";
 import Button from "./Button";

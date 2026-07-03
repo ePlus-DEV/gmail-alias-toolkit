@@ -23,6 +23,10 @@ export function Marquee({
   const vertical = direction === "up" || direction === "down";
   const reverse = direction === "right" || direction === "down";
   const items = Children.toArray(children);
+  const getItemKey = (child: ReactNode) =>
+    typeof child === "object" && child !== null && "key" in child
+      ? String(child.key)
+      : String(child);
 
   return (
     <div
@@ -56,9 +60,8 @@ export function Marquee({
             pauseOnHover && "group-hover:[animation-play-state:paused]",
           )}
         >
-          {items.map((child, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: Marquee duplicates static child slots; item order is not mutated.
-            <div key={i} className="shrink-0">
+          {items.map((child) => (
+            <div key={getItemKey(child)} className="shrink-0">
               {child}
             </div>
           ))}

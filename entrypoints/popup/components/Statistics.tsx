@@ -32,6 +32,7 @@ interface StatCardProps {
   label: string;
 }
 
+/** Compact metric tile used inside the statistics panel. */
 function StatCard({ icon, value, label }: StatCardProps) {
   return (
     <div className="rounded-xl border border-border bg-card/85 p-3 shadow-sm">

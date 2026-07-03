@@ -56,10 +56,10 @@ export function TableMenu({
     }
     const el = triggerRef.current;
     if (!el) return;
-    const r = el.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
     setCoords({
-      top: r.bottom + 4,
-      left: Math.max(8, r.right - MENU_WIDTH),
+      top: rect.bottom + 4,
+      left: Math.max(8, rect.right - MENU_WIDTH),
     });
   };
 

@@ -1,3 +1,4 @@
+// skipcq: JS-0415 - Account switcher form layout is intentionally inline and shallow in behavior.
 import { Mail, Plus, Tag, UserRound } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
 import { Input } from "src/components/motion/input";

@@ -3,12 +3,10 @@ import { useMemo } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import {
-  Check,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Copy,
   QrCode,
   Star,
 } from "lucide-react";
@@ -30,6 +28,7 @@ interface Alias {
   timestamp: number;
 }
 
+/** Shortens long email aliases while keeping the domain readable. */
 function shortenEmail(email: string) {
   const [local, domain] = email.split("@");
   if (!local || !domain || email.length <= 30) return email;
@@ -57,7 +56,6 @@ interface HistorySectionProps {
   setIsSelectMode: (on: boolean) => void;
   selectedAliases: Set<string>;
   setSelectedAliases: (set: Set<string>) => void;
-  copiedEmail: string | null;
   filteredAliases: Alias[];
   exportAliases: (format: "csv" | "json") => void;
   deleteSelected: () => void;
@@ -87,7 +85,6 @@ export default function HistorySection({
   setIsSelectMode,
   selectedAliases,
   setSelectedAliases,
-  copiedEmail,
   filteredAliases,
   exportAliases,
   deleteSelected,
@@ -566,106 +563,6 @@ function HistoryList({
           totalItems={totalItems}
         />
       )}
-    </div>
-  );
-}
-
-/** Single alias row with action buttons. */
-function AliasRow({
-  alias,
-  isSelectMode,
-  isSelected,
-  onToggleSelect,
-  isCopied,
-  isFavorited,
-  onToggleFavorite,
-  onCopy,
-  onShowQR,
-}: {
-  alias: Alias;
-  isSelectMode: boolean;
-  isSelected: boolean;
-  onToggleSelect: () => void;
-  isCopied: boolean;
-  isFavorited: boolean;
-  onToggleFavorite: () => void;
-  onCopy: () => void;
-  onShowQR: () => void;
-}) {
-  return (
-    <div
-      className={`group flex items-center gap-2 rounded-xl border px-2.5 py-2 transition-colors ${
-        isSelected
-          ? "border-primary/30 bg-primary/5"
-          : "border-border bg-background hover:bg-muted/45"
-      }`}
-    >
-      {isSelectMode && (
-        <Checkbox
-          checked={isSelected}
-          onCheckedChange={onToggleSelect}
-          className="shrink-0"
-          aria-label={alias.email}
-        />
-      )}
-      <div className="min-w-0 flex-1">
-        <div
-          className="truncate font-mono text-[12px] leading-5 text-foreground"
-          aria-label={alias.email}
-        >
-          {alias.email}
-        </div>
-      </div>
-      <div className="flex shrink-0 items-center gap-0.5 rounded-lg bg-muted/60 p-0.5">
-        <Tooltip content={t("showQrCode")}>
-          <Button
-            onClick={onShowQR}
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:outline-none"
-            aria-label={t("showQrCode")}
-          >
-            <QrCode className="h-3.5 w-3.5" />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          content={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
-        >
-          <Button
-            onClick={onToggleFavorite}
-            variant="ghost"
-            size="icon"
-            className={`h-7 w-7 rounded-md p-0 transition-colors hover:bg-background focus:outline-none ${
-              isFavorited
-                ? "text-accent hover:text-accent"
-                : "text-muted-foreground hover:text-accent"
-            }`}
-            aria-label={
-              isFavorited ? t("removeFromFavorites") : t("addToFavorites")
-            }
-          >
-            <Star
-              className="h-3.5 w-3.5"
-              fill={isFavorited ? "currentColor" : "none"}
-            />
-          </Button>
-        </Tooltip>
-        <Tooltip content={t("copyToClipboard")}>
-          <Button
-            onClick={onCopy}
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:text-primary focus:outline-none"
-            aria-label={t("copyToClipboard")}
-          >
-            {isCopied ? (
-              <Check className="h-3.5 w-3.5 text-primary" />
-            ) : (
-              <Copy className="h-3.5 w-3.5" />
-            )}
-          </Button>
-        </Tooltip>
-      </div>
     </div>
   );
 }

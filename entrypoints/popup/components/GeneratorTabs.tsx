@@ -1,3 +1,4 @@
+// skipcq: JS-0415 - Popup tab panels are intentionally colocated for compact UI state flow.
 import GmailTricks from "./GmailTricks";
 import Button from "./Button";
 import Input from "./Input";

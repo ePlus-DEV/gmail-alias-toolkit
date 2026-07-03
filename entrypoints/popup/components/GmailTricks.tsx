@@ -205,6 +205,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     }, 0);
   };
 
+  /** Builds the visual state classes for each Gmail trick selector. */
   const trickButtonClass = (active: boolean) =>
     `h-10 min-w-0 rounded-xl border px-2 text-xs font-medium transition-colors ${
       active

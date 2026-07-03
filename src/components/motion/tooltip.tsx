@@ -58,14 +58,14 @@ const offsetFrom: Record<Side, { x?: number; y?: number }> = {
 };
 
 function buildVariants(side: Side): Variants {
-  const o = offsetFrom[side];
+  const offset = offsetFrom[side];
   return {
     initial: {
       opacity: 0,
       scale: 0.85,
       filter: "blur(10px)",
-      x: o.x ?? 0,
-      y: o.y ?? 0,
+      x: offset.x ?? 0,
+      y: offset.y ?? 0,
     },
     animate: {
       opacity: 1,
@@ -86,8 +86,8 @@ function buildVariants(side: Side): Variants {
       opacity: 0,
       scale: 0.92,
       filter: "blur(6px)",
-      x: (o.x ?? 0) * 0.6,
-      y: (o.y ?? 0) * 0.6,
+      x: (offset.x ?? 0) * 0.6,
+      y: (offset.y ?? 0) * 0.6,
       transition: { duration: 0.14, ease: EASE_OUT },
     },
   };

@@ -50,7 +50,7 @@ export function TextReveal({
   const shouldAnimate = whileInView ? inView : true;
 
   const lines = Array.isArray(text) ? text : [text];
-  const s = { ...DEFAULT_SPRING, ...spring };
+  const springConfig = { ...DEFAULT_SPRING, ...spring };
 
   let unitIndex = 0;
   const lineCounts = new Map<string, number>();
@@ -66,8 +66,8 @@ export function TextReveal({
 
         return (
           <span key={lineKey} className="block">
-            {units.map((unit, i) => {
-              const d = delay + unitIndex * stagger;
+            {units.map((unit, unitIndexInLine) => {
+              const unitDelay = delay + unitIndex * stagger;
               unitIndex += 1;
               const unitCount = unitCounts.get(unit) ?? 0;
               unitCounts.set(unit, unitCount + 1);
@@ -82,12 +82,28 @@ export function TextReveal({
                 : initial;
               const transition: Transition = reduce
                 ? {
-                    opacity: { duration: 0.25, ease: EASE_OUT, delay: d * 0.3 },
+                    opacity: {
+                      duration: 0.25,
+                      ease: EASE_OUT,
+                      delay: unitDelay * 0.3,
+                    },
                   }
                 : {
-                    y: { type: "spring" as const, ...s, delay: d },
-                    opacity: { duration: 0.7, ease: EASE_OUT, delay: d },
-                    filter: { duration: 0.9, ease: EASE_OUT, delay: d },
+                    y: {
+                      type: "spring" as const,
+                      ...springConfig,
+                      delay: unitDelay,
+                    },
+                    opacity: {
+                      duration: 0.7,
+                      ease: EASE_OUT,
+                      delay: unitDelay,
+                    },
+                    filter: {
+                      duration: 0.9,
+                      ease: EASE_OUT,
+                      delay: unitDelay,
+                    },
                   };
               return (
                 <motion.span
@@ -98,7 +114,7 @@ export function TextReveal({
                   className="inline-block will-change-transform"
                 >
                   {unit}
-                  {split === "word" && i < units.length - 1 ? (
+                  {split === "word" && unitIndexInLine < units.length - 1 ? (
                     <span className="inline-block">&nbsp;</span>
                   ) : null}
                 </motion.span>

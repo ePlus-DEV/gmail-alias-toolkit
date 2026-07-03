@@ -73,7 +73,6 @@ function App() {
   const [baseEmail, setBaseEmail] = useState("your.email@gmail.com");
   const [customTag, setCustomTag] = useState("");
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
-  const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -615,13 +614,11 @@ function App() {
   const copyToClipboard = async (email: string) => {
     try {
       await navigator.clipboard.writeText(email);
-      setCopiedEmail(email);
       if (showNotifications) {
         setToastMessage(t("toastCopiedEmail", email));
       }
       saveRecentAlias(email);
       setTimeout(() => {
-        setCopiedEmail(null);
         setToastMessage(null);
       }, 2000);
     } catch {
@@ -838,7 +835,6 @@ function App() {
                 setIsSelectMode={setIsSelectMode}
                 selectedAliases={selectedAliases}
                 setSelectedAliases={setSelectedAliases}
-                copiedEmail={copiedEmail}
                 filteredAliases={filteredAliases}
                 exportAliases={exportAliases}
                 deleteSelected={deleteSelected}

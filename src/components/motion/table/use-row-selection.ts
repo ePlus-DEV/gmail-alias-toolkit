@@ -30,15 +30,15 @@ export function useRowSelection<T>({
   );
 
   const allSelected =
-    sortedRows.length > 0 && sortedRows.every((r) => selected.has(r.id));
-  const someSelected = sortedRows.some((r) => selected.has(r.id));
+    sortedRows.length > 0 && sortedRows.every((row) => selected.has(row.id));
+  const someSelected = sortedRows.some((row) => selected.has(row.id));
 
   const toggleAll = useCallback(() => {
     const next = new Set(selected);
     if (allSelected) {
-      for (const r of sortedRows) next.delete(r.id);
+      for (const row of sortedRows) next.delete(row.id);
     } else {
-      for (const r of sortedRows) next.add(r.id);
+      for (const row of sortedRows) next.add(row.id);
     }
     commit(next);
   }, [allSelected, sortedRows, selected, commit]);

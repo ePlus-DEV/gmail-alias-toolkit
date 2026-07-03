@@ -138,6 +138,7 @@ function ColumnHandle<T>({
   );
 }
 
+/** Renders table headers, sorting controls, and optional column handles. */
 export function TableHeader<T>({
   columns,
   rowHeight,
@@ -166,7 +167,7 @@ export function TableHeader<T>({
   onColumnActivate,
   onColumnDeactivate,
 }: TableHeaderProps<T>) {
-  const hasColumnMenu = !!(onInsertColumn || onDeleteColumn);
+  const hasColumnMenu = Boolean(onInsertColumn || onDeleteColumn);
   const activeIndex = columns.findIndex((c) => c.key === activeColumn);
   return (
     <>

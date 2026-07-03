@@ -68,7 +68,10 @@ export function NumberTicker({
     // identity and rolls to the new value instead of remounting and replaying
     // from 0. Growing numbers add glyphs on the left without re-keying the
     // ones, tens, hundreds already on screen.
-    return chars.map((char, i) => ({ char, id: `g-${chars.length - 1 - i}` }));
+    return chars.map((char, index) => ({
+      char,
+      id: `g-${chars.length - 1 - index}`,
+    }));
   }, [text]);
   const readableText = `${prefix ?? ""}${text}${suffix ?? ""}`;
 
@@ -79,8 +82,8 @@ export function NumberTicker({
   useEffect(() => {
     if (!armed || entered) return;
     const total = (duration + glyphs.length * stagger) * 1000;
-    const t = window.setTimeout(() => setEntered(true), total);
-    return () => window.clearTimeout(t);
+    const timeoutId = window.setTimeout(() => setEntered(true), total);
+    return () => window.clearTimeout(timeoutId);
   }, [armed, entered, duration, stagger, glyphs.length]);
 
   return (
@@ -91,7 +94,7 @@ export function NumberTicker({
       <span className="sr-only">{readableText}</span>
       <span aria-hidden="true" className="inline-flex items-center">
         {prefix ? <span>{prefix}</span> : null}
-        {glyphs.map(({ char, id }, i) => {
+        {glyphs.map(({ char, id }, index) => {
           const isDigit = /\d/.test(char);
           if (!isDigit) {
             return (
@@ -105,7 +108,7 @@ export function NumberTicker({
             <Digit
               key={id}
               digit={armed ? digit : 0}
-              delay={entered ? 0 : i * stagger}
+              delay={entered ? 0 : index * stagger}
               duration={duration}
               blur={blur}
               className={digitClassName}

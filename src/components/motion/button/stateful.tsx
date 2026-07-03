@@ -34,13 +34,13 @@ const ROLL_BLUR = "blur(6px)";
 
 const CASCADE_LETTER_VARIANTS: Variants = {
   initial: { opacity: 0, y: "105%", filter: ROLL_BLUR },
-  animate: (delay: number = 0) => ({
+  animate: (delay = 0) => ({
     opacity: 1,
     y: "0%",
     filter: "blur(0px)",
     transition: { ...SPRING_SWAP, delay },
   }),
-  exit: (delay: number = 0) => ({
+  exit: (delay = 0) => ({
     opacity: 0,
     y: "-105%",
     filter: ROLL_BLUR,
@@ -68,6 +68,7 @@ const ICON_VARIANTS: Variants = {
   },
 };
 
+/** Animated slot for the status icon in a stateful button. */
 function IconSlot({ keyId, children }: { keyId: string; children: ReactNode }) {
   const reduce = useReducedMotion();
   return (
@@ -85,6 +86,7 @@ function IconSlot({ keyId, children }: { keyId: string; children: ReactNode }) {
   );
 }
 
+/** Animated slot for the stateful button label. */
 function TextSlot({ value, children }: { value: string; children: ReactNode }) {
   const reduce = useReducedMotion();
   const measureRef = useRef<HTMLSpanElement>(null);
@@ -129,8 +131,7 @@ function TextSlot({ value, children }: { value: string; children: ReactNode }) {
             >
               {label.split("").map((char, index) => (
                 <motion.span
-                  // biome-ignore lint/suspicious/noArrayIndexKey: position is the slot identity.
-                  key={index}
+                  key={`${value}-${index}-${char}`}
                   custom={index * CASCADE_STAGGER}
                   variants={CASCADE_LETTER_VARIANTS}
                   className="inline-block whitespace-pre will-change-[opacity,filter,transform]"

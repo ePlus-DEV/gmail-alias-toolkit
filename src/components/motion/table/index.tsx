@@ -24,6 +24,7 @@ export type {
   TableProps,
 } from "./types";
 
+/** Data table with optional sorting, selection, resizing, and virtual rows. */
 export function Table<T>({
   data,
   columns,
@@ -126,8 +127,8 @@ export function Table<T>({
       ? totalSize - virtualItems[virtualItems.length - 1].end
       : 0;
 
-  const hasRowMenu = !!(onInsertRow || onDeleteRow);
-  const hasColumnMenu = !!(onInsertColumn || onDeleteColumn);
+  const hasRowMenu = Boolean(onInsertRow || onDeleteRow);
+  const hasColumnMenu = Boolean(onInsertColumn || onDeleteColumn);
   // Only shrink-wrap (w-max) once every column has an explicit resized width;
   // otherwise stay fill-width so a flexible column can't size to cell content.
   const sized =
@@ -217,7 +218,7 @@ export function Table<T>({
           <TableHeader
             columns={orderedColumns}
             rowHeight={rowHeight}
-            reduce={!!reduce}
+            reduce={Boolean(reduce)}
             thRefs={thRefs}
             selectable={selectable}
             allSelected={allSelected}

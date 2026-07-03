@@ -1,3 +1,4 @@
+// skipcq: JS-0415 - Header markup is a compact visual composition with no nested business logic.
 import { Settings, Sparkles } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
 import { Tooltip } from "src/components/motion/tooltip";
