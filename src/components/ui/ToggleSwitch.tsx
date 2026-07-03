@@ -39,9 +39,7 @@ export default function ToggleSwitch({
         whileTap={reduce ? undefined : { scale: 0.96 }}
         className={cn(
           "relative h-6 w-11 rounded-full transition-colors",
-          enabled
-            ? "bg-primary"
-            : "bg-muted",
+          enabled ? "bg-primary" : "bg-muted",
         )}
       >
         <motion.span
