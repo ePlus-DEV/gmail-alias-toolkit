@@ -49,13 +49,13 @@ describe("Toggle", () => {
     expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "false");
   });
 
-  it("has bg-blue-600 when enabled", () => {
+  it("has bg-primary when enabled", () => {
     render(<Toggle enabled onChange={vi.fn()} label="Test" />);
-    expect(screen.getByRole("switch")).toHaveClass("bg-blue-600");
+    expect(screen.getByRole("switch")).toHaveClass("bg-primary");
   });
 
-  it("has bg-gray-300 when disabled", () => {
+  it("has bg-muted when disabled", () => {
     render(<Toggle enabled={false} onChange={vi.fn()} label="Test" />);
-    expect(screen.getByRole("switch")).toHaveClass("bg-gray-300");
+    expect(screen.getByRole("switch")).toHaveClass("bg-muted");
   });
 });

@@ -40,8 +40,8 @@ export default function ToggleSwitch({
         className={cn(
           "relative h-6 w-11 rounded-full transition-colors",
           enabled
-            ? "bg-blue-600"
-            : "bg-gray-300 dark:bg-gray-700",
+            ? "bg-primary"
+            : "bg-muted",
         )}
       >
         <motion.span

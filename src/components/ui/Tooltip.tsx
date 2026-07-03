@@ -36,7 +36,7 @@ export default function Tooltip({
                 : { opacity: 0, y: 4, scale: 0.96, filter: "blur(4px)" }
             }
             transition={SPRING_PANEL}
-            className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-950 px-2.5 py-1.5 text-xs font-medium text-white shadow-xl dark:bg-gray-900"
+            className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-2.5 py-1.5 text-xs font-medium text-background shadow-xl"
           >
             {label}
           </motion.span>
