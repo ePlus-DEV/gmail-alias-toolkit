@@ -108,7 +108,30 @@ function App() {
   const [qrAlias, setQrAlias] = useState<string | null>(null);
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
   // Theme
-  const [, setTheme] = useState<"light" | "dark" | "auto">("light");
+  const [theme, setTheme] = useState<"light" | "dark" | "auto">("light");
+
+  const applyTheme = useCallback((nextTheme: "light" | "dark" | "auto") => {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle(
+      "dark",
+      nextTheme === "dark" || (nextTheme === "auto" && prefersDark),
+    );
+  }, []);
+
+  const handleThemeChange = useCallback(
+    async (nextTheme: "light" | "dark") => {
+      setTheme(nextTheme);
+      applyTheme(nextTheme);
+      const result = await browser.storage.local.get("app_settings");
+      await browser.storage.local.set({
+        app_settings: {
+          ...(result.app_settings || {}),
+          theme: nextTheme,
+        },
+      });
+    },
+    [applyTheme],
+  );
 
   // Load recent aliases, base email, and settings from storage
   useEffect(() => {
@@ -213,13 +236,7 @@ function App() {
           setShowNotifications(result.app_settings.showNotifications ?? true);
           const savedTheme = result.app_settings.theme || "light";
           setTheme(savedTheme);
-          const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-          ).matches;
-          document.documentElement.classList.toggle(
-            "dark",
-            savedTheme === "dark" || (savedTheme === "auto" && prefersDark),
-          );
+          applyTheme(savedTheme);
         }
 
         // Load email accounts list
@@ -253,13 +270,7 @@ function App() {
           setShowNotifications(newSettings.showNotifications ?? true);
           const newTheme = newSettings.theme || "light";
           setTheme(newTheme);
-          const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-          ).matches;
-          document.documentElement.classList.toggle(
-            "dark",
-            newTheme === "dark" || (newTheme === "auto" && prefersDark),
-          );
+          applyTheme(newTheme);
         }
       }
       if (changes.email_accounts) {
@@ -728,7 +739,11 @@ function App() {
       ) : (
         // skipcq: JS-0415
         <>
-          <PopupHeader onOpenSettings={() => setIsSettingsOpen(true)} />
+          <PopupHeader
+            theme={theme}
+            onThemeChange={handleThemeChange}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+          />
 
           {/* Main Content */}
           <div className="flex-1 overflow-y-auto px-3 pb-3">

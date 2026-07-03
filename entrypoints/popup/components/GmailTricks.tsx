@@ -3,6 +3,7 @@ import Button from "./Button";
 import Input from "./Input";
 import { Checkbox } from "src/components/motion/checkbox";
 import { Tooltip } from "src/components/motion/tooltip";
+import { Copy, Dices, Info, Zap } from "lucide-react";
 import { getDotVariationCandidates } from "../utils";
 
 interface GmailTricksProps {
@@ -203,6 +204,13 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     }, 0);
   };
 
+  const trickButtonClass = (active: boolean) =>
+    `h-10 min-w-0 rounded-xl border px-2 text-xs font-medium transition-colors ${
+      active
+        ? "border-primary/35 bg-primary/10 text-foreground"
+        : "border-border bg-background text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+    }`;
+
   // skipcq: JS-0415
   return (
     // skipcq: JS-0415
@@ -212,66 +220,42 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
         <Button
           onClick={() => setSelectedTrick("dot")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "dot"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "dot")}
         >
           Dot Trick
         </Button>
         <Button
           onClick={() => setSelectedTrick("plus")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "plus"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "plus")}
         >
           Plus (+) Tags
         </Button>
         <Button
           onClick={() => setSelectedTrick("googlemail")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "googlemail"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "googlemail")}
         >
           Googlemail
         </Button>
         <Button
           onClick={() => setSelectedTrick("nodots")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "nodots"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "nodots")}
         >
           Remove Dots
         </Button>
         <Button
           onClick={() => setSelectedTrick("dotplus")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "dotplus"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "dotplus")}
         >
           Dot + Plus
         </Button>
         <Button
           onClick={() => setSelectedTrick("combo")}
           variant="outline"
-          className={`p-2.5 rounded-lg border-2 transition-all text-xs font-medium ${
-            selectedTrick === "combo"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-primary/50"
-          }`}
+          className={trickButtonClass(selectedTrick === "combo")}
         >
           All Combos
         </Button>
@@ -299,7 +283,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
           selectedTrick === "googlemail" ||
           selectedTrick === "dotplus" ||
           selectedTrick === "combo") && (
-          <div className="flex items-center gap-2 p-2.5 bg-primary/10 rounded-lg border border-primary/30">
+          <div className="flex items-center gap-2 rounded-xl border border-border bg-background p-2.5">
             <Checkbox
               id="randomizeDots"
               checked={randomizeDots}
@@ -307,11 +291,12 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
             />
             <label
               htmlFor="randomizeDots"
-              className="text-sm font-medium text-primary cursor-pointer"
+              className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-foreground"
             >
-              🎲 Randomize dot positions
+              <Dices className="h-3.5 w-3.5 text-muted-foreground" />
+              Randomize dot positions
             </label>
-            <span className="ml-auto text-xs text-primary">
+            <span className="ml-auto rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
               {randomizeDots ? "Random" : "Sequential"}
             </span>
           </div>
@@ -322,29 +307,17 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
       <Button
         onClick={generateTricksVariations}
         ripple
-        className="w-full bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold text-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring transition-colors mb-3"
+        className="mb-3 h-10 w-full rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
       >
         <div className="flex items-center justify-center gap-2">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
+          <Zap className="h-4 w-4" />
           Generate Tricks
         </div>
       </Button>
 
       {/* Generated Tricks List */}
       {generatedTricks.length > 0 && (
-        <div className="border border-border rounded-lg overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-border bg-background">
           <div className="bg-muted/40 px-3 py-2 border-b border-border">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-foreground">
@@ -369,22 +342,10 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
                     onClick={() => onCopy(email)}
                     variant="ghost"
                     size="icon"
-                    className="p-1.5 text-primary hover:bg-primary/15 rounded transition-colors flex-shrink-0"
+                    className="h-7 w-7 flex-shrink-0 rounded-lg p-0 text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
                     aria-label="Copy"
                   >
-                    <svg
-                      className="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                      />
-                    </svg>
+                    <Copy className="h-3.5 w-3.5" />
                   </Button>
                 </Tooltip>
               </div>
@@ -394,21 +355,11 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
       )}
 
       {/* Info */}
-      <div className="mt-3 p-2 bg-primary/10 rounded-lg">
+      <div className="mt-3 rounded-xl border border-border bg-muted/55 p-2.5">
         <div className="flex gap-2">
-          <svg
-            className="w-4 h-4 text-primary flex-shrink-0 mt-0.5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <p className="text-[10px] text-primary">
-            <strong>Gmail trick:</strong> Dots are ignored & everything after +
+          <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+          <p className="text-[10px] leading-4 text-muted-foreground">
+            <strong className="text-foreground">Gmail trick:</strong> Dots are ignored & everything after +
             goes to same inbox
           </p>
         </div>
@@ -416,6 +367,7 @@ export default function GmailTricks({ baseEmail, onCopy }: GmailTricksProps) {
     </div>
   );
 }
+
 
 
 

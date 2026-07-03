@@ -25,6 +25,8 @@ export interface ThemeToggleProps
   /** Origin direction for the reveal. Default: "bottom-up". */
   start?: RectStart;
   iconClassName?: string;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 const VT_STYLE_ID = "beui-theme-toggle-vt";
@@ -88,7 +90,14 @@ const CIRCLE_ORIGIN: Record<RectStart, string> = {
 export function useThemeToggle({
   variant = "rectangle",
   start = "bottom-up",
-}: { variant?: ThemeVariant; start?: RectStart } = {}) {
+  checked,
+  onCheckedChange,
+}: {
+  variant?: ThemeVariant;
+  start?: RectStart;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+} = {}) {
   const { setTheme, resolvedTheme } = useTheme();
   const reduce = useReducedMotion() ?? false;
   const [mounted, setMounted] = useState(false);
@@ -100,13 +109,21 @@ export function useThemeToggle({
     el.textContent = VT_CSS;
     document.head.appendChild(el);
   }, []);
-  const isDark = mounted && resolvedTheme === "dark";
+  const isControlled = typeof checked === "boolean";
+  const isDark = mounted && (isControlled ? checked : resolvedTheme === "dark");
 
   const toggle = () => {
     const next = isDark ? "light" : "dark";
+    const applyTheme = () => {
+      if (isControlled) {
+        onCheckedChange?.(next === "dark");
+      } else {
+        setTheme(next);
+      }
+    };
 
     if (reduce || !("startViewTransition" in document)) {
-      setTheme(next);
+      applyTheme();
       return;
     }
 
@@ -124,7 +141,7 @@ export function useThemeToggle({
       document as Document & {
         startViewTransition(cb: () => void): { finished: Promise<void> };
       }
-    ).startViewTransition(() => setTheme(next));
+    ).startViewTransition(applyTheme);
 
     vt.finished.finally(() => {
       delete root.dataset.beuiVt;
@@ -139,9 +156,16 @@ export function ThemeToggle({
   start = "bottom-up",
   className,
   iconClassName,
+  checked,
+  onCheckedChange,
   ...rest
 }: ThemeToggleProps) {
-  const { isDark, mounted, toggle } = useThemeToggle({ variant, start });
+  const { isDark, mounted, toggle } = useThemeToggle({
+    variant,
+    start,
+    checked,
+    onCheckedChange,
+  });
 
   return (
     <button

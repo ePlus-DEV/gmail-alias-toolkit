@@ -649,7 +649,7 @@ export default function Settings({
                 title: "text-sm font-bold",
                 chevron: "text-muted-foreground",
                 content: "border-t border-border/70 bg-background",
-                description: "px-1 pt-3 text-foreground",
+                description: "px-3 py-3 text-foreground",
               }}
               items={[
                 {
@@ -666,17 +666,11 @@ export default function Settings({
                     <div className="space-y-3">
                       <div>
                         <label className="block text-xs font-semibold text-foreground mb-1.5">
-                          {t("theme")}
-                        </label>
-                        <Select value={settings.theme} onValueChange={(value) => { const newTheme = value as "light" | "dark" | "auto"; saveSettings({ ...settings, theme: newTheme }); const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches; document.documentElement.classList.toggle("dark", newTheme === "dark" || (newTheme === "auto" && prefersDark)); }}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="light">Light</SelectItem><SelectItem value="dark">Dark</SelectItem><SelectItem value="auto">System (Auto)</SelectItem></SelectContent></Select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-foreground mb-1.5">
                           {t("badgeCounter")}
                         </label>
                         <Select value={settings.badgeDisplay} onValueChange={(value) => saveSettings({ ...settings, badgeDisplay: value as AppSettings["badgeDisplay"] })}><SelectTrigger className="rounded-xl bg-background shadow-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="none">None (Hidden)</SelectItem><SelectItem value="total">Total in History</SelectItem><SelectItem value="all-time">Total Generated (All Time)</SelectItem><SelectItem value="today">Created Today</SelectItem><SelectItem value="week">This Week</SelectItem></SelectContent></Select>
                       </div>
-                      <div className="flex items-center justify-between pt-3 border-t border-border">
+                      <div className="flex items-center justify-between border-t border-border pt-3">
                         <label className="text-xs font-semibold text-foreground">
                           {t("copyNotifications")}
                         </label>
