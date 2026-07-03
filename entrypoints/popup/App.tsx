@@ -713,7 +713,7 @@ function App() {
 
   // skipcq: JS-0415
   return (
-    <div className="h-screen flex flex-col relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_34%),linear-gradient(180deg,#f8fafc_0%,#eef2ff_100%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(79,70,229,0.25),_transparent_34%),linear-gradient(180deg,#020617_0%,#111827_100%)]">
+    <div className="h-screen flex flex-col relative overflow-hidden bg-background">
       {/* Show Welcome Screen for first-time users */}
       {!hasEmailAccounts ? (
         <div className="flex-1 overflow-y-auto">
@@ -731,8 +731,8 @@ function App() {
           <PopupHeader onOpenSettings={() => setIsSettingsOpen(true)} />
 
           {/* Main Content */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-4">
-            <div className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border bg-card shadow-soft backdrop-blur dark:divide-border">
+          <div className="flex-1 overflow-y-auto px-3 pb-3">
+            <div className="divide-y divide-border/70 overflow-hidden rounded-2xl border border-border bg-card shadow-soft dark:divide-border">
               <AccountSwitcher
                 baseEmail={baseEmail}
                 emailAccounts={emailAccounts}

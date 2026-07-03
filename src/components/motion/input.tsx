@@ -144,7 +144,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
                 : "idle"
         }
         className={cn(
-          "relative h-11 overflow-hidden rounded-full border transition-colors duration-200",
+          "relative h-10 overflow-hidden rounded-full border bg-background transition-colors duration-200",
           "border-border",
           focused && !hasError && "border-foreground/40 ring-2 ring-ring/40",
           hasError && "border-destructive ring-2 ring-destructive/25",
@@ -178,7 +178,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           onSelect={(e) => setCaretIndex(e.currentTarget.selectionStart)}
           onScroll={(e) => setScrollLeft(e.currentTarget.scrollLeft)}
           className={cn(
-            "peer h-full w-full bg-transparent text-base leading-6 text-foreground outline-none",
+            "peer h-full w-full bg-transparent text-sm leading-6 text-foreground outline-none",
             customCaret ? "caret-transparent" : "caret-foreground",
             "placeholder:text-muted-foreground/60",
             "disabled:opacity-50",
@@ -194,7 +194,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               ref={mirrorRef}
               aria-hidden
               style={{ left: leftPad }}
-              className="pointer-events-none invisible absolute top-1/2 -translate-y-1/2 whitespace-pre text-base leading-6"
+              className="pointer-events-none invisible absolute top-1/2 -translate-y-1/2 whitespace-pre text-sm leading-6"
             />
 
             {/* Custom caret glides between positions and blinks while focused. */}

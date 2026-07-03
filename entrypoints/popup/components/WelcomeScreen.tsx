@@ -1,6 +1,8 @@
 import { useCallback, useState, ReactNode } from "react";
+import { UserRound } from "lucide-react";
 import Button from "./Button";
 import Input from "./Input";
+import { TextReveal } from "src/components/motion/text-reveal";
 import {
   validateEmail as validateEmailPure,
   getAccountStorageKey,
@@ -157,8 +159,25 @@ function WelcomeHeader() {
         alt=""
         className="w-12 h-12 rounded-xl mb-2 mx-auto"
       />
-      <h1 className="text-lg font-bold text-foreground">{t("welcomeTitle")}</h1>
-      <p className="mt-0.5 text-xs text-muted-foreground">{t("welcomeSubtitle")}</p>
+      <TextReveal
+        as="h1"
+        text={t("welcomeTitle")}
+        split="word"
+        stagger={0.055}
+        blur={8}
+        yOffset="32%"
+        className="text-lg font-bold text-foreground"
+      />
+      <TextReveal
+        as="p"
+        text={t("welcomeSubtitle")}
+        split="word"
+        stagger={0.025}
+        delay={0.16}
+        blur={6}
+        yOffset="24%"
+        className="mt-0.5 text-xs text-muted-foreground"
+      />
     </div>
   );
 }
@@ -188,21 +207,6 @@ function WelcomeForm({
       </label>
 
       <div className="relative mb-1.5">
-        <div className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-            />
-          </svg>
-        </div>
         <Input
           type="email"
           value={email}
@@ -210,11 +214,12 @@ function WelcomeForm({
           onBlur={onBlur}
           onKeyDown={onKeyPress}
           placeholder={t("emailPlaceholder")}
+          leftIcon={<UserRound className="h-4 w-4" />}
           className={`w-full ${
             validationError && !isWarning
               ? "text-destructive"
               : validationError && isWarning
-                ? "text-amber-700"
+                ? "text-accent"
                 : ""
           }`}
           ref={focusOnMount}
@@ -230,7 +235,7 @@ function WelcomeForm({
         <div
           className={`mb-2 p-1.5 rounded-full text-xs text-center ${
             isWarning
-              ? "bg-amber-50 text-amber-700 border border-amber-200"
+              ? "bg-accent/10 text-accent border border-accent/25"
               : "bg-destructive/10 text-destructive border border-destructive/30"
           }`}
         >

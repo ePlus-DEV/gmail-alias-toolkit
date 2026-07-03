@@ -79,20 +79,20 @@ export default function HistorySection({
   // skipcq: JS-0415
   return (
     // skipcq: JS-0415
-    <div className="p-3.5">
+    <div className="p-3">
       {/* Header with title and action buttons */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-foreground">
           {viewMode === "all" ? t("recentAliases") : t("favorites")}
         </h2>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           {viewMode === "all" && recentAliases.length > 0 && (
             <>
               <Button
                 onClick={() => exportAliases("csv")}
                 variant="ghost"
                 size="sm"
-                className="text-xs text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded hover:bg-primary/10 transition-colors"
+                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
                 title={t("exportAsCsv")}
               >
                 CSV
@@ -101,7 +101,7 @@ export default function HistorySection({
                 onClick={() => exportAliases("json")}
                 variant="ghost"
                 size="sm"
-                className="text-xs text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded hover:bg-primary/10 transition-colors"
+                className="h-7 px-2 text-xs text-muted-foreground hover:text-primary"
                 title={t("exportAsJson")}
               >
                 JSON
@@ -113,7 +113,7 @@ export default function HistorySection({
                 }}
                 variant={isSelectMode ? "primary" : "ghost"}
                 size="sm"
-                className={`text-xs px-1.5 py-0.5 rounded transition-colors ${
+                className={`h-7 px-2 text-xs transition-colors ${
                   isSelectMode
                     ? "bg-primary/15 text-primary"
                     : "text-muted-foreground hover:text-primary hover:bg-primary/10"
@@ -172,11 +172,11 @@ export default function HistorySection({
       )}
 
       {/* View mode tabs */}
-      <div className="mb-3 flex gap-1 p-1 bg-muted rounded-lg">
+      <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
         <Button
           onClick={() => setViewMode("all")}
           variant="ghost"
-          className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+          className={`h-9 rounded-lg px-3 text-xs font-medium transition-all ${
             viewMode === "all"
               ? "bg-card text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
@@ -202,9 +202,9 @@ export default function HistorySection({
         <Button
           onClick={() => setViewMode("favorites")}
           variant="ghost"
-          className={`flex-1 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+          className={`h-9 rounded-lg px-3 text-xs font-medium transition-all ${
             viewMode === "favorites"
-              ? "bg-card text-yellow-600 dark:text-yellow-400 shadow-sm"
+              ? "bg-card text-accent shadow-sm"
               : "text-muted-foreground hover:text-foreground dark:hover:text-foreground"
           }`}
         >
@@ -261,13 +261,13 @@ export default function HistorySection({
           )}
         </div>
 
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <Select
             value={filterTag}
             onValueChange={setFilterTag}
             className="flex-1"
           >
-            <SelectTrigger className="py-1.5 text-xs">
+            <SelectTrigger className="min-h-9 rounded-xl py-1.5 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -296,7 +296,7 @@ export default function HistorySection({
             }
             className="flex-1"
           >
-            <SelectTrigger className="py-1.5 text-xs">
+            <SelectTrigger className="min-h-9 rounded-xl py-1.5 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -506,8 +506,8 @@ function AliasRow({
         size="icon"
         className={`p-1.5 focus:outline-none transition-colors ${
           isFavorited
-            ? "text-yellow-500 hover:text-yellow-600"
-            : "text-muted-foreground hover:text-yellow-500"
+            ? "text-accent hover:text-accent"
+            : "text-muted-foreground hover:text-accent"
         }`}
         title={isFavorited ? t("removeFromFavorites") : t("addToFavorites")}
       >
@@ -534,7 +534,7 @@ function AliasRow({
       >
         {isCopied ? (
           <svg
-            className="w-4 h-4 text-green-600"
+            className="w-4 h-4 text-primary"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

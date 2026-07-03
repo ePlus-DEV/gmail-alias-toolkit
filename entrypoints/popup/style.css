@@ -227,11 +227,14 @@ body {
 .h-6 { height: 1.5rem; }
 .h-7 { height: 1.75rem; }
 .h-8 { height: 2rem; }
+.h-9 { height: 2.25rem; }
 .h-10 { height: 2.5rem; }
 .h-11 { height: 2.75rem; }
 .h-12 { height: 3rem; }
 .h-full { height: 100%; }
 .h-px { height: 1px; }
+.min-h-9 { min-height: 2.25rem; }
+.min-h-10 { min-height: 2.5rem; }
 .w-3 { width: 0.75rem; }
 .w-3\.5 { width: 0.875rem; }
 .w-4 { width: 1rem; }

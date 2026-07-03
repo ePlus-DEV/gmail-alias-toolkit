@@ -1141,7 +1141,7 @@ export default function Settings({
                         <span
                           className={`inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1 ${
                             change.type === "Added"
-                              ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400"
+                              ? "bg-accent/10 text-accent"
                               : change.type === "Fixed"
                                 ? "bg-destructive/10 text-destructive"
                                 : "bg-primary/10 text-primary"

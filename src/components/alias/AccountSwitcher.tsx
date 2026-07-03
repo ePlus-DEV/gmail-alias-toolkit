@@ -52,16 +52,16 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
     onCancelAddAccount,
   } = props;
   return (
-    <div className="p-4">
-      <div className="flex gap-2">
+    <div className="p-3">
+      <div className="flex items-end gap-2">
         <div className="min-w-0 flex-1 space-y-1.5">
           <label className="block text-xs font-semibold text-foreground">
             {t("activeGmailAddress")}
           </label>
           <Select value={baseEmail} onValueChange={onSelectAccount}>
-            <SelectTrigger className="flex items-center gap-2">
+            <SelectTrigger className="rounded-2xl bg-background">
               <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
-              <SelectValue />
+              <SelectValue className="flex-1 text-left" />
             </SelectTrigger>
             <SelectContent>
               {emailAccounts.length > 0 ? (
@@ -81,7 +81,7 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
           onClick={onToggleAddAccount}
           size="icon"
           ripple
-          className="mt-[22px] shrink-0 rounded-2xl"
+          className="h-10 w-10 shrink-0 rounded-2xl"
           title={t("addNewAccount")}
         >
           <Plus className="h-4 w-4" />
@@ -136,7 +136,7 @@ export default function AccountSwitcher(props: AccountSwitcherProps) {
       {baseEmail &&
         !baseEmail.includes("@gmail.com") &&
         baseEmail.includes("@") && (
-          <p className="mt-2 text-xs font-medium text-amber-600 dark:text-amber-400">
+          <p className="mt-2 text-xs font-medium text-accent">
             {t("gmailWarning")}
           </p>
         )}

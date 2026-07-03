@@ -1,6 +1,7 @@
 import GmailTricks from "./GmailTricks";
 import Button from "./Button";
 import Input from "./Input";
+import { AtSign, Copy, Shuffle, Tag, Zap } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -81,83 +82,50 @@ export default function GeneratorTabs({
   return (
     <div>
       {/* Main Tabs */}
-      <div className="flex gap-2 p-3.5 pb-0">
+      <div className="grid grid-cols-3 gap-1.5 p-3 pb-0">
         <Button
           onClick={() => setActiveTab("random")}
-          variant="outline"
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
+          variant="ghost"
+          size="sm"
+          className={`h-10 min-w-0 rounded-xl border px-2 text-xs transition-colors ${
             activeTab === "random"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
+              ? "border-primary/40 bg-primary/10 text-primary"
+              : "border-border bg-background text-muted-foreground hover:bg-muted/70"
           }`}
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4h4l4 4m0 0l4-4h4m0 16h-4l-4-4m0 0l-4 4H4m0-8h4m8 0h4"
-            />
-          </svg>
-          {t("random")}
+          <Shuffle className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{t("random")}</span>
         </Button>
         <Button
           onClick={() => setActiveTab("tags")}
-          variant="outline"
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
+          variant="ghost"
+          size="sm"
+          className={`h-10 min-w-0 rounded-xl border px-2 text-xs transition-colors ${
             activeTab === "tags"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
+              ? "border-primary/40 bg-primary/10 text-primary"
+              : "border-border bg-background text-muted-foreground hover:bg-muted/70"
           }`}
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-            />
-          </svg>
-          {t("customTags")}
+          <Tag className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{t("customTags")}</span>
         </Button>
         <Button
           onClick={() => setActiveTab("tricks")}
-          variant="outline"
-          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
+          variant="ghost"
+          size="sm"
+          className={`h-10 min-w-0 rounded-xl border px-2 text-xs transition-colors ${
             activeTab === "tricks"
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border text-muted-foreground hover:border-border dark:hover:border-border"
+              ? "border-primary/40 bg-primary/10 text-primary"
+              : "border-border bg-background text-muted-foreground hover:bg-muted/70"
           }`}
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
-          {t("gmailTricks")}
+          <Zap className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate">{t("gmailTricks")}</span>
         </Button>
       </div>
 
       {/* Tab Content */}
-      <div className="p-3.5">
+      <div className="p-3">
         {/* Random Tab */}
         {activeTab === "random" && (
           <div>
@@ -356,22 +324,7 @@ export default function GeneratorTabs({
           // skipcq: JS-0415
           <div>
             <div className="flex gap-2 mb-3">
-              <div className="relative flex-1">
-                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                    />
-                  </svg>
-                </div>
+              <div className="min-w-0 flex-1">
                 <Input
                   type="text"
                   value={customTag}
@@ -379,13 +332,14 @@ export default function GeneratorTabs({
                   onKeyDown={handleKeyPress}
                   className="w-full"
                   placeholder={t("tagPlaceholder")}
+                  leftIcon={<AtSign className="h-4 w-4" />}
                 />
               </div>
               <Button
                 onClick={handleCustomGenerate}
                 disabled={!customTag.trim()}
                 ripple
-                className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-full hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="h-10 shrink-0 px-4 text-sm font-semibold"
               >
                 {t("generate")}
               </Button>
@@ -429,22 +383,10 @@ export default function GeneratorTabs({
                 }
                 variant="ghost"
                 size="icon"
-                className="text-muted-foreground hover:text-primary flex-shrink-0"
+                className="h-7 w-7 flex-shrink-0 text-muted-foreground hover:text-primary"
                 title={t("copyExample")}
               >
-                <svg
-                  className="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
+                <Copy className="h-3.5 w-3.5" />
               </Button>
             </div>
           </div>
