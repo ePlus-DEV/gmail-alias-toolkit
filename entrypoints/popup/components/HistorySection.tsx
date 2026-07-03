@@ -1,4 +1,5 @@
 /** Recent aliases list with search, filter, pagination, and bulk selection. */
+import { useMemo } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import {
@@ -20,6 +21,7 @@ import {
 } from "src/components/motion/select";
 import { Checkbox } from "src/components/motion/checkbox";
 import { Tooltip } from "src/components/motion/tooltip";
+import { Table, type TableColumn } from "src/components/motion/table";
 import { t } from "../../../lib/i18n";
 
 interface Alias {
@@ -384,6 +386,120 @@ function HistoryList({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedAliases = filteredAliases.slice(startIndex, endIndex);
+  const tableHeight = Math.min(
+    288,
+    Math.max(96, paginatedAliases.length * 44 + 44),
+  );
+  const columns = useMemo<TableColumn<Alias>[]>(
+    () => [
+      ...(isSelectMode
+        ? [
+            {
+              key: "select",
+              header: "",
+              width: "40px",
+              align: "center" as const,
+              cell: (alias: Alias) => (
+                <Checkbox
+                  checked={selectedAliases.has(alias.email)}
+                  onCheckedChange={() => toggleSelectAlias(alias.email)}
+                  aria-label={alias.email}
+                />
+              ),
+            },
+          ]
+        : []),
+      {
+        key: "email",
+        header: "Alias",
+        sortable: true,
+        width: isSelectMode ? "178px" : "218px",
+        cell: (alias) => (
+          <span className="block truncate font-mono text-[12px] text-foreground">
+            {alias.email}
+          </span>
+        ),
+        sortValue: (alias) => alias.email,
+      },
+      {
+        key: "actions",
+        header: "",
+        width: "104px",
+        align: "right",
+        cell: (alias) => {
+          const isCopied = copiedEmail === alias.email;
+          const isFavorited = favorites.includes(alias.email);
+
+          return (
+            <div className="flex items-center justify-end gap-0.5 rounded-lg bg-muted/60 p-0.5">
+              <Tooltip content={t("showQrCode")}>
+                <Button
+                  onClick={() => setQrAlias(alias.email)}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:outline-none"
+                  aria-label={t("showQrCode")}
+                >
+                  <QrCode className="h-3.5 w-3.5" />
+                </Button>
+              </Tooltip>
+              <Tooltip
+                content={
+                  isFavorited ? t("removeFromFavorites") : t("addToFavorites")
+                }
+              >
+                <Button
+                  onClick={() => toggleFavorite(alias.email)}
+                  variant="ghost"
+                  size="icon"
+                  className={`h-7 w-7 rounded-md p-0 transition-colors hover:bg-background focus:outline-none ${
+                    isFavorited
+                      ? "text-accent hover:text-accent"
+                      : "text-muted-foreground hover:text-accent"
+                  }`}
+                  aria-label={
+                    isFavorited
+                      ? t("removeFromFavorites")
+                      : t("addToFavorites")
+                  }
+                >
+                  <Star
+                    className="h-3.5 w-3.5"
+                    fill={isFavorited ? "currentColor" : "none"}
+                  />
+                </Button>
+              </Tooltip>
+              <Tooltip content={t("copyToClipboard")}>
+                <Button
+                  onClick={() => copyToClipboard(alias.email)}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-md p-0 text-muted-foreground transition-colors hover:bg-background hover:text-primary focus:text-primary focus:outline-none"
+                  aria-label={t("copyToClipboard")}
+                >
+                  {isCopied ? (
+                    <Check className="h-3.5 w-3.5 text-primary" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5" />
+                  )}
+                </Button>
+              </Tooltip>
+            </div>
+          );
+        },
+      },
+    ],
+    [
+      copiedEmail,
+      copyToClipboard,
+      favorites,
+      isSelectMode,
+      selectedAliases,
+      setQrAlias,
+      toggleFavorite,
+      toggleSelectAlias,
+    ],
+  );
 
   if (filteredAliases.length === 0 && viewMode === "favorites") {
     return (
@@ -432,20 +548,16 @@ function HistoryList({
   // skipcq: JS-0415
   return (
     <div className="space-y-1.5">
-      {paginatedAliases.map((alias) => (
-        <AliasRow
-          key={alias.email}
-          alias={alias}
-          isSelectMode={isSelectMode}
-          isSelected={selectedAliases.has(alias.email)}
-          onToggleSelect={() => toggleSelectAlias(alias.email)}
-          isCopied={copiedEmail === alias.email}
-          isFavorited={favorites.includes(alias.email)}
-          onToggleFavorite={() => toggleFavorite(alias.email)}
-          onCopy={() => copyToClipboard(alias.email)}
-          onShowQR={() => setQrAlias(alias.email)}
-        />
-      ))}
+      <Table
+        data={paginatedAliases}
+        columns={columns}
+        getRowId={(alias) => alias.email}
+        rowHeight={44}
+        height={tableHeight}
+        defaultSort={null}
+        emptyState={t("noResultsFound")}
+        className="rounded-xl"
+      />
 
       {totalPages > 1 && (
         <Pagination
