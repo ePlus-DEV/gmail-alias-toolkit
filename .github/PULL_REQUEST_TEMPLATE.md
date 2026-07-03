@@ -2,7 +2,7 @@
 
 <!-- Briefly describe what this PR changes in Gmail Alias Toolkit. -->
 
-Fixes #
+<!-- Fixes # -->
 
 ## Type of Change
 

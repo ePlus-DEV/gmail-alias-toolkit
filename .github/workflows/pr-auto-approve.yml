@@ -4,6 +4,10 @@ on:
     workflows: [CI]
     types: [completed]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   pull-requests: write
   issues: write
@@ -40,9 +44,32 @@ jobs:
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Wait for pull request checks
-        run: gh pr checks "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --watch --interval 10
+        run: |
+          for attempt in {1..60}; do
+            CHECKS="$(gh pr checks "$PR_NUMBER" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json bucket,name,workflow)"
+
+            FAILING_COUNT="$(jq '[.[] | select(.workflow != env.APPROVAL_WORKFLOW and (.bucket == "fail" or .bucket == "cancel"))] | length' <<<"$CHECKS")"
+            if [ "$FAILING_COUNT" -gt 0 ]; then
+              jq -r '.[] | select(.workflow != env.APPROVAL_WORKFLOW and (.bucket == "fail" or .bucket == "cancel")) | "::error::\(.workflow): \(.name) failed"' <<<"$CHECKS"
+              exit 1
+            fi
+
+            PENDING_COUNT="$(jq '[.[] | select(.workflow != env.APPROVAL_WORKFLOW and .bucket == "pending")] | length' <<<"$CHECKS")"
+            if [ "$PENDING_COUNT" -eq 0 ]; then
+              exit 0
+            fi
+
+            echo "Waiting for $PENDING_COUNT pull request check(s) before approving (attempt $attempt/60)."
+            sleep 10
+          done
+
+          echo "::error::Timed out waiting for pull request checks to finish."
+          exit 1
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
+          APPROVAL_WORKFLOW: ${{github.workflow}}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Approve pull request
@@ -53,11 +80,15 @@ jobs:
             | tail -n 1)"
 
           if [ -z "$APPROVED_FOR_HEAD" ]; then
-            gh pr review --approve "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+            gh pr review --approve "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$APPROVAL_REVIEW_BODY"
           fi
         env:
           PR_NUMBER: ${{steps.pr.outputs.number}}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          APPROVAL_REVIEW_BODY: |
+            Approved by @eplus-bot after all pull request checks passed.
+
+            CI run: ${{ github.event.workflow_run.html_url }}
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
       - name: Upsert CI approval comment
@@ -81,22 +112,19 @@ jobs:
             fi
           fi
 
-          APPROVAL_COMMENT="$(cat <<EOF
-$COMMENT_MARKER
-
-![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)
-
-Approved by @eplus-bot after all pull request checks passed.
-
-Approval refresh: #$REFRESH_COUNT
-CI updated: $CI_UPDATED_AT
-CI attempt: #$CI_RUN_ATTEMPT
-Approval workflow: #$APPROVAL_RUN_NUMBER.$APPROVAL_RUN_ATTEMPT
-
-CI run: $CI_RUN_URL
-EOF
-          )"
-
+          APPROVAL_COMMENT="$(printf '%s\n' \
+            "$COMMENT_MARKER" \
+            "" \
+            "![CI passed](https://img.shields.io/badge/CI-passed-brightgreen)" \
+            "" \
+            "Approved by @eplus-bot after all pull request checks passed." \
+            "" \
+            "Approval refresh: #$REFRESH_COUNT" \
+            "CI updated: $CI_UPDATED_AT" \
+            "CI attempt: #$CI_RUN_ATTEMPT" \
+            "Approval workflow: #$APPROVAL_RUN_NUMBER.$APPROVAL_RUN_ATTEMPT" \
+            "" \
+            "CI run: $CI_RUN_URL")"
           if [ -n "$COMMENT_ID" ]; then
             gh api \
               --method PATCH \

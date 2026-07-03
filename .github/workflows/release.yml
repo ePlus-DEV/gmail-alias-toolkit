@@ -7,6 +7,10 @@ on:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-release:
     name: Build and Release
@@ -25,17 +29,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
-      - name: Ensure Yarn cache directory exists
-        run: mkdir -p ~/Library/Caches/Yarn/v6
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Setup Node.js with Yarn cache
         uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: "yarn"
-
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
