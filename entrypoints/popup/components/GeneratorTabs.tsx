@@ -97,6 +97,43 @@ function GeneratorTabButton({
   );
 }
 
+interface GeneratorTabBarProps {
+  activeTab: GeneratorTabId;
+  onSelect: (tab: GeneratorTabId) => void;
+}
+
+/** Top-level generator tab navigation with tooltip labels. */
+function GeneratorTabBar({ activeTab, onSelect }: GeneratorTabBarProps) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5 p-3 pb-0">
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="random"
+        icon={<Shuffle className="h-3.5 w-3.5 shrink-0" />}
+        label={t("random")}
+        tooltip={t("random")}
+        onSelect={onSelect}
+      />
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="tags"
+        icon={<Tag className="h-3.5 w-3.5 shrink-0" />}
+        label={t("tabTagsShort")}
+        tooltip={t("customTags")}
+        onSelect={onSelect}
+      />
+      <GeneratorTabButton
+        activeTab={activeTab}
+        tab="tricks"
+        icon={<Zap className="h-3.5 w-3.5 shrink-0" />}
+        label={t("tabTricksShort")}
+        tooltip={t("gmailTricks")}
+        onSelect={onSelect}
+      />
+    </div>
+  );
+}
+
 interface RandomFormatControlsProps {
   randomFormat: RandomFormat;
   randomEmailCount: number;
@@ -154,6 +191,131 @@ function RandomFormatControls({
   );
 }
 
+interface RandomAliasListProps {
+  generatedRandomList: string[];
+  showNotifications: boolean;
+  copyToClipboard: (email: string) => Promise<void>;
+  saveRecentAliases: (emails: string[]) => void;
+  setToastMessage: (msg: string | null) => void;
+}
+
+/** Shows generated aliases with copy actions. */
+function RandomAliasList({
+  generatedRandomList,
+  showNotifications,
+  copyToClipboard,
+  saveRecentAliases,
+  setToastMessage,
+}: RandomAliasListProps) {
+  if (generatedRandomList.length === 0) return null;
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-border">
+      <RandomAliasListHeader
+        generatedRandomList={generatedRandomList}
+        showNotifications={showNotifications}
+        saveRecentAliases={saveRecentAliases}
+        setToastMessage={setToastMessage}
+      />
+      <div className="max-h-64 overflow-y-auto">
+        {generatedRandomList.map((email) => (
+          <RandomAliasRow
+            key={email}
+            email={email}
+            copyToClipboard={copyToClipboard}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface RandomAliasListHeaderProps {
+  generatedRandomList: string[];
+  showNotifications: boolean;
+  saveRecentAliases: (emails: string[]) => void;
+  setToastMessage: (msg: string | null) => void;
+}
+
+/** Header and bulk-copy action for generated aliases. */
+function RandomAliasListHeader({
+  generatedRandomList,
+  showNotifications,
+  saveRecentAliases,
+  setToastMessage,
+}: RandomAliasListHeaderProps) {
+  /** Copies all generated aliases and records them in recent history. */
+  const copyAllAliases = async () => {
+    try {
+      await navigator.clipboard.writeText(generatedRandomList.join("\n"));
+      saveRecentAliases(generatedRandomList);
+      if (showNotifications) {
+        setToastMessage(
+          t("copiedAliases", String(generatedRandomList.length)),
+        );
+      }
+    } catch {
+      if (showNotifications) {
+        setToastMessage(t("failedToCopy"));
+      }
+    }
+    setTimeout(() => setToastMessage(null), showNotifications ? 2000 : 0);
+  };
+
+  return (
+    <div className="border-b border-border bg-muted/40 px-3 py-2">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-foreground">
+          {t("generatedAliases")}
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">
+            {t("totalCount", String(generatedRandomList.length))}
+          </span>
+          <Tooltip content={t("copyToClipboard")} side="top">
+            <Button
+              onClick={copyAllAliases}
+              variant="ghost"
+              size="sm"
+              className="text-xs font-medium text-primary hover:text-primary"
+              aria-label={t("copyToClipboard")}
+            >
+              {t("copyAll")}
+            </Button>
+          </Tooltip>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface RandomAliasRowProps {
+  email: string;
+  copyToClipboard: (email: string) => Promise<void>;
+}
+
+/** Single generated alias row with copy action. */
+function RandomAliasRow({ email, copyToClipboard }: RandomAliasRowProps) {
+  return (
+    <div className="flex items-center gap-2 border-b border-border px-3 py-2.5 transition-colors last:border-b-0 hover:bg-muted/40 dark:border-border dark:hover:bg-muted/50">
+      <div className="flex-1 truncate font-mono text-xs text-foreground">
+        {email}
+      </div>
+      <Tooltip content={t("copy")}>
+        <Button
+          onClick={() => copyToClipboard(email)}
+          variant="ghost"
+          size="icon"
+          className="flex-shrink-0 rounded p-1.5 text-primary transition-colors hover:bg-primary/15"
+          aria-label={t("copy")}
+        >
+          <Copy className="h-3.5 w-3.5" />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
+
 /** Renders three alias generator tabs: random (formatted strings), custom tags, and Gmail tricks. */
 export default function GeneratorTabs({
   baseEmail,
@@ -196,33 +358,7 @@ export default function GeneratorTabs({
   return (
     <div>
       {/* Main Tabs */}
-      {/* skipcq: JS-0415 - Three compact tooltip buttons are clearer inline than split across wrappers. */}
-      <div className="grid grid-cols-3 gap-1.5 p-3 pb-0">
-        <GeneratorTabButton
-          activeTab={activeTab}
-          tab="random"
-          icon={<Shuffle className="h-3.5 w-3.5 shrink-0" />}
-          label={t("random")}
-          tooltip={t("random")}
-          onSelect={setActiveTab}
-        />
-        <GeneratorTabButton
-          activeTab={activeTab}
-          tab="tags"
-          icon={<Tag className="h-3.5 w-3.5 shrink-0" />}
-          label={t("tabTagsShort")}
-          tooltip={t("customTags")}
-          onSelect={setActiveTab}
-        />
-        <GeneratorTabButton
-          activeTab={activeTab}
-          tab="tricks"
-          icon={<Zap className="h-3.5 w-3.5 shrink-0" />}
-          label={t("tabTricksShort")}
-          tooltip={t("gmailTricks")}
-          onSelect={setActiveTab}
-        />
-      </div>
+      <GeneratorTabBar activeTab={activeTab} onSelect={setActiveTab} />
 
       {/* Tab Content */}
       <div className="p-3">
@@ -294,93 +430,13 @@ export default function GeneratorTabs({
               className="mb-2.5 h-10 w-full rounded-xl px-4 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-ring"
             />
 
-            {/* Generated Emails List */}
-            {generatedRandomList.length > 0 && (
-              // skipcq: JS-0415
-              <div className="border border-border rounded-lg overflow-hidden">
-                <div className="bg-muted/40 px-3 py-2 border-b border-border">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-foreground">
-                      {t("generatedAliases")}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        {t("totalCount", String(generatedRandomList.length))}
-                      </span>
-                      <Tooltip content={t("copyToClipboard")} side="top">
-                        <Button
-                          onClick={async () => {
-                            try {
-                              await navigator.clipboard.writeText(
-                                generatedRandomList.join("\n"),
-                              );
-                              saveRecentAliases(generatedRandomList);
-                              if (showNotifications) {
-                                setToastMessage(
-                                  t(
-                                    "copiedAliases",
-                                    String(generatedRandomList.length),
-                                  ),
-                                );
-                              }
-                            } catch {
-                              if (showNotifications) {
-                                setToastMessage(t("failedToCopy"));
-                              }
-                            }
-                            setTimeout(
-                              () => setToastMessage(null),
-                              showNotifications ? 2000 : 0,
-                            );
-                          }}
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs text-primary hover:text-primary font-medium"
-                          aria-label={t("copyToClipboard")}
-                        >
-                          {t("copyAll")}
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </div>
-                </div>
-                <div className="max-h-64 overflow-y-auto">
-                  {generatedRandomList.map((email) => (
-                    <div
-                      key={email}
-                      className="flex items-center gap-2 px-3 py-2.5 border-b border-border dark:border-border last:border-b-0 hover:bg-muted/40 dark:hover:bg-muted/50 transition-colors"
-                    >
-                      <div className="flex-1 font-mono text-xs text-foreground truncate">
-                        {email}
-                      </div>
-                      <Tooltip content={t("copy")}>
-                        <Button
-                          onClick={() => copyToClipboard(email)}
-                          variant="ghost"
-                          size="icon"
-                          className="p-1.5 text-primary hover:bg-primary/15 rounded transition-colors flex-shrink-0"
-                          aria-label={t("copy")}
-                        >
-                          <svg
-                            className="w-3.5 h-3.5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <RandomAliasList
+              generatedRandomList={generatedRandomList}
+              showNotifications={showNotifications}
+              copyToClipboard={copyToClipboard}
+              saveRecentAliases={saveRecentAliases}
+              setToastMessage={setToastMessage}
+            />
 
             <div className="mt-1 text-center text-[11px] text-muted-foreground">
               {randomFormat === "private-mail"

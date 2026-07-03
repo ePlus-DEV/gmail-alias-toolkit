@@ -47,6 +47,54 @@ jobs:
             We will review / merge it when we are online.
           GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
 
+      - name: Add pull request labels
+        run: |
+          add_label() {
+            local name="$1"
+            local color="$2"
+            local description="$3"
+
+            gh api \
+              --method POST \
+              "repos/$GITHUB_REPOSITORY/labels" \
+              -f name="$name" \
+              -f color="$color" \
+              -f description="$description" >/dev/null 2>&1 || true
+
+            gh pr edit "$PR_NUMBER" --add-label "$name" --repo "$GITHUB_REPOSITORY"
+          }
+
+          add_label "needs-review" "fbca04" "Pull request is ready for maintainer review"
+
+          CHANGED_FILES="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --paginate --jq '.[].filename')"
+
+          if echo "$CHANGED_FILES" | grep -Eq '^(entrypoints|src)/'; then
+            add_label "app" "1d76db" "Application or extension source code"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq '^(entrypoints/popup|src/components|src/styles|assets)/'; then
+            add_label "ui" "c5def5" "User interface or visual changes"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq '^(_locales|src/lib/i18n|.*messages\.json)'; then
+            add_label "i18n" "bfdadc" "Translation or localization changes"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq '(\.test\.|\.spec\.|^tests?/|^vitest\.|testing-library)'; then
+            add_label "tests" "0e8a16" "Test coverage or test tooling changes"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq '^(\.github/|package\.json|yarn\.lock|wxt\.config\.ts|tsconfig|vite\.config|postcss\.config|components\.json)'; then
+            add_label "build-ci" "5319e7" "Build, CI, release, or project configuration"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -Eq '(^README|^CHANGELOG|^docs/|\.md$)'; then
+            add_label "documentation" "0075ca" "Documentation changes"
+          fi
+        env:
+          PR_NUMBER: ${{github.event.pull_request.number}}
+          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+
       - name: Assign PR author
         run: gh pr edit "$PR_NUMBER" --add-assignee "$PR_AUTHOR" --repo "$GITHUB_REPOSITORY"
         env:
