@@ -68,13 +68,25 @@ const CHANGELOG: {
 }[] = [
   {
     version: "1.2.0",
-    date: "2026-07-01",
+    date: "2026-07-03",
     changes: [
+      {
+        type: "Added",
+        items: [
+          "Added Tailwind CSS v4, shadcn, and beUI motion components",
+          "Added Action Swap, Animated Badge, Bouncy Accordion, Theme Toggle, Tooltip, and Table integrations",
+          "Added dark mode toggle in the popup header",
+          "Added locale key coverage tests for all supported languages",
+        ],
+      },
       {
         type: "Changed",
         items: [
-          "Redesigned popup and settings UI with a unified card layout",
-          "Fixed popup height so only content scrolls, not the whole page",
+          "Redesigned popup, settings, generator tabs, Gmail tricks, history table, and changelog UI with a unified beUI style",
+          "Reworked Recent Aliases into a compact non-scrolling table with fixed action buttons",
+          "Improved dark mode contrast, spacing, hover states, tooltips, and responsive popup layout",
+          "Moved theme switching out of Settings and into the main popup header",
+          "Updated all supported locales with the new UI strings",
         ],
       },
       {
@@ -83,6 +95,9 @@ const CHANGELOG: {
           '"Copy All" no longer undercounts statistics for generated aliases',
           "Settings/QR modals no longer render outside the popup bounds",
           "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
+          "Fixed missing imports and old component references after replacing legacy UI components",
+          "Fixed table overflow and hidden row action buttons in alias history",
+          "Fixed untranslated/fallback strings in the new UI",
         ],
       },
     ],
