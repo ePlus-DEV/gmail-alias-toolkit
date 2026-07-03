@@ -20,7 +20,9 @@ export function useHoverCapable() {
     update();
     mediaQuery.addEventListener?.("change", update);
     return () => {
-      mediaQuery.removeEventListener?.("change", update);
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", update);
+      }
     };
   }, []);
 
