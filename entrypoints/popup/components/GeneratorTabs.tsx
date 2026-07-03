@@ -144,7 +144,9 @@ function RandomFormatControls({
           type="number"
           min="1"
           value={String(randomEmailCount)}
-          onChange={(value) => onCountChange(Math.max(1, parseInt(value) || 10))}
+          onChange={(value) =>
+            onCountChange(Math.max(1, parseInt(value) || 10))
+          }
           className="w-full"
         />
       </div>
