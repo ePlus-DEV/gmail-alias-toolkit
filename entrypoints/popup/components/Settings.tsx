@@ -146,43 +146,70 @@ function AppearanceSettingsPanel({
 }: SettingsPanelProps) {
   return (
     <div className="space-y-3">
-      <div>
-        <label className="mb-1.5 block text-xs font-semibold text-foreground">
-          {t("badgeCounter")}
-        </label>
-        <Select
-          value={settings.badgeDisplay}
-          onValueChange={(value) =>
-            saveSettings({
-              ...settings,
-              badgeDisplay: value as AppSettings["badgeDisplay"],
-            })
-          }
-        >
-          <SelectTrigger className="rounded-xl bg-background shadow-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">None (Hidden)</SelectItem>
-            <SelectItem value="total">Total in History</SelectItem>
-            <SelectItem value="all-time">Total Generated (All Time)</SelectItem>
-            <SelectItem value="today">Created Today</SelectItem>
-            <SelectItem value="week">This Week</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="flex items-center justify-between border-t border-border pt-3">
-        <label className="text-xs font-semibold text-foreground">
-          {t("copyNotifications")}
-        </label>
-        <Toggle
-          enabled={settings.showNotifications}
-          onChange={(enabled) =>
-            saveSettings({ ...settings, showNotifications: enabled })
-          }
-          label=""
-        />
-      </div>
+      <BadgeCounterField settings={settings} saveSettings={saveSettings} />
+      <CopyNotificationsField
+        settings={settings}
+        saveSettings={saveSettings}
+      />
+    </div>
+  );
+}
+
+/** Badge counter setting field. */
+function BadgeCounterField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("badgeCounter")}
+      </label>
+      <Select
+        value={settings.badgeDisplay}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            badgeDisplay: value as AppSettings["badgeDisplay"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <BadgeCounterOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Badge counter select options. */
+function BadgeCounterOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="none">None (Hidden)</SelectItem>
+      <SelectItem value="total">Total in History</SelectItem>
+      <SelectItem value="all-time">Total Generated (All Time)</SelectItem>
+      <SelectItem value="today">Created Today</SelectItem>
+      <SelectItem value="week">This Week</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Copy notification toggle field. */
+function CopyNotificationsField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div className="flex items-center justify-between border-t border-border pt-3">
+      <label className="text-xs font-semibold text-foreground">
+        {t("copyNotifications")}
+      </label>
+      <Toggle
+        enabled={settings.showNotifications}
+        onChange={(enabled) =>
+          saveSettings({ ...settings, showNotifications: enabled })
+        }
+        label=""
+      />
     </div>
   );
 }
@@ -194,61 +221,91 @@ function AliasGenerationSettingsPanel({
 }: SettingsPanelProps) {
   return (
     <div className="space-y-3">
-      <div>
-        <label className="mb-1.5 block text-xs font-semibold text-foreground">
-          {t("randomAliasFormat")}
-        </label>
-        <Select
-          value={settings.randomFormat}
-          onValueChange={(value) =>
-            saveSettings({
-              ...settings,
-              randomFormat: value as AppSettings["randomFormat"],
-            })
-          }
-        >
-          <SelectTrigger className="rounded-xl bg-background shadow-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="private-mail">
-              Private Mail (e.g., private-mail-q2ga)
-            </SelectItem>
-            <SelectItem value="alphanumeric">
-              Random Characters (e.g., abc123xy)
-            </SelectItem>
-            <SelectItem value="words">
-              Random Words (e.g., happy-fox-42)
-            </SelectItem>
-            <SelectItem value="timestamp">
-              Timestamp (e.g., lk9x2m3n)
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <label className="mb-1.5 block text-xs font-semibold text-foreground">
-          {t("autoSaveLimit")}
-        </label>
-        <Select
-          value={String(settings.maxHistory)}
-          onValueChange={(value) =>
-            saveSettings({ ...settings, maxHistory: Number(value) })
-          }
-        >
-          <SelectTrigger className="rounded-xl bg-background shadow-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="20">20 aliases</SelectItem>
-            <SelectItem value="50">50 aliases</SelectItem>
-            <SelectItem value="100">100 aliases</SelectItem>
-            <SelectItem value="200">200 aliases</SelectItem>
-            <SelectItem value="500">500 aliases</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <RandomAliasFormatField
+        settings={settings}
+        saveSettings={saveSettings}
+      />
+      <AutoSaveLimitField settings={settings} saveSettings={saveSettings} />
     </div>
+  );
+}
+
+/** Random alias format setting field. */
+function RandomAliasFormatField({
+  settings,
+  saveSettings,
+}: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("randomAliasFormat")}
+      </label>
+      <Select
+        value={settings.randomFormat}
+        onValueChange={(value) =>
+          saveSettings({
+            ...settings,
+            randomFormat: value as AppSettings["randomFormat"],
+          })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <RandomAliasFormatOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Random alias format select options. */
+function RandomAliasFormatOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="private-mail">
+        Private Mail (e.g., private-mail-q2ga)
+      </SelectItem>
+      <SelectItem value="alphanumeric">
+        Random Characters (e.g., abc123xy)
+      </SelectItem>
+      <SelectItem value="words">Random Words (e.g., happy-fox-42)</SelectItem>
+      <SelectItem value="timestamp">Timestamp (e.g., lk9x2m3n)</SelectItem>
+    </SelectContent>
+  );
+}
+
+/** Auto-save limit setting field. */
+function AutoSaveLimitField({ settings, saveSettings }: SettingsPanelProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("autoSaveLimit")}
+      </label>
+      <Select
+        value={String(settings.maxHistory)}
+        onValueChange={(value) =>
+          saveSettings({ ...settings, maxHistory: Number(value) })
+        }
+      >
+        <SelectTrigger className="rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <AutoSaveLimitOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Auto-save limit select options. */
+function AutoSaveLimitOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="20">20 aliases</SelectItem>
+      <SelectItem value="50">50 aliases</SelectItem>
+      <SelectItem value="100">100 aliases</SelectItem>
+      <SelectItem value="200">200 aliases</SelectItem>
+      <SelectItem value="500">500 aliases</SelectItem>
+    </SelectContent>
   );
 }
 

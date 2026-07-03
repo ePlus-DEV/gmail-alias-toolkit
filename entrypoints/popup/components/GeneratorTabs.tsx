@@ -150,43 +150,82 @@ function RandomFormatControls({
 }: RandomFormatControlsProps) {
   return (
     <div className="mb-3 grid grid-cols-[minmax(0,1fr)_82px] gap-2">
-      <div className="min-w-0">
-        <label className="mb-1.5 block text-xs font-semibold text-foreground">
-          {t("format")}
-        </label>
-        <Select
-          value={randomFormat}
-          onValueChange={(value) => onFormatChange(value as RandomFormat)}
-        >
-          <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="private-mail">
-              {t("privateMailFormat")}
-            </SelectItem>
-            <SelectItem value="alphanumeric">
-              {t("randomCharactersFormat")}
-            </SelectItem>
-            <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
-            <SelectItem value="timestamp">{t("timestampFormat")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
-          {t("numberOfAliases")}
-        </label>
-        <Input
-          type="number"
-          min="1"
-          value={String(randomEmailCount)}
-          onChange={(value) =>
-            onCountChange(Math.max(1, parseInt(value) || 10))
-          }
-          className="w-full"
-        />
-      </div>
+      <RandomFormatSelect
+        randomFormat={randomFormat}
+        onFormatChange={onFormatChange}
+      />
+      <RandomAliasCountInput
+        randomEmailCount={randomEmailCount}
+        onCountChange={onCountChange}
+      />
+    </div>
+  );
+}
+
+interface RandomFormatSelectProps {
+  randomFormat: RandomFormat;
+  onFormatChange: (format: RandomFormat) => void;
+}
+
+/** Selects the random alias format. */
+function RandomFormatSelect({
+  randomFormat,
+  onFormatChange,
+}: RandomFormatSelectProps) {
+  return (
+    <div className="min-w-0">
+      <label className="mb-1.5 block text-xs font-semibold text-foreground">
+        {t("format")}
+      </label>
+      <Select
+        value={randomFormat}
+        onValueChange={(value) => onFormatChange(value as RandomFormat)}
+      >
+        <SelectTrigger className="min-h-10 rounded-xl bg-background shadow-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <RandomFormatOptions />
+      </Select>
+    </div>
+  );
+}
+
+/** Options for the random format select. */
+function RandomFormatOptions() {
+  return (
+    <SelectContent>
+      <SelectItem value="private-mail">{t("privateMailFormat")}</SelectItem>
+      <SelectItem value="alphanumeric">
+        {t("randomCharactersFormat")}
+      </SelectItem>
+      <SelectItem value="words">{t("randomWordsFormat")}</SelectItem>
+      <SelectItem value="timestamp">{t("timestampFormat")}</SelectItem>
+    </SelectContent>
+  );
+}
+
+interface RandomAliasCountInputProps {
+  randomEmailCount: number;
+  onCountChange: (count: number) => void;
+}
+
+/** Numeric input for random alias batch size. */
+function RandomAliasCountInput({
+  randomEmailCount,
+  onCountChange,
+}: RandomAliasCountInputProps) {
+  return (
+    <div>
+      <label className="mb-1.5 block truncate text-xs font-semibold text-foreground">
+        {t("numberOfAliases")}
+      </label>
+      <Input
+        type="number"
+        min="1"
+        value={String(randomEmailCount)}
+        onChange={(value) => onCountChange(Math.max(1, parseInt(value) || 10))}
+        className="w-full"
+      />
     </div>
   );
 }
@@ -266,23 +305,41 @@ function RandomAliasListHeader({
         <span className="text-xs font-semibold text-foreground">
           {t("generatedAliases")}
         </span>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">
-            {t("totalCount", String(generatedRandomList.length))}
-          </span>
-          <Tooltip content={t("copyToClipboard")} side="top">
-            <Button
-              onClick={copyAllAliases}
-              variant="ghost"
-              size="sm"
-              className="text-xs font-medium text-primary hover:text-primary"
-              aria-label={t("copyToClipboard")}
-            >
-              {t("copyAll")}
-            </Button>
-          </Tooltip>
-        </div>
+        <RandomAliasListActions
+          count={generatedRandomList.length}
+          onCopyAll={copyAllAliases}
+        />
       </div>
+    </div>
+  );
+}
+
+interface RandomAliasListActionsProps {
+  count: number;
+  onCopyAll: () => void;
+}
+
+/** Count and bulk-copy action for generated aliases. */
+function RandomAliasListActions({
+  count,
+  onCopyAll,
+}: RandomAliasListActionsProps) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-muted-foreground">
+        {t("totalCount", String(count))}
+      </span>
+      <Tooltip content={t("copyToClipboard")} side="top">
+        <Button
+          onClick={onCopyAll}
+          variant="ghost"
+          size="sm"
+          className="text-xs font-medium text-primary hover:text-primary"
+          aria-label={t("copyToClipboard")}
+        >
+          {t("copyAll")}
+        </Button>
+      </Tooltip>
     </div>
   );
 }
