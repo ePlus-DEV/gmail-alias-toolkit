@@ -1,16 +1,18 @@
 name: dependabot-auto-merge
 
 on:
-  pull_request_target:
-    types: [opened, reopened, synchronize]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.event.workflow_run.head_sha }}
   cancel-in-progress: true
 
 permissions:
   pull-requests: write
   contents: write
+  actions: read
   checks: read
   statuses: read
   metadata: read
@@ -18,45 +20,82 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' }}
 
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v3.1.0
-        with:
-          github-token: ${{ github.token }}
-
-      - name: Skip unsupported update types
-        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-minor' && steps.metadata.outputs.update-type != 'version-update:semver-patch' }}
-        run: |
-          echo "Skipping Dependabot update type: $UPDATE_TYPE"
-        env:
-          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
-
       - name: Verify bot token
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
         run: |
           if [ -z "${GH_TOKEN:-}" ]; then
-            echo "::error::EPLUS_BOT_TOKEN is empty. Add it to repository Dependabot secrets."
+            echo "::error::EPLUS_BOT_TOKEN is empty. Add it to repository Actions secrets."
             exit 1
           fi
         env:
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Verify bot identity
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
         run: |
           BOT_LOGIN="$(gh api user --jq .login)"
           test "$BOT_LOGIN" = "eplus-bot"
         env:
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
+      - name: Resolve pull request
+        id: pr
+        run: |
+          PR_NUMBER="${{ github.event.workflow_run.pull_requests[0].number }}"
+
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+            PR_NUMBER="$(gh pr list \
+              --repo "$GITHUB_REPOSITORY" \
+              --state open \
+              --head "$HEAD_BRANCH" \
+              --json number \
+              --jq '.[0].number')"
+          fi
+
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+            echo "::notice::No pull request found for head branch $HEAD_BRANCH."
+            echo "should_merge=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PR_AUTHOR="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '.user.login')"
+          PR_STATE="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '.state')"
+          PR_DRAFT="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '.draft')"
+
+          echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
+          echo "state=$PR_STATE" >> "$GITHUB_OUTPUT"
+          echo "draft=$PR_DRAFT" >> "$GITHUB_OUTPUT"
+
+          if [ "$PR_AUTHOR" != "dependabot[bot]" ]; then
+            echo "::notice::PR #$PR_NUMBER is not a Dependabot PR. Author: $PR_AUTHOR"
+            echo "should_merge=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$PR_STATE" != "open" ]; then
+            echo "::notice::PR #$PR_NUMBER is not open. State: $PR_STATE"
+            echo "should_merge=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$PR_DRAFT" = "true" ]; then
+            echo "::notice::PR #$PR_NUMBER is a draft."
+            echo "should_merge=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "should_merge=true" >> "$GITHUB_OUTPUT"
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
+
       - name: Wait for pull request checks
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
+        if: ${{ steps.pr.outputs.should_merge == 'true' }}
         run: |
           for attempt in {1..60}; do
-            CHECKS="$(gh pr checks "$PR_URL" \
+            CHECKS="$(gh pr checks "$PR_NUMBER" \
               --repo "$GITHUB_REPOSITORY" \
               --json bucket,name,workflow)"
 
@@ -78,14 +117,14 @@ jobs:
           echo "::error::Timed out waiting for pull request checks to finish."
           exit 1
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
           MERGE_WORKFLOW: ${{ github.workflow }}
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Merge Dependabot pull request
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
+        if: ${{ steps.pr.outputs.should_merge == 'true' }}
         run: |
-          gh pr merge --merge "$PR_URL"
+          gh pr merge --merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
