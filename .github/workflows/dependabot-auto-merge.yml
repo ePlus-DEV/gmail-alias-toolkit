@@ -11,6 +11,8 @@ concurrency:
 permissions:
   pull-requests: write
   contents: write
+  checks: read
+  statuses: read
   metadata: read
 
 jobs:
@@ -25,7 +27,15 @@ jobs:
         with:
           github-token: ${{ github.token }}
 
+      - name: Skip unsupported update types
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-minor' && steps.metadata.outputs.update-type != 'version-update:semver-patch' }}
+        run: |
+          echo "Skipping Dependabot update type: $UPDATE_TYPE"
+        env:
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+
       - name: Verify bot token
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
         run: |
           if [ -z "${GH_TOKEN:-}" ]; then
             echo "::error::EPLUS_BOT_TOKEN is empty. Add it to repository Dependabot secrets."
@@ -35,22 +45,47 @@ jobs:
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Verify bot identity
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
         run: |
           BOT_LOGIN="$(gh api user --jq .login)"
           test "$BOT_LOGIN" = "eplus-bot"
         env:
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
-      - name: Auto-merge Dependabot PRs for semver-minor updates
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' }}
-        run: gh pr merge --auto --merge "$PR_URL"
+      - name: Wait for pull request checks
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
+        run: |
+          for attempt in {1..60}; do
+            CHECKS="$(gh pr checks "$PR_URL" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json bucket,name,workflow)"
+
+            FAILING_COUNT="$(jq '[.[] | select(.workflow != env.MERGE_WORKFLOW and (.bucket == "fail" or .bucket == "cancel"))] | length' <<<"$CHECKS")"
+            if [ "$FAILING_COUNT" -gt 0 ]; then
+              jq -r '.[] | select(.workflow != env.MERGE_WORKFLOW and (.bucket == "fail" or .bucket == "cancel")) | "::error::\(.workflow): \(.name) failed"' <<<"$CHECKS"
+              exit 1
+            fi
+
+            PENDING_COUNT="$(jq '[.[] | select(.workflow != env.MERGE_WORKFLOW and .bucket == "pending")] | length' <<<"$CHECKS")"
+            if [ "$PENDING_COUNT" -eq 0 ]; then
+              exit 0
+            fi
+
+            echo "Waiting for $PENDING_COUNT pull request check(s) before merging (attempt $attempt/60)."
+            sleep 10
+          done
+
+          echo "::error::Timed out waiting for pull request checks to finish."
+          exit 1
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
+          MERGE_WORKFLOW: ${{ github.workflow }}
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
-      - name: Auto-merge Dependabot PRs for semver-patch updates
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
-        run: gh pr merge --auto --merge "$PR_URL"
+      - name: Merge Dependabot pull request
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
+        run: |
+          gh pr merge --merge "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
