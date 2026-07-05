@@ -1,5 +1,8 @@
 name: dependabot-auto-merge
-on: pull_request_target
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -8,35 +11,46 @@ concurrency:
 permissions:
   pull-requests: write
   contents: write
+  metadata: read
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+
     steps:
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v3.1.0
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: ${{ github.token }}
+
+      - name: Verify bot token
+        run: |
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::EPLUS_BOT_TOKEN is empty. Add it to repository Dependabot secrets."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Verify bot identity
         run: |
           BOT_LOGIN="$(gh api user --jq .login)"
           test "$BOT_LOGIN" = "eplus-bot"
         env:
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Auto-merge Dependabot PRs for semver-minor updates
-        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-minor'}}
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' }}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Auto-merge Dependabot PRs for semver-patch updates
-        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-patch'}}
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
