@@ -215,10 +215,18 @@ function Brand() {
 function NavLinks() {
   return (
     <nav className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
-      <a href="#demo" className="hover:text-slate-950">Demo</a>
-      <a href="#features" className="hover:text-slate-950">Features</a>
-      <a href="#workflow" className="hover:text-slate-950">Workflow</a>
-      <a href="#privacy" className="hover:text-slate-950">Privacy</a>
+      <a href="#demo" className="hover:text-slate-950">
+        Demo
+      </a>
+      <a href="#features" className="hover:text-slate-950">
+        Features
+      </a>
+      <a href="#workflow" className="hover:text-slate-950">
+        Workflow
+      </a>
+      <a href="#privacy" className="hover:text-slate-950">
+        Privacy
+      </a>
     </nav>
   );
 }
@@ -252,14 +260,19 @@ function HeroBackground() {
  */
 function HeroCopy() {
   return (
-    <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55 }}
+    >
       <HeroBadge />
       <h1 className="max-w-4xl text-5xl font-black tracking-tight md:text-7xl">
         Create Gmail aliases before spam finds you.
       </h1>
       <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
         Gmail Alias Toolkit is a Chrome extension for generating, copying,
-        organizing and exporting <strong className="text-slate-950">name+tag@gmail.com</strong> aliases.
+        organizing and exporting{" "}
+        <strong className="text-slate-950">name+tag@gmail.com</strong> aliases.
         Track where emails come from without exposing your main inbox.
       </p>
       <HeroActions />
@@ -274,7 +287,8 @@ function HeroCopy() {
 function HeroBadge() {
   return (
     <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 shadow-sm">
-      <BadgeCheck className="h-4 w-4" /> Chrome extension for Gmail plus addressing
+      <BadgeCheck className="h-4 w-4" /> Chrome extension for Gmail plus
+      addressing
     </div>
   );
 }
@@ -301,8 +315,16 @@ function HeroActions() {
 function ProblemSolution() {
   return (
     <div className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-2">
-      <MiniPanel title="Without alias" items={["Unknown spam source", "Inbox clutter", "Manual typing"]} tone="bad" />
-      <MiniPanel title="With Toolkit" items={["Trace every signup", "Copy in one click", "Local history"]} tone="good" />
+      <MiniPanel
+        title="Without alias"
+        items={["Unknown spam source", "Inbox clutter", "Manual typing"]}
+        tone="bad"
+      />
+      <MiniPanel
+        title="With Toolkit"
+        items={["Trace every signup", "Copy in one click", "Local history"]}
+        tone="good"
+      />
     </div>
   );
 }
@@ -310,14 +332,29 @@ function ProblemSolution() {
 /**
  * Renders one compact problem or solution panel.
  */
-function MiniPanel({ title, items, tone }: { title: string; items: string[]; tone: "bad" | "good" }) {
+function MiniPanel({
+  title,
+  items,
+  tone,
+}: {
+  title: string;
+  items: string[];
+  tone: "bad" | "good";
+}) {
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <p className="font-black text-slate-950">{title}</p>
       <div className="mt-3 space-y-2">
         {items.map((item) => (
-          <div key={item} className="flex items-center gap-2 text-sm text-slate-600">
-            <span className={tone === "good" ? "text-blue-600" : "text-slate-400"}>{tone === "good" ? "✓" : "×"}</span>
+          <div
+            key={item}
+            className="flex items-center gap-2 text-sm text-slate-600"
+          >
+            <span
+              className={tone === "good" ? "text-blue-600" : "text-slate-400"}
+            >
+              {tone === "good" ? "✓" : "×"}
+            </span>
             {item}
           </div>
         ))}
@@ -347,7 +384,9 @@ function ExtensionMockup() {
  * Renders decorative glow behind the product mockup.
  */
 function FloatingGlow() {
-  return <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-blue-500/10 blur-3xl" />;
+  return (
+    <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-blue-500/10 blur-3xl" />
+  );
 }
 
 /**
@@ -365,7 +404,10 @@ function MockupTopBar() {
           <p className="text-xs text-slate-400">david@gmail.com</p>
         </div>
       </div>
-      <motion.div animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 2.6, repeat: Infinity }}>
+      <motion.div
+        animate={{ rotate: [0, 8, -8, 0] }}
+        transition={{ duration: 2.6, repeat: Infinity }}
+      >
         <Sparkles className="h-5 w-5 text-blue-300" />
       </motion.div>
     </div>
@@ -396,7 +438,12 @@ function MockupGeneratePanel() {
         <motion.div
           className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white"
           whileHover={{ scale: 1.05 }}
-          animate={{ boxShadow: ["0 0 0 0 rgba(37,99,235,.35)", "0 0 0 10px rgba(37,99,235,0)"] }}
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(37,99,235,.35)",
+              "0 0 0 10px rgba(37,99,235,0)",
+            ],
+          }}
           transition={{ duration: 1.8, repeat: Infinity }}
         >
           <Clipboard className="h-5 w-5" />
@@ -454,7 +501,9 @@ function HistoryRow({ item }: { item: (typeof historyItems)[number] }) {
       whileHover={{ x: 4 }}
     >
       <span className="truncate text-slate-200">{item.alias}</span>
-      <span className="ml-3 rounded-full bg-blue-400/20 px-2 py-1 text-xs text-blue-200">{item.tag}</span>
+      <span className="ml-3 rounded-full bg-blue-400/20 px-2 py-1 text-xs text-blue-200">
+        {item.tag}
+      </span>
     </motion.div>
   );
 }
@@ -489,7 +538,11 @@ function GenerateDemo() {
         <p className="text-xs font-bold uppercase text-slate-400">Format</p>
         <p className="mt-2 font-black text-slate-950">Random Words</p>
       </div>
-      <motion.div className="mt-3 rounded-2xl bg-blue-600 p-4 text-white" animate={{ y: [0, -4, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+      <motion.div
+        className="mt-3 rounded-2xl bg-blue-600 p-4 text-white"
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
         david+happy-fox-42@gmail.com
       </motion.div>
     </DemoCard>
@@ -502,7 +555,9 @@ function GenerateDemo() {
 function OrganizeDemo() {
   return (
     <DemoCard icon={<Search className="h-5 w-5" />} title="Organize">
-      <div className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-500">Search: github</div>
+      <div className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-500">
+        Search: github
+      </div>
       <div className="mt-3 space-y-2">
         <DemoListItem text="david+github-test@gmail.com" />
         <DemoListItem text="david+github-actions@gmail.com" />
@@ -521,7 +576,9 @@ function ExportDemo() {
         <SquareAction icon={<QrCode className="h-6 w-6" />} label="QR" />
         <SquareAction icon={<Download className="h-6 w-6" />} label="CSV" />
       </div>
-      <div className="mt-3 rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-600">JSON backup ready</div>
+      <div className="mt-3 rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-600">
+        JSON backup ready
+      </div>
     </DemoCard>
   );
 }
@@ -529,11 +586,21 @@ function ExportDemo() {
 /**
  * Renders a reusable demo card.
  */
-function DemoCard({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
+function DemoCard({
+  icon,
+  title,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <TiltCard className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-center gap-3">
-        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-50 text-blue-600">{icon}</div>
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-50 text-blue-600">
+          {icon}
+        </div>
         <h3 className="text-xl font-black">{title}</h3>
       </div>
       {children}
@@ -556,9 +623,18 @@ function DemoListItem({ text }: { text: string }) {
 /**
  * Renders one square action block.
  */
-function SquareAction({ icon, label }: { icon: React.ReactNode; label: string }) {
+function SquareAction({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
-    <motion.div whileHover={{ scale: 1.04 }} className="grid aspect-square place-items-center rounded-2xl bg-slate-100 text-slate-700">
+    <motion.div
+      whileHover={{ scale: 1.04 }}
+      className="grid aspect-square place-items-center rounded-2xl bg-slate-100 text-slate-700"
+    >
       <div className="text-center">
         <div className="mx-auto mb-2 grid place-items-center">{icon}</div>
         <p className="text-sm font-black">{label}</p>
@@ -588,11 +664,21 @@ function FeaturesSection() {
 /**
  * Renders a centered section heading.
  */
-function SectionHeading({ eyebrow, title, desc }: { eyebrow: string; title: string; desc: string }) {
+function SectionHeading({
+  eyebrow,
+  title,
+  desc,
+}: {
+  eyebrow: string;
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="mx-auto max-w-3xl text-center">
       <p className="font-bold text-blue-600">{eyebrow}</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">{title}</h2>
+      <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+        {title}
+      </h2>
       <p className="mt-4 text-slate-600">{desc}</p>
     </div>
   );
@@ -644,7 +730,11 @@ function FormatSection() {
       />
       <div className="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-3">
         {aliasFormats.map((format) => (
-          <motion.div key={format} whileHover={{ y: -4 }} className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm">
+          <motion.div
+            key={format}
+            whileHover={{ y: -4 }}
+            className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm"
+          >
             david+{format}@gmail.com
           </motion.div>
         ))}
@@ -676,7 +766,9 @@ function WorkflowIntro() {
   return (
     <div>
       <p className="font-bold text-blue-300">Workflow</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight">From signup problem to traceable alias</h2>
+      <h2 className="mt-3 text-4xl font-black tracking-tight">
+        From signup problem to traceable alias
+      </h2>
       <p className="mt-4 leading-7 text-slate-300">
         The extension turns Gmail plus addressing into a repeatable workflow:
         generate, copy, use, then track.
@@ -703,7 +795,10 @@ function WorkflowCards() {
  */
 function WorkflowCard({ step }: { step: (typeof workflowSteps)[number] }) {
   return (
-    <motion.div whileHover={{ y: -5 }} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="rounded-3xl border border-white/10 bg-white/5 p-6"
+    >
       <p className="text-sm font-black text-blue-300">{step.number}</p>
       <h3 className="mt-4 text-xl font-black">{step.title}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-300">{step.desc}</p>
@@ -734,7 +829,9 @@ function PrivacyIntro() {
   return (
     <div>
       <p className="font-bold text-blue-600">Privacy by design</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight">Your aliases stay in your browser.</h2>
+      <h2 className="mt-3 text-4xl font-black tracking-tight">
+        Your aliases stay in your browser.
+      </h2>
       <p className="mt-4 leading-7 text-slate-600">
         Gmail Alias Toolkit is designed as a local-first extension: generate
         aliases without a remote database, tracking script or analytics layer.
@@ -790,7 +887,12 @@ function ComparisonSection() {
             ["Export CSV / JSON", true, false],
             ["QR sharing", true, false],
           ].map(([label, toolkit, manual]) => (
-            <ComparisonRow key={label as string} label={label as string} toolkit={Boolean(toolkit)} manual={Boolean(manual)} />
+            <ComparisonRow
+              key={label as string}
+              label={label as string}
+              toolkit={Boolean(toolkit)}
+              manual={Boolean(manual)}
+            />
           ))}
         </div>
       </div>
@@ -801,12 +903,24 @@ function ComparisonSection() {
 /**
  * Renders one comparison row.
  */
-function ComparisonRow({ label, toolkit, manual }: { label: string; toolkit: boolean; manual: boolean }) {
+function ComparisonRow({
+  label,
+  toolkit,
+  manual,
+}: {
+  label: string;
+  toolkit: boolean;
+  manual: boolean;
+}) {
   return (
     <div className="grid grid-cols-3 border-b border-slate-200 bg-white last:border-b-0">
       <div className="p-4 font-bold text-slate-700">{label}</div>
-      <div className="grid place-items-center p-4 text-blue-600">{toolkit ? <Check className="h-5 w-5" /> : "—"}</div>
-      <div className="grid place-items-center p-4 text-slate-400">{manual ? <Check className="h-5 w-5" /> : "—"}</div>
+      <div className="grid place-items-center p-4 text-blue-600">
+        {toolkit ? <Check className="h-5 w-5" /> : "—"}
+      </div>
+      <div className="grid place-items-center p-4 text-slate-400">
+        {manual ? <Check className="h-5 w-5" /> : "—"}
+      </div>
     </div>
   );
 }
@@ -820,7 +934,9 @@ function CtaSection() {
       <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
         <BarChart3 className="h-4 w-4" /> Generate · Copy · Track · Export
       </div>
-      <h2 className="text-4xl font-black tracking-tight md:text-5xl">Ready to control your Gmail aliases?</h2>
+      <h2 className="text-4xl font-black tracking-tight md:text-5xl">
+        Ready to control your Gmail aliases?
+      </h2>
       <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
         Install Gmail Alias Toolkit to create traceable aliases for signups,
         newsletters, testing and everyday inbox protection.
