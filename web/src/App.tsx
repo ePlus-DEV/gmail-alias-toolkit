@@ -49,7 +49,11 @@ const features = [
     "Turn aliases into QR codes for quick scan-and-share workflows.",
     QrCode,
   ],
-  ["CSV / JSON Export", "Export aliases for backup, migration or reporting.", Download],
+  [
+    "CSV / JSON Export",
+    "Export aliases for backup, migration or reporting.",
+    Download,
+  ],
   [
     "Multi-account Ready",
     "Keep aliases separated by Gmail account for cleaner workflows.",
@@ -176,7 +180,8 @@ export function App() {
             transition={{ duration: 0.55 }}
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 shadow-sm">
-              <BadgeCheck className="h-4 w-4" /> Gmail plus addressing made simple
+              <BadgeCheck className="h-4 w-4" /> Gmail plus addressing made
+              simple
             </div>
             <h1 className="max-w-4xl text-5xl font-black tracking-tight md:text-7xl">
               Generate & manage Gmail aliases in seconds.
