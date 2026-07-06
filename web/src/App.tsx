@@ -642,8 +642,7 @@ function HeroCopy({ t }: { t: (typeof translations)[Locale] }) {
     >
       <HeroBadge label={t.hero.badge} />
       <h1 className="max-w-3xl text-[clamp(2.55rem,7vw,4.75rem)] font-black leading-[0.98] tracking-normal text-slate-950">
-        {t.hero.titlePrefix}{" "}
-        <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
+        {t.hero.titlePrefix} <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
       </h1>
       <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
         {t.hero.desc}
@@ -928,9 +927,7 @@ function AliasSourceTagPanel({ label, tag }: { label: string; tag: string }) {
           <Tags className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase text-slate-400">
-            {label}
-          </p>
+          <p className="text-xs font-black uppercase text-slate-400">{label}</p>
           <p className="truncate font-mono text-sm font-black text-slate-950">
             {tag} = newsletter
           </p>
