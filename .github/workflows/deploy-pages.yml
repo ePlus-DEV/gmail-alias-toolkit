@@ -28,16 +28,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 24
+          cache: yarn
 
       - name: Install dependencies
-        run: npm install
+        working-directory: .
+        run: yarn install --immutable --mode=skip-build
 
       - name: Build
-        run: npm run build
+        working-directory: .
+        run: yarn workspace gmail-alias-toolkit-web build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
