@@ -463,7 +463,9 @@ function ShimmerText({
   return (
     <>
       <style>
-        {"@keyframes beui-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}"}
+        {
+          "@keyframes beui-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}"
+        }
       </style>
       <span
         className={`inline-block bg-[linear-gradient(110deg,#64748b_28%,#2563eb_48%,#020617_68%)] bg-[length:200%_100%] bg-clip-text text-transparent ${className}`}
