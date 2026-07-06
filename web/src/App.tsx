@@ -1,126 +1,479 @@
 import type React from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  AtSign,
   BadgeCheck,
   BarChart3,
-  Check,
   Clipboard,
+  Copy,
   Database,
   Download,
   EyeOff,
+  FileJson,
   Github,
   History,
+  Languages,
   Mail,
   Moon,
   QrCode,
   Search,
+  Settings,
   ShieldCheck,
+  Shuffle,
   Sparkles,
   Star,
   Tags,
-  Users,
+  Zap,
 } from "lucide-react";
 
 const chromeUrl =
   "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl";
 const githubUrl = "https://github.com/ePlus-DEV/gmail-alias-toolkit";
 
-const features = [
-  {
-    title: "Random Alias Generator",
-    desc: "Generate clean Gmail aliases with private-mail, random words, alphanumeric or timestamp formats.",
-    icon: Sparkles,
-    sample: "david+private-mail-q2ga@gmail.com",
-  },
-  {
-    title: "Custom Tags & Presets",
-    desc: "Save common tags for shopping, work, newsletters, testing and project-specific signups.",
-    icon: Tags,
-    sample: "shopping · github · newsletter",
-  },
-  {
-    title: "Searchable History",
-    desc: "Find generated aliases quickly by tag, date, account or purpose.",
-    icon: History,
-    sample: "24 aliases saved locally",
-  },
-  {
-    title: "Favorites",
-    desc: "Pin aliases you reuse often so they are always one click away.",
-    icon: Star,
-    sample: "3 favorite aliases",
-  },
-  {
-    title: "QR Code Sharing",
-    desc: "Turn aliases into QR-style sharing blocks for quick scan-and-share workflows.",
-    icon: QrCode,
-    sample: "QR preview ready",
-  },
-  {
-    title: "CSV / JSON Export",
-    desc: "Export aliases for backup, migration or reporting without leaving your browser.",
-    icon: Download,
-    sample: "CSV · JSON",
-  },
-  {
-    title: "Multi-account Ready",
-    desc: "Keep aliases separated by Gmail account for cleaner personal and work workflows.",
-    icon: Users,
-    sample: "Personal / Work",
-  },
-  {
-    title: "Local-first Privacy",
-    desc: "Your alias data stays in browser storage with no analytics and no tracking.",
-    icon: ShieldCheck,
-    sample: "No remote database",
-  },
-] as const;
+type Locale = "vi" | "en";
 
-const workflowSteps = [
-  {
-    number: "01",
-    title: "Open extension",
-    desc: "Choose your Gmail account and alias format.",
-  },
-  {
-    number: "02",
-    title: "Generate alias",
-    desc: "Create a unique name+tag@gmail.com address instantly.",
-  },
-  {
-    number: "03",
-    title: "Copy & use",
-    desc: "Paste it into sign-up forms and keep the source traceable.",
-  },
-] as const;
+const localeLabels: Record<Locale, string> = {
+  vi: "Tiếng Việt",
+  en: "English",
+};
 
-const aliasFormats = [
-  "private-mail-q2ga",
-  "shopping",
-  "newsletter",
-  "github-test",
-  "happy-fox-42",
-  "lk9x2m3n",
-] as const;
-
-const privacyItems = [
-  { icon: EyeOff, text: "No analytics" },
-  { icon: ShieldCheck, text: "No tracking" },
-  { icon: Database, text: "Local storage" },
-  { icon: Moon, text: "Light/Dark mode" },
-] as const;
+const translations = {
+  vi: {
+    nav: {
+      mock: "Bản mô phỏng",
+      features: "Tính năng",
+      privacy: "Quyền riêng tư",
+      install: "Thêm vào Chrome",
+    },
+    hero: {
+      badge: "Tiện ích Chrome cho Gmail plus addressing",
+      titlePrefix: "Quản lý Gmail alias bằng một",
+      titleHighlight: "popup nhỏ gọn.",
+      desc: "Tạo địa chỉ dạng david+tag@gmail.com, sao chép nhanh, tìm lại trong lịch sử, ghim mục yêu thích và xuất dữ liệu mà không rời khỏi trình duyệt.",
+      install: "Cài tiện ích",
+      source: "Xem mã nguồn",
+      stats: [
+        ["4", "định dạng random"],
+        ["6", "Gmail tricks"],
+        ["0", "theo dõi"],
+      ],
+    },
+    explainer: {
+      eyebrow: "Gmail alias là gì?",
+      title: "Một inbox, nhiều địa chỉ dễ nhận diện.",
+      desc: "Gmail bỏ qua phần sau dấu cộng khi nhận email. Vì vậy david+shop@gmail.com vẫn về david@gmail.com, nhưng bạn biết email đó đến từ shop.",
+      baseLabel: "Email gốc",
+      aliasLabel: "Alias dùng để đăng ký",
+      inboxLabel: "Vẫn về cùng inbox",
+      sourceLabel: "Tag cho biết nguồn",
+      steps: [
+        {
+          title: "Bắt đầu từ email gốc",
+          desc: "Bạn giữ nguyên tài khoản Gmail chính, không cần tạo hộp thư mới.",
+          tag: "",
+        },
+        {
+          title: "Thêm +tag khi đăng ký",
+          desc: "Dùng tag như +shop, +newsletter hoặc +github cho từng dịch vụ.",
+          tag: "+newsletter",
+        },
+        {
+          title: "Nhận về cùng inbox",
+          desc: "Gmail vẫn chuyển thư vào inbox chính của bạn.",
+          tag: "+newsletter",
+        },
+        {
+          title: "Truy vết nguồn email",
+          desc: "Nếu alias nhận spam, bạn biết dịch vụ nào đã làm lộ địa chỉ.",
+          tag: "+newsletter",
+        },
+      ],
+    },
+    tabs: [
+      {
+        id: "random",
+        label: "Ngẫu nhiên",
+        icon: Shuffle,
+        title: "Sinh alias ngẫu nhiên",
+        desc: "Tạo hàng loạt địa chỉ theo private-mail, chữ số, từ ngẫu nhiên hoặc timestamp.",
+        alias: "david+private-mail-q2ga@gmail.com",
+      },
+      {
+        id: "tags",
+        label: "Tags",
+        icon: Tags,
+        title: "Preset tag riêng",
+        desc: "Lưu tag quen dùng cho mua sắm, newsletter, dev, test và từng dự án.",
+        alias: "david+github-test@gmail.com",
+      },
+      {
+        id: "tricks",
+        label: "Tricks",
+        icon: Zap,
+        title: "Gmail tricks",
+        desc: "Dot variations, googlemail, bỏ dấu chấm, plus tags và combo trong một panel.",
+        alias: "da.vid+newsletter@gmail.com",
+      },
+    ],
+    mock: {
+      format: "Định dạng",
+      count: "Số lượng",
+      generate: "Tạo và sao chép",
+      generated: "Đã tạo",
+      recent: "Alias gần đây",
+      search: "tìm kiếm",
+      settings: "Cài đặt",
+    },
+    features: {
+      eyebrow: "Tính năng tiện ích",
+      title: "Mỗi tính năng đều được mô phỏng như popup thật",
+      desc: "Trang giới thiệu không chỉ kể tính năng, mà mô phỏng đúng cách extension tạo, sao chép, lưu và xuất alias.",
+      items: [
+        {
+          title: "Tạo alias ngẫu nhiên",
+          desc: "Chọn định dạng, nhập số lượng và tự động sao chép alias đầu tiên ngay khi tạo xong.",
+          icon: Shuffle,
+          sample: "10 alias",
+        },
+        {
+          title: "Preset tùy chỉnh",
+          desc: "Tạo preset để dùng lại các tag như work, shop, social hoặc finance.",
+          icon: Tags,
+          sample: "shop / dev / promo",
+        },
+        {
+          title: "Gmail tricks",
+          desc: "Tạo biến thể dấu chấm, googlemail, plus tag, dot plus và all combos.",
+          icon: Zap,
+          sample: "dot + plus",
+        },
+        {
+          title: "Tìm lịch sử",
+          desc: "Tìm nhanh alias đã tạo theo tag, nội dung hoặc tài khoản Gmail.",
+          icon: History,
+          sample: "24 mục đã lưu",
+        },
+        {
+          title: "Yêu thích",
+          desc: "Ghim những alias dùng lại thường xuyên để sao chép nhanh hơn.",
+          icon: Star,
+          sample: "3 mục đã ghim",
+        },
+        {
+          title: "Xuất dữ liệu",
+          desc: "Tải lịch sử alias thành CSV hoặc JSON để sao lưu và di chuyển.",
+          icon: Download,
+          sample: "CSV / JSON",
+        },
+        {
+          title: "Chia sẻ QR",
+          desc: "Biến alias thành mã QR cho các luồng chia sẻ nhanh.",
+          icon: QrCode,
+          sample: "QR sẵn sàng",
+        },
+        {
+          title: "Riêng tư cục bộ",
+          desc: "Dữ liệu nằm trong browser storage, không analytics, không tracking.",
+          icon: ShieldCheck,
+          sample: "local-first",
+        },
+      ],
+    },
+    tricks: {
+      eyebrow: "Gmail tricks",
+      title: "Dấu chấm, plus tag và googlemail trong một luồng.",
+      desc: "Extension gom các mẹo Gmail thành một UI rõ ràng: chọn trick, chọn số lượng, randomize dots và sao chép kết quả đầu tiên.",
+      buttons: [
+        "Dot trick",
+        "Plus tags",
+        "Googlemail",
+        "Bỏ dấu chấm",
+        "Dot plus",
+        "Tất cả combo",
+      ],
+      copied: "Đã sao chép vào clipboard",
+    },
+    privacy: {
+      eyebrow: "Quyền riêng tư từ thiết kế",
+      title: "Dữ liệu alias nằm trong trình duyệt của bạn.",
+      desc: "Bản mô phỏng trên trang giới thiệu bám sát extension: lưu trữ cục bộ, không analytics, không tracking và có giao diện sáng/tối.",
+      items: [
+        { icon: EyeOff, text: "Không analytics" },
+        { icon: ShieldCheck, text: "Không tracking" },
+        { icon: Database, text: "Browser storage" },
+        { icon: Moon, text: "Sáng / Tối" },
+      ],
+    },
+    cta: {
+      badge: "Tạo / Sao chép / Theo dõi / Xuất dữ liệu",
+      title: "Sẵn sàng biến Gmail alias thành workflow gọn gàng?",
+      desc: "Cài Gmail Alias Toolkit để tạo alias traceable cho đăng ký tài khoản, newsletter, testing và bảo vệ inbox mỗi ngày.",
+      install: "Thêm vào Chrome",
+    },
+  },
+  en: {
+    nav: {
+      mock: "Mock",
+      features: "Features",
+      privacy: "Privacy",
+      install: "Add to Chrome",
+    },
+    hero: {
+      badge: "Chrome extension for Gmail plus addressing",
+      titlePrefix: "Manage Gmail aliases from one",
+      titleHighlight: "compact popup.",
+      desc: "Create david+tag@gmail.com aliases, copy them quickly, search history, pin favorites and export data without leaving the browser.",
+      install: "Install extension",
+      source: "View source",
+      stats: [
+        ["4", "random formats"],
+        ["6", "Gmail tricks"],
+        ["0", "tracking"],
+      ],
+    },
+    explainer: {
+      eyebrow: "What is a Gmail alias?",
+      title: "One inbox, many traceable addresses.",
+      desc: "Gmail ignores the part after the plus sign when receiving mail. So david+shop@gmail.com still lands in david@gmail.com, while the tag tells you where it came from.",
+      baseLabel: "Base email",
+      aliasLabel: "Alias used for signup",
+      inboxLabel: "Same inbox",
+      sourceLabel: "Source tag",
+      steps: [
+        {
+          title: "Start with your base email",
+          desc: "Keep your main Gmail account. No new mailbox is needed.",
+          tag: "",
+        },
+        {
+          title: "Add a +tag when signing up",
+          desc: "Use tags like +shop, +newsletter or +github for each service.",
+          tag: "+newsletter",
+        },
+        {
+          title: "Receive it in the same inbox",
+          desc: "Gmail still delivers the message to your main inbox.",
+          tag: "+newsletter",
+        },
+        {
+          title: "Trace where mail came from",
+          desc: "If an alias gets spam, you know which service exposed it.",
+          tag: "+newsletter",
+        },
+      ],
+    },
+    tabs: [
+      {
+        id: "random",
+        label: "Random",
+        icon: Shuffle,
+        title: "Random alias generator",
+        desc: "Create batches with private-mail, alphanumeric, random words or timestamp formats.",
+        alias: "david+private-mail-q2ga@gmail.com",
+      },
+      {
+        id: "tags",
+        label: "Tags",
+        icon: Tags,
+        title: "Custom tag presets",
+        desc: "Save common tags for shopping, newsletters, dev, testing and project-specific signups.",
+        alias: "david+github-test@gmail.com",
+      },
+      {
+        id: "tricks",
+        label: "Tricks",
+        icon: Zap,
+        title: "Gmail tricks",
+        desc: "Dot variations, googlemail, remove dots, plus tags and combos in one panel.",
+        alias: "da.vid+newsletter@gmail.com",
+      },
+    ],
+    mock: {
+      format: "Format",
+      count: "Count",
+      generate: "Generate and copy",
+      generated: "Generated",
+      recent: "Recent aliases",
+      search: "search",
+      settings: "Settings",
+    },
+    features: {
+      eyebrow: "Extension features",
+      title: "Every feature is mocked like the real popup",
+      desc: "The page does more than describe features: it simulates how the extension generates, copies, stores and exports aliases.",
+      items: [
+        {
+          title: "Random generator",
+          desc: "Choose a format, enter a count and copy the first alias as soon as it is generated.",
+          icon: Shuffle,
+          sample: "10 aliases",
+        },
+        {
+          title: "Custom presets",
+          desc: "Create reusable presets for tags like work, shop, social or finance.",
+          icon: Tags,
+          sample: "shop / dev / promo",
+        },
+        {
+          title: "Gmail tricks",
+          desc: "Generate dot variations, googlemail, plus tags, dot plus and all combos.",
+          icon: Zap,
+          sample: "dot + plus",
+        },
+        {
+          title: "History search",
+          desc: "Quickly find generated aliases by tag, content or Gmail account.",
+          icon: History,
+          sample: "24 saved",
+        },
+        {
+          title: "Favorites",
+          desc: "Pin aliases you reuse often so copying them is faster.",
+          icon: Star,
+          sample: "3 pinned",
+        },
+        {
+          title: "Export data",
+          desc: "Download alias history as CSV or JSON for backup and migration.",
+          icon: Download,
+          sample: "CSV / JSON",
+        },
+        {
+          title: "QR sharing",
+          desc: "Turn an alias into a QR code for fast sharing flows.",
+          icon: QrCode,
+          sample: "QR ready",
+        },
+        {
+          title: "Local privacy",
+          desc: "Data stays in browser storage, with no analytics and no tracking.",
+          icon: ShieldCheck,
+          sample: "local-first",
+        },
+      ],
+    },
+    tricks: {
+      eyebrow: "Gmail tricks",
+      title: "Dots, plus tags and googlemail in one flow.",
+      desc: "The extension gathers Gmail tricks into a clear UI: choose a trick, choose a count, randomize dots and copy the first result.",
+      buttons: [
+        "Dot trick",
+        "Plus tags",
+        "Googlemail",
+        "Remove dots",
+        "Dot plus",
+        "All combos",
+      ],
+      copied: "Copied to clipboard",
+    },
+    privacy: {
+      eyebrow: "Privacy by design",
+      title: "Alias data stays in your browser.",
+      desc: "The landing-page mock follows the extension: local storage, no analytics, no tracking and light/dark mode.",
+      items: [
+        { icon: EyeOff, text: "No analytics" },
+        { icon: ShieldCheck, text: "No tracking" },
+        { icon: Database, text: "Browser storage" },
+        { icon: Moon, text: "Light / Dark mode" },
+      ],
+    },
+    cta: {
+      badge: "Generate / Copy / Track / Export",
+      title: "Ready to turn Gmail aliases into a tidy workflow?",
+      desc: "Install Gmail Alias Toolkit to create traceable aliases for signups, newsletters, testing and everyday inbox protection.",
+      install: "Add to Chrome",
+    },
+  },
+} as const;
 
 const historyItems = [
-  { alias: "david+amazon-order@gmail.com", tag: "shopping" },
-  { alias: "david+github-test@gmail.com", tag: "dev" },
-  { alias: "david+newsletter@gmail.com", tag: "mailing" },
+  { alias: "david+amazon-order@gmail.com", tag: "shopping", favorite: true },
+  { alias: "david+github-test@gmail.com", tag: "dev", favorite: false },
+  { alias: "david+newsletter@gmail.com", tag: "mailing", favorite: true },
+  { alias: "david+finance-alert@gmail.com", tag: "finance", favorite: false },
 ] as const;
 
-/**
- * Renders an animated external-link button used for primary and secondary calls to action.
- */
-function BeButton({
+const trickIds = [
+  "dot",
+  "plus",
+  "googlemail",
+  "nodots",
+  "dotplus",
+  "combo",
+] as const;
+
+type TrickId = (typeof trickIds)[number];
+
+const gmailTrickAliases: Record<TrickId, string[]> = {
+  dot: [
+    "d.avid@gmail.com",
+    "da.vid@gmail.com",
+    "dav.id@gmail.com",
+    "d.a.vid@gmail.com",
+    "da.v.id@gmail.com",
+  ],
+  plus: [
+    "david+shop@gmail.com",
+    "david+work@gmail.com",
+    "david+newsletter@gmail.com",
+    "david+finance@gmail.com",
+    "david+promo@gmail.com",
+  ],
+  googlemail: [
+    "david@googlemail.com",
+    "d.avid@googlemail.com",
+    "da.vid@googlemail.com",
+    "david+shop@googlemail.com",
+    "david+promo@googlemail.com",
+  ],
+  nodots: [
+    "david@gmail.com",
+    "david@googlemail.com",
+    "david+work@gmail.com",
+    "david+shop@gmail.com",
+    "david+alerts@gmail.com",
+  ],
+  dotplus: [
+    "d.avid+shop@gmail.com",
+    "da.vid+work@gmail.com",
+    "dav.id+test@gmail.com",
+    "d.a.vid+promo@gmail.com",
+    "da.v.id+finance@gmail.com",
+  ],
+  combo: [
+    "d.avid+shop@gmail.com",
+    "da.vid@googlemail.com",
+    "david+newsletter@gmail.com",
+    "dav.id+promo@googlemail.com",
+    "d.a.vid+finance@gmail.com",
+  ],
+};
+
+function ShimmerText({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <>
+      <style>
+        {`@keyframes beui-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}`}
+      </style>
+      <span
+        className={`inline-block bg-[linear-gradient(110deg,#64748b_28%,#2563eb_48%,#020617_68%)] bg-[length:200%_100%] bg-clip-text text-transparent ${className}`}
+        style={{ animation: "beui-shimmer 9s linear infinite" }}
+      >
+        {children}
+      </span>
+    </>
+  );
+}
+
+function MagneticLink({
   href,
   children,
   variant = "primary",
@@ -129,541 +482,603 @@ function BeButton({
   children: React.ReactNode;
   variant?: "primary" | "secondary";
 }) {
+  const classes =
+    variant === "primary"
+      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700"
+      : "border border-slate-200 bg-white text-slate-950 hover:border-blue-300 hover:bg-blue-50";
+
   return (
     <motion.a
       href={href}
       target="_blank"
       rel="noreferrer"
-      whileHover={{ y: -2, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={getButtonClassName(variant)}
+      whileHover={{ y: -3, scale: 1.025 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 420, damping: 24 }}
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 text-sm font-extrabold transition ${classes}`}
     >
       {children}
     </motion.a>
   );
 }
 
-/**
- * Returns the button class list for the selected visual variant.
- */
-function getButtonClassName(variant: "primary" | "secondary") {
-  if (variant === "primary") {
-    return "inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-glow transition hover:bg-blue-700";
-  }
-
-  return "inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50";
-}
-
-/**
- * Renders a motion card with a subtle lift and tilt interaction on hover.
- */
-function TiltCard({
-  children,
-  className = "",
+function Header({
+  locale,
+  setLocale,
+  t,
 }: {
-  children: React.ReactNode;
-  className?: string;
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  t: (typeof translations)[Locale];
 }) {
   return (
-    <motion.div
-      whileHover={{ y: -6, rotateX: 2, rotateY: -2 }}
-      transition={{ type: "spring", stiffness: 260, damping: 18 }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/**
- * Renders the sticky top navigation.
- */
-function Header() {
-  return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-        <Brand />
-        <NavLinks />
-        <BeButton href={chromeUrl}>
-          Add to Chrome <ArrowRight className="h-4 w-4" />
-        </BeButton>
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-4">
+        <a href="#" className="flex min-w-0 items-center gap-3">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white shadow-glow">
+            <Mail className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-black leading-none">
+              Gmail Alias
+            </p>
+            <p className="text-xs font-semibold text-slate-500">Toolkit</p>
+          </div>
+        </a>
+        <nav className="hidden items-center gap-7 text-sm font-bold text-slate-600 lg:flex">
+          <a href="#mock" className="hover:text-slate-950">
+            {t.nav.mock}
+          </a>
+          <a href="#features" className="hover:text-slate-950">
+            {t.nav.features}
+          </a>
+          <a href="#privacy" className="hover:text-slate-950">
+            {t.nav.privacy}
+          </a>
+        </nav>
+        <div className="flex items-center gap-2">
+          <LanguageSwitch locale={locale} setLocale={setLocale} />
+          <div className="hidden sm:block">
+            <MagneticLink href={chromeUrl}>
+              {t.nav.install} <ArrowRight className="h-4 w-4" />
+            </MagneticLink>
+          </div>
+        </div>
       </div>
     </header>
   );
 }
 
-/**
- * Renders the extension brand mark.
- */
-function Brand() {
+function LanguageSwitch({
+  locale,
+  setLocale,
+}: {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+}) {
   return (
-    <a href="#" className="flex items-center gap-3">
-      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-white shadow-glow">
-        <Mail className="h-5 w-5" />
-      </div>
-      <div>
-        <p className="text-sm font-black leading-none">Gmail Alias</p>
-        <p className="text-xs font-medium text-slate-500">Toolkit</p>
-      </div>
-    </a>
+    <div className="flex h-12 items-center gap-1 rounded-2xl border border-slate-200 bg-white p-1 shadow-sm">
+      <Languages className="ml-2 hidden h-4 w-4 text-slate-500 sm:block" />
+      {(["vi", "en"] as const).map((item) => (
+        <motion.button
+          key={item}
+          type="button"
+          onClick={() => setLocale(item)}
+          whileTap={{ scale: 0.95 }}
+          aria-label={localeLabels[item]}
+          className={`relative h-9 min-w-10 rounded-xl px-3 text-xs font-black transition ${
+            locale === item ? "text-white" : "text-slate-600 hover:text-slate-950"
+          }`}
+        >
+          {locale === item ? (
+            <motion.span
+              layoutId="language-pill"
+              className="absolute inset-0 rounded-xl bg-blue-600"
+              transition={{ type: "spring", bounce: 0.28, duration: 0.42 }}
+            />
+          ) : null}
+          <span className="relative uppercase">{item}</span>
+        </motion.button>
+      ))}
+    </div>
   );
 }
 
-/**
- * Renders desktop navigation links.
- */
-function NavLinks() {
+function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
   return (
-    <nav className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
-      <a href="#demo" className="hover:text-slate-950">
-        Demo
-      </a>
-      <a href="#features" className="hover:text-slate-950">
-        Features
-      </a>
-      <a href="#workflow" className="hover:text-slate-950">
-        Workflow
-      </a>
-      <a href="#privacy" className="hover:text-slate-950">
-        Privacy
-      </a>
-    </nav>
-  );
-}
-
-/**
- * Renders the hero section.
- */
-function HeroSection() {
-  return (
-    <section className="relative">
-      <HeroBackground />
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 lg:grid-cols-[1.02fr_.98fr] lg:py-28">
-        <HeroCopy />
-        <ExtensionMockup />
+    <section className="relative overflow-hidden border-b border-slate-200 bg-[#fbfbfc]">
+      <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,#111318,#2563eb,#93c5fd)]" />
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-14 pt-14 md:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] md:pb-16 md:pt-16 lg:gap-12 lg:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55 }}
+        >
+          <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-extrabold text-blue-700 shadow-sm">
+            <BadgeCheck className="h-4 w-4" /> {t.hero.badge}
+          </div>
+          <h1 className="max-w-3xl text-[clamp(2.55rem,7vw,4.75rem)] font-black leading-[0.98] tracking-normal text-slate-950">
+            {t.hero.titlePrefix} <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+            {t.hero.desc}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <MagneticLink href={chromeUrl}>
+              {t.hero.install} <ArrowRight className="h-5 w-5" />
+            </MagneticLink>
+            <MagneticLink href={githubUrl} variant="secondary">
+              <Github className="h-5 w-5" /> {t.hero.source}
+            </MagneticLink>
+          </div>
+          <HeroStats stats={t.hero.stats} />
+        </motion.div>
+        <ExtensionMockup t={t} />
       </div>
     </section>
   );
 }
 
-/**
- * Renders the hero gradient background.
- */
-function HeroBackground() {
+function HeroStats({ stats }: { stats: readonly (readonly [string, string])[] }) {
   return (
-    <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_10%,rgba(37,99,235,.22),transparent_32%),radial-gradient(circle_at_78%_16%,rgba(20,184,166,.18),transparent_30%)]" />
-  );
-}
-
-/**
- * Renders hero copy and calls to action.
- */
-function HeroCopy() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55 }}
-    >
-      <HeroBadge />
-      <h1 className="max-w-4xl text-5xl font-black tracking-tight md:text-7xl">
-        Create Gmail aliases before spam finds you.
-      </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-        Gmail Alias Toolkit is a Chrome extension for generating, copying,
-        organizing and exporting{" "}
-        <strong className="text-slate-950">name+tag@gmail.com</strong> aliases.
-        Track where emails come from without exposing your main inbox.
-      </p>
-      <HeroActions />
-      <ProblemSolution />
-    </motion.div>
-  );
-}
-
-/**
- * Renders the hero badge.
- */
-function HeroBadge() {
-  return (
-    <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 shadow-sm">
-      <BadgeCheck className="h-4 w-4" /> Chrome extension for Gmail plus
-      addressing
-    </div>
-  );
-}
-
-/**
- * Renders hero action buttons.
- */
-function HeroActions() {
-  return (
-    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-      <BeButton href={chromeUrl}>
-        Install from Chrome Web Store <ArrowRight className="h-5 w-5" />
-      </BeButton>
-      <BeButton href={githubUrl} variant="secondary">
-        <Github className="h-5 w-5" /> View source
-      </BeButton>
-    </div>
-  );
-}
-
-/**
- * Renders problem and solution chips.
- */
-function ProblemSolution() {
-  return (
-    <div className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-2">
-      <MiniPanel
-        title="Without alias"
-        items={["Unknown spam source", "Inbox clutter", "Manual typing"]}
-        tone="bad"
-      />
-      <MiniPanel
-        title="With Toolkit"
-        items={["Trace every signup", "Copy in one click", "Local history"]}
-        tone="good"
-      />
-    </div>
-  );
-}
-
-/**
- * Renders one compact problem or solution panel.
- */
-function MiniPanel({
-  title,
-  items,
-  tone,
-}: {
-  title: string;
-  items: string[];
-  tone: "bad" | "good";
-}) {
-  return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="font-black text-slate-950">{title}</p>
-      <div className="mt-3 space-y-2">
-        {items.map((item) => (
-          <div
-            key={item}
-            className="flex items-center gap-2 text-sm text-slate-600"
-          >
-            <span
-              className={tone === "good" ? "text-blue-600" : "text-slate-400"}
-            >
-              {tone === "good" ? "✓" : "×"}
-            </span>
-            {item}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/**
- * Renders the animated extension popup mockup.
- */
-function ExtensionMockup() {
-  return (
-    <TiltCard className="relative rounded-[2.2rem] border border-slate-200 bg-white p-4 shadow-2xl shadow-blue-950/10">
-      <FloatingGlow />
-      <div className="relative overflow-hidden rounded-[1.7rem] bg-slate-950 p-5 text-white">
-        <MockupTopBar />
-        <MockupGeneratePanel />
-        <MockupFormatRail />
-        <MockupHistory />
-      </div>
-    </TiltCard>
-  );
-}
-
-/**
- * Renders decorative glow behind the product mockup.
- */
-function FloatingGlow() {
-  return (
-    <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-blue-500/10 blur-3xl" />
-  );
-}
-
-/**
- * Renders mockup top bar.
- */
-function MockupTopBar() {
-  return (
-    <div className="mb-6 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-blue-500 text-white">
-          <Mail className="h-5 w-5" />
-        </div>
-        <div>
-          <p className="text-sm font-black">Gmail Alias Toolkit</p>
-          <p className="text-xs text-slate-400">david@gmail.com</p>
-        </div>
-      </div>
-      <motion.div
-        animate={{ rotate: [0, 8, -8, 0] }}
-        transition={{ duration: 2.6, repeat: Infinity }}
-      >
-        <Sparkles className="h-5 w-5 text-blue-300" />
-      </motion.div>
-    </div>
-  );
-}
-
-/**
- * Renders the main generate alias panel.
- */
-function MockupGeneratePanel() {
-  return (
-    <div className="rounded-3xl bg-white p-4 text-slate-950">
-      <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
-        <span>Generated alias</span>
-        <span>Private Mail</span>
-      </div>
-      <motion.p
-        className="mt-3 break-all text-lg font-black"
-        animate={{ opacity: [0.75, 1, 0.75] }}
-        transition={{ duration: 2.4, repeat: Infinity }}
-      >
-        david+private-mail-q2ga@gmail.com
-      </motion.p>
-      <div className="mt-4 grid grid-cols-[1fr_auto] gap-3">
-        <div className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-600">
-          private-mail-q2ga
-        </div>
+    <div className="mt-8 grid max-w-xl grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {stats.map(([value, label], index) => (
         <motion.div
-          className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white"
-          whileHover={{ scale: 1.05 }}
-          animate={{
-            boxShadow: [
-              "0 0 0 0 rgba(37,99,235,.35)",
-              "0 0 0 10px rgba(37,99,235,0)",
-            ],
+          key={label}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            type: "spring",
+            bounce: 0.28,
+            duration: 0.48,
+            delay: 0.08 * index,
           }}
-          transition={{ duration: 1.8, repeat: Infinity }}
+          whileHover={{ backgroundColor: "#f8fafc" }}
+          className="border-r border-slate-200 p-4 last:border-r-0"
         >
-          <Clipboard className="h-5 w-5" />
-        </motion.div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Renders alias format chips in the mockup.
- */
-function MockupFormatRail() {
-  return (
-    <div className="mt-4 flex gap-2 overflow-hidden">
-      {aliasFormats.slice(0, 4).map((format) => (
-        <motion.div
-          key={format}
-          className="whitespace-nowrap rounded-full bg-white/10 px-3 py-2 text-xs font-semibold text-slate-200"
-          whileHover={{ y: -2 }}
-        >
-          +{format}
+          <p className="text-2xl font-black text-slate-950">{value}</p>
+          <p className="mt-1 text-xs font-bold uppercase text-slate-500">
+            {label}
+          </p>
         </motion.div>
       ))}
     </div>
   );
 }
 
-/**
- * Renders mockup history list.
- */
-function MockupHistory() {
+function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
+  const [activeStep, setActiveStep] = useState(1);
+  const active = t.explainer.steps[activeStep];
+  const baseName = "david";
+  const domain = "@gmail.com";
+  const tag = active.tag;
+  const alias = `${baseName}${tag}${domain}`;
+
   return (
-    <div className="mt-5 rounded-3xl border border-white/10 bg-white/5 p-4">
-      <div className="mb-3 flex items-center justify-between text-sm">
-        <span className="font-bold text-slate-200">Recent aliases</span>
-        <span className="text-blue-300">24 saved</span>
+    <section className="bg-white py-20">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-[0.86fr_1.14fr]">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ type: "spring", bounce: 0.22, duration: 0.58 }}
+        >
+          <p className="font-black text-blue-600">{t.explainer.eyebrow}</p>
+          <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950 md:text-5xl">
+            {t.explainer.title}
+          </h2>
+          <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+            {t.explainer.desc}
+          </p>
+          <div className="mt-7 space-y-2">
+            {t.explainer.steps.map((step, index) => (
+              <motion.button
+                key={step.title}
+                type="button"
+                onClick={() => setActiveStep(index)}
+                whileHover={{ x: 2 }}
+                whileTap={{ scale: 0.98 }}
+                className={`relative flex w-full items-start gap-3 overflow-hidden rounded-2xl border p-4 text-left transition ${
+                  activeStep === index
+                    ? "border-blue-300 bg-blue-50"
+                    : "border-slate-200 bg-slate-50 hover:border-blue-200"
+                }`}
+              >
+                {activeStep === index ? (
+                  <motion.span
+                    layoutId="alias-step-active"
+                    className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-blue-600"
+                    transition={{ type: "spring", bounce: 0.28, duration: 0.42 }}
+                  />
+                ) : null}
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white text-xs font-black text-blue-600 shadow-sm">
+                  {index + 1}
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-black text-slate-950">
+                    {step.title}
+                  </span>
+                  <span className="mt-1 block text-sm leading-6 text-slate-600">
+                    {step.desc}
+                  </span>
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ type: "spring", bounce: 0.2, duration: 0.62 }}
+          className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 p-4 shadow-xl shadow-blue-950/5"
+        >
+          <div className="absolute inset-x-8 top-1/2 hidden h-px bg-slate-200 md:block" />
+          <motion.div
+            className="absolute left-[23%] top-1/2 hidden h-px bg-blue-500 md:block"
+            initial={false}
+            animate={{ width: activeStep > 1 ? "52%" : "18%" }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+          />
+          <div className="relative grid gap-4 md:grid-cols-[1fr_auto_1fr]">
+            <AliasNode
+              label={activeStep === 0 ? t.explainer.baseLabel : t.explainer.aliasLabel}
+              primary={alias}
+              tag={tag}
+            />
+            <div className="grid place-items-center">
+              <motion.div
+                whileHover={{ scale: 1.04 }}
+                className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+              >
+                <ArrowRight className="h-5 w-5" />
+              </motion.div>
+            </div>
+            <InboxNode label={t.explainer.inboxLabel} email={`${baseName}${domain}`} />
+          </div>
+
+          <motion.div
+            key={activeStep}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.24 }}
+            className="mt-4 rounded-2xl border border-blue-200 bg-white p-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue-600">
+                <Tags className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase text-slate-400">
+                  {t.explainer.sourceLabel}
+                </p>
+                <p className="truncate font-mono text-sm font-black text-slate-950">
+                  {tag || "+tag"} = newsletter
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
-      <div className="space-y-2">
-        {historyItems.map((item) => (
-          <HistoryRow key={item.alias} item={item} />
+    </section>
+  );
+}
+
+function AliasNode({
+  label,
+  primary,
+  tag,
+}: {
+  label: string;
+  primary: string;
+  tag: string;
+}) {
+  const [name, rest] = primary.split(tag || "@");
+  const suffix = tag ? rest : `@${rest}`;
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-4 flex items-center gap-2 text-xs font-black uppercase text-slate-400">
+        <AtSign className="h-4 w-4 text-blue-600" /> {label}
+      </div>
+      <motion.div
+        layout
+        className="break-all rounded-xl bg-slate-50 p-4 font-mono text-lg font-black text-slate-950"
+      >
+        <span>{name}</span>
+        {tag ? (
+          <motion.span
+            layoutId="alias-plus-tag"
+            className="rounded-lg bg-blue-100 px-1.5 py-0.5 text-blue-700"
+          >
+            {tag}
+          </motion.span>
+        ) : null}
+        <span>{suffix}</span>
+      </motion.div>
+    </div>
+  );
+}
+
+function InboxNode({ label, email }: { label: string; email: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-4 flex items-center gap-2 text-xs font-black uppercase text-slate-400">
+        <Mail className="h-4 w-4 text-blue-600" /> {label}
+      </div>
+      <div className="rounded-xl bg-slate-950 p-4 text-white">
+        <p className="font-mono text-lg font-black">{email}</p>
+        <div className="mt-3 space-y-2">
+          {[0, 1, 2].map((item) => (
+            <motion.div
+              key={item}
+              initial={{ width: "38%", opacity: 0.5 }}
+              whileInView={{ width: `${72 - item * 14}%`, opacity: 0.72 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.45,
+                delay: item * 0.2,
+              }}
+              className="h-2 rounded-full bg-white/20"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
+  const [activeTab, setActiveTab] =
+    useState<(typeof t.tabs)[number]["id"]>("random");
+  const currentTab = t.tabs.find((tab) => tab.id === activeTab) ?? t.tabs[0];
+
+  return (
+    <motion.div
+      id="mock"
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65, delay: 0.08 }}
+      whileHover={{ y: -3 }}
+      className="mx-auto w-full max-w-[390px] rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-2xl shadow-blue-950/10"
+    >
+      <div className="overflow-hidden rounded-[1.45rem] border border-slate-200 bg-white">
+        <MockHeader />
+        <MockTabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={t.tabs} />
+        <div className="p-3">
+          <MockGeneratorPanel currentTab={currentTab} t={t} />
+          <MockHistory t={t} />
+          <MockFooter t={t} />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function MockHeader() {
+  return (
+    <div className="flex items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-3 text-white">
+      <div className="flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-600 text-white">
+          <Mail className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-sm font-black">Gmail Alias Toolkit</p>
+          <p className="text-xs text-slate-300">david@gmail.com</p>
+        </div>
+      </div>
+      <motion.div
+        whileHover={{ rotate: 8, scale: 1.04 }}
+        className="grid h-9 w-9 place-items-center rounded-xl bg-white/10"
+      >
+        <Sparkles className="h-4 w-4 text-amber-300" />
+      </motion.div>
+    </div>
+  );
+}
+
+function MockTabs({
+  activeTab,
+  setActiveTab,
+  tabs,
+}: {
+  activeTab: (typeof translations)[Locale]["tabs"][number]["id"];
+  setActiveTab: (
+    tab: (typeof translations)[Locale]["tabs"][number]["id"],
+  ) => void;
+  tabs: (typeof translations)[Locale]["tabs"];
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5 bg-slate-50 p-3">
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        const active = activeTab === tab.id;
+
+        return (
+          <motion.button
+            key={tab.id}
+            type="button"
+            onClick={() => setActiveTab(tab.id)}
+            whileTap={{ scale: 0.96 }}
+            className={`relative flex h-10 items-center justify-center gap-2 rounded-xl border px-2 text-xs font-extrabold transition ${
+              active
+                ? "border-blue-300 text-blue-700"
+                : "border-slate-200 bg-white text-slate-500 hover:text-slate-950"
+            }`}
+          >
+            {active ? (
+              <motion.span
+                layoutId="mock-tab"
+                className="absolute inset-0 rounded-xl bg-blue-50"
+                transition={{ type: "spring", bounce: 0.28, duration: 0.48 }}
+              />
+            ) : null}
+            <Icon className="relative h-3.5 w-3.5" />
+            <span className="relative truncate">{tab.label}</span>
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+}
+
+function MockGeneratorPanel({
+  currentTab,
+  t,
+}: {
+  currentTab: (typeof translations)[Locale]["tabs"][number];
+  t: (typeof translations)[Locale];
+}) {
+  return (
+    <motion.div
+      key={currentTab.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", bounce: 0.25, duration: 0.45 }}
+      className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm"
+    >
+      <div className="grid grid-cols-[minmax(0,1fr)_74px] gap-2">
+        <div className="min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+          <p className="text-[11px] font-black uppercase text-slate-400">
+            {t.mock.format}
+          </p>
+          <p className="truncate text-sm font-black text-slate-950">
+            {currentTab.title}
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+          <p className="text-[11px] font-black uppercase text-slate-400">
+            {t.mock.count}
+          </p>
+          <p className="text-sm font-black text-slate-950">10</p>
+        </div>
+      </div>
+      <motion.button
+        type="button"
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-extrabold text-white"
+      >
+        <Sparkles className="h-4 w-4" /> {t.mock.generate}
+      </motion.button>
+      <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-xs font-black text-slate-500">
+            {t.mock.generated}
+          </span>
+          <Copy className="h-4 w-4 text-blue-600" />
+        </div>
+        <motion.p
+          initial={{ opacity: 0.74 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25 }}
+          className="break-all font-mono text-sm font-bold text-slate-950"
+        >
+          {currentTab.alias}
+        </motion.p>
+      </div>
+      <p className="mt-2 text-center text-[11px] leading-4 text-slate-500">
+        {currentTab.desc}
+      </p>
+    </motion.div>
+  );
+}
+
+function MockHistory({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+      <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
+        <div className="flex items-center gap-2 text-xs font-black text-slate-700">
+          <History className="h-3.5 w-3.5" /> {t.mock.recent}
+        </div>
+        <div className="flex items-center gap-1 text-xs font-bold text-slate-500">
+          <Search className="h-3.5 w-3.5" /> {t.mock.search}
+        </div>
+      </div>
+      <div>
+        {historyItems.map((item, index) => (
+          <motion.div
+            key={item.alias}
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.08 * index }}
+            className="flex items-center gap-2 border-b border-slate-100 px-3 py-2.5 last:border-b-0"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-mono text-xs font-bold text-slate-800">
+                {item.alias}
+              </p>
+              <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
+                {item.tag}
+              </p>
+            </div>
+            <Star
+              className={`h-4 w-4 ${
+                item.favorite ? "fill-amber-400 text-amber-400" : "text-slate-300"
+              }`}
+            />
+            <Clipboard className="h-4 w-4 text-blue-600" />
+          </motion.div>
         ))}
       </div>
     </div>
   );
 }
 
-/**
- * Renders one history row in the mockup.
- */
-function HistoryRow({ item }: { item: (typeof historyItems)[number] }) {
-  return (
-    <motion.div
-      className="flex items-center justify-between rounded-2xl bg-white/10 px-3 py-2 text-sm"
-      whileHover={{ x: 4 }}
-    >
-      <span className="truncate text-slate-200">{item.alias}</span>
-      <span className="ml-3 rounded-full bg-blue-400/20 px-2 py-1 text-xs text-blue-200">
-        {item.tag}
-      </span>
-    </motion.div>
-  );
-}
+function MockFooter({ t }: { t: (typeof translations)[Locale] }) {
+  const footerItems = [
+    [Settings, t.mock.settings],
+    [FileJson, "JSON"],
+    [QrCode, "QR"],
+  ] as const;
 
-/**
- * Renders product demo section.
- */
-function DemoSection() {
   return (
-    <section id="demo" className="mx-auto max-w-7xl px-5 py-20">
-      <SectionHeading
-        eyebrow="Product demo"
-        title="No screenshots needed — the page explains the product by simulating it."
-        desc="Animated UI blocks show how alias generation, copy, history, favorites and export work."
-      />
-      <div className="mt-12 grid gap-5 lg:grid-cols-3">
-        <GenerateDemo />
-        <OrganizeDemo />
-        <ExportDemo />
-      </div>
-    </section>
-  );
-}
-
-/**
- * Renders alias generation demo card.
- */
-function GenerateDemo() {
-  return (
-    <DemoCard icon={<Sparkles className="h-5 w-5" />} title="Generate">
-      <div className="rounded-2xl bg-slate-100 p-4">
-        <p className="text-xs font-bold uppercase text-slate-400">Format</p>
-        <p className="mt-2 font-black text-slate-950">Random Words</p>
-      </div>
-      <motion.div
-        className="mt-3 rounded-2xl bg-blue-600 p-4 text-white"
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        david+happy-fox-42@gmail.com
-      </motion.div>
-    </DemoCard>
-  );
-}
-
-/**
- * Renders alias organization demo card.
- */
-function OrganizeDemo() {
-  return (
-    <DemoCard icon={<Search className="h-5 w-5" />} title="Organize">
-      <div className="rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-500">
-        Search: github
-      </div>
-      <div className="mt-3 space-y-2">
-        <DemoListItem text="david+github-test@gmail.com" />
-        <DemoListItem text="david+github-actions@gmail.com" />
-      </div>
-    </DemoCard>
-  );
-}
-
-/**
- * Renders export and QR demo card.
- */
-function ExportDemo() {
-  return (
-    <DemoCard icon={<Download className="h-5 w-5" />} title="Export & share">
-      <div className="grid grid-cols-2 gap-3">
-        <SquareAction icon={<QrCode className="h-6 w-6" />} label="QR" />
-        <SquareAction icon={<Download className="h-6 w-6" />} label="CSV" />
-      </div>
-      <div className="mt-3 rounded-2xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-600">
-        JSON backup ready
-      </div>
-    </DemoCard>
-  );
-}
-
-/**
- * Renders a reusable demo card.
- */
-function DemoCard({
-  icon,
-  title,
-  children,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <TiltCard className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="mb-5 flex items-center gap-3">
-        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-50 text-blue-600">
-          {icon}
-        </div>
-        <h3 className="text-xl font-black">{title}</h3>
-      </div>
-      {children}
-    </TiltCard>
-  );
-}
-
-/**
- * Renders one demo list item.
- */
-function DemoListItem({ text }: { text: string }) {
-  return (
-    <div className="flex items-center justify-between rounded-2xl bg-slate-100 px-4 py-3 text-sm">
-      <span className="truncate font-semibold text-slate-700">{text}</span>
-      <Star className="ml-2 h-4 w-4 text-blue-600" />
+    <div className="mt-3 grid grid-cols-3 gap-2">
+      {footerItems.map(([Icon, label]) => (
+        <motion.div
+          key={label}
+          whileHover={{ y: -2 }}
+          className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-black text-slate-700"
+        >
+          <Icon className="h-4 w-4 text-blue-600" />
+          {label}
+        </motion.div>
+      ))}
     </div>
   );
 }
 
-/**
- * Renders one square action block.
- */
-function SquareAction({
-  icon,
-  label,
-}: {
-  icon: React.ReactNode;
-  label: string;
-}) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.04 }}
-      className="grid aspect-square place-items-center rounded-2xl bg-slate-100 text-slate-700"
-    >
-      <div className="text-center">
-        <div className="mx-auto mb-2 grid place-items-center">{icon}</div>
-        <p className="text-sm font-black">{label}</p>
-      </div>
-    </motion.div>
-  );
-}
+function FeaturesSection({ t }: { t: (typeof translations)[Locale] }) {
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+  const activeFeature = t.features.items[activeFeatureIndex];
 
-/**
- * Renders the feature card grid section.
- */
-function FeaturesSection() {
   return (
     <section id="features" className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
-          eyebrow="Feature set"
-          title="Everything needed to control Gmail aliases"
-          desc="Not a generic landing page: every section shows what the extension actually does."
+          eyebrow={t.features.eyebrow}
+          title={t.features.title}
+          desc={t.features.desc}
         />
-        <FeatureGrid />
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {t.features.items.map((feature, index) => (
+            <FeatureCard
+              key={feature.title}
+              feature={feature}
+              index={index}
+              active={activeFeatureIndex === index}
+              onSelect={() => setActiveFeatureIndex(index)}
+            />
+          ))}
+        </div>
+        <FeaturePreview feature={activeFeature} />
+        <FeatureMarquee features={t.features.items} />
       </div>
     </section>
   );
 }
 
-/**
- * Renders a centered section heading.
- */
 function SectionHeading({
   eyebrow,
   title,
@@ -675,296 +1090,323 @@ function SectionHeading({
 }) {
   return (
     <div className="mx-auto max-w-3xl text-center">
-      <p className="font-bold text-blue-600">{eyebrow}</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">
+      <p className="font-black text-blue-600">{eyebrow}</p>
+      <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950 md:text-5xl">
         {title}
       </h2>
-      <p className="mt-4 text-slate-600">{desc}</p>
+      <p className="mt-4 leading-7 text-slate-600">{desc}</p>
     </div>
   );
 }
 
-/**
- * Renders all feature cards.
- */
-function FeatureGrid() {
+function FeatureCard({
+  feature,
+  index,
+  active,
+  onSelect,
+}: {
+  feature: (typeof translations)[Locale]["features"]["items"][number];
+  index: number;
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const Icon = feature.icon;
+  const tones = [
+    "bg-blue-50 text-blue-600",
+    "bg-slate-100 text-slate-700",
+    "bg-indigo-50 text-indigo-600",
+    "bg-sky-50 text-sky-700",
+  ];
+
   return (
-    <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-      {features.map((feature) => (
-        <FeatureCard key={feature.title} feature={feature} />
-      ))}
-    </div>
+    <motion.button
+      type="button"
+      onClick={onSelect}
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={`relative overflow-hidden rounded-2xl border p-5 text-left shadow-sm outline-none transition ${
+        active
+          ? "border-blue-300 bg-blue-50/70 shadow-blue-950/10"
+          : "border-slate-200 bg-slate-50 hover:border-blue-200"
+      }`}
+    >
+      {active ? (
+        <motion.span
+          layoutId="feature-active-glow"
+          className="absolute inset-x-4 top-0 h-1 rounded-b-full bg-blue-600"
+          transition={{ type: "spring", bounce: 0.28, duration: 0.5 }}
+        />
+      ) : null}
+      <div
+        className={`mb-5 grid h-11 w-11 place-items-center rounded-xl ${
+          tones[index % tones.length]
+        }`}
+      >
+        <Icon className="h-5 w-5" />
+      </div>
+      <h3 className="text-lg font-black text-slate-950">{feature.title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{feature.desc}</p>
+      <div className="mt-5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700">
+        {feature.sample}
+      </div>
+    </motion.button>
   );
 }
 
-/**
- * Renders one feature card.
- */
-function FeatureCard({ feature }: { feature: (typeof features)[number] }) {
+function FeaturePreview({
+  feature,
+}: {
+  feature: (typeof translations)[Locale]["features"]["items"][number];
+}) {
   const Icon = feature.icon;
 
   return (
-    <TiltCard className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
-      <div className="mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-blue-600">
-        <Icon className="h-6 w-6" />
+    <motion.div
+      key={feature.title}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", bounce: 0.22, duration: 0.48 }}
+      className="mt-6 grid gap-4 rounded-2xl border border-blue-200 bg-blue-50/55 p-4 md:grid-cols-[auto_minmax(0,1fr)_auto]"
+    >
+      <div className="grid h-12 w-12 place-items-center rounded-xl bg-white text-blue-600 shadow-sm">
+        <Icon className="h-5 w-5" />
       </div>
-      <h3 className="text-lg font-black">{feature.title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{feature.desc}</p>
-      <div className="mt-5 rounded-2xl bg-white px-3 py-2 text-xs font-bold text-blue-700 shadow-sm">
+      <div className="min-w-0">
+        <p className="text-lg font-black text-slate-950">{feature.title}</p>
+        <p className="mt-1 text-sm leading-6 text-slate-600">{feature.desc}</p>
+      </div>
+      <div className="flex items-center rounded-xl border border-blue-200 bg-white px-3 py-2 text-xs font-black text-blue-700">
         {feature.sample}
       </div>
-    </TiltCard>
-  );
-}
-
-/**
- * Renders the supported alias formats section.
- */
-function FormatSection() {
-  return (
-    <section className="mx-auto max-w-7xl px-5 py-20">
-      <SectionHeading
-        eyebrow="Alias formats"
-        title="Pick a format, generate, copy, done."
-        desc="Use random aliases for privacy or custom tags when you want a memorable address."
-      />
-      <div className="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-3">
-        {aliasFormats.map((format) => (
-          <motion.div
-            key={format}
-            whileHover={{ y: -4 }}
-            className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 shadow-sm"
-          >
-            david+{format}@gmail.com
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/**
- * Renders the workflow section.
- */
-function WorkflowSection() {
-  return (
-    <section id="workflow" className="bg-slate-950 py-20 text-white">
-      <div className="mx-auto max-w-7xl px-5">
-        <div className="grid gap-10 lg:grid-cols-[.75fr_1.25fr]">
-          <WorkflowIntro />
-          <WorkflowCards />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * Renders workflow intro copy.
- */
-function WorkflowIntro() {
-  return (
-    <div>
-      <p className="font-bold text-blue-300">Workflow</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight">
-        From signup problem to traceable alias
-      </h2>
-      <p className="mt-4 leading-7 text-slate-300">
-        The extension turns Gmail plus addressing into a repeatable workflow:
-        generate, copy, use, then track.
-      </p>
-    </div>
-  );
-}
-
-/**
- * Renders workflow cards.
- */
-function WorkflowCards() {
-  return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {workflowSteps.map((step) => (
-        <WorkflowCard key={step.number} step={step} />
-      ))}
-    </div>
-  );
-}
-
-/**
- * Renders one workflow card.
- */
-function WorkflowCard({ step }: { step: (typeof workflowSteps)[number] }) {
-  return (
-    <motion.div
-      whileHover={{ y: -5 }}
-      className="rounded-3xl border border-white/10 bg-white/5 p-6"
-    >
-      <p className="text-sm font-black text-blue-300">{step.number}</p>
-      <h3 className="mt-4 text-xl font-black">{step.title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{step.desc}</p>
     </motion.div>
   );
 }
 
-/**
- * Renders the privacy section.
- */
-function PrivacySection() {
-  return (
-    <section id="privacy" className="mx-auto max-w-7xl px-5 py-20">
-      <div className="rounded-[2rem] bg-white p-8 shadow-sm md:p-12">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <PrivacyIntro />
-          <PrivacyGrid />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * Renders privacy intro copy.
- */
-function PrivacyIntro() {
-  return (
-    <div>
-      <p className="font-bold text-blue-600">Privacy by design</p>
-      <h2 className="mt-3 text-4xl font-black tracking-tight">
-        Your aliases stay in your browser.
-      </h2>
-      <p className="mt-4 leading-7 text-slate-600">
-        Gmail Alias Toolkit is designed as a local-first extension: generate
-        aliases without a remote database, tracking script or analytics layer.
-      </p>
-    </div>
-  );
-}
-
-/**
- * Renders privacy cards.
- */
-function PrivacyGrid() {
-  return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      {privacyItems.map((item) => (
-        <PrivacyCard key={item.text} item={item} />
-      ))}
-    </div>
-  );
-}
-
-/**
- * Renders one privacy card.
- */
-function PrivacyCard({ item }: { item: (typeof privacyItems)[number] }) {
-  const Icon = item.icon;
-
-  return (
-    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-      <Icon className="mb-4 h-6 w-6 text-blue-600" />
-      <p className="font-black">{item.text}</p>
-    </div>
-  );
-}
-
-/**
- * Renders comparison section.
- */
-function ComparisonSection() {
-  return (
-    <section className="bg-white py-20">
-      <div className="mx-auto max-w-5xl px-5">
-        <SectionHeading
-          eyebrow="Why not manual?"
-          title="Manual aliases are useful. Toolkit makes them manageable."
-          desc="Gmail already supports plus addressing; this extension adds generation, organization and export."
-        />
-        <div className="mt-10 overflow-hidden rounded-3xl border border-slate-200">
-          {[
-            ["Random alias", true, false],
-            ["History", true, false],
-            ["Favorites", true, false],
-            ["Export CSV / JSON", true, false],
-            ["QR sharing", true, false],
-          ].map(([label, toolkit, manual]) => (
-            <ComparisonRow
-              key={label as string}
-              label={label as string}
-              toolkit={Boolean(toolkit)}
-              manual={Boolean(manual)}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * Renders one comparison row.
- */
-function ComparisonRow({
-  label,
-  toolkit,
-  manual,
+function FeatureMarquee({
+  features,
 }: {
-  label: string;
-  toolkit: boolean;
-  manual: boolean;
+  features: (typeof translations)[Locale]["features"]["items"];
 }) {
   return (
-    <div className="grid grid-cols-3 border-b border-slate-200 bg-white last:border-b-0">
-      <div className="p-4 font-bold text-slate-700">{label}</div>
-      <div className="grid place-items-center p-4 text-blue-600">
-        {toolkit ? <Check className="h-5 w-5" /> : "—"}
-      </div>
-      <div className="grid place-items-center p-4 text-slate-400">
-        {manual ? <Check className="h-5 w-5" /> : "—"}
+    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+      <div className="flex flex-wrap gap-2">
+        {features.map((feature) => (
+          <motion.div
+            key={feature.title}
+            whileHover={{ y: -2, backgroundColor: "#ffffff" }}
+            transition={{ duration: 0.18 }}
+            className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black text-slate-600 shadow-sm"
+          >
+            {feature.sample}
+          </motion.div>
+        ))}
       </div>
     </div>
   );
 }
 
-/**
- * Renders the final call to action section.
- */
-function CtaSection() {
+function TricksSection({ t }: { t: (typeof translations)[Locale] }) {
+  const [activeTrick, setActiveTrick] = useState<TrickId>("dot");
+  const [copiedAlias, setCopiedAlias] = useState<string | null>(null);
+  const activeAliases = gmailTrickAliases[activeTrick];
+
+  const copyAlias = async (alias: string) => {
+    try {
+      await navigator.clipboard.writeText(alias);
+      setCopiedAlias(alias);
+      window.setTimeout(() => setCopiedAlias(null), 1400);
+    } catch {
+      setCopiedAlias(null);
+    }
+  };
+
   return (
-    <section className="mx-auto max-w-5xl px-5 py-24 text-center">
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
-        <BarChart3 className="h-4 w-4" /> Generate · Copy · Track · Export
-      </div>
-      <h2 className="text-4xl font-black tracking-tight md:text-5xl">
-        Ready to control your Gmail aliases?
-      </h2>
-      <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-600">
-        Install Gmail Alias Toolkit to create traceable aliases for signups,
-        newsletters, testing and everyday inbox protection.
-      </p>
-      <div className="mt-8 flex justify-center">
-        <BeButton href={chromeUrl}>
-          Add to Chrome <ArrowRight className="h-5 w-5" />
-        </BeButton>
+    <section className="border-y border-slate-200 bg-slate-50 py-20">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <p className="font-black text-blue-600">{t.tricks.eyebrow}</p>
+          <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950">
+            {t.tricks.title}
+          </h2>
+          <p className="mt-4 leading-7 text-slate-600">{t.tricks.desc}</p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="grid grid-cols-3 gap-2">
+            {t.tricks.buttons.map((label, index) => {
+              const trickId = trickIds[index];
+              const active = activeTrick === trickId;
+
+              return (
+                <motion.button
+                  key={trickId}
+                  type="button"
+                  onClick={() => setActiveTrick(trickId)}
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  aria-pressed={active}
+                  className={`relative flex h-10 items-center justify-center overflow-hidden rounded-xl border px-2 text-center text-xs font-black ${
+                    active
+                      ? "border-blue-300 text-blue-700"
+                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:text-blue-700"
+                  }`}
+                >
+                  {active ? (
+                    <motion.span
+                      layoutId="trick-active-bg"
+                      className="absolute inset-0 rounded-xl bg-blue-50"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.28,
+                        duration: 0.42,
+                      }}
+                    />
+                  ) : null}
+                  <span className="relative">{label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+          <motion.div
+            key={activeTrick}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22 }}
+            className="mt-4 space-y-2"
+          >
+            {activeAliases.map((alias, index) => (
+              <motion.div
+                key={alias}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.06 }}
+                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3"
+              >
+                <motion.span
+                  animate={{ scale: copiedAlias === alias ? [1, 1.08, 1] : 1 }}
+                  transition={{ duration: 0.28 }}
+                  className="grid h-5 w-5 shrink-0 place-items-center text-blue-600"
+                >
+                  <AtSign className="h-4 w-4" />
+                </motion.span>
+                <span className="min-w-0 flex-1 truncate font-mono text-sm font-bold text-slate-800">
+                  {alias}
+                </span>
+                <motion.button
+                  type="button"
+                  onClick={() => copyAlias(alias)}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label={`Copy ${alias}`}
+                  className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg text-blue-600 transition ${
+                    copiedAlias === alias ? "bg-blue-100" : "hover:bg-blue-100"
+                  }`}
+                >
+                  <Copy className="h-4 w-4" />
+                </motion.button>
+              </motion.div>
+            ))}
+          </motion.div>
+          <div className="mt-3 h-5 text-center text-xs font-bold text-blue-600">
+            {copiedAlias ? t.tricks.copied : ""}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-/**
- * Renders the GitHub Pages landing page for Gmail Alias Toolkit.
- */
-export function App() {
+function PrivacySection({ t }: { t: (typeof translations)[Locale] }) {
   return (
-    <main className="min-h-screen overflow-hidden bg-slate-50 text-slate-950">
-      <Header />
-      <HeroSection />
-      <DemoSection />
-      <FeaturesSection />
-      <FormatSection />
-      <WorkflowSection />
-      <PrivacySection />
-      <ComparisonSection />
-      <CtaSection />
+    <section id="privacy" className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ type: "spring", bounce: 0.22, duration: 0.58 }}
+          className="grid gap-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-10 lg:grid-cols-[1fr_1fr]"
+        >
+          <div>
+            <p className="font-black text-blue-600">{t.privacy.eyebrow}</p>
+            <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950">
+              {t.privacy.title}
+            </h2>
+            <p className="mt-4 leading-7 text-slate-600">{t.privacy.desc}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {t.privacy.items.map((item) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={item.text}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="rounded-2xl border border-slate-200 bg-white p-5"
+                >
+                  <Icon className="mb-4 h-6 w-6 text-blue-600" />
+                  <p className="font-black text-slate-950">{item.text}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function CtaSection({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <section className="bg-slate-950 py-20 text-white">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ type: "spring", bounce: 0.2, duration: 0.58 }}
+        className="mx-auto max-w-4xl px-5 text-center"
+      >
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-black text-blue-200">
+          <BarChart3 className="h-4 w-4" /> {t.cta.badge}
+        </div>
+        <h2 className="text-4xl font-black tracking-normal md:text-5xl">
+          {t.cta.title}
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">
+          {t.cta.desc}
+        </p>
+        <div className="mt-8 flex justify-center">
+          <motion.a
+            href={chromeUrl}
+            target="_blank"
+            rel="noreferrer"
+            whileHover={{ y: -3, scale: 1.025 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-black text-slate-950"
+          >
+            {t.cta.install} <ArrowRight className="h-5 w-5" />
+          </motion.a>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+export function App() {
+  const [locale, setLocale] = useState<Locale>("en");
+  const t = translations[locale];
+
+  return (
+    <main
+      className="min-h-screen overflow-hidden bg-white text-slate-950"
+      lang={locale}
+    >
+      <Header locale={locale} setLocale={setLocale} t={t} />
+      <HeroSection t={t} />
+      <AliasExplainerSection t={t} />
+      <FeaturesSection t={t} />
+      <TricksSection t={t} />
+      <PrivacySection t={t} />
+      <CtaSection t={t} />
     </main>
   );
 }
