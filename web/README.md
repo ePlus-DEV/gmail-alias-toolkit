@@ -5,16 +5,14 @@ Static landing page for Gmail Alias Toolkit, built with Vite, React, Tailwind CS
 ## Local development
 
 ```bash
-cd web
-npm install
-npm run dev
+yarn install
+yarn workspace gmail-alias-toolkit-web dev
 ```
 
 ## Build
 
 ```bash
-cd web
-npm run build
+yarn workspace gmail-alias-toolkit-web build
 ```
 
 The production build is generated in `web/dist` and deployed to GitHub Pages by `.github/workflows/deploy-pages.yml`.
