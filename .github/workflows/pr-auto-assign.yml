@@ -1,7 +1,8 @@
 name: pr-auto-assign
+
 on:
   pull_request_target:
-    types: [opened]
+    types: [opened, reopened, ready_for_review, synchronize]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -10,25 +11,31 @@ concurrency:
 permissions:
   issues: write
   pull-requests: write
+  contents: read
 
 jobs:
   assign:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
+
     steps:
-      - name: Skip Dependabot pull requests
-        if: ${{github.actor == 'dependabot[bot]'}}
-        run: echo "Dependabot pull requests are handled by dependabot-auto-merge."
+      - name: Verify bot token
+        run: |
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::EPLUS_BOT_TOKEN is empty. Add it to repository Actions secrets."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Verify bot identity
-        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           BOT_LOGIN="$(gh api user --jq .login)"
           test "$BOT_LOGIN" = "eplus-bot"
         env:
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Upsert welcome comment
-        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           COMMENT_ID="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
             --paginate \
@@ -47,7 +54,7 @@ jobs:
               -f body="$WELCOME_COMMENT"
           fi
         env:
-          PR_NUMBER: ${{github.event.pull_request.number}}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           COMMENT_MARKER: "<!-- eplus-bot-pr-welcome -->"
           WELCOME_COMMENT: |
             <!-- eplus-bot-pr-welcome -->
@@ -55,10 +62,9 @@ jobs:
             Thank you for creating this pull request and helping make the project better.
 
             We will review / merge it when we are online.
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Add pull request labels
-        if: ${{github.actor != 'dependabot[bot]'}}
         run: |
           add_label() {
             local name="$1"
@@ -72,7 +78,10 @@ jobs:
               -f color="$color" \
               -f description="$description" >/dev/null 2>&1 || true
 
-            gh pr edit "$PR_NUMBER" --add-label "$name" --repo "$GITHUB_REPOSITORY"
+            gh api \
+              --method POST \
+              "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels" \
+              -f labels[]="$name" >/dev/null
           }
 
           add_label "needs-review" "fbca04" "Pull request is ready for maintainer review"
@@ -103,20 +112,28 @@ jobs:
             add_label "documentation" "0075ca" "Documentation changes"
           fi
         env:
-          PR_NUMBER: ${{github.event.pull_request.number}}
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Assign PR author
-        if: ${{github.actor != 'dependabot[bot]'}}
-        run: gh pr edit "$PR_NUMBER" --add-assignee "$PR_AUTHOR" --repo "$GITHUB_REPOSITORY"
+        run: |
+          gh api \
+            --method POST \
+            "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/assignees" \
+            -f assignees[]="$PR_AUTHOR" >/dev/null || \
+            echo "::notice::Cannot assign $PR_AUTHOR. The user may not be assignable in this repository."
         env:
-          PR_NUMBER: ${{github.event.pull_request.number}}
-          PR_AUTHOR: ${{github.event.pull_request.user.login}}
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
 
       - name: Request eplus-bot review
-        if: ${{github.actor != 'dependabot[bot]'}}
-        run: gh pr edit "$PR_NUMBER" --add-reviewer eplus-bot --repo "$GITHUB_REPOSITORY"
+        run: |
+          gh api \
+            --method POST \
+            "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers" \
+            -f reviewers[]="eplus-bot" >/dev/null || \
+            echo "::notice::Cannot request eplus-bot review. It may already be requested or unavailable."
         env:
-          PR_NUMBER: ${{github.event.pull_request.number}}
-          GH_TOKEN: ${{secrets.EPLUS_BOT_TOKEN}}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
