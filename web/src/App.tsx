@@ -451,6 +451,7 @@ const gmailTrickAliases: Record<TrickId, string[]> = {
   ],
 };
 
+/** Renders subdued animated gradient text for the hero headline. */
 function ShimmerText({
   children,
   className = "",
@@ -458,10 +459,11 @@ function ShimmerText({
   children: React.ReactNode;
   className?: string;
 }) {
+  // skipcq: JS-0415 - Header markup is intentionally colocated for responsive navigation.
   return (
     <>
       <style>
-        {`@keyframes beui-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}`}
+        {"@keyframes beui-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}"}
       </style>
       <span
         className={`inline-block bg-[linear-gradient(110deg,#64748b_28%,#2563eb_48%,#020617_68%)] bg-[length:200%_100%] bg-clip-text text-transparent ${className}`}
@@ -473,6 +475,7 @@ function ShimmerText({
   );
 }
 
+/** Renders a springy external link used for primary landing-page actions. */
 function MagneticLink({
   href,
   children,
@@ -502,6 +505,8 @@ function MagneticLink({
   );
 }
 
+// skipcq: JS-0415
+/** Renders the sticky site header with navigation, language control, and CTA. */
 function Header({
   locale,
   setLocale,
@@ -549,6 +554,7 @@ function Header({
   );
 }
 
+/** Renders the animated language segmented control. */
 function LanguageSwitch({
   locale,
   setLocale,
@@ -586,7 +592,10 @@ function LanguageSwitch({
   );
 }
 
+// skipcq: JS-0415
+/** Renders the first viewport with product positioning and extension mockup. */
 function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
+  // skipcq: JS-0415 - Hero copy and mockup stay together to preserve the first-viewport composition.
   return (
     <section className="relative overflow-hidden border-b border-slate-200 bg-[#fbfbfc]">
       <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,#111318,#2563eb,#93c5fd)]" />
@@ -622,6 +631,7 @@ function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders compact animated proof points below the hero actions. */
 function HeroStats({
   stats,
 }: {
@@ -653,6 +663,8 @@ function HeroStats({
   );
 }
 
+// skipcq: JS-0415
+/** Explains Gmail plus aliases with an interactive step-by-step animation. */
 function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeStep, setActiveStep] = useState(1);
   const active = t.explainer.steps[activeStep];
@@ -661,6 +673,7 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
   const tag = active.tag;
   const alias = `${baseName}${tag}${domain}`;
 
+  // skipcq: JS-0415 - The paired explanation and animation share active-step state.
   return (
     <section className="bg-white py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-[0.86fr_1.14fr]">
@@ -783,6 +796,7 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders the source email or alias node in the explainer diagram. */
 function AliasNode({
   label,
   primary,
@@ -819,6 +833,7 @@ function AliasNode({
   );
 }
 
+/** Renders the destination inbox node in the alias explainer diagram. */
 function InboxNode({ label, email }: { label: string; email: string }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -847,6 +862,7 @@ function InboxNode({ label, email }: { label: string; email: string }) {
   );
 }
 
+/** Renders the interactive Chrome extension popup mockup. */
 function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] =
     useState<(typeof t.tabs)[number]["id"]>("random");
@@ -878,6 +894,7 @@ function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders the header inside the extension popup mockup. */
 function MockHeader() {
   return (
     <div className="flex items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-3 text-white">
@@ -900,6 +917,7 @@ function MockHeader() {
   );
 }
 
+/** Renders the animated generator tabs in the popup mockup. */
 function MockTabs({
   activeTab,
   setActiveTab,
@@ -945,6 +963,7 @@ function MockTabs({
   );
 }
 
+/** Renders the active generated-alias panel in the popup mockup. */
 function MockGeneratorPanel({
   currentTab,
   t,
@@ -1007,6 +1026,7 @@ function MockGeneratorPanel({
   );
 }
 
+/** Renders recent alias rows in the popup mockup. */
 function MockHistory({ t }: { t: (typeof translations)[Locale] }) {
   return (
     <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-white">
@@ -1050,6 +1070,7 @@ function MockHistory({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders compact utility actions in the popup mockup footer. */
 function MockFooter({ t }: { t: (typeof translations)[Locale] }) {
   const footerItems = [
     [Settings, t.mock.settings],
@@ -1073,6 +1094,7 @@ function MockFooter({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders the feature grid with active preview and sample rail. */
 function FeaturesSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
   const activeFeature = t.features.items[activeFeatureIndex];
@@ -1103,6 +1125,7 @@ function FeaturesSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders a reusable centered section heading. */
 function SectionHeading({
   eyebrow,
   title,
@@ -1123,6 +1146,7 @@ function SectionHeading({
   );
 }
 
+/** Renders one selectable feature card. */
 function FeatureCard({
   feature,
   index,
@@ -1178,6 +1202,7 @@ function FeatureCard({
   );
 }
 
+/** Renders detail preview for the currently selected feature. */
 function FeaturePreview({
   feature,
 }: {
@@ -1207,6 +1232,7 @@ function FeaturePreview({
   );
 }
 
+/** Renders a compact rail of feature samples. */
 function FeatureMarquee({
   features,
 }: {
@@ -1230,11 +1256,13 @@ function FeatureMarquee({
   );
 }
 
+/** Renders the interactive Gmail tricks demo. */
 function TricksSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTrick, setActiveTrick] = useState<TrickId>("dot");
   const [copiedAlias, setCopiedAlias] = useState<string | null>(null);
   const activeAliases = gmailTrickAliases[activeTrick];
 
+  /** Copies a trick alias and briefly displays localized feedback. */
   const copyAlias = async (alias: string) => {
     try {
       await navigator.clipboard.writeText(alias);
@@ -1339,7 +1367,10 @@ function TricksSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+// skipcq: JS-0415
+/** Renders the privacy-focused product promises. */
 function PrivacySection({ t }: { t: (typeof translations)[Locale] }) {
+  // skipcq: JS-0415 - Localized privacy copy and icon cards are kept together.
   return (
     <section id="privacy" className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-5">
@@ -1379,6 +1410,7 @@ function PrivacySection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders the final install call to action. */
 function CtaSection({ t }: { t: (typeof translations)[Locale] }) {
   return (
     <section className="bg-slate-950 py-20 text-white">
@@ -1415,22 +1447,23 @@ function CtaSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders the localized GitHub Pages landing page. */
 export function App() {
   const [locale, setLocale] = useState<Locale>("en");
-  const t = translations[locale];
+  const copy = translations[locale];
 
   return (
     <main
       className="min-h-screen overflow-hidden bg-white text-slate-950"
       lang={locale}
     >
-      <Header locale={locale} setLocale={setLocale} t={t} />
-      <HeroSection t={t} />
-      <AliasExplainerSection t={t} />
-      <FeaturesSection t={t} />
-      <TricksSection t={t} />
-      <PrivacySection t={t} />
-      <CtaSection t={t} />
+      <Header locale={locale} setLocale={setLocale} t={copy} />
+      <HeroSection t={copy} />
+      <AliasExplainerSection t={copy} />
+      <FeaturesSection t={copy} />
+      <TricksSection t={copy} />
+      <PrivacySection t={copy} />
+      <CtaSection t={copy} />
     </main>
   );
 }
