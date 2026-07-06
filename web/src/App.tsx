@@ -567,7 +567,9 @@ function LanguageSwitch({
           whileTap={{ scale: 0.95 }}
           aria-label={localeLabels[item]}
           className={`relative h-9 min-w-10 rounded-xl px-3 text-xs font-black transition ${
-            locale === item ? "text-white" : "text-slate-600 hover:text-slate-950"
+            locale === item
+              ? "text-white"
+              : "text-slate-600 hover:text-slate-950"
           }`}
         >
           {locale === item ? (
@@ -598,7 +600,8 @@ function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
             <BadgeCheck className="h-4 w-4" /> {t.hero.badge}
           </div>
           <h1 className="max-w-3xl text-[clamp(2.55rem,7vw,4.75rem)] font-black leading-[0.98] tracking-normal text-slate-950">
-            {t.hero.titlePrefix} <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
+            {t.hero.titlePrefix}{" "}
+            <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
             {t.hero.desc}
@@ -619,7 +622,11 @@ function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
-function HeroStats({ stats }: { stats: readonly (readonly [string, string])[] }) {
+function HeroStats({
+  stats,
+}: {
+  stats: readonly (readonly [string, string])[];
+}) {
   return (
     <div className="mt-8 grid max-w-xl grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {stats.map(([value, label], index) => (
@@ -688,7 +695,11 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
                   <motion.span
                     layoutId="alias-step-active"
                     className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-blue-600"
-                    transition={{ type: "spring", bounce: 0.28, duration: 0.42 }}
+                    transition={{
+                      type: "spring",
+                      bounce: 0.28,
+                      duration: 0.42,
+                    }}
                   />
                 ) : null}
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white text-xs font-black text-blue-600 shadow-sm">
@@ -723,7 +734,11 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
           />
           <div className="relative grid gap-4 md:grid-cols-[1fr_auto_1fr]">
             <AliasNode
-              label={activeStep === 0 ? t.explainer.baseLabel : t.explainer.aliasLabel}
+              label={
+                activeStep === 0
+                  ? t.explainer.baseLabel
+                  : t.explainer.aliasLabel
+              }
               primary={alias}
               tag={tag}
             />
@@ -735,7 +750,10 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
                 <ArrowRight className="h-5 w-5" />
               </motion.div>
             </div>
-            <InboxNode label={t.explainer.inboxLabel} email={`${baseName}${domain}`} />
+            <InboxNode
+              label={t.explainer.inboxLabel}
+              email={`${baseName}${domain}`}
+            />
           </div>
 
           <motion.div
@@ -845,7 +863,11 @@ function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
     >
       <div className="overflow-hidden rounded-[1.45rem] border border-slate-200 bg-white">
         <MockHeader />
-        <MockTabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={t.tabs} />
+        <MockTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={t.tabs}
+        />
         <div className="p-3">
           <MockGeneratorPanel currentTab={currentTab} t={t} />
           <MockHistory t={t} />
@@ -1015,7 +1037,9 @@ function MockHistory({ t }: { t: (typeof translations)[Locale] }) {
             </div>
             <Star
               className={`h-4 w-4 ${
-                item.favorite ? "fill-amber-400 text-amber-400" : "text-slate-300"
+                item.favorite
+                  ? "fill-amber-400 text-amber-400"
+                  : "text-slate-300"
               }`}
             />
             <Clipboard className="h-4 w-4 text-blue-600" />
