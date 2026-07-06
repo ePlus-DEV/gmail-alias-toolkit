@@ -459,7 +459,6 @@ function ShimmerText({
   children: React.ReactNode;
   className?: string;
 }) {
-  // skipcq: JS-0415 - Header markup is intentionally colocated for responsive navigation.
   return (
     <>
       <style>
@@ -507,7 +506,6 @@ function MagneticLink({
   );
 }
 
-// skipcq: JS-0415
 /** Renders the sticky site header with navigation, language control, and CTA. */
 function Header({
   locale,
@@ -521,38 +519,65 @@ function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-4">
-        <a href="#" className="flex min-w-0 items-center gap-3">
-          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white shadow-glow">
-            <Mail className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-black leading-none">
-              Gmail Alias
-            </p>
-            <p className="text-xs font-semibold text-slate-500">Toolkit</p>
-          </div>
-        </a>
-        <nav className="hidden items-center gap-7 text-sm font-bold text-slate-600 lg:flex">
-          <a href="#mock" className="hover:text-slate-950">
-            {t.nav.mock}
-          </a>
-          <a href="#features" className="hover:text-slate-950">
-            {t.nav.features}
-          </a>
-          <a href="#privacy" className="hover:text-slate-950">
-            {t.nav.privacy}
-          </a>
-        </nav>
-        <div className="flex items-center gap-2">
-          <LanguageSwitch locale={locale} setLocale={setLocale} />
-          <div className="hidden sm:block">
-            <MagneticLink href={chromeUrl}>
-              {t.nav.install} <ArrowRight className="h-4 w-4" />
-            </MagneticLink>
-          </div>
-        </div>
+        <HeaderBrand />
+        <HeaderNav t={t} />
+        <HeaderActions locale={locale} setLocale={setLocale} t={t} />
       </div>
     </header>
+  );
+}
+
+/** Renders the product mark in the site header. */
+function HeaderBrand() {
+  return (
+    <a href="#" className="flex min-w-0 items-center gap-3">
+      <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white shadow-glow">
+        <Mail className="h-5 w-5" />
+      </div>
+      <div className="min-w-0">
+        <p className="truncate text-sm font-black leading-none">Gmail Alias</p>
+        <p className="text-xs font-semibold text-slate-500">Toolkit</p>
+      </div>
+    </a>
+  );
+}
+
+/** Renders desktop navigation links in the site header. */
+function HeaderNav({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <nav className="hidden items-center gap-7 text-sm font-bold text-slate-600 lg:flex">
+      <a href="#mock" className="hover:text-slate-950">
+        {t.nav.mock}
+      </a>
+      <a href="#features" className="hover:text-slate-950">
+        {t.nav.features}
+      </a>
+      <a href="#privacy" className="hover:text-slate-950">
+        {t.nav.privacy}
+      </a>
+    </nav>
+  );
+}
+
+/** Renders header language and install actions. */
+function HeaderActions({
+  locale,
+  setLocale,
+  t,
+}: {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  t: (typeof translations)[Locale];
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <LanguageSwitch locale={locale} setLocale={setLocale} />
+      <div className="hidden sm:block">
+        <MagneticLink href={chromeUrl}>
+          {t.nav.install} <ArrowRight className="h-4 w-4" />
+        </MagneticLink>
+      </div>
+    </div>
   );
 }
 
@@ -594,42 +619,61 @@ function LanguageSwitch({
   );
 }
 
-// skipcq: JS-0415
 /** Renders the first viewport with product positioning and extension mockup. */
 function HeroSection({ t }: { t: (typeof translations)[Locale] }) {
-  // skipcq: JS-0415 - Hero copy and mockup stay together to preserve the first-viewport composition.
   return (
     <section className="relative overflow-hidden border-b border-slate-200 bg-[#fbfbfc]">
       <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,#111318,#2563eb,#93c5fd)]" />
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-14 pt-14 md:grid-cols-[minmax(0,0.9fr)_minmax(320px,0.72fr)] md:pb-16 md:pt-16 lg:gap-12 lg:py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-extrabold text-blue-700 shadow-sm">
-            <BadgeCheck className="h-4 w-4" /> {t.hero.badge}
-          </div>
-          <h1 className="max-w-3xl text-[clamp(2.55rem,7vw,4.75rem)] font-black leading-[0.98] tracking-normal text-slate-950">
-            {t.hero.titlePrefix}{" "}
-            <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-            {t.hero.desc}
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <MagneticLink href={chromeUrl}>
-              {t.hero.install} <ArrowRight className="h-5 w-5" />
-            </MagneticLink>
-            <MagneticLink href={githubUrl} variant="secondary">
-              <Github className="h-5 w-5" /> {t.hero.source}
-            </MagneticLink>
-          </div>
-          <HeroStats stats={t.hero.stats} />
-        </motion.div>
+        <HeroCopy t={t} />
         <ExtensionMockup t={t} />
       </div>
     </section>
+  );
+}
+
+/** Renders hero copy, calls to action, and proof stats. */
+function HeroCopy({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55 }}
+    >
+      <HeroBadge label={t.hero.badge} />
+      <h1 className="max-w-3xl text-[clamp(2.55rem,7vw,4.75rem)] font-black leading-[0.98] tracking-normal text-slate-950">
+        {t.hero.titlePrefix}{" "}
+        <ShimmerText>{t.hero.titleHighlight}</ShimmerText>
+      </h1>
+      <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+        {t.hero.desc}
+      </p>
+      <HeroActions t={t} />
+      <HeroStats stats={t.hero.stats} />
+    </motion.div>
+  );
+}
+
+/** Renders the hero badge. */
+function HeroBadge({ label }: { label: string }) {
+  return (
+    <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-extrabold text-blue-700 shadow-sm">
+      <BadgeCheck className="h-4 w-4" /> {label}
+    </div>
+  );
+}
+
+/** Renders hero call-to-action links. */
+function HeroActions({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+      <MagneticLink href={chromeUrl}>
+        {t.hero.install} <ArrowRight className="h-5 w-5" />
+      </MagneticLink>
+      <MagneticLink href={githubUrl} variant="secondary">
+        <Github className="h-5 w-5" /> {t.hero.source}
+      </MagneticLink>
+    </div>
   );
 }
 
@@ -665,7 +709,6 @@ function HeroStats({
   );
 }
 
-// skipcq: JS-0415
 /** Explains Gmail plus aliases with an interactive step-by-step animation. */
 function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeStep, setActiveStep] = useState(1);
@@ -675,126 +718,225 @@ function AliasExplainerSection({ t }: { t: (typeof translations)[Locale] }) {
   const tag = active.tag;
   const alias = `${baseName}${tag}${domain}`;
 
-  // skipcq: JS-0415 - The paired explanation and animation share active-step state.
   return (
     <section className="bg-white py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 lg:grid-cols-[0.86fr_1.14fr]">
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ type: "spring", bounce: 0.22, duration: 0.58 }}
-        >
-          <p className="font-black text-blue-600">{t.explainer.eyebrow}</p>
-          <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950 md:text-5xl">
-            {t.explainer.title}
-          </h2>
-          <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-            {t.explainer.desc}
-          </p>
-          <div className="mt-7 space-y-2">
-            {t.explainer.steps.map((step, index) => (
-              <motion.button
-                key={step.title}
-                type="button"
-                onClick={() => setActiveStep(index)}
-                whileHover={{ x: 2 }}
-                whileTap={{ scale: 0.98 }}
-                className={`relative flex w-full items-start gap-3 overflow-hidden rounded-2xl border p-4 text-left transition ${
-                  activeStep === index
-                    ? "border-blue-300 bg-blue-50"
-                    : "border-slate-200 bg-slate-50 hover:border-blue-200"
-                }`}
-              >
-                {activeStep === index ? (
-                  <motion.span
-                    layoutId="alias-step-active"
-                    className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-blue-600"
-                    transition={{
-                      type: "spring",
-                      bounce: 0.28,
-                      duration: 0.42,
-                    }}
-                  />
-                ) : null}
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white text-xs font-black text-blue-600 shadow-sm">
-                  {index + 1}
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-black text-slate-950">
-                    {step.title}
-                  </span>
-                  <span className="mt-1 block text-sm leading-6 text-slate-600">
-                    {step.desc}
-                  </span>
-                </span>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ type: "spring", bounce: 0.2, duration: 0.62 }}
-          className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 p-4 shadow-xl shadow-blue-950/5"
-        >
-          <div className="absolute inset-x-8 top-1/2 hidden h-px bg-slate-200 md:block" />
-          <motion.div
-            className="absolute left-[23%] top-1/2 hidden h-px bg-blue-500 md:block"
-            initial={false}
-            animate={{ width: activeStep > 1 ? "52%" : "18%" }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-          />
-          <div className="relative grid gap-4 md:grid-cols-[1fr_auto_1fr]">
-            <AliasNode
-              label={
-                activeStep === 0
-                  ? t.explainer.baseLabel
-                  : t.explainer.aliasLabel
-              }
-              primary={alias}
-              tag={tag}
-            />
-            <div className="grid place-items-center">
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/25"
-              >
-                <ArrowRight className="h-5 w-5" />
-              </motion.div>
-            </div>
-            <InboxNode
-              label={t.explainer.inboxLabel}
-              email={`${baseName}${domain}`}
-            />
-          </div>
-
-          <motion.div
-            key={activeStep}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.24 }}
-            className="mt-4 rounded-2xl border border-blue-200 bg-white p-4"
-          >
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue-600">
-                <Tags className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs font-black uppercase text-slate-400">
-                  {t.explainer.sourceLabel}
-                </p>
-                <p className="truncate font-mono text-sm font-black text-slate-950">
-                  {tag || "+tag"} = newsletter
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+        <AliasExplainerCopy
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          t={t}
+        />
+        <AliasFlowDiagram
+          activeStep={activeStep}
+          alias={alias}
+          baseEmail={`${baseName}${domain}`}
+          tag={tag}
+          t={t}
+        />
       </div>
     </section>
+  );
+}
+
+/** Renders the explanatory copy and step controls for Gmail aliases. */
+function AliasExplainerCopy({
+  activeStep,
+  setActiveStep,
+  t,
+}: {
+  activeStep: number;
+  setActiveStep: (step: number) => void;
+  t: (typeof translations)[Locale];
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ type: "spring", bounce: 0.22, duration: 0.58 }}
+    >
+      <p className="font-black text-blue-600">{t.explainer.eyebrow}</p>
+      <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950 md:text-5xl">
+        {t.explainer.title}
+      </h2>
+      <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+        {t.explainer.desc}
+      </p>
+      <AliasStepList
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        steps={t.explainer.steps}
+      />
+    </motion.div>
+  );
+}
+
+/** Renders the list of selectable alias explanation steps. */
+function AliasStepList({
+  activeStep,
+  setActiveStep,
+  steps,
+}: {
+  activeStep: number;
+  setActiveStep: (step: number) => void;
+  steps: (typeof translations)[Locale]["explainer"]["steps"];
+}) {
+  return (
+    <div className="mt-7 space-y-2">
+      {steps.map((step, index) => (
+        <AliasStepButton
+          key={step.title}
+          active={activeStep === index}
+          index={index}
+          onSelect={() => setActiveStep(index)}
+          step={step}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Renders one selectable step in the alias explainer. */
+function AliasStepButton({
+  active,
+  index,
+  onSelect,
+  step,
+}: {
+  active: boolean;
+  index: number;
+  onSelect: () => void;
+  step: (typeof translations)[Locale]["explainer"]["steps"][number];
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={onSelect}
+      whileHover={{ x: 2 }}
+      whileTap={{ scale: 0.98 }}
+      className={`relative flex w-full items-start gap-3 overflow-hidden rounded-2xl border p-4 text-left transition ${
+        active
+          ? "border-blue-300 bg-blue-50"
+          : "border-slate-200 bg-slate-50 hover:border-blue-200"
+      }`}
+    >
+      {active ? <AliasStepActiveBar /> : null}
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white text-xs font-black text-blue-600 shadow-sm">
+        {index + 1}
+      </span>
+      <span className="min-w-0">
+        <span className="block font-black text-slate-950">{step.title}</span>
+        <span className="mt-1 block text-sm leading-6 text-slate-600">
+          {step.desc}
+        </span>
+      </span>
+    </motion.button>
+  );
+}
+
+/** Renders the animated active marker for an explainer step. */
+function AliasStepActiveBar() {
+  return (
+    <motion.span
+      layoutId="alias-step-active"
+      className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-blue-600"
+      transition={{ type: "spring", bounce: 0.28, duration: 0.42 }}
+    />
+  );
+}
+
+/** Renders the animated alias-to-inbox diagram. */
+function AliasFlowDiagram({
+  activeStep,
+  alias,
+  baseEmail,
+  tag,
+  t,
+}: {
+  activeStep: number;
+  alias: string;
+  baseEmail: string;
+  tag: string;
+  t: (typeof translations)[Locale];
+}) {
+  const sourceLabel =
+    activeStep === 0 ? t.explainer.baseLabel : t.explainer.aliasLabel;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ type: "spring", bounce: 0.2, duration: 0.62 }}
+      className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50 p-4 shadow-xl shadow-blue-950/5"
+    >
+      <AliasFlowLine activeStep={activeStep} />
+      <div className="relative grid gap-4 md:grid-cols-[1fr_auto_1fr]">
+        <AliasNode label={sourceLabel} primary={alias} tag={tag} />
+        <AliasFlowArrow />
+        <InboxNode label={t.explainer.inboxLabel} email={baseEmail} />
+      </div>
+      <AliasSourceTagPanel
+        label={t.explainer.sourceLabel}
+        tag={tag || "+tag"}
+      />
+    </motion.div>
+  );
+}
+
+/** Renders the progress line between alias and inbox nodes. */
+function AliasFlowLine({ activeStep }: { activeStep: number }) {
+  return (
+    <>
+      <div className="absolute inset-x-8 top-1/2 hidden h-px bg-slate-200 md:block" />
+      <motion.div
+        className="absolute left-[23%] top-1/2 hidden h-px bg-blue-500 md:block"
+        initial={false}
+        animate={{ width: activeStep > 1 ? "52%" : "18%" }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      />
+    </>
+  );
+}
+
+/** Renders the directional arrow in the alias flow diagram. */
+function AliasFlowArrow() {
+  return (
+    <div className="grid place-items-center">
+      <motion.div
+        whileHover={{ scale: 1.04 }}
+        className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+      >
+        <ArrowRight className="h-5 w-5" />
+      </motion.div>
+    </div>
+  );
+}
+
+/** Renders the source tag hint below the alias flow diagram. */
+function AliasSourceTagPanel({ label, tag }: { label: string; tag: string }) {
+  return (
+    <motion.div
+      key={tag}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.24 }}
+      className="mt-4 rounded-2xl border border-blue-200 bg-white p-4"
+    >
+      <div className="flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue-600">
+          <Tags className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase text-slate-400">
+            {label}
+          </p>
+          <p className="truncate font-mono text-sm font-black text-slate-950">
+            {tag} = newsletter
+          </p>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -1369,10 +1511,8 @@ function TricksSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
-// skipcq: JS-0415
 /** Renders the privacy-focused product promises. */
 function PrivacySection({ t }: { t: (typeof translations)[Locale] }) {
-  // skipcq: JS-0415 - Localized privacy copy and icon cards are kept together.
   return (
     <section id="privacy" className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-5">
@@ -1383,32 +1523,59 @@ function PrivacySection({ t }: { t: (typeof translations)[Locale] }) {
           transition={{ type: "spring", bounce: 0.22, duration: 0.58 }}
           className="grid gap-10 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-10 lg:grid-cols-[1fr_1fr]"
         >
-          <div>
-            <p className="font-black text-blue-600">{t.privacy.eyebrow}</p>
-            <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950">
-              {t.privacy.title}
-            </h2>
-            <p className="mt-4 leading-7 text-slate-600">{t.privacy.desc}</p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {t.privacy.items.map((item) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.text}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="rounded-2xl border border-slate-200 bg-white p-5"
-                >
-                  <Icon className="mb-4 h-6 w-6 text-blue-600" />
-                  <p className="font-black text-slate-950">{item.text}</p>
-                </motion.div>
-              );
-            })}
-          </div>
+          <PrivacyIntro t={t} />
+          <PrivacyCards items={t.privacy.items} />
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/** Renders privacy section copy. */
+function PrivacyIntro({ t }: { t: (typeof translations)[Locale] }) {
+  return (
+    <div>
+      <p className="font-black text-blue-600">{t.privacy.eyebrow}</p>
+      <h2 className="mt-3 text-4xl font-black tracking-normal text-slate-950">
+        {t.privacy.title}
+      </h2>
+      <p className="mt-4 leading-7 text-slate-600">{t.privacy.desc}</p>
+    </div>
+  );
+}
+
+/** Renders privacy promise cards. */
+function PrivacyCards({
+  items,
+}: {
+  items: (typeof translations)[Locale]["privacy"]["items"];
+}) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {items.map((item) => (
+        <PrivacyCard key={item.text} item={item} />
+      ))}
+    </div>
+  );
+}
+
+/** Renders a single privacy promise card. */
+function PrivacyCard({
+  item,
+}: {
+  item: (typeof translations)[Locale]["privacy"]["items"][number];
+}) {
+  const Icon = item.icon;
+
+  return (
+    <motion.div
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      className="rounded-2xl border border-slate-200 bg-white p-5"
+    >
+      <Icon className="mb-4 h-6 w-6 text-blue-600" />
+      <p className="font-black text-slate-950">{item.text}</p>
+    </motion.div>
   );
 }
 
