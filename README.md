@@ -2,6 +2,8 @@
 
 A lightweight browser extension that generates, manages, and organizes Gmail aliases directly from your browser. Create plus-addressed aliases (`name+shopping@gmail.com`), Gmail dot-trick variations, custom presets, and maintain a searchable history—all without sending your data anywhere.
 
+<img width="1920" height="917" alt="Gmail-Alias-Toolkit-07-06-2026_10_20_AM" src="https://github.com/user-attachments/assets/b0f76cea-2a0c-4522-8a14-d9486023f8bd" />
+
 ## Features
 
 ### Alias Generation
