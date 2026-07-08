@@ -162,9 +162,7 @@ function injectIcon(input: EmailInputElement) {
   container.className = "gmail-alias-input-wrapper";
   container.innerHTML = ICON_HTML;
 
-  const icon = container.querySelector(
-    ".gmail-alias-input-icon",
-  ) as SVGElement;
+  const icon = container.querySelector(".gmail-alias-input-icon") as SVGElement;
 
   input.parentNode?.insertBefore(container, input.nextSibling);
   container.insertBefore(input, container.firstChild);
@@ -190,9 +188,7 @@ function injectIcon(input: EmailInputElement) {
     e.preventDefault();
     e.stopPropagation();
 
-    document
-      .querySelectorAll(".gmail-alias-popup")
-      .forEach((p) => p.remove());
+    document.querySelectorAll(".gmail-alias-popup").forEach((p) => p.remove());
 
     const data = await fetchSuggestions();
     if (!data || data.suggestions.length === 0) {

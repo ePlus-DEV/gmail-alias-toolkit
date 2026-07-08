@@ -5,7 +5,10 @@ import { AnimatedNumber } from "src/components/motion/animated-number";
 import Button from "./Button";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
-import { normalizeHostname, getDisplayName } from "../../../src/utils/hostnameNormalizer";
+import {
+  normalizeHostname,
+  getDisplayName,
+} from "../../../src/utils/hostnameNormalizer";
 import {
   getPreviousAliasForWebsite,
   generateSuggestionsForWebsite,
@@ -259,7 +262,9 @@ export default function Statistics() {
   const [currentWebsite, setCurrentWebsite] = useState<string | null>(null);
   const [previousAlias, setPreviousAlias] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [activeEmail, setActiveEmail] = useState<string>("your.email@gmail.com");
+  const [activeEmail, setActiveEmail] = useState<string>(
+    "your.email@gmail.com",
+  );
 
   /** Loads active email account and fetches associated statistics from storage. */
   const loadActiveEmailAndStats = async () => {
@@ -357,7 +362,10 @@ export default function Statistics() {
 
     setCurrentWebsite(normalized);
 
-    const previous = await getPreviousAliasForWebsite(activeEmail, activeTabUrl);
+    const previous = await getPreviousAliasForWebsite(
+      activeEmail,
+      activeTabUrl,
+    );
     setPreviousAlias(previous?.alias || null);
 
     const suggestionsList = await generateSuggestionsForWebsite(

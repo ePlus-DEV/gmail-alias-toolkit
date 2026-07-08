@@ -250,9 +250,11 @@ export default defineBackground(() => {
       // The suggestion will be stored in a temp cache during menu show
       const cacheResult = (await browser.storage.session?.get?.(
         "contextMenuWebsiteSuggestions",
-      )) as {
-        contextMenuWebsiteSuggestions?: string[] | undefined;
-      } | undefined;
+      )) as
+        | {
+            contextMenuWebsiteSuggestions?: string[] | undefined;
+          }
+        | undefined;
       const suggestions = (cacheResult?.contextMenuWebsiteSuggestions ||
         []) as string[];
       if (suggestions[suggestionIndex]) {
@@ -334,12 +336,10 @@ export default defineBackground(() => {
       // If website suggestion was used, save the mapping
       if (String(info.menuItemId).startsWith("website-suggestion-")) {
         try {
-          const { normalizeHostname } = await import(
-            "../src/utils/hostnameNormalizer"
-          );
-          const { saveWebsiteAlias } = await import(
-            "../src/services/websiteAliasService"
-          );
+          const { normalizeHostname } =
+            await import("../src/utils/hostnameNormalizer");
+          const { saveWebsiteAlias } =
+            await import("../src/services/websiteAliasService");
           if (tab.url) {
             const normalized = normalizeHostname(tab.url);
             if (normalized) {
@@ -530,12 +530,10 @@ export default defineBackground(() => {
       if (!info.pageUrl) return;
 
       // Import services inline to avoid circular dependencies
-      const { normalizeHostname } = await import(
-        "../src/utils/hostnameNormalizer"
-      );
-      const { generateSuggestionsForWebsite } = await import(
-        "../src/services/websiteAliasService"
-      );
+      const { normalizeHostname } =
+        await import("../src/utils/hostnameNormalizer");
+      const { generateSuggestionsForWebsite } =
+        await import("../src/services/websiteAliasService");
 
       const normalized = normalizeHostname(info.pageUrl);
       if (!normalized) return;
@@ -594,33 +592,34 @@ export default defineBackground(() => {
   });
 
   // Handle messages from popup/content script
-  browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    try {
-      if (message.action === "getActiveTabUrl") {
-        const tabs = await browser.tabs.query({
-          active: true,
-          currentWindow: true,
-        });
-        const tab = tabs[0];
-        sendResponse({
-          url: tab?.url,
-          title: tab?.title,
-        });
-      } else if (message.action === "saveWebsiteAlias") {
-        // Import service inline to avoid circular dependencies
-        const { saveWebsiteAlias } = await import(
-          "../src/services/websiteAliasService"
-        );
-        await saveWebsiteAlias(
-          message.email,
-          message.normalizedHostname,
-          message.alias,
-        );
-        sendResponse({ success: true });
+  browser.runtime.onMessage.addListener(
+    async (message, sender, sendResponse) => {
+      try {
+        if (message.action === "getActiveTabUrl") {
+          const tabs = await browser.tabs.query({
+            active: true,
+            currentWindow: true,
+          });
+          const tab = tabs[0];
+          sendResponse({
+            url: tab?.url,
+            title: tab?.title,
+          });
+        } else if (message.action === "saveWebsiteAlias") {
+          // Import service inline to avoid circular dependencies
+          const { saveWebsiteAlias } =
+            await import("../src/services/websiteAliasService");
+          await saveWebsiteAlias(
+            message.email,
+            message.normalizedHostname,
+            message.alias,
+          );
+          sendResponse({ success: true });
+        }
+      } catch (error) {
+        console.error("Message handler error:", error);
+        sendResponse({ error: String(error) });
       }
-    } catch (error) {
-      console.error("Message handler error:", error);
-      sendResponse({ error: String(error) });
-    }
-  });
+    },
+  );
 });

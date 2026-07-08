@@ -62,9 +62,7 @@ export async function getPreviousAliasForWebsite(
   const map = await getWebsiteAliasMap(email);
   const entry = map[normalized];
 
-  return entry
-    ? { alias: entry.alias, timestamp: entry.timestamp }
-    : null;
+  return entry ? { alias: entry.alias, timestamp: entry.timestamp } : null;
 }
 
 /**
