@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "Gmail-Aliase mit Plus-Adressierung und Vorlagen erstellen und verwalten"
+    "message": "Gmail-Aliasse mit +tag-Adressen und Vorlagen erstellen und verwalten"
   },
   "headerSubtitle": {
-    "message": "Aliase mit Plus-Adressierung erstellen"
+    "message": "Aliasse mit +tag-Adressen erstellen"
   },
   "settings": {
     "message": "Einstellungen"
@@ -45,7 +45,7 @@
     "message": "deine.email"
   },
   "accountLabelPlaceholder": {
-    "message": "Bezeichnung (optional, z. B. Arbeit, Privat)"
+    "message": "Label (optional, z. B. Arbeit, Privat)"
   },
   "pressTabToAddGmail": {
     "message": "Drücke $KEY$, um @gmail.com hinzuzufügen",
@@ -74,7 +74,7 @@
     "message": "Tricks"
   },
   "generating": {
-    "message": "Wird generiert"
+    "message": "Wird erstellt"
   },
   "copied": {
     "message": "Kopiert"
@@ -89,7 +89,7 @@
     "message": "Alias"
   },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - klicken zum Kopieren",
+    "message": "$EMAIL$ - zum Kopieren klicken",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -108,7 +108,7 @@
     "message": "Punkt-Trick"
   },
   "plusTags": {
-    "message": "Plus-Tags (+)"
+    "message": "Plus- (+) Tags"
   },
   "googlemail": {
     "message": "Googlemail"
@@ -129,13 +129,13 @@
     "message": "Punktpositionen zufällig wählen"
   },
   "sequential": {
-    "message": "Nacheinander"
+    "message": "Fortlaufend"
   },
   "generateTricks": {
-    "message": "Tricks generieren"
+    "message": "Tricks erstellen"
   },
   "generatedVariations": {
-    "message": "Generierte Varianten"
+    "message": "Erstellte Varianten"
   },
   "gmailTrickInfoLabel": {
     "message": "Gmail-Trick:"
@@ -159,10 +159,10 @@
     "message": "Zeitstempel (1234567890)"
   },
   "numberOfAliases": {
-    "message": "Anzahl der Aliase"
+    "message": "Anzahl der Aliasse"
   },
   "generateRandomAliases": {
-    "message": "$COUNT$ zufällige Aliase generieren",
+    "message": "$COUNT$ zufällige Alias$PLURAL$ erstellen",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,7 +173,7 @@
     }
   },
   "generatedAliases": {
-    "message": "Generierte Aliase"
+    "message": "Erstellte Aliasse"
   },
   "totalCount": {
     "message": "$COUNT$ insgesamt",
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "$COUNT$ Aliase kopiert!",
+    "message": "$COUNT$ Aliasse kopiert!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -207,10 +207,10 @@
     "message": "Unix-Zeitstempel"
   },
   "tagPlaceholder": {
-    "message": "Tag eingeben (z. B. shopping, arbeit)"
+    "message": "Tag eingeben (z. B. shopping, work)"
   },
   "generate": {
-    "message": "Generieren"
+    "message": "Erstellen"
   },
   "yourPresets": {
     "message": "Deine Vorlagen"
@@ -222,7 +222,7 @@
     "message": "Beispiel kopieren"
   },
   "recentAliases": {
-    "message": "Aktuelle Aliase"
+    "message": "Aktuelle Aliasse"
   },
   "favorites": {
     "message": "Favoriten"
@@ -234,7 +234,7 @@
     "message": "Als JSON exportieren"
   },
   "selectAliases": {
-    "message": "Aliase auswählen"
+    "message": "Aliasse auswählen"
   },
   "select": {
     "message": "Auswählen"
@@ -248,7 +248,7 @@
     }
   },
   "deselectAll": {
-    "message": "Auswahl aufheben"
+    "message": "Alle abwählen"
   },
   "selectAll": {
     "message": "Alle auswählen"
@@ -286,7 +286,7 @@
     }
   },
   "searchAliases": {
-    "message": "Aliase suchen..."
+    "message": "Aliasse suchen..."
   },
   "allTags": {
     "message": "Alle Tags"
@@ -319,7 +319,7 @@
     "message": "Zu Favoriten hinzufügen"
   },
   "showingRange": {
-    "message": "$START$–$END$ von $TOTAL$ werden angezeigt",
+    "message": "Zeige $START$-$END$ von $TOTAL$",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -383,13 +383,13 @@
     "message": "Badge-Zähler"
   },
   "badgeNone": {
-    "message": "Keine (Ausgeblendet)"
+    "message": "Keine (ausgeblendet)"
   },
   "badgeTotal": {
     "message": "Gesamt im Verlauf"
   },
   "badgeAllTime": {
-    "message": "Insgesamt generiert"
+    "message": "Insgesamt erstellt (alle Zeiten)"
   },
   "badgeToday": {
     "message": "Heute erstellt"
@@ -401,16 +401,16 @@
     "message": "Kopierbenachrichtigungen"
   },
   "aliasGeneration": {
-    "message": "Alias-Generierung"
+    "message": "Alias-Erstellung"
   },
   "randomAliasFormat": {
-    "message": "Format für zufällige Aliase"
+    "message": "Format für zufällige Aliasse"
   },
   "autoSaveLimit": {
     "message": "Limit für automatisches Speichern"
   },
   "aliasesLimit": {
-    "message": "$COUNT$ Aliase",
+    "message": "$COUNT$ Aliasse",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -421,7 +421,7 @@
     "message": "Benutzerdefinierte Vorlagen"
   },
   "label": {
-    "message": "Bezeichnung"
+    "message": "Label"
   },
   "tag": {
     "message": "Tag"
@@ -454,16 +454,16 @@
     "message": "Zurücksetzen"
   },
   "clearHistoryTitle": {
-    "message": "Aktuelle Aliase löschen?"
+    "message": "Aktuelle Aliasse löschen?"
   },
   "clearHistoryMessage": {
-    "message": "Dadurch werden alle Aliase aus der Liste des aktuellen Verlaufs entfernt."
+    "message": "Dadurch werden alle Aliasse aus der Liste des aktuellen Verlaufs entfernt."
   },
   "emailAccounts": {
     "message": "E-Mail-Konten"
   },
   "manageAccountsDescription": {
-    "message": "Verwalte deine Gmail-Konten. Jedes Konto hat seinen eigenen Verlauf, eigene Statistiken und Favoriten."
+    "message": "Verwalte deine Gmail-Konten. Jedes Konto hat seinen eigenen Verlauf, Statistiken und Favoriten."
   },
   "noAccountsFound": {
     "message": "Keine Konten gefunden. Bitte füge ein Konto über den Hauptbildschirm hinzu."
@@ -472,7 +472,7 @@
     "message": "E-Mail-Adresse"
   },
   "accountLabel": {
-    "message": "Kontobezeichnung"
+    "message": "Kontolabel"
   },
   "emailAddressPlaceholder": {
     "message": "deine.email@gmail.com"
@@ -499,7 +499,7 @@
     "message": "Konto löschen?"
   },
   "deleteAccountMessage": {
-    "message": "„$LABEL$“ ($EMAIL$) löschen?\n\nDies löscht dauerhaft:\n- Den gesamten Verlauf dieses Kontos\n- Alle Statistiken\n- Alle Favoriten\n\nDiese Aktion kann nicht rückgängig gemacht werden.",
+    "message": "\"$LABEL$\" ($EMAIL$) löschen?\n\nDadurch wird dauerhaft gelöscht:\n- Der gesamte Verlauf für dieses Konto\n- Alle Statistiken\n- Alle Favoriten\n\nDiese Aktion kann nicht rückgängig gemacht werden.",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -516,7 +516,7 @@
     "message": "Konto-E-Mail ändern?"
   },
   "changeAccountEmailMessage": {
-    "message": "E-Mail ändern von\n$OLD_EMAIL$\nzu\n$NEW_EMAIL$?\n\nDies wird:\n- Den gesamten Verlauf, alle Statistiken und Favoriten zur neuen E-Mail migrieren\n- Die Konto-E-Mail aktualisieren\n- Mit der alten E-Mail verknüpfte Daten löschen\n\nFortfahren?",
+    "message": "E-Mail ändern von\n$OLD_EMAIL$\nzu\n$NEW_EMAIL$?\n\nDies wird:\n- Den gesamten Verlauf, Statistiken und Favoriten zur neuen E-Mail migrieren\n- Die Konto-E-Mail aktualisieren\n- Daten löschen, die mit der alten E-Mail verknüpft sind\n\nFortfahren?",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -536,13 +536,13 @@
     "message": "Benutzerdefinierte Tags"
   },
   "menuNoPresets": {
-    "message": "Keine Vorlagen – in den Einstellungen hinzufügen"
+    "message": "Keine Vorlagen - in Einstellungen hinzufügen"
   },
   "menuGmailTricks": {
     "message": "Gmail-Tricks"
   },
   "menuDotVariation": {
-    "message": "Punkt-Variation"
+    "message": "Punktvariante"
   },
   "menuGooglemailDomain": {
     "message": "Googlemail-Domain"
@@ -563,7 +563,7 @@
     "message": "Einstellungen importiert"
   },
   "toastImportFailed": {
-    "message": "Import fehlgeschlagen – ungültige Datei"
+    "message": "Import fehlgeschlagen - ungültige Datei"
   },
   "toastSettingsReset": {
     "message": "Einstellungen auf Standard zurückgesetzt"
@@ -586,7 +586,7 @@
     }
   },
   "errorLabelRequired": {
-    "message": "Bezeichnung darf nicht leer sein"
+    "message": "Label darf nicht leer sein"
   },
   "errorInvalidEmail": {
     "message": "Bitte gib eine gültige E-Mail-Adresse ein"
@@ -604,7 +604,7 @@
     "message": "QR-Code konnte nicht erstellt werden"
   },
   "toastExportedAliases": {
-    "message": "$COUNT$ Aliase exportiert",
+    "message": "$COUNT$ Aliasse exportiert",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -612,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "$COUNT$ Aliase gelöscht",
+    "message": "$COUNT$ Aliasse gelöscht",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -643,7 +643,7 @@
     "message": "Willkommen bei Gmail Alias Toolkit"
   },
   "welcomeSubtitle": {
-    "message": "Erstelle unbegrenzt E-Mail-Aliase für Datenschutz und Organisation"
+    "message": "Erstelle unbegrenzt E-Mail-Aliasse für Datenschutz und Organisation"
   },
   "letsGetStarted": {
     "message": "Los geht’s"
@@ -660,7 +660,7 @@
     }
   },
   "settingUp": {
-    "message": "Einrichtung läuft..."
+    "message": "Wird eingerichtet..."
   },
   "getStarted": {
     "message": "Starten"
@@ -672,7 +672,7 @@
     "message": "Was du tun kannst:"
   },
   "featurePrivateEmail": {
-    "message": "Private-E-Mail-Generator"
+    "message": "Generator für private E-Mails"
   },
   "featureCustomTags": {
     "message": "Benutzerdefinierte Tags & Vorlagen"
@@ -692,23 +692,50 @@
     }
   },
   "clickStarHint": {
-    "message": "Klicke bei einem Alias im Verlauf auf den Stern, um ihn hier hinzuzufügen"
-  }
-,
-  "viewStatistics": { "message": "Statistiken anzeigen" },
-  "statistics": { "message": "Statistiken" },
-  "metricsTab": { "message": "Metriken" },
-  "timelineTab": { "message": "Zeitstrahl" },
-  "tagsTab": { "message": "Tags" },
-  "totalGenerated": { "message": "Insgesamt generiert" },
-  "createdToday": { "message": "Heute erstellt" },
-  "thisWeek": { "message": "Diese Woche" },
-  "thisMonth": { "message": "Dieser Monat" },
-  "topTag": { "message": "Top-Tag" },
-  "totalTags": { "message": "Gesamtanzahl Tags" },
-  "noTagsYet": { "message": "Noch keine Tags" },
+    "message": "Klicke im Verlauf bei einem Alias auf den Stern, um ihn hier hinzuzufügen"
+  },
+  "viewStatistics": {
+    "message": "Statistiken anzeigen"
+  },
+  "statistics": {
+    "message": "Statistiken"
+  },
+  "metricsTab": {
+    "message": "Metriken"
+  },
+  "timelineTab": {
+    "message": "Zeitachse"
+  },
+  "tagsTab": {
+    "message": "Tags"
+  },
+  "totalGenerated": {
+    "message": "Insgesamt erstellt"
+  },
+  "createdToday": {
+    "message": "Heute erstellt"
+  },
+  "thisWeek": {
+    "message": "Diese Woche"
+  },
+  "thisMonth": {
+    "message": "Diesen Monat"
+  },
+  "topTag": {
+    "message": "Top-Tag"
+  },
+  "totalTags": {
+    "message": "Tags insgesamt"
+  },
+  "noTagsYet": {
+    "message": "Noch keine Tags"
+  },
   "percentLabel": {
     "message": "$PERCENT$%",
-    "placeholders": { "percent": { "content": "$1" } }
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "Gmail takma adlarını plus adresleme ve ön ayarlarla oluşturun ve yönetin"
+    "message": "+tag adresleri ve hazır ayarlarla Gmail takma adları oluşturun ve yönetin"
   },
   "headerSubtitle": {
-    "message": "Plus adresleme ile takma adlar oluşturun"
+    "message": "+tag adresleriyle takma adlar oluşturun"
   },
   "settings": {
     "message": "Ayarlar"
@@ -24,31 +24,31 @@
     "message": "Kopyala"
   },
   "copyAll": {
-    "message": "Copy All"
+    "message": "Tümünü kopyala"
   },
   "copyToClipboard": {
-    "message": "Copy to clipboard"
+    "message": "Panoya kopyala"
   },
   "activeGmailAddress": {
-    "message": "Active Gmail Address"
+    "message": "Etkin Gmail Adresi"
   },
   "addNewAccount": {
     "message": "Yeni hesap ekle"
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Hesap ekle"
   },
   "addNewAccountTitle": {
     "message": "Yeni hesap ekle"
   },
   "emailPlaceholder": {
-    "message": "your.email"
+    "message": "email.adresin"
   },
   "accountLabelPlaceholder": {
-    "message": "Label (optional, e.g., Work, Personal)"
+    "message": "Etiket (isteğe bağlı, örn. İş, Kişisel)"
   },
   "pressTabToAddGmail": {
-    "message": "Press $KEY$ to add @gmail.com",
+    "message": "@gmail.com eklemek için $KEY$ tuşuna basın",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -56,40 +56,40 @@
     }
   },
   "gmailWarning": {
-    "message": "This doesn't look like a Gmail address. Plus addressing works best with Gmail."
+    "message": "Bu bir Gmail adresine benzemiyor. Plus adresleme en iyi Gmail ile çalışır."
   },
   "random": {
     "message": "Rastgele"
   },
   "customTags": {
-    "message": "Custom Tags"
+    "message": "Özel etiketler"
   },
   "gmailTricks": {
-    "message": "Gmail Hileleri"
+    "message": "Gmail ipuçları"
   },
   "tabTagsShort": {
-    "message": "Tags"
+    "message": "Etiketler"
   },
   "tabTricksShort": {
-    "message": "Tricks"
+    "message": "İpuçları"
   },
   "generating": {
-    "message": "Generating"
+    "message": "Oluşturuluyor"
   },
   "copied": {
-    "message": "Copied"
+    "message": "Kopyalandı"
   },
   "switchToLightMode": {
-    "message": "Switch to light mode"
+    "message": "Açık moda geç"
   },
   "switchToDarkMode": {
-    "message": "Switch to dark mode"
+    "message": "Koyu moda geç"
   },
   "aliasColumn": {
-    "message": "Alias"
+    "message": "Takma ad"
   },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - click to copy",
+    "message": "$EMAIL$ - kopyalamak için tıklayın",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -97,7 +97,7 @@
     }
   },
   "pageLabel": {
-    "message": "Page $PAGE$",
+    "message": "Sayfa $PAGE$",
     "placeholders": {
       "page": {
         "content": "$1"
@@ -105,64 +105,64 @@
     }
   },
   "dotTrick": {
-    "message": "Dot Trick"
+    "message": "Nokta ipucu"
   },
   "plusTags": {
-    "message": "Plus (+) Tags"
+    "message": "Plus (+) etiketleri"
   },
   "googlemail": {
     "message": "Googlemail"
   },
   "removeDots": {
-    "message": "Remove Dots"
+    "message": "Noktaları kaldır"
   },
   "dotPlus": {
-    "message": "Dot + Plus"
+    "message": "Nokta + Plus"
   },
   "allCombos": {
-    "message": "All Combos"
+    "message": "Tüm kombinasyonlar"
   },
   "numberOfVariations": {
-    "message": "Number of variations"
+    "message": "Varyasyon sayısı"
   },
   "randomizeDotPositions": {
-    "message": "Randomize dot positions"
+    "message": "Nokta konumlarını rastgele yap"
   },
   "sequential": {
-    "message": "Sequential"
+    "message": "Sıralı"
   },
   "generateTricks": {
-    "message": "Generate Tricks"
+    "message": "İpuçları oluştur"
   },
   "generatedVariations": {
-    "message": "Generated Variations"
+    "message": "Oluşturulan varyasyonlar"
   },
   "gmailTrickInfoLabel": {
-    "message": "Gmail trick:"
+    "message": "Gmail ipucu:"
   },
   "gmailTrickInfo": {
-    "message": "Dots are ignored and everything after + goes to the same inbox"
+    "message": "Noktalar yok sayılır ve + sonrasındaki her şey aynı gelen kutusuna gider"
   },
   "format": {
-    "message": "Format"
+    "message": "Biçim"
   },
   "privateMailFormat": {
-    "message": "Private Mail (private-mail-xxxx)"
+    "message": "Özel Posta (private-mail-xxxx)"
   },
   "randomCharactersFormat": {
-    "message": "Random Characters (abc123xy)"
+    "message": "Rastgele karakterler (abc123xy)"
   },
   "randomWordsFormat": {
-    "message": "Random Words (happy-fox-42)"
+    "message": "Rastgele kelimeler (happy-fox-42)"
   },
   "timestampFormat": {
-    "message": "Timestamp (1234567890)"
+    "message": "Zaman damgası (1234567890)"
   },
   "numberOfAliases": {
-    "message": "Number of aliases"
+    "message": "Takma ad sayısı"
   },
   "generateRandomAliases": {
-    "message": "Generate $COUNT$ Random Alias$PLURAL$",
+    "message": "$COUNT$ rastgele takma ad$PLURAL$ oluştur",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,10 +173,10 @@
     }
   },
   "generatedAliases": {
-    "message": "Generated Aliases"
+    "message": "Oluşturulan takma adlar"
   },
   "totalCount": {
-    "message": "$COUNT$ total",
+    "message": "Toplam $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "Copied $COUNT$ aliases!",
+    "message": "$COUNT$ takma ad kopyalandı!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -192,34 +192,34 @@
     }
   },
   "failedToCopy": {
-    "message": "Failed to copy"
+    "message": "Kopyalanamadı"
   },
   "formatPrivateMail": {
-    "message": "Format: private-mail-xxxx"
+    "message": "Biçim: private-mail-xxxx"
   },
   "formatAlphanumeric": {
-    "message": "8 random characters"
+    "message": "8 rastgele karakter"
   },
   "formatWords": {
-    "message": "2 random words"
+    "message": "2 rastgele kelime"
   },
   "formatTimestamp": {
-    "message": "Unix timestamp"
+    "message": "Unix zaman damgası"
   },
   "tagPlaceholder": {
-    "message": "Enter tag (e.g., shopping, work)"
+    "message": "Etiket girin (örn. shopping, work)"
   },
   "generate": {
     "message": "Oluştur"
   },
   "yourPresets": {
-    "message": "Your Presets"
+    "message": "Hazır ayarlarınız"
   },
   "example": {
-    "message": "Example:"
+    "message": "Örnek:"
   },
   "copyExample": {
-    "message": "Copy example"
+    "message": "Örneği kopyala"
   },
   "recentAliases": {
     "message": "Son takma adlar"
@@ -228,19 +228,19 @@
     "message": "Favoriler"
   },
   "exportAsCsv": {
-    "message": "Export as CSV"
+    "message": "CSV olarak dışa aktar"
   },
   "exportAsJson": {
-    "message": "Export as JSON"
+    "message": "JSON olarak dışa aktar"
   },
   "selectAliases": {
-    "message": "Select aliases"
+    "message": "Takma adları seç"
   },
   "select": {
-    "message": "Select"
+    "message": "Seç"
   },
   "starredCount": {
-    "message": "$COUNT$ starred",
+    "message": "$COUNT$ yıldızlı",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -248,13 +248,13 @@
     }
   },
   "deselectAll": {
-    "message": "Deselect All"
+    "message": "Tüm seçimleri kaldır"
   },
   "selectAll": {
-    "message": "Select All"
+    "message": "Tümünü seç"
   },
   "selectedCount": {
-    "message": "$COUNT$ selected",
+    "message": "$COUNT$ seçildi",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -262,7 +262,7 @@
     }
   },
   "deleteCount": {
-    "message": "Delete $COUNT$",
+    "message": "$COUNT$ sil",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -270,7 +270,7 @@
     }
   },
   "allCount": {
-    "message": "All ($COUNT$)",
+    "message": "Tümü ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -278,7 +278,7 @@
     }
   },
   "favoritesCount": {
-    "message": "Favorites ($COUNT$)",
+    "message": "Favoriler ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -286,40 +286,40 @@
     }
   },
   "searchAliases": {
-    "message": "Search aliases..."
+    "message": "Takma ad ara..."
   },
   "allTags": {
-    "message": "All Tags"
+    "message": "Tüm etiketler"
   },
   "mostRecent": {
-    "message": "Most Recent"
+    "message": "En yeni"
   },
   "az": {
     "message": "A-Z"
   },
   "noFavoritesYet": {
-    "message": "No favorites yet"
+    "message": "Henüz favori yok"
   },
   "starEmailsHint": {
-    "message": "Star emails from your history to quick access them here"
+    "message": "Buradan hızlı erişim için geçmişinizdeki e-postalara yıldız ekleyin"
   },
   "noResultsFound": {
-    "message": "No results found"
+    "message": "Sonuç bulunamadı"
   },
   "differentSearchHint": {
-    "message": "Try a different search or filter"
+    "message": "Farklı bir arama veya filtre deneyin"
   },
   "showQrCode": {
-    "message": "Show QR code"
+    "message": "QR kodunu göster"
   },
   "removeFromFavorites": {
-    "message": "Remove from favorites"
+    "message": "Favorilerden kaldır"
   },
   "addToFavorites": {
-    "message": "Add to favorites"
+    "message": "Favorilere ekle"
   },
   "showingRange": {
-    "message": "Showing $START$-$END$ of $TOTAL$",
+    "message": "$TOTAL$ içinden $START$-$END$ gösteriliyor",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -333,7 +333,7 @@
     }
   },
   "perPage": {
-    "message": "$COUNT$ / page",
+    "message": "$COUNT$ / sayfa",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -341,76 +341,76 @@
     }
   },
   "firstPage": {
-    "message": "First page"
+    "message": "İlk sayfa"
   },
   "previousPage": {
-    "message": "Previous page"
+    "message": "Önceki sayfa"
   },
   "nextPage": {
-    "message": "Next page"
+    "message": "Sonraki sayfa"
   },
   "lastPage": {
-    "message": "Last page"
+    "message": "Son sayfa"
   },
   "scanToCopyAlias": {
-    "message": "Scan to copy alias"
+    "message": "Takma adı kopyalamak için tara"
   },
   "general": {
-    "message": "General"
+    "message": "Genel"
   },
   "accounts": {
-    "message": "Accounts"
+    "message": "Hesaplar"
   },
   "changelog": {
-    "message": "Changelog"
+    "message": "Değişiklik günlüğü"
   },
   "appearanceDisplay": {
-    "message": "Appearance & Display"
+    "message": "Görünüm ve görüntüleme"
   },
   "theme": {
-    "message": "Theme"
+    "message": "Tema"
   },
   "themeLight": {
-    "message": "Light"
+    "message": "Açık"
   },
   "themeDark": {
-    "message": "Dark"
+    "message": "Koyu"
   },
   "themeAuto": {
-    "message": "System (Auto)"
+    "message": "Sistem (Otomatik)"
   },
   "badgeCounter": {
-    "message": "Badge Counter"
+    "message": "Rozet sayacı"
   },
   "badgeNone": {
-    "message": "None (Hidden)"
+    "message": "Yok (Gizli)"
   },
   "badgeTotal": {
-    "message": "Total in History"
+    "message": "Geçmişte toplam"
   },
   "badgeAllTime": {
-    "message": "Total Generated (All Time)"
+    "message": "Toplam oluşturulan (tüm zamanlar)"
   },
   "badgeToday": {
-    "message": "Created Today"
+    "message": "Bugün oluşturuldu"
   },
   "badgeWeek": {
-    "message": "This Week"
+    "message": "Bu hafta"
   },
   "copyNotifications": {
-    "message": "Copy notifications"
+    "message": "Kopyalama bildirimleri"
   },
   "aliasGeneration": {
-    "message": "Alias Generation"
+    "message": "Takma ad oluşturma"
   },
   "randomAliasFormat": {
-    "message": "Random Alias Format"
+    "message": "Rastgele takma ad biçimi"
   },
   "autoSaveLimit": {
-    "message": "Auto-save Limit"
+    "message": "Otomatik kaydetme limiti"
   },
   "aliasesLimit": {
-    "message": "$COUNT$ aliases",
+    "message": "$COUNT$ takma ad",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -418,88 +418,88 @@
     }
   },
   "customPresets": {
-    "message": "Custom Presets"
+    "message": "Özel hazır ayarlar"
   },
   "label": {
     "message": "Etiket"
   },
   "tag": {
-    "message": "Tag"
+    "message": "Etiket"
   },
   "addPreset": {
-    "message": "+ Add Preset"
+    "message": "+ Hazır ayar ekle"
   },
   "dataManagement": {
-    "message": "Data Management"
+    "message": "Veri yönetimi"
   },
   "export": {
-    "message": "Export"
+    "message": "Dışa aktar"
   },
   "import": {
-    "message": "Import"
+    "message": "İçe aktar"
   },
   "clear": {
-    "message": "Clear"
+    "message": "Temizle"
   },
   "resetSettings": {
-    "message": "Reset all settings to default"
+    "message": "Tüm ayarları varsayılana sıfırla"
   },
   "resetSettingsTitle": {
-    "message": "Reset settings?"
+    "message": "Ayarlar sıfırlansın mı?"
   },
   "resetSettingsMessage": {
-    "message": "This will restore every setting to its default value."
+    "message": "Bu işlem tüm ayarları varsayılan değerlerine döndürür."
   },
   "reset": {
-    "message": "Reset"
+    "message": "Sıfırla"
   },
   "clearHistoryTitle": {
-    "message": "Clear recent aliases?"
+    "message": "Son takma adlar temizlensin mi?"
   },
   "clearHistoryMessage": {
-    "message": "This removes all aliases from the recent history list."
+    "message": "Bu işlem son geçmiş listesindeki tüm takma adları kaldırır."
   },
   "emailAccounts": {
-    "message": "Email Accounts"
+    "message": "E-posta hesapları"
   },
   "manageAccountsDescription": {
-    "message": "Manage your Gmail accounts. Each account has its own history, statistics, and favorites."
+    "message": "Gmail hesaplarınızı yönetin. Her hesabın kendi geçmişi, istatistikleri ve favorileri vardır."
   },
   "noAccountsFound": {
-    "message": "No accounts found. Please add an account from the main screen."
+    "message": "Hesap bulunamadı. Lütfen ana ekrandan bir hesap ekleyin."
   },
   "emailAddress": {
     "message": "E-posta adresi"
   },
   "accountLabel": {
-    "message": "Account label"
+    "message": "Hesap etiketi"
   },
   "emailAddressPlaceholder": {
-    "message": "your.email@gmail.com"
+    "message": "email.adresin@gmail.com"
   },
   "emailChangeWarning": {
-    "message": "Changing email will migrate all data to the new email address"
+    "message": "E-posta değiştirildiğinde tüm veriler yeni e-posta adresine taşınır"
   },
   "saveChanges": {
     "message": "Değişiklikleri kaydet"
   },
   "active": {
-    "message": "Active"
+    "message": "Etkin"
   },
   "editAccount": {
-    "message": "Edit account"
+    "message": "Hesabı düzenle"
   },
   "cannotDeleteLastAccountTitle": {
-    "message": "Cannot delete the last account"
+    "message": "Son hesap silinemez"
   },
   "deleteThisAccount": {
-    "message": "Delete this account"
+    "message": "Bu hesabı sil"
   },
   "deleteAccountTitle": {
-    "message": "Delete account?"
+    "message": "Hesap silinsin mi?"
   },
   "deleteAccountMessage": {
-    "message": "Delete \"$LABEL$\" ($EMAIL$)?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.",
+    "message": "\"$LABEL$\" ($EMAIL$) silinsin mi?\n\nBu işlem kalıcı olarak şunları siler:\n- Bu hesaba ait tüm geçmiş\n- Tüm istatistikler\n- Tüm favoriler\n\nBu işlem geri alınamaz.",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -513,10 +513,10 @@
     "message": "Sil"
   },
   "changeAccountEmailTitle": {
-    "message": "Change account email?"
+    "message": "Hesap e-postası değiştirilsin mi?"
   },
   "changeAccountEmailMessage": {
-    "message": "Change email from\n$OLD_EMAIL$\nto\n$NEW_EMAIL$?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?",
+    "message": "E-postayı\n$OLD_EMAIL$\nadresinden\n$NEW_EMAIL$\nadresine değiştirilsin mi?\n\nBu işlem:\n- Tüm geçmişi, istatistikleri ve favorileri yeni e-postaya taşır\n- Hesap e-postasını günceller\n- Eski e-posta ile ilişkili verileri siler\n\nDevam edilsin mi?",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -527,58 +527,58 @@
     }
   },
   "changeEmail": {
-    "message": "Change email"
+    "message": "E-postayı değiştir"
   },
   "menuRandomEmailAlias": {
-    "message": "Random Email Alias"
+    "message": "Rastgele e-posta takma adı"
   },
   "menuCustomTags": {
-    "message": "Custom Tags"
+    "message": "Özel etiketler"
   },
   "menuNoPresets": {
-    "message": "No presets - Add in Settings"
+    "message": "Hazır ayar yok - Ayarlardan ekleyin"
   },
   "menuGmailTricks": {
-    "message": "Gmail Hileleri"
+    "message": "Gmail ipuçları"
   },
   "menuDotVariation": {
-    "message": "Dot Variation"
+    "message": "Nokta varyasyonu"
   },
   "menuGooglemailDomain": {
-    "message": "Googlemail Domain"
+    "message": "Googlemail alan adı"
   },
   "menuRemoveAllDots": {
-    "message": "Remove All Dots"
+    "message": "Tüm noktaları kaldır"
   },
   "toastPresetAdded": {
-    "message": "Preset added"
+    "message": "Hazır ayar eklendi"
   },
   "toastPresetRemoved": {
-    "message": "Preset removed"
+    "message": "Hazır ayar kaldırıldı"
   },
   "toastSettingsExported": {
-    "message": "Settings exported"
+    "message": "Ayarlar dışa aktarıldı"
   },
   "toastSettingsImported": {
-    "message": "Settings imported"
+    "message": "Ayarlar içe aktarıldı"
   },
   "toastImportFailed": {
-    "message": "Import failed - invalid file"
+    "message": "İçe aktarma başarısız - geçersiz dosya"
   },
   "toastSettingsReset": {
-    "message": "Settings reset to default"
+    "message": "Ayarlar varsayılana sıfırlandı"
   },
   "toastAccountSwitched": {
-    "message": "Account switched"
+    "message": "Hesap değiştirildi"
   },
   "toastAccountDeleted": {
-    "message": "Account deleted"
+    "message": "Hesap silindi"
   },
   "toastAccountUpdated": {
-    "message": "Account updated"
+    "message": "Hesap güncellendi"
   },
   "toastAccountAdded": {
-    "message": "$LABEL$ added",
+    "message": "$LABEL$ eklendi",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -586,25 +586,25 @@
     }
   },
   "errorLabelRequired": {
-    "message": "Label cannot be empty"
+    "message": "Etiket boş olamaz"
   },
   "errorInvalidEmail": {
-    "message": "Please enter a valid email address"
+    "message": "Lütfen geçerli bir e-posta adresi girin"
   },
   "errorDuplicateEmail": {
-    "message": "This email address is already used by another account"
+    "message": "Bu e-posta adresi başka bir hesap tarafından kullanılıyor"
   },
   "errorEnterEmail": {
-    "message": "Please enter an email address"
+    "message": "Lütfen bir e-posta adresi girin"
   },
   "errorAccountExists": {
-    "message": "This account already exists"
+    "message": "Bu hesap zaten var"
   },
   "toastQrFailed": {
-    "message": "Failed to generate QR code"
+    "message": "QR kodu oluşturulamadı"
   },
   "toastExportedAliases": {
-    "message": "Exported $COUNT$ aliases",
+    "message": "$COUNT$ takma ad dışa aktarıldı",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -612,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "Deleted $COUNT$ aliases",
+    "message": "$COUNT$ takma ad silindi",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -620,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "History cleared"
+    "message": "Geçmiş temizlendi"
   },
   "toastFavoriteAdded": {
-    "message": "Added to favorites"
+    "message": "Favorilere eklendi"
   },
   "toastFavoriteRemoved": {
-    "message": "Removed from favorites"
+    "message": "Favorilerden kaldırıldı"
   },
   "toastCopiedEmail": {
-    "message": "Copied $EMAIL$",
+    "message": "$EMAIL$ kopyalandı",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -637,22 +637,22 @@
     }
   },
   "toastCopyFailed": {
-    "message": "Failed to copy"
+    "message": "Kopyalanamadı"
   },
   "welcomeTitle": {
-    "message": "Welcome to Gmail Alias Toolkit"
+    "message": "Gmail Alias Toolkit’e hoş geldiniz"
   },
   "welcomeSubtitle": {
-    "message": "Generate unlimited email aliases for privacy and organization"
+    "message": "Gizlilik ve düzen için sınırsız e-posta takma adı oluşturun"
   },
   "letsGetStarted": {
-    "message": "Let's get started"
+    "message": "Başlayalım"
   },
   "enterGmailAddress": {
-    "message": "Enter your Gmail address"
+    "message": "Gmail adresinizi girin"
   },
   "pressTabForGmail": {
-    "message": "Press $KEY$ for @gmail.com",
+    "message": "@gmail.com için $KEY$ tuşuna basın",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -660,31 +660,31 @@
     }
   },
   "settingUp": {
-    "message": "Setting up..."
+    "message": "Ayarlanıyor..."
   },
   "getStarted": {
-    "message": "Get Started"
+    "message": "Başla"
   },
   "advancedSetup": {
-    "message": "Advanced Setup in Settings"
+    "message": "Ayarlarda gelişmiş kurulum"
   },
   "whatYouCanDo": {
-    "message": "What you can do:"
+    "message": "Yapabilecekleriniz:"
   },
   "featurePrivateEmail": {
-    "message": "Private Email Generator"
+    "message": "Özel e-posta oluşturucu"
   },
   "featureCustomTags": {
-    "message": "Custom Tags & Presets"
+    "message": "Özel etiketler ve hazır ayarlar"
   },
   "featureGmailTricks": {
-    "message": "Gmail Advanced Tricks"
+    "message": "Gelişmiş Gmail ipuçları"
   },
   "welcomeFooter": {
-    "message": "All data is stored locally. No tracking, no server."
+    "message": "Tüm veriler yerel olarak saklanır. Takip yok, sunucu yok."
   },
   "favoritesSaved": {
-    "message": "$COUNT$ saved",
+    "message": "$COUNT$ kaydedildi",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -692,10 +692,10 @@
     }
   },
   "clickStarHint": {
-    "message": "Click star on any alias in history to add it here"
+    "message": "Buraya eklemek için geçmişteki herhangi bir takma adın yıldızına tıklayın"
   },
   "viewStatistics": {
-    "message": "İstatistikleri Görüntüle"
+    "message": "İstatistikleri görüntüle"
   },
   "statistics": {
     "message": "İstatistikler"
@@ -704,28 +704,28 @@
     "message": "Metrikler"
   },
   "timelineTab": {
-    "message": "Zaman Çizelgesi"
+    "message": "Zaman çizelgesi"
   },
   "tagsTab": {
     "message": "Etiketler"
   },
   "totalGenerated": {
-    "message": "Toplam Oluşturulan"
+    "message": "Toplam oluşturulan"
   },
   "createdToday": {
-    "message": "Bugün Oluşturulan"
+    "message": "Bugün oluşturuldu"
   },
   "thisWeek": {
-    "message": "Bu Hafta"
+    "message": "Bu hafta"
   },
   "thisMonth": {
-    "message": "Bu Ay"
+    "message": "Bu ay"
   },
   "topTag": {
-    "message": "En İyi Etiket"
+    "message": "En iyi etiket"
   },
   "totalTags": {
-    "message": "Toplam Etiketler"
+    "message": "Toplam etiket"
   },
   "noTagsYet": {
     "message": "Henüz etiket yok"

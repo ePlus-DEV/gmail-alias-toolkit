@@ -1,317 +1,741 @@
 {
-  "extensionName": { "message": "Gmail Alias Toolkit" },
-  "extensionDescription": {
-    "message": "Tạo và quản lý bí danh Gmail bằng plus addressing và mẫu có sẵn"
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
   },
-  "headerSubtitle": { "message": "Tạo bí danh bằng plus addressing" },
-  "settings": { "message": "Cài đặt" },
-  "back": { "message": "Quay lại" },
-  "close": { "message": "Đóng" },
-  "cancel": { "message": "Hủy" },
-  "copy": { "message": "Sao chép" },
-  "copyAll": { "message": "Sao chép tất cả" },
-  "copyToClipboard": { "message": "Sao chép vào clipboard" },
-  "activeGmailAddress": { "message": "Địa chỉ Gmail đang dùng" },
-  "addNewAccount": { "message": "Thêm tài khoản mới" },
-  "addAccount": { "message": "Thêm tài khoản" },
-  "addNewAccountTitle": { "message": "Thêm tài khoản mới" },
-  "emailPlaceholder": { "message": "email.cua.ban" },
+  "extensionDescription": {
+    "message": "Tạo và quản lý alias Gmail bằng cú pháp +tag và preset"
+  },
+  "headerSubtitle": {
+    "message": "Tạo alias bằng cú pháp +tag"
+  },
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "back": {
+    "message": "Quay lại"
+  },
+  "close": {
+    "message": "Đóng"
+  },
+  "cancel": {
+    "message": "Hủy"
+  },
+  "copy": {
+    "message": "Sao chép"
+  },
+  "copyAll": {
+    "message": "Sao chép tất cả"
+  },
+  "copyToClipboard": {
+    "message": "Sao chép vào clipboard"
+  },
+  "activeGmailAddress": {
+    "message": "Địa chỉ Gmail đang hoạt động"
+  },
+  "addNewAccount": {
+    "message": "Thêm tài khoản mới"
+  },
+  "addAccount": {
+    "message": "Thêm tài khoản"
+  },
+  "addNewAccountTitle": {
+    "message": "Thêm tài khoản mới"
+  },
+  "emailPlaceholder": {
+    "message": "email.cua.ban"
+  },
   "accountLabelPlaceholder": {
     "message": "Nhãn (tùy chọn, ví dụ: Công việc, Cá nhân)"
   },
   "pressTabToAddGmail": {
     "message": "Nhấn $KEY$ để thêm @gmail.com",
-    "placeholders": { "key": { "content": "$1" } }
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
   },
   "gmailWarning": {
-    "message": "Địa chỉ này có vẻ không phải Gmail. Plus addressing hoạt động tốt nhất với Gmail."
+    "message": "Địa chỉ này có vẻ không phải Gmail. Địa chỉ cộng hoạt động tốt nhất với Gmail."
   },
-  "random": { "message": "Ngẫu nhiên" },
-  "customTags": { "message": "Tag tùy chỉnh" },
-  "gmailTricks": { "message": "Mẹo Gmail" },
-  "tabTagsShort": { "message": "Tag" },
-  "tabTricksShort": { "message": "Mẹo" },
-  "generating": { "message": "Đang tạo" },
-  "copied": { "message": "Đã sao chép" },
-  "switchToLightMode": { "message": "Chuyển sang chế độ sáng" },
-  "switchToDarkMode": { "message": "Chuyển sang chế độ tối" },
-  "aliasColumn": { "message": "Bí danh" },
+  "random": {
+    "message": "Ngẫu nhiên"
+  },
+  "customTags": {
+    "message": "Thẻ tùy chỉnh"
+  },
+  "gmailTricks": {
+    "message": "Thủ thuật Gmail"
+  },
+  "tabTagsShort": {
+    "message": "Thẻ"
+  },
+  "tabTricksShort": {
+    "message": "Mẹo"
+  },
+  "generating": {
+    "message": "Đang tạo"
+  },
+  "copied": {
+    "message": "Đã sao chép"
+  },
+  "switchToLightMode": {
+    "message": "Chuyển sang chế độ sáng"
+  },
+  "switchToDarkMode": {
+    "message": "Chuyển sang chế độ tối"
+  },
+  "aliasColumn": {
+    "message": "Bí danh"
+  },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - bấm để sao chép",
-    "placeholders": { "email": { "content": "$1" } }
+    "message": "$EMAIL$ - nhấp để sao chép",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
   },
   "pageLabel": {
     "message": "Trang $PAGE$",
-    "placeholders": { "page": { "content": "$1" } }
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
   },
-  "dotTrick": { "message": "Mẹo dấu chấm" },
-  "plusTags": { "message": "Tag dấu +" },
-  "googlemail": { "message": "Googlemail" },
-  "removeDots": { "message": "Bỏ dấu chấm" },
-  "dotPlus": { "message": "Chấm + tag" },
-  "allCombos": { "message": "Tất cả kiểu" },
-  "numberOfVariations": { "message": "Số biến thể" },
-  "randomizeDotPositions": { "message": "Ngẫu nhiên vị trí dấu chấm" },
-  "sequential": { "message": "Tuần tự" },
-  "generateTricks": { "message": "Tạo mẹo Gmail" },
-  "generatedVariations": { "message": "Biến thể đã tạo" },
-  "gmailTrickInfoLabel": { "message": "Mẹo Gmail:" },
+  "dotTrick": {
+    "message": "Thủ thuật dấu chấm"
+  },
+  "plusTags": {
+    "message": "Thẻ cộng (+)"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "Xóa dấu chấm"
+  },
+  "dotPlus": {
+    "message": "Dấu chấm + Dấu cộng"
+  },
+  "allCombos": {
+    "message": "Tất cả kết hợp"
+  },
+  "numberOfVariations": {
+    "message": "Số biến thể"
+  },
+  "randomizeDotPositions": {
+    "message": "Ngẫu nhiên vị trí dấu chấm"
+  },
+  "sequential": {
+    "message": "Tuần tự"
+  },
+  "generateTricks": {
+    "message": "Tạo thủ thuật"
+  },
+  "generatedVariations": {
+    "message": "Biến thể đã tạo"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Thủ thuật Gmail:"
+  },
   "gmailTrickInfo": {
-    "message": "Gmail bỏ qua dấu chấm và mọi phần sau dấu + vẫn vào cùng hộp thư"
+    "message": "Dấu chấm bị bỏ qua và mọi nội dung sau dấu + sẽ vào cùng một hộp thư"
   },
-  "format": { "message": "Định dạng" },
-  "privateMailFormat": { "message": "Private Mail (private-mail-xxxx)" },
-  "randomCharactersFormat": { "message": "Ký tự ngẫu nhiên (abc123xy)" },
-  "randomWordsFormat": { "message": "Từ ngẫu nhiên (happy-fox-42)" },
-  "timestampFormat": { "message": "Dấu thời gian (1234567890)" },
-  "numberOfAliases": { "message": "Số lượng bí danh" },
+  "format": {
+    "message": "Định dạng"
+  },
+  "privateMailFormat": {
+    "message": "Private Mail (private-mail-xxxx)"
+  },
+  "randomCharactersFormat": {
+    "message": "Ký tự ngẫu nhiên (abc123xy)"
+  },
+  "randomWordsFormat": {
+    "message": "Từ ngẫu nhiên (happy-fox-42)"
+  },
+  "timestampFormat": {
+    "message": "Dấu thời gian (1234567890)"
+  },
+  "numberOfAliases": {
+    "message": "Số bí danh"
+  },
   "generateRandomAliases": {
     "message": "Tạo $COUNT$ bí danh ngẫu nhiên$PLURAL$",
     "placeholders": {
-      "count": { "content": "$1" },
-      "plural": { "content": "$2" }
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
     }
   },
-  "generatedAliases": { "message": "Bí danh đã tạo" },
+  "generatedAliases": {
+    "message": "Bí danh đã tạo"
+  },
   "totalCount": {
-    "message": "Tổng $COUNT$",
-    "placeholders": { "count": { "content": "$1" } }
+    "message": "Tổng cộng $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "copiedAliases": {
     "message": "Đã sao chép $COUNT$ bí danh!",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "failedToCopy": { "message": "Sao chép thất bại" },
-  "formatPrivateMail": { "message": "Định dạng: private-mail-xxxx" },
-  "formatAlphanumeric": { "message": "8 ký tự ngẫu nhiên" },
-  "formatWords": { "message": "2 từ ngẫu nhiên" },
-  "formatTimestamp": { "message": "Dấu thời gian Unix" },
-  "tagPlaceholder": { "message": "Nhập tag (ví dụ: shopping, work)" },
-  "generate": { "message": "Tạo" },
-  "yourPresets": { "message": "Mẫu của bạn" },
-  "example": { "message": "Ví dụ:" },
-  "copyExample": { "message": "Sao chép ví dụ" },
-  "recentAliases": { "message": "Bí danh gần đây" },
-  "favorites": { "message": "Yêu thích" },
-  "exportAsCsv": { "message": "Xuất CSV" },
-  "exportAsJson": { "message": "Xuất JSON" },
-  "selectAliases": { "message": "Chọn bí danh" },
-  "select": { "message": "Chọn" },
+  "failedToCopy": {
+    "message": "Sao chép thất bại"
+  },
+  "formatPrivateMail": {
+    "message": "Định dạng: private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 ký tự ngẫu nhiên"
+  },
+  "formatWords": {
+    "message": "2 từ ngẫu nhiên"
+  },
+  "formatTimestamp": {
+    "message": "Dấu thời gian Unix"
+  },
+  "tagPlaceholder": {
+    "message": "Nhập thẻ (ví dụ: shopping, work)"
+  },
+  "generate": {
+    "message": "Tạo"
+  },
+  "yourPresets": {
+    "message": "Preset của bạn"
+  },
+  "example": {
+    "message": "Ví dụ:"
+  },
+  "copyExample": {
+    "message": "Sao chép ví dụ"
+  },
+  "recentAliases": {
+    "message": "Bí danh gần đây"
+  },
+  "favorites": {
+    "message": "Yêu thích"
+  },
+  "exportAsCsv": {
+    "message": "Xuất CSV"
+  },
+  "exportAsJson": {
+    "message": "Xuất JSON"
+  },
+  "selectAliases": {
+    "message": "Chọn bí danh"
+  },
+  "select": {
+    "message": "Chọn"
+  },
   "starredCount": {
-    "message": "$COUNT$ đã đánh dấu",
-    "placeholders": { "count": { "content": "$1" } }
+    "message": "$COUNT$ đã đánh dấu sao",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "deselectAll": { "message": "Bỏ chọn tất cả" },
-  "selectAll": { "message": "Chọn tất cả" },
+  "deselectAll": {
+    "message": "Bỏ chọn tất cả"
+  },
+  "selectAll": {
+    "message": "Chọn tất cả"
+  },
   "selectedCount": {
     "message": "Đã chọn $COUNT$",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "deleteCount": {
     "message": "Xóa $COUNT$",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "allCount": {
     "message": "Tất cả ($COUNT$)",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "favoritesCount": {
     "message": "Yêu thích ($COUNT$)",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "searchAliases": { "message": "Tìm bí danh..." },
-  "allTags": { "message": "Tất cả tag" },
-  "mostRecent": { "message": "Mới nhất" },
-  "az": { "message": "A-Z" },
-  "noFavoritesYet": { "message": "Chưa có mục yêu thích" },
+  "searchAliases": {
+    "message": "Tìm bí danh..."
+  },
+  "allTags": {
+    "message": "Tất cả thẻ"
+  },
+  "mostRecent": {
+    "message": "Mới nhất"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "Chưa có mục yêu thích"
+  },
   "starEmailsHint": {
-    "message": "Đánh dấu sao email trong lịch sử để truy cập nhanh tại đây"
+    "message": "Đánh dấu sao email từ lịch sử để truy cập nhanh tại đây"
   },
-  "noResultsFound": { "message": "Không tìm thấy kết quả" },
-  "differentSearchHint": { "message": "Thử từ khóa tìm kiếm hoặc bộ lọc khác" },
-  "showQrCode": { "message": "Hiển thị mã QR" },
-  "removeFromFavorites": { "message": "Bỏ khỏi yêu thích" },
-  "addToFavorites": { "message": "Thêm vào yêu thích" },
+  "noResultsFound": {
+    "message": "Không tìm thấy kết quả"
+  },
+  "differentSearchHint": {
+    "message": "Thử tìm kiếm hoặc bộ lọc khác"
+  },
+  "showQrCode": {
+    "message": "Hiển thị mã QR"
+  },
+  "removeFromFavorites": {
+    "message": "Xóa khỏi yêu thích"
+  },
+  "addToFavorites": {
+    "message": "Thêm vào yêu thích"
+  },
   "showingRange": {
     "message": "Hiển thị $START$-$END$ trên $TOTAL$",
     "placeholders": {
-      "start": { "content": "$1" },
-      "end": { "content": "$2" },
-      "total": { "content": "$3" }
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
     }
   },
   "perPage": {
     "message": "$COUNT$ / trang",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "firstPage": { "message": "Trang đầu" },
-  "previousPage": { "message": "Trang trước" },
-  "nextPage": { "message": "Trang sau" },
-  "lastPage": { "message": "Trang cuối" },
-  "scanToCopyAlias": { "message": "Quét để sao chép bí danh" },
-  "general": { "message": "Chung" },
-  "accounts": { "message": "Tài khoản" },
-  "changelog": { "message": "Nhật ký thay đổi" },
-  "appearanceDisplay": { "message": "Giao diện & hiển thị" },
-  "theme": { "message": "Giao diện" },
-  "themeLight": { "message": "Sáng" },
-  "themeDark": { "message": "Tối" },
-  "themeAuto": { "message": "Theo hệ thống" },
-  "badgeCounter": { "message": "Bộ đếm huy hiệu" },
-  "badgeNone": { "message": "Không hiển thị" },
-  "badgeTotal": { "message": "Tổng trong lịch sử" },
-  "badgeAllTime": { "message": "Tổng đã tạo" },
-  "badgeToday": { "message": "Tạo hôm nay" },
-  "badgeWeek": { "message": "Tuần này" },
-  "copyNotifications": { "message": "Thông báo khi sao chép" },
-  "aliasGeneration": { "message": "Tạo bí danh" },
-  "randomAliasFormat": { "message": "Định dạng bí danh ngẫu nhiên" },
-  "autoSaveLimit": { "message": "Giới hạn tự lưu" },
+  "firstPage": {
+    "message": "Trang đầu"
+  },
+  "previousPage": {
+    "message": "Trang trước"
+  },
+  "nextPage": {
+    "message": "Trang tiếp"
+  },
+  "lastPage": {
+    "message": "Trang cuối"
+  },
+  "scanToCopyAlias": {
+    "message": "Quét để sao chép bí danh"
+  },
+  "general": {
+    "message": "Chung"
+  },
+  "accounts": {
+    "message": "Tài khoản"
+  },
+  "changelog": {
+    "message": "Nhật ký thay đổi"
+  },
+  "appearanceDisplay": {
+    "message": "Giao diện & hiển thị"
+  },
+  "theme": {
+    "message": "Chủ đề"
+  },
+  "themeLight": {
+    "message": "Sáng"
+  },
+  "themeDark": {
+    "message": "Tối"
+  },
+  "themeAuto": {
+    "message": "Hệ thống (Tự động)"
+  },
+  "badgeCounter": {
+    "message": "Bộ đếm huy hiệu"
+  },
+  "badgeNone": {
+    "message": "Không (Ẩn)"
+  },
+  "badgeTotal": {
+    "message": "Tổng trong lịch sử"
+  },
+  "badgeAllTime": {
+    "message": "Tổng đã tạo (Tất cả thời gian)"
+  },
+  "badgeToday": {
+    "message": "Tạo hôm nay"
+  },
+  "badgeWeek": {
+    "message": "Tuần này"
+  },
+  "copyNotifications": {
+    "message": "Thông báo sao chép"
+  },
+  "aliasGeneration": {
+    "message": "Tạo bí danh"
+  },
+  "randomAliasFormat": {
+    "message": "Định dạng bí danh ngẫu nhiên"
+  },
+  "autoSaveLimit": {
+    "message": "Giới hạn tự động lưu"
+  },
   "aliasesLimit": {
     "message": "$COUNT$ bí danh",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "customPresets": { "message": "Mẫu tùy chỉnh" },
-  "label": { "message": "Nhãn" },
-  "tag": { "message": "Tag" },
-  "addPreset": { "message": "+ Thêm mẫu" },
-  "dataManagement": { "message": "Quản lý dữ liệu" },
-  "export": { "message": "Xuất" },
-  "import": { "message": "Nhập" },
-  "clear": { "message": "Xóa" },
-  "resetSettings": { "message": "Khôi phục tất cả cài đặt mặc định" },
-  "resetSettingsTitle": { "message": "Khôi phục cài đặt?" },
+  "customPresets": {
+    "message": "Preset tùy chỉnh"
+  },
+  "label": {
+    "message": "Nhãn"
+  },
+  "tag": {
+    "message": "Thẻ"
+  },
+  "addPreset": {
+    "message": "+ Thêm preset"
+  },
+  "dataManagement": {
+    "message": "Quản lý dữ liệu"
+  },
+  "export": {
+    "message": "Xuất"
+  },
+  "import": {
+    "message": "Nhập"
+  },
+  "clear": {
+    "message": "Xóa"
+  },
+  "resetSettings": {
+    "message": "Đặt lại tất cả cài đặt về mặc định"
+  },
+  "resetSettingsTitle": {
+    "message": "Đặt lại cài đặt?"
+  },
   "resetSettingsMessage": {
-    "message": "Thao tác này sẽ đưa mọi cài đặt về giá trị mặc định."
+    "message": "Thao tác này sẽ khôi phục mọi cài đặt về giá trị mặc định."
   },
-  "reset": { "message": "Khôi phục" },
-  "clearHistoryTitle": { "message": "Xóa bí danh gần đây?" },
+  "reset": {
+    "message": "Đặt lại"
+  },
+  "clearHistoryTitle": {
+    "message": "Xóa bí danh gần đây?"
+  },
   "clearHistoryMessage": {
-    "message": "Thao tác này xóa toàn bộ bí danh khỏi lịch sử gần đây."
+    "message": "Thao tác này xóa tất cả bí danh khỏi danh sách lịch sử gần đây."
   },
-  "emailAccounts": { "message": "Tài khoản email" },
+  "emailAccounts": {
+    "message": "Tài khoản email"
+  },
   "manageAccountsDescription": {
-    "message": "Quản lý các tài khoản Gmail. Mỗi tài khoản có lịch sử, thống kê và yêu thích riêng."
+    "message": "Quản lý các tài khoản Gmail của bạn. Mỗi tài khoản có lịch sử, thống kê và mục yêu thích riêng."
   },
   "noAccountsFound": {
-    "message": "Không tìm thấy tài khoản. Hãy thêm tài khoản từ màn hình chính."
+    "message": "Không tìm thấy tài khoản. Vui lòng thêm tài khoản từ màn hình chính."
   },
-  "emailAddress": { "message": "Địa chỉ email" },
-  "accountLabel": { "message": "Nhãn tài khoản" },
-  "emailAddressPlaceholder": { "message": "email.cua.ban@gmail.com" },
+  "emailAddress": {
+    "message": "Địa chỉ email"
+  },
+  "accountLabel": {
+    "message": "Nhãn tài khoản"
+  },
+  "emailAddressPlaceholder": {
+    "message": "email.cua.ban@gmail.com"
+  },
   "emailChangeWarning": {
-    "message": "Đổi email sẽ chuyển toàn bộ dữ liệu sang địa chỉ email mới"
+    "message": "Thay đổi email sẽ di chuyển toàn bộ dữ liệu sang địa chỉ email mới"
   },
-  "saveChanges": { "message": "Lưu thay đổi" },
-  "active": { "message": "Đang dùng" },
-  "editAccount": { "message": "Sửa tài khoản" },
+  "saveChanges": {
+    "message": "Lưu thay đổi"
+  },
+  "active": {
+    "message": "Đang hoạt động"
+  },
+  "editAccount": {
+    "message": "Sửa tài khoản"
+  },
   "cannotDeleteLastAccountTitle": {
     "message": "Không thể xóa tài khoản cuối cùng"
   },
-  "deleteThisAccount": { "message": "Xóa tài khoản này" },
-  "deleteAccountTitle": { "message": "Xóa tài khoản?" },
+  "deleteThisAccount": {
+    "message": "Xóa tài khoản này"
+  },
+  "deleteAccountTitle": {
+    "message": "Xóa tài khoản?"
+  },
   "deleteAccountMessage": {
-    "message": "Xóa \"$LABEL$\" ($EMAIL$)?\n\nThao tác này sẽ xóa vĩnh viễn:\n- Toàn bộ lịch sử của tài khoản này\n- Toàn bộ thống kê\n- Toàn bộ yêu thích\n\nKhông thể hoàn tác.",
+    "message": "Xóa \"$LABEL$\" ($EMAIL$)?\n\nThao tác này sẽ xóa vĩnh viễn:\n- Toàn bộ lịch sử của tài khoản này\n- Toàn bộ thống kê\n- Toàn bộ mục yêu thích\n\nKhông thể hoàn tác thao tác này.",
     "placeholders": {
-      "label": { "content": "$1" },
-      "email": { "content": "$2" }
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
     }
   },
-  "delete": { "message": "Xóa" },
-  "changeAccountEmailTitle": { "message": "Đổi email tài khoản?" },
+  "delete": {
+    "message": "Xóa"
+  },
+  "changeAccountEmailTitle": {
+    "message": "Thay đổi email tài khoản?"
+  },
   "changeAccountEmailMessage": {
-    "message": "Đổi email từ\n$OLD_EMAIL$\nsang\n$NEW_EMAIL$?\n\nThao tác này sẽ:\n- Chuyển toàn bộ lịch sử, thống kê và yêu thích sang email mới\n- Cập nhật email tài khoản\n- Xóa dữ liệu gắn với email cũ\n\nTiếp tục?",
+    "message": "Thay đổi email từ\n$OLD_EMAIL$\nthành\n$NEW_EMAIL$?\n\nThao tác này sẽ:\n- Di chuyển toàn bộ lịch sử, thống kê và mục yêu thích sang email mới\n- Cập nhật email tài khoản\n- Xóa dữ liệu liên quan đến email cũ\n\nTiếp tục?",
     "placeholders": {
-      "old_email": { "content": "$1" },
-      "new_email": { "content": "$2" }
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
     }
   },
-  "changeEmail": { "message": "Đổi email" },
-  "menuRandomEmailAlias": { "message": "Bí danh email ngẫu nhiên" },
-  "menuCustomTags": { "message": "Tag tùy chỉnh" },
-  "menuNoPresets": { "message": "Chưa có mẫu - Thêm trong Cài đặt" },
-  "menuGmailTricks": { "message": "Mẹo Gmail" },
-  "menuDotVariation": { "message": "Biến thể dấu chấm" },
-  "menuGooglemailDomain": { "message": "Tên miền Googlemail" },
-  "menuRemoveAllDots": { "message": "Xóa toàn bộ dấu chấm" },
-  "toastPresetAdded": { "message": "Đã thêm mẫu" },
-  "toastPresetRemoved": { "message": "Đã xóa mẫu" },
-  "toastSettingsExported": { "message": "Đã xuất cài đặt" },
-  "toastSettingsImported": { "message": "Đã nhập cài đặt" },
-  "toastImportFailed": { "message": "Nhập thất bại - tệp không hợp lệ" },
-  "toastSettingsReset": { "message": "Đã khôi phục cài đặt mặc định" },
-  "toastAccountSwitched": { "message": "Đã chuyển tài khoản" },
-  "toastAccountDeleted": { "message": "Đã xóa tài khoản" },
-  "toastAccountUpdated": { "message": "Đã cập nhật tài khoản" },
+  "changeEmail": {
+    "message": "Thay đổi email"
+  },
+  "menuRandomEmailAlias": {
+    "message": "Bí danh email ngẫu nhiên"
+  },
+  "menuCustomTags": {
+    "message": "Thẻ tùy chỉnh"
+  },
+  "menuNoPresets": {
+    "message": "Chưa có preset - Thêm trong Cài đặt"
+  },
+  "menuGmailTricks": {
+    "message": "Thủ thuật Gmail"
+  },
+  "menuDotVariation": {
+    "message": "Biến thể dấu chấm"
+  },
+  "menuGooglemailDomain": {
+    "message": "Tên miền Googlemail"
+  },
+  "menuRemoveAllDots": {
+    "message": "Xóa tất cả dấu chấm"
+  },
+  "toastPresetAdded": {
+    "message": "Đã thêm preset"
+  },
+  "toastPresetRemoved": {
+    "message": "Đã xóa preset"
+  },
+  "toastSettingsExported": {
+    "message": "Đã xuất cài đặt"
+  },
+  "toastSettingsImported": {
+    "message": "Đã nhập cài đặt"
+  },
+  "toastImportFailed": {
+    "message": "Nhập thất bại - tệp không hợp lệ"
+  },
+  "toastSettingsReset": {
+    "message": "Cài đặt đã được đặt về mặc định"
+  },
+  "toastAccountSwitched": {
+    "message": "Đã chuyển tài khoản"
+  },
+  "toastAccountDeleted": {
+    "message": "Đã xóa tài khoản"
+  },
+  "toastAccountUpdated": {
+    "message": "Đã cập nhật tài khoản"
+  },
   "toastAccountAdded": {
     "message": "Đã thêm $LABEL$",
-    "placeholders": { "label": { "content": "$1" } }
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
   },
-  "errorLabelRequired": { "message": "Nhãn không được để trống" },
-  "errorInvalidEmail": { "message": "Vui lòng nhập địa chỉ email hợp lệ" },
+  "errorLabelRequired": {
+    "message": "Nhãn không được để trống"
+  },
+  "errorInvalidEmail": {
+    "message": "Vui lòng nhập địa chỉ email hợp lệ"
+  },
   "errorDuplicateEmail": {
-    "message": "Địa chỉ email này đã được dùng bởi tài khoản khác"
+    "message": "Địa chỉ email này đã được tài khoản khác sử dụng"
   },
-  "errorEnterEmail": { "message": "Vui lòng nhập địa chỉ email" },
-  "errorAccountExists": { "message": "Tài khoản này đã tồn tại" },
-  "toastQrFailed": { "message": "Tạo mã QR thất bại" },
+  "errorEnterEmail": {
+    "message": "Vui lòng nhập địa chỉ email"
+  },
+  "errorAccountExists": {
+    "message": "Tài khoản này đã tồn tại"
+  },
+  "toastQrFailed": {
+    "message": "Tạo mã QR thất bại"
+  },
   "toastExportedAliases": {
     "message": "Đã xuất $COUNT$ bí danh",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "toastDeletedAliases": {
     "message": "Đã xóa $COUNT$ bí danh",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
-  "toastHistoryCleared": { "message": "Đã xóa lịch sử" },
-  "toastFavoriteAdded": { "message": "Đã thêm vào yêu thích" },
-  "toastFavoriteRemoved": { "message": "Đã bỏ khỏi yêu thích" },
+  "toastHistoryCleared": {
+    "message": "Đã xóa lịch sử"
+  },
+  "toastFavoriteAdded": {
+    "message": "Đã thêm vào yêu thích"
+  },
+  "toastFavoriteRemoved": {
+    "message": "Đã xóa khỏi yêu thích"
+  },
   "toastCopiedEmail": {
     "message": "Đã sao chép $EMAIL$",
-    "placeholders": { "email": { "content": "$1" } }
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
   },
-  "toastCopyFailed": { "message": "Sao chép thất bại" },
-  "welcomeTitle": { "message": "Chào mừng đến với Bộ công cụ bí danh Gmail" },
+  "toastCopyFailed": {
+    "message": "Sao chép thất bại"
+  },
+  "welcomeTitle": {
+    "message": "Chào mừng đến với Gmail Alias Toolkit"
+  },
   "welcomeSubtitle": {
-    "message": "Tạo bí danh email không giới hạn để bảo vệ riêng tư và sắp xếp hộp thư"
+    "message": "Tạo bí danh email không giới hạn để bảo vệ riêng tư và sắp xếp tốt hơn"
   },
-  "letsGetStarted": { "message": "Bắt đầu thôi" },
-  "enterGmailAddress": { "message": "Nhập địa chỉ Gmail của bạn" },
+  "letsGetStarted": {
+    "message": "Bắt đầu thôi"
+  },
+  "enterGmailAddress": {
+    "message": "Nhập địa chỉ Gmail của bạn"
+  },
   "pressTabForGmail": {
     "message": "Nhấn $KEY$ để thêm @gmail.com",
-    "placeholders": { "key": { "content": "$1" } }
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
   },
-  "settingUp": { "message": "Đang thiết lập..." },
-  "getStarted": { "message": "Bắt đầu" },
-  "advancedSetup": { "message": "Thiết lập nâng cao trong Cài đặt" },
-  "whatYouCanDo": { "message": "Bạn có thể:" },
-  "featurePrivateEmail": { "message": "Tạo email riêng tư" },
-  "featureCustomTags": { "message": "Tag tùy chỉnh & mẫu có sẵn" },
-  "featureGmailTricks": { "message": "Mẹo Gmail nâng cao" },
+  "settingUp": {
+    "message": "Đang thiết lập..."
+  },
+  "getStarted": {
+    "message": "Bắt đầu"
+  },
+  "advancedSetup": {
+    "message": "Thiết lập nâng cao trong Cài đặt"
+  },
+  "whatYouCanDo": {
+    "message": "Bạn có thể làm gì:"
+  },
+  "featurePrivateEmail": {
+    "message": "Trình tạo email riêng tư"
+  },
+  "featureCustomTags": {
+    "message": "Thẻ & preset tùy chỉnh"
+  },
+  "featureGmailTricks": {
+    "message": "Thủ thuật Gmail nâng cao"
+  },
   "welcomeFooter": {
-    "message": "Mọi dữ liệu được lưu cục bộ. Không theo dõi, không máy chủ."
+    "message": "Tất cả dữ liệu được lưu cục bộ. Không theo dõi, không máy chủ."
   },
   "favoritesSaved": {
     "message": "Đã lưu $COUNT$",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "clickStarHint": {
-    "message": "Bấm sao trên bí danh trong lịch sử để thêm vào đây"
+    "message": "Nhấp vào sao trên bất kỳ bí danh nào trong lịch sử để thêm vào đây"
   },
-  "viewStatistics": { "message": "Xem thống kê" },
-  "statistics": { "message": "Thống kê" },
-  "metricsTab": { "message": "Chỉ số" },
-  "timelineTab": { "message": "Biểu đồ" },
-  "tagsTab": { "message": "Thẻ" },
-  "totalGenerated": { "message": "Tổng đã tạo" },
-  "createdToday": { "message": "Tạo hôm nay" },
-  "thisWeek": { "message": "Tuần này" },
-  "thisMonth": { "message": "Tháng này" },
-  "topTag": { "message": "Thẻ hàng đầu" },
-  "totalTags": { "message": "Tổng thẻ" },
-  "noTagsYet": { "message": "Chưa có thẻ" },
+  "viewStatistics": {
+    "message": "Xem thống kê"
+  },
+  "statistics": {
+    "message": "Thống kê"
+  },
+  "metricsTab": {
+    "message": "Chỉ số"
+  },
+  "timelineTab": {
+    "message": "Dòng thời gian"
+  },
+  "tagsTab": {
+    "message": "Thẻ"
+  },
+  "totalGenerated": {
+    "message": "Tổng đã tạo"
+  },
+  "createdToday": {
+    "message": "Tạo hôm nay"
+  },
+  "thisWeek": {
+    "message": "Tuần này"
+  },
+  "thisMonth": {
+    "message": "Tháng này"
+  },
+  "topTag": {
+    "message": "Thẻ hàng đầu"
+  },
+  "totalTags": {
+    "message": "Tổng số thẻ"
+  },
+  "noTagsYet": {
+    "message": "Chưa có thẻ"
+  },
   "percentLabel": {
     "message": "$PERCENT$%",
-    "placeholders": { "percent": { "content": "$1" } }
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

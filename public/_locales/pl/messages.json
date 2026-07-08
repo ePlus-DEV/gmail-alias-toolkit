@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "Generuj i zarządzaj aliasami Gmail za pomocą adresowania plus i ustawień wstępnych"
+    "message": "Twórz aliasy Gmail i zarządzaj nimi za pomocą adresów +tag oraz gotowych ustawień"
   },
   "headerSubtitle": {
-    "message": "Generuj aliasy za pomocą adresowania plus"
+    "message": "Generuj aliasy za pomocą adresów +tag"
   },
   "settings": {
     "message": "Ustawienia"
@@ -24,31 +24,31 @@
     "message": "Kopiuj"
   },
   "copyAll": {
-    "message": "Copy All"
+    "message": "Kopiuj wszystko"
   },
   "copyToClipboard": {
-    "message": "Copy to clipboard"
+    "message": "Kopiuj do schowka"
   },
   "activeGmailAddress": {
-    "message": "Active Gmail Address"
+    "message": "Aktywny adres Gmail"
   },
   "addNewAccount": {
     "message": "Dodaj nowe konto"
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Dodaj konto"
   },
   "addNewAccountTitle": {
     "message": "Dodaj nowe konto"
   },
   "emailPlaceholder": {
-    "message": "your.email"
+    "message": "twoj.email"
   },
   "accountLabelPlaceholder": {
-    "message": "Label (optional, e.g., Work, Personal)"
+    "message": "Etykieta (opcjonalnie, np. Praca, Prywatne)"
   },
   "pressTabToAddGmail": {
-    "message": "Press $KEY$ to add @gmail.com",
+    "message": "Naciśnij $KEY$, aby dodać @gmail.com",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -56,40 +56,40 @@
     }
   },
   "gmailWarning": {
-    "message": "This doesn't look like a Gmail address. Plus addressing works best with Gmail."
+    "message": "To nie wygląda jak adres Gmail. Adresowanie plus działa najlepiej z Gmail."
   },
   "random": {
-    "message": "Losowy"
+    "message": "Losowo"
   },
   "customTags": {
-    "message": "Custom Tags"
+    "message": "Niestandardowe tagi"
   },
   "gmailTricks": {
-    "message": "Sztuczki Gmail"
+    "message": "Triki Gmail"
   },
   "tabTagsShort": {
-    "message": "Tags"
+    "message": "Tagi"
   },
   "tabTricksShort": {
-    "message": "Tricks"
+    "message": "Triki"
   },
   "generating": {
-    "message": "Generating"
+    "message": "Generowanie"
   },
   "copied": {
-    "message": "Copied"
+    "message": "Skopiowano"
   },
   "switchToLightMode": {
-    "message": "Switch to light mode"
+    "message": "Przełącz na tryb jasny"
   },
   "switchToDarkMode": {
-    "message": "Switch to dark mode"
+    "message": "Przełącz na tryb ciemny"
   },
   "aliasColumn": {
     "message": "Alias"
   },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - click to copy",
+    "message": "$EMAIL$ - kliknij, aby skopiować",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -97,7 +97,7 @@
     }
   },
   "pageLabel": {
-    "message": "Page $PAGE$",
+    "message": "Strona $PAGE$",
     "placeholders": {
       "page": {
         "content": "$1"
@@ -105,64 +105,64 @@
     }
   },
   "dotTrick": {
-    "message": "Dot Trick"
+    "message": "Trik z kropkami"
   },
   "plusTags": {
-    "message": "Plus (+) Tags"
+    "message": "Tagi Plus (+)"
   },
   "googlemail": {
     "message": "Googlemail"
   },
   "removeDots": {
-    "message": "Remove Dots"
+    "message": "Usuń kropki"
   },
   "dotPlus": {
-    "message": "Dot + Plus"
+    "message": "Kropka + Plus"
   },
   "allCombos": {
-    "message": "All Combos"
+    "message": "Wszystkie kombinacje"
   },
   "numberOfVariations": {
-    "message": "Number of variations"
+    "message": "Liczba wariantów"
   },
   "randomizeDotPositions": {
-    "message": "Randomize dot positions"
+    "message": "Losuj pozycje kropek"
   },
   "sequential": {
-    "message": "Sequential"
+    "message": "Sekwencyjnie"
   },
   "generateTricks": {
-    "message": "Generate Tricks"
+    "message": "Generuj triki"
   },
   "generatedVariations": {
-    "message": "Generated Variations"
+    "message": "Wygenerowane warianty"
   },
   "gmailTrickInfoLabel": {
-    "message": "Gmail trick:"
+    "message": "Trik Gmail:"
   },
   "gmailTrickInfo": {
-    "message": "Dots are ignored and everything after + goes to the same inbox"
+    "message": "Kropki są ignorowane, a wszystko po + trafia do tej samej skrzynki odbiorczej"
   },
   "format": {
     "message": "Format"
   },
   "privateMailFormat": {
-    "message": "Private Mail (private-mail-xxxx)"
+    "message": "Prywatna poczta (private-mail-xxxx)"
   },
   "randomCharactersFormat": {
-    "message": "Random Characters (abc123xy)"
+    "message": "Losowe znaki (abc123xy)"
   },
   "randomWordsFormat": {
-    "message": "Random Words (happy-fox-42)"
+    "message": "Losowe słowa (happy-fox-42)"
   },
   "timestampFormat": {
-    "message": "Timestamp (1234567890)"
+    "message": "Znacznik czasu (1234567890)"
   },
   "numberOfAliases": {
-    "message": "Number of aliases"
+    "message": "Liczba aliasów"
   },
   "generateRandomAliases": {
-    "message": "Generate $COUNT$ Random Alias$PLURAL$",
+    "message": "Generuj $COUNT$ losowy alias$PLURAL$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,10 +173,10 @@
     }
   },
   "generatedAliases": {
-    "message": "Generated Aliases"
+    "message": "Wygenerowane aliasy"
   },
   "totalCount": {
-    "message": "$COUNT$ total",
+    "message": "$COUNT$ łącznie",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "Copied $COUNT$ aliases!",
+    "message": "Skopiowano $COUNT$ aliasów!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -192,34 +192,34 @@
     }
   },
   "failedToCopy": {
-    "message": "Failed to copy"
+    "message": "Nie udało się skopiować"
   },
   "formatPrivateMail": {
     "message": "Format: private-mail-xxxx"
   },
   "formatAlphanumeric": {
-    "message": "8 random characters"
+    "message": "8 losowych znaków"
   },
   "formatWords": {
-    "message": "2 random words"
+    "message": "2 losowe słowa"
   },
   "formatTimestamp": {
-    "message": "Unix timestamp"
+    "message": "Znacznik czasu Unix"
   },
   "tagPlaceholder": {
-    "message": "Enter tag (e.g., shopping, work)"
+    "message": "Wpisz tag (np. shopping, work)"
   },
   "generate": {
     "message": "Generuj"
   },
   "yourPresets": {
-    "message": "Your Presets"
+    "message": "Twoje presety"
   },
   "example": {
-    "message": "Example:"
+    "message": "Przykład:"
   },
   "copyExample": {
-    "message": "Copy example"
+    "message": "Kopiuj przykład"
   },
   "recentAliases": {
     "message": "Ostatnie aliasy"
@@ -228,19 +228,19 @@
     "message": "Ulubione"
   },
   "exportAsCsv": {
-    "message": "Export as CSV"
+    "message": "Eksportuj jako CSV"
   },
   "exportAsJson": {
-    "message": "Export as JSON"
+    "message": "Eksportuj jako JSON"
   },
   "selectAliases": {
-    "message": "Select aliases"
+    "message": "Wybierz aliasy"
   },
   "select": {
-    "message": "Select"
+    "message": "Wybierz"
   },
   "starredCount": {
-    "message": "$COUNT$ starred",
+    "message": "$COUNT$ oznaczono gwiazdką",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -248,13 +248,13 @@
     }
   },
   "deselectAll": {
-    "message": "Deselect All"
+    "message": "Odznacz wszystko"
   },
   "selectAll": {
-    "message": "Select All"
+    "message": "Zaznacz wszystko"
   },
   "selectedCount": {
-    "message": "$COUNT$ selected",
+    "message": "Wybrano $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -262,7 +262,7 @@
     }
   },
   "deleteCount": {
-    "message": "Delete $COUNT$",
+    "message": "Usuń $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -270,7 +270,7 @@
     }
   },
   "allCount": {
-    "message": "All ($COUNT$)",
+    "message": "Wszystkie ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -278,7 +278,7 @@
     }
   },
   "favoritesCount": {
-    "message": "Favorites ($COUNT$)",
+    "message": "Ulubione ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -286,40 +286,40 @@
     }
   },
   "searchAliases": {
-    "message": "Search aliases..."
+    "message": "Szukaj aliasów..."
   },
   "allTags": {
-    "message": "All Tags"
+    "message": "Wszystkie tagi"
   },
   "mostRecent": {
-    "message": "Most Recent"
+    "message": "Najnowsze"
   },
   "az": {
     "message": "A-Z"
   },
   "noFavoritesYet": {
-    "message": "No favorites yet"
+    "message": "Brak ulubionych"
   },
   "starEmailsHint": {
-    "message": "Star emails from your history to quick access them here"
+    "message": "Oznacz e-maile z historii gwiazdką, aby mieć do nich szybki dostęp tutaj"
   },
   "noResultsFound": {
-    "message": "No results found"
+    "message": "Nie znaleziono wyników"
   },
   "differentSearchHint": {
-    "message": "Try a different search or filter"
+    "message": "Spróbuj innego wyszukiwania lub filtra"
   },
   "showQrCode": {
-    "message": "Show QR code"
+    "message": "Pokaż kod QR"
   },
   "removeFromFavorites": {
-    "message": "Remove from favorites"
+    "message": "Usuń z ulubionych"
   },
   "addToFavorites": {
-    "message": "Add to favorites"
+    "message": "Dodaj do ulubionych"
   },
   "showingRange": {
-    "message": "Showing $START$-$END$ of $TOTAL$",
+    "message": "Wyświetlanie $START$-$END$ z $TOTAL$",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -333,7 +333,7 @@
     }
   },
   "perPage": {
-    "message": "$COUNT$ / page",
+    "message": "$COUNT$ / strona",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -341,76 +341,76 @@
     }
   },
   "firstPage": {
-    "message": "First page"
+    "message": "Pierwsza strona"
   },
   "previousPage": {
-    "message": "Previous page"
+    "message": "Poprzednia strona"
   },
   "nextPage": {
-    "message": "Next page"
+    "message": "Następna strona"
   },
   "lastPage": {
-    "message": "Last page"
+    "message": "Ostatnia strona"
   },
   "scanToCopyAlias": {
-    "message": "Scan to copy alias"
+    "message": "Zeskanuj, aby skopiować alias"
   },
   "general": {
-    "message": "General"
+    "message": "Ogólne"
   },
   "accounts": {
-    "message": "Accounts"
+    "message": "Konta"
   },
   "changelog": {
-    "message": "Changelog"
+    "message": "Dziennik zmian"
   },
   "appearanceDisplay": {
-    "message": "Appearance & Display"
+    "message": "Wygląd i wyświetlanie"
   },
   "theme": {
-    "message": "Theme"
+    "message": "Motyw"
   },
   "themeLight": {
-    "message": "Light"
+    "message": "Jasny"
   },
   "themeDark": {
-    "message": "Dark"
+    "message": "Ciemny"
   },
   "themeAuto": {
-    "message": "System (Auto)"
+    "message": "Systemowy (Auto)"
   },
   "badgeCounter": {
-    "message": "Badge Counter"
+    "message": "Licznik odznaki"
   },
   "badgeNone": {
-    "message": "None (Hidden)"
+    "message": "Brak (ukryty)"
   },
   "badgeTotal": {
-    "message": "Total in History"
+    "message": "Łącznie w historii"
   },
   "badgeAllTime": {
-    "message": "Total Generated (All Time)"
+    "message": "Łącznie wygenerowane (cały czas)"
   },
   "badgeToday": {
-    "message": "Created Today"
+    "message": "Utworzone dzisiaj"
   },
   "badgeWeek": {
-    "message": "This Week"
+    "message": "Ten tydzień"
   },
   "copyNotifications": {
-    "message": "Copy notifications"
+    "message": "Powiadomienia kopiowania"
   },
   "aliasGeneration": {
-    "message": "Alias Generation"
+    "message": "Generowanie aliasów"
   },
   "randomAliasFormat": {
-    "message": "Random Alias Format"
+    "message": "Format losowego aliasu"
   },
   "autoSaveLimit": {
-    "message": "Auto-save Limit"
+    "message": "Limit automatycznego zapisu"
   },
   "aliasesLimit": {
-    "message": "$COUNT$ aliases",
+    "message": "$COUNT$ aliasów",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -418,7 +418,7 @@
     }
   },
   "customPresets": {
-    "message": "Custom Presets"
+    "message": "Niestandardowe presety"
   },
   "label": {
     "message": "Etykieta"
@@ -427,79 +427,79 @@
     "message": "Tag"
   },
   "addPreset": {
-    "message": "+ Add Preset"
+    "message": "+ Dodaj preset"
   },
   "dataManagement": {
-    "message": "Data Management"
+    "message": "Zarządzanie danymi"
   },
   "export": {
-    "message": "Export"
+    "message": "Eksport"
   },
   "import": {
     "message": "Import"
   },
   "clear": {
-    "message": "Clear"
+    "message": "Wyczyść"
   },
   "resetSettings": {
-    "message": "Reset all settings to default"
+    "message": "Przywróć wszystkie ustawienia domyślne"
   },
   "resetSettingsTitle": {
-    "message": "Reset settings?"
+    "message": "Zresetować ustawienia?"
   },
   "resetSettingsMessage": {
-    "message": "This will restore every setting to its default value."
+    "message": "To przywróci każde ustawienie do wartości domyślnej."
   },
   "reset": {
-    "message": "Reset"
+    "message": "Resetuj"
   },
   "clearHistoryTitle": {
-    "message": "Clear recent aliases?"
+    "message": "Wyczyścić ostatnie aliasy?"
   },
   "clearHistoryMessage": {
-    "message": "This removes all aliases from the recent history list."
+    "message": "To usunie wszystkie aliasy z listy ostatniej historii."
   },
   "emailAccounts": {
-    "message": "Email Accounts"
+    "message": "Konta e-mail"
   },
   "manageAccountsDescription": {
-    "message": "Manage your Gmail accounts. Each account has its own history, statistics, and favorites."
+    "message": "Zarządzaj swoimi kontami Gmail. Każde konto ma własną historię, statystyki i ulubione."
   },
   "noAccountsFound": {
-    "message": "No accounts found. Please add an account from the main screen."
+    "message": "Nie znaleziono kont. Dodaj konto z ekranu głównego."
   },
   "emailAddress": {
     "message": "Adres e-mail"
   },
   "accountLabel": {
-    "message": "Account label"
+    "message": "Etykieta konta"
   },
   "emailAddressPlaceholder": {
-    "message": "your.email@gmail.com"
+    "message": "twoj.email@gmail.com"
   },
   "emailChangeWarning": {
-    "message": "Changing email will migrate all data to the new email address"
+    "message": "Zmiana e-maila przeniesie wszystkie dane na nowy adres e-mail"
   },
   "saveChanges": {
     "message": "Zapisz zmiany"
   },
   "active": {
-    "message": "Active"
+    "message": "Aktywne"
   },
   "editAccount": {
-    "message": "Edit account"
+    "message": "Edytuj konto"
   },
   "cannotDeleteLastAccountTitle": {
-    "message": "Cannot delete the last account"
+    "message": "Nie można usunąć ostatniego konta"
   },
   "deleteThisAccount": {
-    "message": "Delete this account"
+    "message": "Usuń to konto"
   },
   "deleteAccountTitle": {
-    "message": "Delete account?"
+    "message": "Usunąć konto?"
   },
   "deleteAccountMessage": {
-    "message": "Delete \"$LABEL$\" ($EMAIL$)?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.",
+    "message": "Usunąć \"$LABEL$\" ($EMAIL$)?\n\nTo trwale usunie:\n- Całą historię tego konta\n- Wszystkie statystyki\n- Wszystkie ulubione\n\nTej akcji nie można cofnąć.",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -513,10 +513,10 @@
     "message": "Usuń"
   },
   "changeAccountEmailTitle": {
-    "message": "Change account email?"
+    "message": "Zmienić e-mail konta?"
   },
   "changeAccountEmailMessage": {
-    "message": "Change email from\n$OLD_EMAIL$\nto\n$NEW_EMAIL$?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?",
+    "message": "Zmienić e-mail z\n$OLD_EMAIL$\nna\n$NEW_EMAIL$?\n\nTo spowoduje:\n- Migrację całej historii, statystyk i ulubionych na nowy e-mail\n- Aktualizację e-maila konta\n- Usunięcie danych powiązanych ze starym e-mailem\n\nKontynuować?",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -527,58 +527,58 @@
     }
   },
   "changeEmail": {
-    "message": "Change email"
+    "message": "Zmień e-mail"
   },
   "menuRandomEmailAlias": {
-    "message": "Random Email Alias"
+    "message": "Losowy alias e-mail"
   },
   "menuCustomTags": {
-    "message": "Custom Tags"
+    "message": "Niestandardowe tagi"
   },
   "menuNoPresets": {
-    "message": "No presets - Add in Settings"
+    "message": "Brak presetów - dodaj w Ustawieniach"
   },
   "menuGmailTricks": {
-    "message": "Sztuczki Gmail"
+    "message": "Triki Gmail"
   },
   "menuDotVariation": {
-    "message": "Dot Variation"
+    "message": "Wariant z kropkami"
   },
   "menuGooglemailDomain": {
-    "message": "Googlemail Domain"
+    "message": "Domena Googlemail"
   },
   "menuRemoveAllDots": {
-    "message": "Remove All Dots"
+    "message": "Usuń wszystkie kropki"
   },
   "toastPresetAdded": {
-    "message": "Preset added"
+    "message": "Preset dodany"
   },
   "toastPresetRemoved": {
-    "message": "Preset removed"
+    "message": "Preset usunięty"
   },
   "toastSettingsExported": {
-    "message": "Settings exported"
+    "message": "Ustawienia wyeksportowane"
   },
   "toastSettingsImported": {
-    "message": "Settings imported"
+    "message": "Ustawienia zaimportowane"
   },
   "toastImportFailed": {
-    "message": "Import failed - invalid file"
+    "message": "Import nieudany - nieprawidłowy plik"
   },
   "toastSettingsReset": {
-    "message": "Settings reset to default"
+    "message": "Ustawienia przywrócone do domyślnych"
   },
   "toastAccountSwitched": {
-    "message": "Account switched"
+    "message": "Konto przełączone"
   },
   "toastAccountDeleted": {
-    "message": "Account deleted"
+    "message": "Konto usunięte"
   },
   "toastAccountUpdated": {
-    "message": "Account updated"
+    "message": "Konto zaktualizowane"
   },
   "toastAccountAdded": {
-    "message": "$LABEL$ added",
+    "message": "Dodano $LABEL$",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -586,25 +586,25 @@
     }
   },
   "errorLabelRequired": {
-    "message": "Label cannot be empty"
+    "message": "Etykieta nie może być pusta"
   },
   "errorInvalidEmail": {
-    "message": "Please enter a valid email address"
+    "message": "Wpisz prawidłowy adres e-mail"
   },
   "errorDuplicateEmail": {
-    "message": "This email address is already used by another account"
+    "message": "Ten adres e-mail jest już używany przez inne konto"
   },
   "errorEnterEmail": {
-    "message": "Please enter an email address"
+    "message": "Wpisz adres e-mail"
   },
   "errorAccountExists": {
-    "message": "This account already exists"
+    "message": "To konto już istnieje"
   },
   "toastQrFailed": {
-    "message": "Failed to generate QR code"
+    "message": "Nie udało się wygenerować kodu QR"
   },
   "toastExportedAliases": {
-    "message": "Exported $COUNT$ aliases",
+    "message": "Wyeksportowano $COUNT$ aliasów",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -612,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "Deleted $COUNT$ aliases",
+    "message": "Usunięto $COUNT$ aliasów",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -620,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "History cleared"
+    "message": "Historia wyczyszczona"
   },
   "toastFavoriteAdded": {
-    "message": "Added to favorites"
+    "message": "Dodano do ulubionych"
   },
   "toastFavoriteRemoved": {
-    "message": "Removed from favorites"
+    "message": "Usunięto z ulubionych"
   },
   "toastCopiedEmail": {
-    "message": "Copied $EMAIL$",
+    "message": "Skopiowano $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -637,22 +637,22 @@
     }
   },
   "toastCopyFailed": {
-    "message": "Failed to copy"
+    "message": "Nie udało się skopiować"
   },
   "welcomeTitle": {
-    "message": "Welcome to Gmail Alias Toolkit"
+    "message": "Witamy w Gmail Alias Toolkit"
   },
   "welcomeSubtitle": {
-    "message": "Generate unlimited email aliases for privacy and organization"
+    "message": "Generuj nieograniczone aliasy e-mail dla prywatności i organizacji"
   },
   "letsGetStarted": {
-    "message": "Let's get started"
+    "message": "Zaczynajmy"
   },
   "enterGmailAddress": {
-    "message": "Enter your Gmail address"
+    "message": "Wpisz swój adres Gmail"
   },
   "pressTabForGmail": {
-    "message": "Press $KEY$ for @gmail.com",
+    "message": "Naciśnij $KEY$ dla @gmail.com",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -660,31 +660,31 @@
     }
   },
   "settingUp": {
-    "message": "Setting up..."
+    "message": "Konfiguracja..."
   },
   "getStarted": {
-    "message": "Get Started"
+    "message": "Rozpocznij"
   },
   "advancedSetup": {
-    "message": "Advanced Setup in Settings"
+    "message": "Konfiguracja zaawansowana w Ustawieniach"
   },
   "whatYouCanDo": {
-    "message": "What you can do:"
+    "message": "Co możesz zrobić:"
   },
   "featurePrivateEmail": {
-    "message": "Private Email Generator"
+    "message": "Generator prywatnych e-maili"
   },
   "featureCustomTags": {
-    "message": "Custom Tags & Presets"
+    "message": "Niestandardowe tagi i presety"
   },
   "featureGmailTricks": {
-    "message": "Gmail Advanced Tricks"
+    "message": "Zaawansowane triki Gmail"
   },
   "welcomeFooter": {
-    "message": "All data is stored locally. No tracking, no server."
+    "message": "Wszystkie dane są przechowywane lokalnie. Bez śledzenia, bez serwera."
   },
   "favoritesSaved": {
-    "message": "$COUNT$ saved",
+    "message": "Zapisano $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -692,7 +692,7 @@
     }
   },
   "clickStarHint": {
-    "message": "Click star on any alias in history to add it here"
+    "message": "Kliknij gwiazdkę na dowolnym aliasie w historii, aby dodać go tutaj"
   },
   "viewStatistics": {
     "message": "Wyświetl statystyki"
@@ -710,22 +710,22 @@
     "message": "Tagi"
   },
   "totalGenerated": {
-    "message": "Łącznie wygenerowano"
+    "message": "Łącznie wygenerowane"
   },
   "createdToday": {
     "message": "Utworzone dzisiaj"
   },
   "thisWeek": {
-    "message": "W tym tygodniu"
+    "message": "Ten tydzień"
   },
   "thisMonth": {
-    "message": "W tym miesiącu"
+    "message": "Ten miesiąc"
   },
   "topTag": {
     "message": "Najlepszy tag"
   },
   "totalTags": {
-    "message": "Razem tagów"
+    "message": "Łącznie tagów"
   },
   "noTagsYet": {
     "message": "Brak tagów"

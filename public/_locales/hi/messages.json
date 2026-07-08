@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "प्लस एड्रेसिंग और प्रीसेट के साथ Gmail उपनाम बनाएं और प्रबंधित करें"
+    "message": "+tag पते और प्रीसेट का उपयोग करके Gmail उपनाम बनाएं और प्रबंधित करें"
   },
   "headerSubtitle": {
-    "message": "प्लस एड्रेसिंग के साथ उपनाम बनाएं"
+    "message": "+tag पतों से उपनाम बनाएं"
   },
   "settings": {
     "message": "सेटिंग्स"
@@ -56,10 +56,10 @@
     }
   },
   "gmailWarning": {
-    "message": "यह Gmail पता नहीं लग रहा है। प्लस एड्रेसिंग Gmail के साथ सबसे अच्छी तरह काम करती है।"
+    "message": "यह Gmail पता जैसा नहीं दिखता। प्लस एड्रेसिंग Gmail के साथ सबसे अच्छा काम करती है।"
   },
   "random": {
-    "message": "यादृच्छिक"
+    "message": "रैंडम"
   },
   "customTags": {
     "message": "कस्टम टैग"
@@ -74,16 +74,16 @@
     "message": "ट्रिक्स"
   },
   "generating": {
-    "message": "बनाया जा रहा है"
+    "message": "बन रहा है"
   },
   "copied": {
     "message": "कॉपी हो गया"
   },
   "switchToLightMode": {
-    "message": "लाइट मोड पर जाएं"
+    "message": "लाइट मोड पर स्विच करें"
   },
   "switchToDarkMode": {
-    "message": "डार्क मोड पर जाएं"
+    "message": "डार्क मोड पर स्विच करें"
   },
   "aliasColumn": {
     "message": "उपनाम"
@@ -120,40 +120,40 @@
     "message": "डॉट + प्लस"
   },
   "allCombos": {
-    "message": "सभी कॉम्बो"
+    "message": "सभी संयोजन"
   },
   "numberOfVariations": {
-    "message": "वेरिएशन की संख्या"
+    "message": "वैरिएशन की संख्या"
   },
   "randomizeDotPositions": {
-    "message": "डॉट की स्थिति रैंडम करें"
+    "message": "डॉट की स्थितियां रैंडम करें"
   },
   "sequential": {
-    "message": "क्रमवार"
+    "message": "क्रमिक"
   },
   "generateTricks": {
     "message": "ट्रिक्स बनाएं"
   },
   "generatedVariations": {
-    "message": "बने हुए वेरिएशन"
+    "message": "बने हुए वैरिएशन"
   },
   "gmailTrickInfoLabel": {
     "message": "Gmail ट्रिक:"
   },
   "gmailTrickInfo": {
-    "message": "डॉट्स को अनदेखा किया जाता है और + के बाद की हर चीज उसी इनबॉक्स में जाती है"
+    "message": "डॉट्स को अनदेखा किया जाता है और + के बाद सब कुछ उसी इनबॉक्स में जाता है"
   },
   "format": {
-    "message": "फ़ॉर्मैट"
+    "message": "फ़ॉर्मेट"
   },
   "privateMailFormat": {
-    "message": "Private Mail (private-mail-xxxx)"
+    "message": "प्राइवेट मेल (private-mail-xxxx)"
   },
   "randomCharactersFormat": {
-    "message": "यादृच्छिक वर्ण (abc123xy)"
+    "message": "रैंडम अक्षर (abc123xy)"
   },
   "randomWordsFormat": {
-    "message": "यादृच्छिक शब्द (happy-fox-42)"
+    "message": "रैंडम शब्द (happy-fox-42)"
   },
   "timestampFormat": {
     "message": "टाइमस्टैम्प (1234567890)"
@@ -162,7 +162,7 @@
     "message": "उपनामों की संख्या"
   },
   "generateRandomAliases": {
-    "message": "$COUNT$ यादृच्छिक उपनाम बनाएं",
+    "message": "$COUNT$ रैंडम उपनाम$PLURAL$ बनाएं",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,7 +173,7 @@
     }
   },
   "generatedAliases": {
-    "message": "बनाए गए उपनाम"
+    "message": "बने हुए उपनाम"
   },
   "totalCount": {
     "message": "कुल $COUNT$",
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "$COUNT$ उपनाम कॉपी किए गए!",
+    "message": "$COUNT$ उपनाम कॉपी हुए!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -195,13 +195,13 @@
     "message": "कॉपी करने में विफल"
   },
   "formatPrivateMail": {
-    "message": "फ़ॉर्मैट: private-mail-xxxx"
+    "message": "फ़ॉर्मेट: private-mail-xxxx"
   },
   "formatAlphanumeric": {
-    "message": "8 यादृच्छिक वर्ण"
+    "message": "8 रैंडम अक्षर"
   },
   "formatWords": {
-    "message": "2 यादृच्छिक शब्द"
+    "message": "2 रैंडम शब्द"
   },
   "formatTimestamp": {
     "message": "Unix टाइमस्टैम्प"
@@ -248,7 +248,7 @@
     }
   },
   "deselectAll": {
-    "message": "सभी चयन हटाएं"
+    "message": "सभी अचयनित करें"
   },
   "selectAll": {
     "message": "सभी चुनें"
@@ -301,13 +301,13 @@
     "message": "अभी कोई पसंदीदा नहीं"
   },
   "starEmailsHint": {
-    "message": "यहां तुरंत पहुंचने के लिए अपने इतिहास से ईमेल को स्टार करें"
+    "message": "यहां जल्दी पहुंचने के लिए अपने इतिहास के ईमेल को स्टार करें"
   },
   "noResultsFound": {
     "message": "कोई परिणाम नहीं मिला"
   },
   "differentSearchHint": {
-    "message": "कोई दूसरी खोज या फ़िल्टर आज़माएं"
+    "message": "अलग खोज या फ़िल्टर आज़माएं"
   },
   "showQrCode": {
     "message": "QR कोड दिखाएं"
@@ -319,7 +319,7 @@
     "message": "पसंदीदा में जोड़ें"
   },
   "showingRange": {
-    "message": "$TOTAL$ में से $START$-$END$ दिखाए जा रहे हैं",
+    "message": "$TOTAL$ में से $START$-$END$ दिखा रहे हैं",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -333,7 +333,7 @@
     }
   },
   "perPage": {
-    "message": "$COUNT$ / पेज",
+    "message": "$COUNT$ / पृष्ठ",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -341,16 +341,16 @@
     }
   },
   "firstPage": {
-    "message": "पहला पेज"
+    "message": "पहला पृष्ठ"
   },
   "previousPage": {
-    "message": "पिछला पेज"
+    "message": "पिछला पृष्ठ"
   },
   "nextPage": {
-    "message": "अगला पेज"
+    "message": "अगला पृष्ठ"
   },
   "lastPage": {
-    "message": "अंतिम पेज"
+    "message": "अंतिम पृष्ठ"
   },
   "scanToCopyAlias": {
     "message": "उपनाम कॉपी करने के लिए स्कैन करें"
@@ -362,10 +362,10 @@
     "message": "खाते"
   },
   "changelog": {
-    "message": "परिवर्तन लॉग"
+    "message": "चेंजलॉग"
   },
   "appearanceDisplay": {
-    "message": "दिखावट और प्रदर्शन"
+    "message": "रूप और प्रदर्शन"
   },
   "theme": {
     "message": "थीम"
@@ -404,7 +404,7 @@
     "message": "उपनाम बनाना"
   },
   "randomAliasFormat": {
-    "message": "यादृच्छिक उपनाम फ़ॉर्मैट"
+    "message": "रैंडम उपनाम फ़ॉर्मेट"
   },
   "autoSaveLimit": {
     "message": "ऑटो-सेव सीमा"
@@ -439,7 +439,7 @@
     "message": "आयात"
   },
   "clear": {
-    "message": "साफ़ करें"
+    "message": "साफ करें"
   },
   "resetSettings": {
     "message": "सभी सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें"
@@ -448,13 +448,13 @@
     "message": "सेटिंग्स रीसेट करें?"
   },
   "resetSettingsMessage": {
-    "message": "यह हर सेटिंग को उसके डिफ़ॉल्ट मान पर वापस कर देगा।"
+    "message": "यह हर सेटिंग को उसके डिफ़ॉल्ट मान पर वापस लाएगा।"
   },
   "reset": {
     "message": "रीसेट"
   },
   "clearHistoryTitle": {
-    "message": "हाल के उपनाम साफ़ करें?"
+    "message": "हाल के उपनाम साफ करें?"
   },
   "clearHistoryMessage": {
     "message": "यह हाल की इतिहास सूची से सभी उपनाम हटा देता है।"
@@ -463,7 +463,7 @@
     "message": "ईमेल खाते"
   },
   "manageAccountsDescription": {
-    "message": "अपने Gmail खाते प्रबंधित करें। हर खाते का अपना इतिहास, आंकड़े और पसंदीदा होते हैं।"
+    "message": "अपने Gmail खातों को प्रबंधित करें। हर खाते का अपना इतिहास, आंकड़े और पसंदीदा होते हैं।"
   },
   "noAccountsFound": {
     "message": "कोई खाता नहीं मिला। कृपया मुख्य स्क्रीन से खाता जोड़ें।"
@@ -478,7 +478,7 @@
     "message": "your.email@gmail.com"
   },
   "emailChangeWarning": {
-    "message": "ईमेल बदलने पर सभी डेटा नए ईमेल पते पर माइग्रेट हो जाएगा"
+    "message": "ईमेल बदलने से सभी डेटा नए ईमेल पते पर माइग्रेट हो जाएगा"
   },
   "saveChanges": {
     "message": "बदलाव सहेजें"
@@ -499,7 +499,7 @@
     "message": "खाता हटाएं?"
   },
   "deleteAccountMessage": {
-    "message": "“$LABEL$” ($EMAIL$) हटाएं?\n\nयह स्थायी रूप से हटाएगा:\n- इस खाते का पूरा इतिहास\n- सभी आंकड़े\n- सभी पसंदीदा\n\nयह कार्रवाई पूर्ववत नहीं की जा सकती।",
+    "message": "\"$LABEL$\" ($EMAIL$) हटाएं?\n\nयह स्थायी रूप से हटाएगा:\n- इस खाते का पूरा इतिहास\n- सभी आंकड़े\n- सभी पसंदीदा\n\nयह कार्रवाई पूर्ववत नहीं की जा सकती।",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -516,7 +516,7 @@
     "message": "खाते का ईमेल बदलें?"
   },
   "changeAccountEmailMessage": {
-    "message": "ईमेल बदलें\n$OLD_EMAIL$\nसे\n$NEW_EMAIL$\nमें?\n\nयह करेगा:\n- पूरा इतिहास, आंकड़े और पसंदीदा नए ईमेल में माइग्रेट करेगा\n- खाते का ईमेल अपडेट करेगा\n- पुराने ईमेल से जुड़े डेटा को हटा देगा\n\nजारी रखें?",
+    "message": "ईमेल बदलें\n$OLD_EMAIL$\nसे\n$NEW_EMAIL$\nमें?\n\nयह करेगा:\n- पूरा इतिहास, आंकड़े और पसंदीदा नए ईमेल पर माइग्रेट करेगा\n- खाते का ईमेल अपडेट करेगा\n- पुराने ईमेल से जुड़ा डेटा हटाएगा\n\nजारी रखें?",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -530,7 +530,7 @@
     "message": "ईमेल बदलें"
   },
   "menuRandomEmailAlias": {
-    "message": "यादृच्छिक ईमेल उपनाम"
+    "message": "रैंडम ईमेल उपनाम"
   },
   "menuCustomTags": {
     "message": "कस्टम टैग"
@@ -557,16 +557,16 @@
     "message": "प्रीसेट हटाया गया"
   },
   "toastSettingsExported": {
-    "message": "सेटिंग्स निर्यात की गईं"
+    "message": "सेटिंग्स निर्यात हुईं"
   },
   "toastSettingsImported": {
-    "message": "सेटिंग्स आयात की गईं"
+    "message": "सेटिंग्स आयात हुईं"
   },
   "toastImportFailed": {
     "message": "आयात विफल - अमान्य फ़ाइल"
   },
   "toastSettingsReset": {
-    "message": "सेटिंग्स डिफ़ॉल्ट पर रीसेट की गईं"
+    "message": "सेटिंग्स डिफ़ॉल्ट पर रीसेट हुईं"
   },
   "toastAccountSwitched": {
     "message": "खाता बदला गया"
@@ -575,7 +575,7 @@
     "message": "खाता हटाया गया"
   },
   "toastAccountUpdated": {
-    "message": "खाता अपडेट किया गया"
+    "message": "खाता अपडेट हुआ"
   },
   "toastAccountAdded": {
     "message": "$LABEL$ जोड़ा गया",
@@ -589,13 +589,13 @@
     "message": "लेबल खाली नहीं हो सकता"
   },
   "errorInvalidEmail": {
-    "message": "कृपया एक मान्य ईमेल पता दर्ज करें"
+    "message": "कृपया मान्य ईमेल पता दर्ज करें"
   },
   "errorDuplicateEmail": {
-    "message": "यह ईमेल पता पहले से किसी दूसरे खाते में उपयोग हो रहा है"
+    "message": "यह ईमेल पता पहले से किसी अन्य खाते द्वारा उपयोग किया जा रहा है"
   },
   "errorEnterEmail": {
-    "message": "कृपया एक ईमेल पता दर्ज करें"
+    "message": "कृपया ईमेल पता दर्ज करें"
   },
   "errorAccountExists": {
     "message": "यह खाता पहले से मौजूद है"
@@ -604,7 +604,7 @@
     "message": "QR कोड बनाने में विफल"
   },
   "toastExportedAliases": {
-    "message": "$COUNT$ उपनाम निर्यात किए गए",
+    "message": "$COUNT$ उपनाम निर्यात हुए",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -620,7 +620,7 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "इतिहास साफ़ किया गया"
+    "message": "इतिहास साफ किया गया"
   },
   "toastFavoriteAdded": {
     "message": "पसंदीदा में जोड़ा गया"
@@ -629,7 +629,7 @@
     "message": "पसंदीदा से हटाया गया"
   },
   "toastCopiedEmail": {
-    "message": "$EMAIL$ कॉपी किया गया",
+    "message": "$EMAIL$ कॉपी हुआ",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -672,13 +672,13 @@
     "message": "आप क्या कर सकते हैं:"
   },
   "featurePrivateEmail": {
-    "message": "निजी ईमेल जनरेटर"
+    "message": "प्राइवेट ईमेल जनरेटर"
   },
   "featureCustomTags": {
     "message": "कस्टम टैग और प्रीसेट"
   },
   "featureGmailTricks": {
-    "message": "Gmail एडवांस्ड ट्रिक्स"
+    "message": "Gmail उन्नत ट्रिक्स"
   },
   "welcomeFooter": {
     "message": "सारा डेटा स्थानीय रूप से संग्रहीत होता है। कोई ट्रैकिंग नहीं, कोई सर्वर नहीं।"
@@ -692,23 +692,50 @@
     }
   },
   "clickStarHint": {
-    "message": "इसे यहां जोड़ने के लिए इतिहास में किसी भी उपनाम पर स्टार क्लिक करें"
-  }
-,
-  "viewStatistics": { "message": "आंकड़े देखें" },
-  "statistics": { "message": "आंकड़े" },
-  "metricsTab": { "message": "मेट्रिक्स" },
-  "timelineTab": { "message": "समयरेखा" },
-  "tagsTab": { "message": "टैग" },
-  "totalGenerated": { "message": "कुल उत्पन्न" },
-  "createdToday": { "message": "आज बनाया गया" },
-  "thisWeek": { "message": "इस हफ्ते" },
-  "thisMonth": { "message": "इस महीने" },
-  "topTag": { "message": "शीर्ष टैग" },
-  "totalTags": { "message": "कुल टैग" },
-  "noTagsYet": { "message": "अभी तक कोई टैग नहीं" },
+    "message": "यहां जोड़ने के लिए इतिहास में किसी भी उपनाम पर स्टार क्लिक करें"
+  },
+  "viewStatistics": {
+    "message": "आंकड़े देखें"
+  },
+  "statistics": {
+    "message": "आंकड़े"
+  },
+  "metricsTab": {
+    "message": "मेट्रिक्स"
+  },
+  "timelineTab": {
+    "message": "टाइमलाइन"
+  },
+  "tagsTab": {
+    "message": "टैग"
+  },
+  "totalGenerated": {
+    "message": "कुल बनाए गए"
+  },
+  "createdToday": {
+    "message": "आज बनाए गए"
+  },
+  "thisWeek": {
+    "message": "इस सप्ताह"
+  },
+  "thisMonth": {
+    "message": "इस महीने"
+  },
+  "topTag": {
+    "message": "शीर्ष टैग"
+  },
+  "totalTags": {
+    "message": "कुल टैग"
+  },
+  "noTagsYet": {
+    "message": "अभी कोई टैग नहीं"
+  },
   "percentLabel": {
     "message": "$PERCENT$%",
-    "placeholders": { "percent": { "content": "$1" } }
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

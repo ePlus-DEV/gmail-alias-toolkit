@@ -3,13 +3,13 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "Создавайте и управляйте альтернативными адресами Gmail с адресацией plus и шаблонами"
+    "message": "Создавайте псевдонимы Gmail и управляйте ими с помощью адресов +tag и шаблонов"
   },
   "headerSubtitle": {
-    "message": "Создавайте альтернативные адреса с плюсовой адресацией"
+    "message": "Создавайте псевдонимы с адресами +tag"
   },
   "settings": {
-    "message": "Параметры"
+    "message": "Настройки"
   },
   "back": {
     "message": "Назад"
@@ -24,19 +24,19 @@
     "message": "Копировать"
   },
   "copyAll": {
-    "message": "Copy All"
+    "message": "Копировать все"
   },
   "copyToClipboard": {
-    "message": "Copy to clipboard"
+    "message": "Копировать в буфер обмена"
   },
   "activeGmailAddress": {
-    "message": "Active Gmail Address"
+    "message": "Активный адрес Gmail"
   },
   "addNewAccount": {
     "message": "Добавить новый аккаунт"
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Добавить аккаунт"
   },
   "addNewAccountTitle": {
     "message": "Добавить новый аккаунт"
@@ -45,10 +45,10 @@
     "message": "your.email"
   },
   "accountLabelPlaceholder": {
-    "message": "Label (optional, e.g., Work, Personal)"
+    "message": "Метка (необязательно, например Работа, Личное)"
   },
   "pressTabToAddGmail": {
-    "message": "Press $KEY$ to add @gmail.com",
+    "message": "Нажмите $KEY$, чтобы добавить @gmail.com",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -56,40 +56,40 @@
     }
   },
   "gmailWarning": {
-    "message": "This doesn't look like a Gmail address. Plus addressing works best with Gmail."
+    "message": "Это не похоже на адрес Gmail. Plus-адресация лучше всего работает с Gmail."
   },
   "random": {
-    "message": "Случайный"
+    "message": "Случайно"
   },
   "customTags": {
-    "message": "Custom Tags"
+    "message": "Пользовательские теги"
   },
   "gmailTricks": {
     "message": "Трюки Gmail"
   },
   "tabTagsShort": {
-    "message": "Tags"
+    "message": "Теги"
   },
   "tabTricksShort": {
-    "message": "Tricks"
+    "message": "Трюки"
   },
   "generating": {
-    "message": "Generating"
+    "message": "Создание"
   },
   "copied": {
-    "message": "Copied"
+    "message": "Скопировано"
   },
   "switchToLightMode": {
-    "message": "Switch to light mode"
+    "message": "Переключиться на светлый режим"
   },
   "switchToDarkMode": {
-    "message": "Switch to dark mode"
+    "message": "Переключиться на темный режим"
   },
   "aliasColumn": {
-    "message": "Alias"
+    "message": "Псевдоним"
   },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - click to copy",
+    "message": "$EMAIL$ - нажмите, чтобы скопировать",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -97,7 +97,7 @@
     }
   },
   "pageLabel": {
-    "message": "Page $PAGE$",
+    "message": "Страница $PAGE$",
     "placeholders": {
       "page": {
         "content": "$1"
@@ -105,64 +105,64 @@
     }
   },
   "dotTrick": {
-    "message": "Dot Trick"
+    "message": "Трюк с точками"
   },
   "plusTags": {
-    "message": "Plus (+) Tags"
+    "message": "Plus-теги (+)"
   },
   "googlemail": {
     "message": "Googlemail"
   },
   "removeDots": {
-    "message": "Remove Dots"
+    "message": "Удалить точки"
   },
   "dotPlus": {
-    "message": "Dot + Plus"
+    "message": "Точка + Plus"
   },
   "allCombos": {
-    "message": "All Combos"
+    "message": "Все комбинации"
   },
   "numberOfVariations": {
-    "message": "Number of variations"
+    "message": "Количество вариантов"
   },
   "randomizeDotPositions": {
-    "message": "Randomize dot positions"
+    "message": "Случайные позиции точек"
   },
   "sequential": {
-    "message": "Sequential"
+    "message": "Последовательно"
   },
   "generateTricks": {
-    "message": "Generate Tricks"
+    "message": "Создать трюки"
   },
   "generatedVariations": {
-    "message": "Generated Variations"
+    "message": "Созданные варианты"
   },
   "gmailTrickInfoLabel": {
-    "message": "Gmail trick:"
+    "message": "Трюк Gmail:"
   },
   "gmailTrickInfo": {
-    "message": "Dots are ignored and everything after + goes to the same inbox"
+    "message": "Точки игнорируются, а все после + попадает в тот же почтовый ящик"
   },
   "format": {
-    "message": "Format"
+    "message": "Формат"
   },
   "privateMailFormat": {
-    "message": "Private Mail (private-mail-xxxx)"
+    "message": "Личная почта (private-mail-xxxx)"
   },
   "randomCharactersFormat": {
-    "message": "Random Characters (abc123xy)"
+    "message": "Случайные символы (abc123xy)"
   },
   "randomWordsFormat": {
-    "message": "Random Words (happy-fox-42)"
+    "message": "Случайные слова (happy-fox-42)"
   },
   "timestampFormat": {
-    "message": "Timestamp (1234567890)"
+    "message": "Метка времени (1234567890)"
   },
   "numberOfAliases": {
-    "message": "Number of aliases"
+    "message": "Количество псевдонимов"
   },
   "generateRandomAliases": {
-    "message": "Generate $COUNT$ Random Alias$PLURAL$",
+    "message": "Создать $COUNT$ случайный псевдоним$PLURAL$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,10 +173,10 @@
     }
   },
   "generatedAliases": {
-    "message": "Generated Aliases"
+    "message": "Созданные псевдонимы"
   },
   "totalCount": {
-    "message": "$COUNT$ total",
+    "message": "Всего $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "Copied $COUNT$ aliases!",
+    "message": "Скопировано псевдонимов: $COUNT$!",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -192,55 +192,55 @@
     }
   },
   "failedToCopy": {
-    "message": "Failed to copy"
+    "message": "Не удалось скопировать"
   },
   "formatPrivateMail": {
-    "message": "Format: private-mail-xxxx"
+    "message": "Формат: private-mail-xxxx"
   },
   "formatAlphanumeric": {
-    "message": "8 random characters"
+    "message": "8 случайных символов"
   },
   "formatWords": {
-    "message": "2 random words"
+    "message": "2 случайных слова"
   },
   "formatTimestamp": {
-    "message": "Unix timestamp"
+    "message": "Метка времени Unix"
   },
   "tagPlaceholder": {
-    "message": "Enter tag (e.g., shopping, work)"
+    "message": "Введите тег (например, shopping, work)"
   },
   "generate": {
-    "message": "Генерировать"
+    "message": "Создать"
   },
   "yourPresets": {
-    "message": "Your Presets"
+    "message": "Ваши шаблоны"
   },
   "example": {
-    "message": "Example:"
+    "message": "Пример:"
   },
   "copyExample": {
-    "message": "Copy example"
+    "message": "Копировать пример"
   },
   "recentAliases": {
-    "message": "Недавние альтернативные адреса"
+    "message": "Недавние псевдонимы"
   },
   "favorites": {
     "message": "Избранное"
   },
   "exportAsCsv": {
-    "message": "Export as CSV"
+    "message": "Экспорт как CSV"
   },
   "exportAsJson": {
-    "message": "Export as JSON"
+    "message": "Экспорт как JSON"
   },
   "selectAliases": {
-    "message": "Select aliases"
+    "message": "Выбрать псевдонимы"
   },
   "select": {
-    "message": "Select"
+    "message": "Выбрать"
   },
   "starredCount": {
-    "message": "$COUNT$ starred",
+    "message": "$COUNT$ отмечено",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -248,13 +248,13 @@
     }
   },
   "deselectAll": {
-    "message": "Deselect All"
+    "message": "Снять выбор со всех"
   },
   "selectAll": {
-    "message": "Select All"
+    "message": "Выбрать все"
   },
   "selectedCount": {
-    "message": "$COUNT$ selected",
+    "message": "Выбрано $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -262,7 +262,7 @@
     }
   },
   "deleteCount": {
-    "message": "Delete $COUNT$",
+    "message": "Удалить $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -270,7 +270,7 @@
     }
   },
   "allCount": {
-    "message": "All ($COUNT$)",
+    "message": "Все ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -278,7 +278,7 @@
     }
   },
   "favoritesCount": {
-    "message": "Favorites ($COUNT$)",
+    "message": "Избранное ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -286,40 +286,40 @@
     }
   },
   "searchAliases": {
-    "message": "Search aliases..."
+    "message": "Поиск псевдонимов..."
   },
   "allTags": {
-    "message": "All Tags"
+    "message": "Все теги"
   },
   "mostRecent": {
-    "message": "Most Recent"
+    "message": "Самые новые"
   },
   "az": {
     "message": "A-Z"
   },
   "noFavoritesYet": {
-    "message": "No favorites yet"
+    "message": "Пока нет избранного"
   },
   "starEmailsHint": {
-    "message": "Star emails from your history to quick access them here"
+    "message": "Отмечайте письма из истории звездочкой, чтобы быстро открывать их здесь"
   },
   "noResultsFound": {
-    "message": "No results found"
+    "message": "Ничего не найдено"
   },
   "differentSearchHint": {
-    "message": "Try a different search or filter"
+    "message": "Попробуйте другой поиск или фильтр"
   },
   "showQrCode": {
-    "message": "Show QR code"
+    "message": "Показать QR-код"
   },
   "removeFromFavorites": {
-    "message": "Remove from favorites"
+    "message": "Удалить из избранного"
   },
   "addToFavorites": {
-    "message": "Add to favorites"
+    "message": "Добавить в избранное"
   },
   "showingRange": {
-    "message": "Showing $START$-$END$ of $TOTAL$",
+    "message": "Показано $START$-$END$ из $TOTAL$",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -333,7 +333,7 @@
     }
   },
   "perPage": {
-    "message": "$COUNT$ / page",
+    "message": "$COUNT$ / стр.",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -341,76 +341,76 @@
     }
   },
   "firstPage": {
-    "message": "First page"
+    "message": "Первая страница"
   },
   "previousPage": {
-    "message": "Previous page"
+    "message": "Предыдущая страница"
   },
   "nextPage": {
-    "message": "Next page"
+    "message": "Следующая страница"
   },
   "lastPage": {
-    "message": "Last page"
+    "message": "Последняя страница"
   },
   "scanToCopyAlias": {
-    "message": "Scan to copy alias"
+    "message": "Отсканируйте, чтобы скопировать псевдоним"
   },
   "general": {
-    "message": "General"
+    "message": "Общие"
   },
   "accounts": {
-    "message": "Accounts"
+    "message": "Аккаунты"
   },
   "changelog": {
-    "message": "Changelog"
+    "message": "Журнал изменений"
   },
   "appearanceDisplay": {
-    "message": "Appearance & Display"
+    "message": "Внешний вид и отображение"
   },
   "theme": {
-    "message": "Theme"
+    "message": "Тема"
   },
   "themeLight": {
-    "message": "Light"
+    "message": "Светлая"
   },
   "themeDark": {
-    "message": "Dark"
+    "message": "Темная"
   },
   "themeAuto": {
-    "message": "System (Auto)"
+    "message": "Система (авто)"
   },
   "badgeCounter": {
-    "message": "Badge Counter"
+    "message": "Счетчик значка"
   },
   "badgeNone": {
-    "message": "None (Hidden)"
+    "message": "Нет (скрыто)"
   },
   "badgeTotal": {
-    "message": "Total in History"
+    "message": "Всего в истории"
   },
   "badgeAllTime": {
-    "message": "Total Generated (All Time)"
+    "message": "Всего создано (за все время)"
   },
   "badgeToday": {
-    "message": "Created Today"
+    "message": "Создано сегодня"
   },
   "badgeWeek": {
-    "message": "This Week"
+    "message": "На этой неделе"
   },
   "copyNotifications": {
-    "message": "Copy notifications"
+    "message": "Уведомления о копировании"
   },
   "aliasGeneration": {
-    "message": "Alias Generation"
+    "message": "Создание псевдонимов"
   },
   "randomAliasFormat": {
-    "message": "Random Alias Format"
+    "message": "Формат случайного псевдонима"
   },
   "autoSaveLimit": {
-    "message": "Auto-save Limit"
+    "message": "Лимит автосохранения"
   },
   "aliasesLimit": {
-    "message": "$COUNT$ aliases",
+    "message": "$COUNT$ псевдонимов",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -418,88 +418,88 @@
     }
   },
   "customPresets": {
-    "message": "Custom Presets"
+    "message": "Пользовательские шаблоны"
   },
   "label": {
     "message": "Метка"
   },
   "tag": {
-    "message": "Tag"
+    "message": "Тег"
   },
   "addPreset": {
-    "message": "+ Add Preset"
+    "message": "+ Добавить шаблон"
   },
   "dataManagement": {
-    "message": "Data Management"
+    "message": "Управление данными"
   },
   "export": {
-    "message": "Export"
+    "message": "Экспорт"
   },
   "import": {
-    "message": "Import"
+    "message": "Импорт"
   },
   "clear": {
-    "message": "Clear"
+    "message": "Очистить"
   },
   "resetSettings": {
-    "message": "Reset all settings to default"
+    "message": "Сбросить все настройки по умолчанию"
   },
   "resetSettingsTitle": {
-    "message": "Reset settings?"
+    "message": "Сбросить настройки?"
   },
   "resetSettingsMessage": {
-    "message": "This will restore every setting to its default value."
+    "message": "Это восстановит все настройки до значений по умолчанию."
   },
   "reset": {
-    "message": "Reset"
+    "message": "Сбросить"
   },
   "clearHistoryTitle": {
-    "message": "Clear recent aliases?"
+    "message": "Очистить недавние псевдонимы?"
   },
   "clearHistoryMessage": {
-    "message": "This removes all aliases from the recent history list."
+    "message": "Это удалит все псевдонимы из списка недавней истории."
   },
   "emailAccounts": {
-    "message": "Email Accounts"
+    "message": "Почтовые аккаунты"
   },
   "manageAccountsDescription": {
-    "message": "Manage your Gmail accounts. Each account has its own history, statistics, and favorites."
+    "message": "Управляйте своими аккаунтами Gmail. У каждого аккаунта своя история, статистика и избранное."
   },
   "noAccountsFound": {
-    "message": "No accounts found. Please add an account from the main screen."
+    "message": "Аккаунты не найдены. Добавьте аккаунт с главного экрана."
   },
   "emailAddress": {
     "message": "Адрес электронной почты"
   },
   "accountLabel": {
-    "message": "Account label"
+    "message": "Метка аккаунта"
   },
   "emailAddressPlaceholder": {
     "message": "your.email@gmail.com"
   },
   "emailChangeWarning": {
-    "message": "Changing email will migrate all data to the new email address"
+    "message": "При изменении e-mail все данные будут перенесены на новый адрес"
   },
   "saveChanges": {
     "message": "Сохранить изменения"
   },
   "active": {
-    "message": "Active"
+    "message": "Активен"
   },
   "editAccount": {
-    "message": "Edit account"
+    "message": "Редактировать аккаунт"
   },
   "cannotDeleteLastAccountTitle": {
-    "message": "Cannot delete the last account"
+    "message": "Нельзя удалить последний аккаунт"
   },
   "deleteThisAccount": {
-    "message": "Delete this account"
+    "message": "Удалить этот аккаунт"
   },
   "deleteAccountTitle": {
-    "message": "Delete account?"
+    "message": "Удалить аккаунт?"
   },
   "deleteAccountMessage": {
-    "message": "Delete \"$LABEL$\" ($EMAIL$)?\n\nThis will permanently delete:\n- All history for this account\n- All statistics\n- All favorites\n\nThis action cannot be undone.",
+    "message": "Удалить \"$LABEL$\" ($EMAIL$)?\n\nЭто навсегда удалит:\n- Всю историю этого аккаунта\n- Всю статистику\n- Все избранное\n\nЭто действие нельзя отменить.",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -513,10 +513,10 @@
     "message": "Удалить"
   },
   "changeAccountEmailTitle": {
-    "message": "Change account email?"
+    "message": "Изменить e-mail аккаунта?"
   },
   "changeAccountEmailMessage": {
-    "message": "Change email from\n$OLD_EMAIL$\nto\n$NEW_EMAIL$?\n\nThis will:\n- Migrate all history, statistics, and favorites to the new email\n- Update the account email\n- Delete data associated with the old email\n\nContinue?",
+    "message": "Изменить e-mail с\n$OLD_EMAIL$\nна\n$NEW_EMAIL$?\n\nЭто выполнит:\n- Перенос всей истории, статистики и избранного на новый e-mail\n- Обновление e-mail аккаунта\n- Удаление данных, связанных со старым e-mail\n\nПродолжить?",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -527,58 +527,58 @@
     }
   },
   "changeEmail": {
-    "message": "Change email"
+    "message": "Изменить e-mail"
   },
   "menuRandomEmailAlias": {
-    "message": "Random Email Alias"
+    "message": "Случайный e-mail псевдоним"
   },
   "menuCustomTags": {
-    "message": "Custom Tags"
+    "message": "Пользовательские теги"
   },
   "menuNoPresets": {
-    "message": "No presets - Add in Settings"
+    "message": "Нет шаблонов - добавьте в Настройках"
   },
   "menuGmailTricks": {
     "message": "Трюки Gmail"
   },
   "menuDotVariation": {
-    "message": "Dot Variation"
+    "message": "Вариант с точками"
   },
   "menuGooglemailDomain": {
-    "message": "Googlemail Domain"
+    "message": "Домен Googlemail"
   },
   "menuRemoveAllDots": {
-    "message": "Remove All Dots"
+    "message": "Удалить все точки"
   },
   "toastPresetAdded": {
-    "message": "Preset added"
+    "message": "Шаблон добавлен"
   },
   "toastPresetRemoved": {
-    "message": "Preset removed"
+    "message": "Шаблон удален"
   },
   "toastSettingsExported": {
-    "message": "Settings exported"
+    "message": "Настройки экспортированы"
   },
   "toastSettingsImported": {
-    "message": "Settings imported"
+    "message": "Настройки импортированы"
   },
   "toastImportFailed": {
-    "message": "Import failed - invalid file"
+    "message": "Ошибка импорта - недопустимый файл"
   },
   "toastSettingsReset": {
-    "message": "Settings reset to default"
+    "message": "Настройки сброшены по умолчанию"
   },
   "toastAccountSwitched": {
-    "message": "Account switched"
+    "message": "Аккаунт переключен"
   },
   "toastAccountDeleted": {
-    "message": "Account deleted"
+    "message": "Аккаунт удален"
   },
   "toastAccountUpdated": {
-    "message": "Account updated"
+    "message": "Аккаунт обновлен"
   },
   "toastAccountAdded": {
-    "message": "$LABEL$ added",
+    "message": "$LABEL$ добавлен",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -586,25 +586,25 @@
     }
   },
   "errorLabelRequired": {
-    "message": "Label cannot be empty"
+    "message": "Метка не может быть пустой"
   },
   "errorInvalidEmail": {
-    "message": "Please enter a valid email address"
+    "message": "Введите действительный адрес электронной почты"
   },
   "errorDuplicateEmail": {
-    "message": "This email address is already used by another account"
+    "message": "Этот адрес уже используется другим аккаунтом"
   },
   "errorEnterEmail": {
-    "message": "Please enter an email address"
+    "message": "Введите адрес электронной почты"
   },
   "errorAccountExists": {
-    "message": "This account already exists"
+    "message": "Этот аккаунт уже существует"
   },
   "toastQrFailed": {
-    "message": "Failed to generate QR code"
+    "message": "Не удалось создать QR-код"
   },
   "toastExportedAliases": {
-    "message": "Exported $COUNT$ aliases",
+    "message": "Экспортировано псевдонимов: $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -612,7 +612,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "Deleted $COUNT$ aliases",
+    "message": "Удалено псевдонимов: $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -620,16 +620,16 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "History cleared"
+    "message": "История очищена"
   },
   "toastFavoriteAdded": {
-    "message": "Added to favorites"
+    "message": "Добавлено в избранное"
   },
   "toastFavoriteRemoved": {
-    "message": "Removed from favorites"
+    "message": "Удалено из избранного"
   },
   "toastCopiedEmail": {
-    "message": "Copied $EMAIL$",
+    "message": "Скопировано $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -637,22 +637,22 @@
     }
   },
   "toastCopyFailed": {
-    "message": "Failed to copy"
+    "message": "Не удалось скопировать"
   },
   "welcomeTitle": {
-    "message": "Welcome to Gmail Alias Toolkit"
+    "message": "Добро пожаловать в Gmail Alias Toolkit"
   },
   "welcomeSubtitle": {
-    "message": "Generate unlimited email aliases for privacy and organization"
+    "message": "Создавайте неограниченное количество e-mail псевдонимов для приватности и порядка"
   },
   "letsGetStarted": {
-    "message": "Let's get started"
+    "message": "Начнем"
   },
   "enterGmailAddress": {
-    "message": "Enter your Gmail address"
+    "message": "Введите ваш адрес Gmail"
   },
   "pressTabForGmail": {
-    "message": "Press $KEY$ for @gmail.com",
+    "message": "Нажмите $KEY$ для @gmail.com",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -660,31 +660,31 @@
     }
   },
   "settingUp": {
-    "message": "Setting up..."
+    "message": "Настройка..."
   },
   "getStarted": {
-    "message": "Get Started"
+    "message": "Начать"
   },
   "advancedSetup": {
-    "message": "Advanced Setup in Settings"
+    "message": "Расширенная настройка в Настройках"
   },
   "whatYouCanDo": {
-    "message": "What you can do:"
+    "message": "Что можно делать:"
   },
   "featurePrivateEmail": {
-    "message": "Private Email Generator"
+    "message": "Генератор личной почты"
   },
   "featureCustomTags": {
-    "message": "Custom Tags & Presets"
+    "message": "Пользовательские теги и шаблоны"
   },
   "featureGmailTricks": {
-    "message": "Gmail Advanced Tricks"
+    "message": "Расширенные трюки Gmail"
   },
   "welcomeFooter": {
-    "message": "All data is stored locally. No tracking, no server."
+    "message": "Все данные хранятся локально. Без отслеживания, без сервера."
   },
   "favoritesSaved": {
-    "message": "$COUNT$ saved",
+    "message": "Сохранено $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -692,10 +692,10 @@
     }
   },
   "clickStarHint": {
-    "message": "Click star on any alias in history to add it here"
+    "message": "Нажмите звезду на любом псевдониме в истории, чтобы добавить его сюда"
   },
   "viewStatistics": {
-    "message": "Просмотр статистики"
+    "message": "Показать статистику"
   },
   "statistics": {
     "message": "Статистика"
@@ -704,7 +704,7 @@
     "message": "Метрики"
   },
   "timelineTab": {
-    "message": "Временная шкала"
+    "message": "Хронология"
   },
   "tagsTab": {
     "message": "Теги"
@@ -722,13 +722,13 @@
     "message": "В этом месяце"
   },
   "topTag": {
-    "message": "Топ тег"
+    "message": "Лучший тег"
   },
   "totalTags": {
     "message": "Всего тегов"
   },
   "noTagsYet": {
-    "message": "Тегов еще нет"
+    "message": "Пока нет тегов"
   },
   "percentLabel": {
     "message": "$PERCENT$%",
