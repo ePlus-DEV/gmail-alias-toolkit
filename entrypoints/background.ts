@@ -118,6 +118,31 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
+    // Website-specific submenu (populated on demand)
+    browser.contextMenus.create({
+      id: "website-alias-parent",
+      parentId: "gmail-alias-parent",
+      title: t("menuForThisWebsite") || "For this website",
+      contexts: ["editable"],
+    });
+
+    // Placeholder for website suggestions (will be replaced dynamically)
+    browser.contextMenus.create({
+      id: "website-loading",
+      parentId: "website-alias-parent",
+      title: t("menuLoading") || "Loading...",
+      contexts: ["editable"],
+      enabled: false,
+    });
+
+    // Separator
+    browser.contextMenus.create({
+      id: "separator-1",
+      parentId: "gmail-alias-parent",
+      type: "separator",
+      contexts: ["editable"],
+    });
+
     // Random email submenu
     browser.contextMenus.create({
       id: "fill-random-email",
@@ -217,6 +242,24 @@ export default defineBackground(() => {
     const [username, domain] = baseEmail.split("@");
     let emailToFill = "";
 
+    // Handle website-specific suggestions
+    if (String(info.menuItemId).startsWith("website-suggestion-")) {
+      const suggestionIndex = parseInt(
+        String(info.menuItemId).replace("website-suggestion-", ""),
+      );
+      // The suggestion will be stored in a temp cache during menu show
+      const cacheResult = (await browser.storage.session?.get?.(
+        "contextMenuWebsiteSuggestions",
+      )) as {
+        contextMenuWebsiteSuggestions?: string[] | undefined;
+      } | undefined;
+      const suggestions = (cacheResult?.contextMenuWebsiteSuggestions ||
+        []) as string[];
+      if (suggestions[suggestionIndex]) {
+        emailToFill = suggestions[suggestionIndex];
+      }
+    }
+
     if (info.menuItemId === "fill-random-email") {
       // Generate random email
       const format = result.app_settings?.randomFormat || "private-mail";
@@ -287,6 +330,26 @@ export default defineBackground(() => {
     if (emailToFill) {
       // Save to history and statistics
       await saveToHistory(emailToFill, result.app_settings?.maxHistory || 20);
+
+      // If website suggestion was used, save the mapping
+      if (String(info.menuItemId).startsWith("website-suggestion-")) {
+        try {
+          const { normalizeHostname } = await import(
+            "../src/utils/hostnameNormalizer"
+          );
+          const { saveWebsiteAlias } = await import(
+            "../src/services/websiteAliasService"
+          );
+          if (tab.url) {
+            const normalized = normalizeHostname(tab.url);
+            if (normalized) {
+              await saveWebsiteAlias(baseEmail, normalized, emailToFill);
+            }
+          }
+        } catch (error) {
+          console.debug("Error saving website alias:", error);
+        }
+      }
 
       // Send message to content script to fill the input
       browser.tabs.sendMessage(tab.id, {
@@ -460,6 +523,75 @@ export default defineBackground(() => {
     // Update badge
     await updateBadge();
   }
+
+  // Update website suggestions when context menu is shown
+  browser.contextMenus.onShown?.addListener?.(async (info) => {
+    try {
+      if (!info.pageUrl) return;
+
+      // Import services inline to avoid circular dependencies
+      const { normalizeHostname } = await import(
+        "../src/utils/hostnameNormalizer"
+      );
+      const { generateSuggestionsForWebsite } = await import(
+        "../src/services/websiteAliasService"
+      );
+
+      const normalized = normalizeHostname(info.pageUrl);
+      if (!normalized) return;
+
+      // Get active email
+      const accountResult = (await browser.storage.local.get([
+        "email_accounts",
+        "base_email",
+      ])) as { email_accounts?: EmailAccount[]; base_email?: string };
+      let activeEmail = "your.email@gmail.com";
+
+      if (
+        accountResult.email_accounts &&
+        Array.isArray(accountResult.email_accounts)
+      ) {
+        const activeAccount = accountResult.email_accounts.find(
+          (acc) => acc.isActive,
+        );
+        if (activeAccount) {
+          activeEmail = activeAccount.email;
+        }
+      } else if (accountResult.base_email) {
+        activeEmail = accountResult.base_email;
+      }
+
+      // Generate suggestions
+      const suggestions = await generateSuggestionsForWebsite(
+        activeEmail,
+        info.pageUrl,
+      );
+      if (suggestions.length === 0) return;
+
+      // Store suggestions in session storage for retrieval in click handler
+      if (browser.storage.session) {
+        await browser.storage.session.set({
+          contextMenuWebsiteSuggestions: suggestions,
+        });
+      }
+
+      // Remove placeholder and add suggestions
+      await browser.contextMenus.remove("website-loading");
+
+      suggestions.slice(0, 3).forEach((suggestion, index) => {
+        browser.contextMenus.create({
+          id: `website-suggestion-${index}`,
+          parentId: "website-alias-parent",
+          title: suggestion.split("@")[0],
+          contexts: ["editable"],
+        });
+      });
+
+      await browser.contextMenus.refresh?.();
+    } catch (error) {
+      console.debug("Error updating website suggestions:", error);
+    }
+  });
 
   // Handle messages from popup/content script
   browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
