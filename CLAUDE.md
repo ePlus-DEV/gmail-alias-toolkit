@@ -35,6 +35,31 @@ function myFunction() {
 
 ---
 
+## Phase 1: Website Detection & Auto-suggestions
+
+**Implemented:**
+
+- Auto-detect active tab website (hostname normalization)
+- Generate 5 alias suggestions per site
+- Save website → alias mapping (local storage)
+- Show "Previously used" alias in Statistics tab
+- Display suggestions in Statistics tab with one-click copy
+- Integrated into right-click context menu (3 suggestions)
+- Auto-save mapping when suggestion is used
+
+**Key Files:**
+
+- `src/utils/hostnameNormalizer.ts` — URL → clean keyword (shopee, github, etc.)
+- `src/services/websiteAliasService.ts` — Storage, retrieval, suggestion generation
+- `entrypoints/background.ts` — Messaging + dynamic context menu population
+- `entrypoints/popup/components/Statistics.tsx` — Website detection UI
+
+**Privacy Note:**
+
+Local-first: All mappings stored in browser.storage.local. No server or analytics.
+
+---
+
 ## Testing & CI
 
 Code is checked by DeepSource for:
