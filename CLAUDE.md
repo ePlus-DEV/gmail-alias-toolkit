@@ -60,6 +60,34 @@ Local-first: All mappings stored in browser.storage.local. No server or analytic
 
 ---
 
+## Phase 2: Email Input Helper UI
+
+**Implemented:**
+
+- Detect email inputs on any webpage
+- Inject blue icon next to each input (like Roboform)
+- Popup on icon click showing:
+  - Previous alias for current website (highlighted in yellow)
+  - 5 suggestion buttons
+- One-click fill + auto-save mapping
+- Supports controlled inputs (React, Vue, Angular)
+- Watch for dynamically added inputs (SPA support)
+- Dark mode styling
+
+**Key Files:**
+
+- `entrypoints/content/index.ts` — Content script entry point
+- `entrypoints/content/email-input-helper.ts` — Icon injection + popup logic
+- `entrypoints/content/email-input-helper.css` — UI styling
+
+**Detection Logic:**
+
+- Looks for: `input[type="email"]`, `input[name*="email"]`, `input[placeholder*="email"]`
+- Uses MutationObserver to catch dynamically added inputs
+- Skips hidden inputs (offsetParent === null)
+
+---
+
 ## Testing & CI
 
 Code is checked by DeepSource for:
