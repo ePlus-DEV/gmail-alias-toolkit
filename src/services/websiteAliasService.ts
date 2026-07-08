@@ -1,5 +1,5 @@
 import { normalizeHostname } from "../utils/hostnameNormalizer";
-import { getAccountStorageKey } from "../components/popup/utils";
+import { getAccountStorageKey } from "../../entrypoints/popup/utils";
 
 interface WebsiteAliasEntry {
   alias: string;
