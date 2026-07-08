@@ -1071,7 +1071,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "general"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1095,7 +1095,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "accounts"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1119,7 +1119,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "changelog"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1459,7 +1459,7 @@ export default function Settings({
                             <Button
                               variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
-                              className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                              className="flex-1 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                               {t("saveChanges")}
                             </Button>
