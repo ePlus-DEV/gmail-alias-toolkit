@@ -10,16 +10,30 @@
 
 .gmail-alias-input-icon {
   cursor: pointer;
-  color: #3b82f6;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
+  opacity: 0.85;
+  transition: all 0.2s ease;
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  border-radius: 6px;
+  background: rgba(26, 210, 164, 0.1);
+  border: 1.5px solid rgba(26, 210, 164, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gmail-alias-input-icon:hover {
   opacity: 1;
+  background: rgba(26, 210, 164, 0.15);
+  border-color: rgba(26, 210, 164, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(26, 210, 164, 0.25);
+}
+
+.gmail-alias-input-icon:active {
+  transform: scale(0.95);
 }
 
 /* Popup styles */
