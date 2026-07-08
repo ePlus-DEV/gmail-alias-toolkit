@@ -36,6 +36,14 @@
   transform: scale(0.95);
 }
 
+/* Highlight effect when hovering icon */
+input.gmail-alias-input-highlight {
+  background-color: rgba(26, 210, 164, 0.08) !important;
+  border-color: rgba(26, 210, 164, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(26, 210, 164, 0.15), inset 0 0 0 1px rgba(26, 210, 164, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
 /* Popup styles */
 .gmail-alias-popup {
   position: fixed;

@@ -181,9 +181,11 @@ function injectIcon(input: EmailInputElement) {
 
   icon.addEventListener("mouseenter", () => {
     icon.style.opacity = "1";
+    input.classList.add("gmail-alias-input-highlight");
   });
   icon.addEventListener("mouseleave", () => {
-    icon.style.opacity = "0.7";
+    icon.style.opacity = "0.85";
+    input.classList.remove("gmail-alias-input-highlight");
   });
 
   icon.addEventListener("click", async (e) => {
