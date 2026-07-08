@@ -37,6 +37,7 @@ interface StatCardProps {
   label: string;
 }
 
+/** Displays a statistics card with icon, value, and label. */
 function StatCard({ icon, value, label }: StatCardProps) {
   return (
     <div className="rounded-xl border border-border bg-card/85 p-3 shadow-sm">
@@ -51,6 +52,7 @@ function StatCard({ icon, value, label }: StatCardProps) {
   );
 }
 
+/** Renders a bar chart comparing alias creation counts for today, week, and month. */
 function TimelineChart({
   today,
   week,
@@ -137,6 +139,7 @@ function TimelineChart({
   );
 }
 
+/** Renders a pie chart showing the top 5 most used tags with distribution percentages. */
 function TagChart({ tags }: { tags: Record<string, number> }) {
   const topTags = Object.entries(tags)
     .sort((a, b) => b[1] - a[1])
@@ -230,6 +233,7 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
   );
 }
 
+/** Main statistics panel component with tabbed view for metrics, timeline, and tags. */
 export default function Statistics() {
   const [stats, setStats] = useState<Stats>({
     totalGenerated: 0,
@@ -246,6 +250,7 @@ export default function Statistics() {
     "metrics",
   );
 
+  /** Loads active email account and fetches associated statistics from storage. */
   const loadActiveEmailAndStats = async () => {
     const accountResult = await browser.storage.local.get([
       "email_accounts",
@@ -314,6 +319,7 @@ export default function Statistics() {
   useEffect(() => {
     loadActiveEmailAndStats();
 
+    /** Handles storage changes and reloads stats if relevant keys change. */
     const handleStorageChange = (changes: StorageChanges) => {
       if (changes.email_accounts) {
         loadActiveEmailAndStats();
