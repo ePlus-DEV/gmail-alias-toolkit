@@ -10,7 +10,6 @@ import {
 } from "motion/react";
 import {
   createContext,
-  createPortal,
   type ReactNode,
   useCallback,
   useContext,
@@ -21,6 +20,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { EASE_OUT } from "src/lib/ease";
 import { cn } from "src/lib/utils";
 
