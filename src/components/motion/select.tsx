@@ -10,6 +10,7 @@ import {
 } from "motion/react";
 import {
   createContext,
+  createPortal,
   type ReactNode,
   useCallback,
   useContext,
@@ -120,8 +121,14 @@ export function Select({
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     const onPointer = (e: PointerEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node))
-        setOpen(false);
+      const target = e.target as Node;
+      const trigger = document.getElementById(`${baseId}-trigger`);
+      const list = document.getElementById(`${baseId}-list`);
+      const isClickInside =
+        (rootRef.current && rootRef.current.contains(target)) ||
+        (trigger && trigger.contains(target)) ||
+        (list && list.contains(target));
+      if (!isClickInside) setOpen(false);
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onPointer);
@@ -129,7 +136,7 @@ export function Select({
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
     };
-  }, [open]);
+  }, [open, baseId]);
 
   const ctx = useMemo<SelectContextValue>(
     () => ({
@@ -260,7 +267,9 @@ export interface SelectContentProps {
 export function SelectContent({ className, children }: SelectContentProps) {
   const ctx = useSelectContext("SelectContent");
   const innerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
+  const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const open = ctx.open;
   const { setPlacement } = ctx;
 
@@ -273,6 +282,17 @@ export function SelectContent({ className, children }: SelectContentProps) {
     observer.observe(node);
     return () => observer.disconnect();
   });
+
+  useLayoutEffect(() => {
+    const trigger = document.getElementById(ctx.triggerId);
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    setPosition({
+      top: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+    });
+  }, [ctx.triggerId, open]);
 
   // On open, flip upward when there isn't room below and there's more above.
   useLayoutEffect(() => {
@@ -287,10 +307,6 @@ export function SelectContent({ className, children }: SelectContentProps) {
     setPlacement(below < nodeHeight + 16 && above > below ? "top" : "bottom");
   }, [open, ctx.triggerId, setPlacement]);
 
-  // Specify EVERY corner + both margins each render. The near edge (facing the
-  // trigger) animates flat->round and the gap opens on that side; the far edge
-  // stays rounded and its margin pinned to 0. Setting all of them avoids a
-  // stranded square corner when the placement flips between opens.
   const isTop = ctx.placement === "top";
   const nearGap = open ? 8 : 0;
   const nearRadius = open ? 12 : 0;
@@ -303,11 +319,9 @@ export function SelectContent({ className, children }: SelectContentProps) {
     : { duration: 0.16, ease: EASE_OUT };
   const instant: Transition = { duration: 0 };
 
-  // Items stay mounted (open just animates the panel) so each item's label
-  // registration persists — otherwise the trigger would fall back to the
-  // placeholder the moment the panel closes.
-  return (
+  const content = (
     <motion.div
+      ref={contentRef}
       id={ctx.listId}
       role="listbox"
       aria-labelledby={ctx.triggerId}
@@ -319,10 +333,8 @@ export function SelectContent({ className, children }: SelectContentProps) {
           : {
               opacity: open ? 1 : 0,
               height: open ? height : 0,
-              // gap opens on the side facing the trigger
               marginTop: isTop ? 0 : nearGap,
               marginBottom: isTop ? nearGap : 0,
-              // near corners go flat->round; far corners stay rounded
               borderTopLeftRadius: isTop ? 12 : nearRadius,
               borderTopRightRadius: isTop ? 12 : nearRadius,
               borderBottomLeftRadius: isTop ? nearRadius : 12,
@@ -348,15 +360,17 @@ export function SelectContent({ className, children }: SelectContentProps) {
             }
       }
       style={{
+        position: "fixed",
+        top: isTop ? position.top - height - nearGap : position.top + nearGap,
+        left: position.left,
+        width: position.width,
         transformOrigin: isTop ? "bottom" : "top",
         overflow: "hidden",
         pointerEvents: open ? "auto" : "none",
+        zIndex: 50,
       }}
-      // flush against the trigger, then separates into its own rounded pill;
-      // sits above or below depending on available space
       className={cn(
-        "absolute left-0 right-0 z-20 rounded-xl border border-border bg-background shadow-lg",
-        isTop ? "bottom-full" : "top-full",
+        "rounded-xl border border-border bg-background shadow-lg",
         className,
       )}
     >
@@ -371,6 +385,8 @@ export function SelectContent({ className, children }: SelectContentProps) {
       </motion.div>
     </motion.div>
   );
+
+  return createPortal(content, document.body);
 }
 
 export interface SelectItemProps {
