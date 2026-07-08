@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { BarChart3, Check, Clock, Mail, Tags } from "lucide-react";
 import { AnimatedNumber } from "src/components/motion/animated-number";
@@ -98,11 +98,11 @@ function TimelineChart({
           value: month,
           x: padding + (barWidth + spacing) * 2,
         },
-      ].map((item, i) => {
+      ].map((item) => {
         const barHeight = Math.max(10, (item.value / max) * (height - 10));
         const barY = height + padding - barHeight;
         return (
-          <g key={i}>
+          <g key={item.label}>
             <rect
               x={item.x}
               y={barY}
@@ -158,7 +158,7 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
   const cy = 50;
   const radius = 35;
 
-  const slices = topTags.map(([tag, count], i) => {
+  const slices = topTags.map(([tag, count], colorIndex) => {
     const sliceAngle = (count / total) * 360;
     const startAngle = currentAngle;
     const endAngle = currentAngle + sliceAngle;
@@ -188,8 +188,8 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
     const labelY = cy + labelRadius * Math.sin(midRad);
 
     return (
-      <g key={i}>
-        <path d={pathData} fill={colors[i % colors.length]} opacity="0.8" />
+      <g key={tag}>
+        <path d={pathData} fill={colors[colorIndex % colors.length]} opacity="0.8" />
         <text
           x={labelX}
           y={labelY}
