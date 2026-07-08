@@ -233,7 +233,8 @@ function injectIcon(input: EmailInputElement) {
     const rect = icon.getBoundingClientRect();
     popup.style.position = "fixed";
     popup.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
-    popup.style.top = `${rect.bottom + 8}px`;
+    // Position popup slightly overlapping the input to prevent gap on hover
+    popup.style.top = `${rect.bottom - 4}px`;
     popup.style.zIndex = "999999";
 
     // Keep popup open when hovering over it
@@ -251,10 +252,10 @@ function injectIcon(input: EmailInputElement) {
   icon.addEventListener("mouseleave", () => {
     icon.style.opacity = "0.85";
     input.classList.remove("gmail-alias-input-highlight");
-    // Delay close to allow mouse movement to popup
+    // Delay close to allow mouse movement to popup (with overlap, 250ms buffer)
     closeTimer = setTimeout(() => {
       document.querySelectorAll(".gmail-alias-popup").forEach((p) => p.remove());
-    }, 150);
+    }, 250);
   });
 
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
