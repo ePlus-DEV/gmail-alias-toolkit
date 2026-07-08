@@ -4,7 +4,7 @@ import {
   generateSuggestionsForWebsite,
   saveWebsiteAlias,
 } from "src/services/websiteAliasService";
-import "./email-helper.css";
+import "src/styles/email-helper.css";
 
 const ICON_HTML = `
 <svg class="gmail-alias-input-icon" viewBox="0 0 512 512" width="24" height="24">
