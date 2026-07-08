@@ -317,6 +317,12 @@ export default function Statistics() {
   };
 
   useEffect(() => {
+    if (activeTab === "tags" && Object.keys(stats.tags).length < 2) {
+      setActiveTab("metrics");
+    }
+  }, [stats.tags, activeTab]);
+
+  useEffect(() => {
     loadActiveEmailAndStats();
 
     /** Handles storage changes and reloads stats if relevant keys change. */
@@ -389,7 +395,9 @@ export default function Statistics() {
           [
             { label: t("metricsTab"), value: "metrics" },
             { label: t("timelineTab"), value: "timeline" },
-            { label: t("tagsTab"), value: "tags" },
+            ...(Object.keys(stats.tags).length >= 2
+              ? [{ label: t("tagsTab"), value: "tags" as const }]
+              : []),
           ] as const
         ).map((tab) => (
           <button
