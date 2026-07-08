@@ -114,6 +114,18 @@ function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
             .join("")}
         </div>
       </div>
+      <div class="gmail-alias-info-panel">
+        <div class="gmail-alias-info-title">Gmail Plus Alias Manager</div>
+        <ul class="gmail-alias-info-list">
+          <li>📋 Auto-detect websites</li>
+          <li>💾 Save alias mappings</li>
+          <li>🔄 Reuse previous aliases</li>
+          <li>🔒 Local-first, no tracking</li>
+        </ul>
+        <div class="gmail-alias-privacy-note">
+          Gmail plus aliases help with filtering and tracking, but do not hide your real email address.
+        </div>
+      </div>
     </div>
   `;
 
