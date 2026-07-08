@@ -1029,7 +1029,7 @@ export default function Settings({
   return (
     // skipcq: JS-0415
     <div className="absolute inset-0 z-50 flex bg-muted">
-      <div className="relative flex h-full w-full flex-col overflow-hidden bg-muted">
+      <div className="relative flex h-full w-full flex-col overflow-visible bg-muted">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border bg-background px-3 py-3 text-foreground">
           <div className="flex items-center gap-2">
