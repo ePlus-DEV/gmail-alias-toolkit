@@ -172,16 +172,25 @@ function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
 function injectIcon(input: EmailInputElement) {
   if (input.__gmailAliasIcon) return;
 
-  const container = document.createElement("div");
-  container.className = "gmail-alias-input-wrapper";
-  container.innerHTML = ICON_HTML;
+  try {
+    const container = document.createElement("div");
+    container.className = "gmail-alias-input-wrapper";
+    container.innerHTML = ICON_HTML;
 
-  const icon = container.querySelector(".gmail-alias-input-icon") as SVGElement;
+    const icon = container.querySelector(
+      ".gmail-alias-input-icon",
+    ) as SVGElement;
+    if (!icon) {
+      console.error("[Gmail Alias] Failed to create icon SVG");
+      return;
+    }
 
-  input.parentNode?.insertBefore(container, input.nextSibling);
-  container.insertBefore(input, container.firstChild);
+    input.parentNode?.insertBefore(container, input.nextSibling);
+    container.insertBefore(input, container.firstChild);
 
-  container.style.display = "flex";
+    console.debug("[Gmail Alias] Icon injected successfully");
+
+    container.style.display = "flex";
   container.style.alignItems = "center";
   container.style.gap = "8px";
 
@@ -247,7 +256,10 @@ function injectIcon(input: EmailInputElement) {
     }, 150);
   });
 
-  input.__gmailAliasIcon = icon;
+    input.__gmailAliasIcon = icon as unknown as HTMLElement;
+  } catch (error) {
+    console.error("[Gmail Alias] Error injecting icon:", error);
+  }
 }
 
 /** Fill email input with alias (supports controlled inputs). */
@@ -278,12 +290,19 @@ function detectEmailInputs() {
     'input[type="email"], input[name*="email" i], input[placeholder*="email" i]',
   );
 
-  emailInputs.forEach((input) => {
-    if (
-      input.offsetParent !== null &&
-      !input.__gmailAliasIcon &&
-      input.offsetWidth > 50
-    ) {
+  console.debug(`[Gmail Alias] Found ${emailInputs.length} email inputs`);
+
+  emailInputs.forEach((input, idx) => {
+    const isVisible = input.offsetParent !== null;
+    const hasIcon = !!input.__gmailAliasIcon;
+    const isWideEnough = input.offsetWidth > 50;
+
+    console.debug(
+      `[Gmail Alias] Input ${idx}: visible=${isVisible}, hasIcon=${hasIcon}, width=${input.offsetWidth}px`,
+    );
+
+    if (isVisible && !hasIcon && isWideEnough) {
+      console.debug(`[Gmail Alias] Injecting icon for input ${idx}`);
       injectIcon(input);
     }
   });
