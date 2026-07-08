@@ -694,4 +694,21 @@
   "clickStarHint": {
     "message": "इसे यहां जोड़ने के लिए इतिहास में किसी भी उपनाम पर स्टार क्लिक करें"
   }
+,
+  "viewStatistics": { "message": "आंकड़े देखें" },
+  "statistics": { "message": "आंकड़े" },
+  "metricsTab": { "message": "मेट्रिक्स" },
+  "timelineTab": { "message": "समयरेखा" },
+  "tagsTab": { "message": "टैग" },
+  "totalGenerated": { "message": "कुल उत्पन्न" },
+  "createdToday": { "message": "आज बनाया गया" },
+  "thisWeek": { "message": "इस हफ्ते" },
+  "thisMonth": { "message": "इस महीने" },
+  "topTag": { "message": "शीर्ष टैग" },
+  "totalTags": { "message": "कुल टैग" },
+  "noTagsYet": { "message": "अभी तक कोई टैग नहीं" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
+  }
 }

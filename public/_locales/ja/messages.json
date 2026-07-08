@@ -694,4 +694,21 @@
   "clickStarHint": {
     "message": "履歴内の任意のエイリアスのスターをクリックすると、ここに追加できます"
   }
+,
+  "viewStatistics": { "message": "統計を表示" },
+  "statistics": { "message": "統計" },
+  "metricsTab": { "message": "メトリクス" },
+  "timelineTab": { "message": "タイムライン" },
+  "tagsTab": { "message": "タグ" },
+  "totalGenerated": { "message": "総生成数" },
+  "createdToday": { "message": "今日作成" },
+  "thisWeek": { "message": "今週" },
+  "thisMonth": { "message": "今月" },
+  "topTag": { "message": "トップタグ" },
+  "totalTags": { "message": "総タグ数" },
+  "noTagsYet": { "message": "タグはまだありません" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
+  }
 }

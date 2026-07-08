@@ -297,5 +297,21 @@
   },
   "clickStarHint": {
     "message": "Click star on any alias in history to add it here"
+  },
+  "viewStatistics": { "message": "View Statistics" },
+  "statistics": { "message": "Statistics" },
+  "metricsTab": { "message": "Metrics" },
+  "timelineTab": { "message": "Timeline" },
+  "tagsTab": { "message": "Tags" },
+  "totalGenerated": { "message": "Total Generated" },
+  "createdToday": { "message": "Created Today" },
+  "thisWeek": { "message": "This Week" },
+  "thisMonth": { "message": "This Month" },
+  "topTag": { "message": "Top Tag" },
+  "totalTags": { "message": "Total Tags" },
+  "noTagsYet": { "message": "No tags yet" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
   }
 }

@@ -297,5 +297,21 @@
   },
   "clickStarHint": {
     "message": "Bấm sao trên bí danh trong lịch sử để thêm vào đây"
+  },
+  "viewStatistics": { "message": "Xem thống kê" },
+  "statistics": { "message": "Thống kê" },
+  "metricsTab": { "message": "Chỉ số" },
+  "timelineTab": { "message": "Biểu đồ" },
+  "tagsTab": { "message": "Thẻ" },
+  "totalGenerated": { "message": "Tổng đã tạo" },
+  "createdToday": { "message": "Tạo hôm nay" },
+  "thisWeek": { "message": "Tuần này" },
+  "thisMonth": { "message": "Tháng này" },
+  "topTag": { "message": "Thẻ hàng đầu" },
+  "totalTags": { "message": "Tổng thẻ" },
+  "noTagsYet": { "message": "Chưa có thẻ" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
   }
 }

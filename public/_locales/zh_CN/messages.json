@@ -694,4 +694,21 @@
   "clickStarHint": {
     "message": "点击历史记录中任意别名的星标，即可将其添加到这里"
   }
+,
+  "viewStatistics": { "message": "查看统计" },
+  "statistics": { "message": "统计" },
+  "metricsTab": { "message": "指标" },
+  "timelineTab": { "message": "时间线" },
+  "tagsTab": { "message": "标签" },
+  "totalGenerated": { "message": "总生成数" },
+  "createdToday": { "message": "今天创建" },
+  "thisWeek": { "message": "本周" },
+  "thisMonth": { "message": "本月" },
+  "topTag": { "message": "热门标签" },
+  "totalTags": { "message": "总标签数" },
+  "noTagsYet": { "message": "还没有标签" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
+  }
 }

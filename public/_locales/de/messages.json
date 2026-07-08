@@ -694,4 +694,21 @@
   "clickStarHint": {
     "message": "Klicke bei einem Alias im Verlauf auf den Stern, um ihn hier hinzuzufügen"
   }
+,
+  "viewStatistics": { "message": "Statistiken anzeigen" },
+  "statistics": { "message": "Statistiken" },
+  "metricsTab": { "message": "Metriken" },
+  "timelineTab": { "message": "Zeitstrahl" },
+  "tagsTab": { "message": "Tags" },
+  "totalGenerated": { "message": "Insgesamt generiert" },
+  "createdToday": { "message": "Heute erstellt" },
+  "thisWeek": { "message": "Diese Woche" },
+  "thisMonth": { "message": "Dieser Monat" },
+  "topTag": { "message": "Top-Tag" },
+  "totalTags": { "message": "Gesamtanzahl Tags" },
+  "noTagsYet": { "message": "Noch keine Tags" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
+  }
 }

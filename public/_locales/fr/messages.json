@@ -694,4 +694,21 @@
   "clickStarHint": {
     "message": "Cliquez sur l’étoile d’un alias dans l’historique pour l’ajouter ici"
   }
+,
+  "viewStatistics": { "message": "Afficher les statistiques" },
+  "statistics": { "message": "Statistiques" },
+  "metricsTab": { "message": "Métriques" },
+  "timelineTab": { "message": "Chronologie" },
+  "tagsTab": { "message": "Tags" },
+  "totalGenerated": { "message": "Total généré" },
+  "createdToday": { "message": "Créé aujourd'hui" },
+  "thisWeek": { "message": "Cette semaine" },
+  "thisMonth": { "message": "Ce mois" },
+  "topTag": { "message": "Tag principal" },
+  "totalTags": { "message": "Nombre total de tags" },
+  "noTagsYet": { "message": "Aucun tag pour le moment" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": { "percent": { "content": "$1" } }
+  }
 }
