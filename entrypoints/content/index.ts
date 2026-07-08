@@ -106,9 +106,10 @@ function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
           ${data.suggestions
             .map(
               (alias) => `
-            <button class="gmail-alias-suggestion" data-alias="${alias}">
-              ${alias}
-            </button>
+            <div class="gmail-alias-suggestion-item">
+              <div class="gmail-alias-suggestion-text">${alias}</div>
+              <button class="gmail-alias-suggestion-use" data-alias="${alias}">Use</button>
+            </div>
           `,
             )
             .join("")}
@@ -140,8 +141,8 @@ function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
     });
   }
 
-  // Handle alias selection
-  popup.querySelectorAll("[data-alias]").forEach((btn) => {
+  // Handle "Use" button clicks
+  popup.querySelectorAll(".gmail-alias-suggestion-use").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();

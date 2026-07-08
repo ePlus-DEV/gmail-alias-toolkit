@@ -161,27 +161,51 @@ input.gmail-alias-input-highlight {
   gap: 6px;
 }
 
-.gmail-alias-suggestion {
+.gmail-alias-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 12px;
   background: #f0f9ff;
   border: 1px solid #bfdbfe;
   border-radius: 6px;
-  font-family: "Monaco", "Courier New", monospace;
-  font-size: 12px;
-  color: #1e40af;
-  cursor: pointer;
-  text-align: left;
   transition: all 0.2s ease;
 }
 
-.gmail-alias-suggestion:hover {
+.gmail-alias-suggestion-item:hover {
   background: #e0f2fe;
   border-color: #7dd3fc;
 }
 
-.gmail-alias-suggestion:active {
-  background: #cffafe;
-  border-color: #06b6d4;
+.gmail-alias-suggestion-text {
+  flex: 1;
+  font-family: "Monaco", "Courier New", monospace;
+  font-size: 12px;
+  color: #1e40af;
+  text-align: left;
+  word-break: break-all;
+}
+
+.gmail-alias-suggestion-use {
+  padding: 4px 10px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.gmail-alias-suggestion-use:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+.gmail-alias-suggestion-use:active {
+  transform: scale(0.95);
 }
 
 /* Info panel with rules and features */
@@ -268,20 +292,27 @@ input.gmail-alias-input-highlight {
     background: #374151;
   }
 
-  .gmail-alias-suggestion {
+  .gmail-alias-suggestion-item {
     background: #0c2340;
     border-color: #1e3a5f;
-    color: #93c5fd;
   }
 
-  .gmail-alias-suggestion:hover {
+  .gmail-alias-suggestion-item:hover {
     background: #1e3a5f;
     border-color: #3b82f6;
   }
 
-  .gmail-alias-suggestion:active {
-    background: #1f3a5f;
-    border-color: #2dd4bf;
+  .gmail-alias-suggestion-text {
+    color: #93c5fd;
+  }
+
+  .gmail-alias-suggestion-use {
+    background: #1e3a5f;
+    color: #e0f2fe;
+  }
+
+  .gmail-alias-suggestion-use:hover {
+    background: #2d5a8c;
   }
 
   .gmail-alias-info-panel {
