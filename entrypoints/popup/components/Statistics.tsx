@@ -73,8 +73,16 @@ function TimelineChart({
     >
       <defs>
         <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.4" />
+          <stop
+            offset="0%"
+            stopColor="var(--color-primary)"
+            stopOpacity="0.8"
+          />
+          <stop
+            offset="100%"
+            stopColor="var(--color-primary)"
+            stopOpacity="0.4"
+          />
         </linearGradient>
       </defs>
 
@@ -143,13 +151,7 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
   }
 
   const total = topTags.reduce((sum, [, count]) => sum + count, 0);
-  const colors = [
-    "#3b82f6",
-    "#8b5cf6",
-    "#ec4899",
-    "#f59e0b",
-    "#10b981",
-  ];
+  const colors = ["#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981"];
 
   let currentAngle = -90;
   const cx = 50;
@@ -216,9 +218,7 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
               style={{ backgroundColor: colors[i % colors.length] }}
             />
             <span className="text-muted-foreground truncate">{tag}</span>
-            <span className="text-foreground font-medium ml-auto">
-              {count}
-            </span>
+            <span className="text-foreground font-medium ml-auto">{count}</span>
           </div>
         ))}
       </div>
