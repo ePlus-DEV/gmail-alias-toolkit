@@ -189,7 +189,11 @@ function TagChart({ tags }: { tags: Record<string, number> }) {
 
     return (
       <g key={tag}>
-        <path d={pathData} fill={colors[colorIndex % colors.length]} opacity="0.8" />
+        <path
+          d={pathData}
+          fill={colors[colorIndex % colors.length]}
+          opacity="0.8"
+        />
         <text
           x={labelX}
           y={labelY}
