@@ -157,14 +157,16 @@ function createPopup(
 
       item.addEventListener("mouseenter", () => {
         if (alias) {
-          // Show preview in input
+          // Show preview in input with visual indicator
           fillInput(input, alias);
+          input.classList.add("gmail-alias-input-preview");
         }
       });
 
       item.addEventListener("mouseleave", () => {
         // Restore original input value
         input.value = originalValue;
+        input.classList.remove("gmail-alias-input-preview");
       });
     });
   }
