@@ -460,4 +460,35 @@ export default defineBackground(() => {
     // Update badge
     await updateBadge();
   }
+
+  // Handle messages from popup/content script
+  browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    try {
+      if (message.action === "getActiveTabUrl") {
+        const tabs = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+        const tab = tabs[0];
+        sendResponse({
+          url: tab?.url,
+          title: tab?.title,
+        });
+      } else if (message.action === "saveWebsiteAlias") {
+        // Import service inline to avoid circular dependencies
+        const { saveWebsiteAlias } = await import(
+          "../src/services/websiteAliasService"
+        );
+        await saveWebsiteAlias(
+          message.email,
+          message.normalizedHostname,
+          message.alias,
+        );
+        sendResponse({ success: true });
+      }
+    } catch (error) {
+      console.error("Message handler error:", error);
+      sendResponse({ error: String(error) });
+    }
+  });
 });

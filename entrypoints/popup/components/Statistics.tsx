@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { BarChart3, Check, Clock, Mail, Tags } from "lucide-react";
+import { BarChart3, Check, Clock, Mail, Tags, Globe } from "lucide-react";
 import { AnimatedNumber } from "src/components/motion/animated-number";
 import Button from "./Button";
 import { getAccountStorageKey } from "../utils";
 import { t } from "../../../lib/i18n";
+import { normalizeHostname, getDisplayName } from "../../../src/utils/hostnameNormalizer";
+import {
+  getPreviousAliasForWebsite,
+  generateSuggestionsForWebsite,
+  saveWebsiteAlias,
+} from "../../../src/services/websiteAliasService";
 
 interface Stats {
   totalGenerated: number;
@@ -249,6 +255,11 @@ export default function Statistics() {
   const [activeTab, setActiveTab] = useState<"metrics" | "timeline" | "tags">(
     "metrics",
   );
+  const [activeTabUrl, setActiveTabUrl] = useState<string | null>(null);
+  const [currentWebsite, setCurrentWebsite] = useState<string | null>(null);
+  const [previousAlias, setPreviousAlias] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [activeEmail, setActiveEmail] = useState<string>("your.email@gmail.com");
 
   /** Loads active email account and fetches associated statistics from storage. */
   const loadActiveEmailAndStats = async () => {
@@ -271,6 +282,8 @@ export default function Statistics() {
     } else if (accountResult.base_email) {
       email = accountResult.base_email as string;
     }
+
+    setActiveEmail(email);
 
     const historyKey = getAccountStorageKey(email, "gmail_alias_recent");
     const statsKey = getAccountStorageKey(email, "alias_stats");
@@ -316,6 +329,44 @@ export default function Statistics() {
     });
   };
 
+  /** Fetches active tab URL for website detection. */
+  const loadActiveTabUrl = async () => {
+    try {
+      const response = await browser.runtime.sendMessage({
+        action: "getActiveTabUrl",
+      });
+      if (response.url) {
+        setActiveTabUrl(response.url);
+      }
+    } catch (error) {
+      console.debug("Failed to get active tab URL:", error);
+    }
+  };
+
+  /** Loads website alias data: previous alias and suggestions. */
+  const loadWebsiteAliasData = async () => {
+    if (!activeTabUrl || !activeEmail) return;
+
+    const normalized = normalizeHostname(activeTabUrl);
+    if (!normalized) {
+      setCurrentWebsite(null);
+      setPreviousAlias(null);
+      setSuggestions([]);
+      return;
+    }
+
+    setCurrentWebsite(normalized);
+
+    const previous = await getPreviousAliasForWebsite(activeEmail, activeTabUrl);
+    setPreviousAlias(previous?.alias || null);
+
+    const suggestionsList = await generateSuggestionsForWebsite(
+      activeEmail,
+      activeTabUrl,
+    );
+    setSuggestions(suggestionsList);
+  };
+
   useEffect(() => {
     if (activeTab === "tags" && Object.keys(stats.tags).length < 2) {
       setActiveTab("metrics");
@@ -324,6 +375,7 @@ export default function Statistics() {
 
   useEffect(() => {
     loadActiveEmailAndStats();
+    loadActiveTabUrl();
 
     /** Handles storage changes and reloads stats if relevant keys change. */
     const handleStorageChange = (changes: StorageChanges) => {
@@ -345,6 +397,23 @@ export default function Statistics() {
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
   }, []);
+
+  useEffect(() => {
+    loadWebsiteAliasData();
+  }, [activeTabUrl, activeEmail]);
+
+  /** Copies suggestion and saves website-to-alias mapping. */
+  const handleCopySuggestion = async (alias: string) => {
+    try {
+      await navigator.clipboard.writeText(alias);
+      if (currentWebsite) {
+        await saveWebsiteAlias(activeEmail, currentWebsite, alias);
+        setPreviousAlias(alias);
+      }
+    } catch (error) {
+      console.error("Failed to copy or save alias:", error);
+    }
+  };
 
   if (!isOpen) {
     return (
@@ -389,6 +458,48 @@ export default function Statistics() {
           </svg>
         </Button>
       </div>
+
+      {/* Website Detection Section */}
+      {currentWebsite && (
+        <div className="mb-3 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950/30">
+          <div className="mb-2 flex items-center gap-2">
+            <Globe className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
+              {getDisplayName(currentWebsite)}
+            </span>
+          </div>
+
+          {previousAlias && (
+            <div className="mb-2 rounded bg-blue-100 p-2 dark:bg-blue-900/30">
+              <p className="text-xs text-blue-600 dark:text-blue-300 mb-1">
+                Previously used:
+              </p>
+              <p className="font-mono text-xs text-blue-900 dark:text-blue-100 truncate">
+                {previousAlias}
+              </p>
+            </div>
+          )}
+
+          {suggestions.length > 0 && (
+            <div>
+              <p className="text-xs font-medium text-blue-600 dark:text-blue-300 mb-1">
+                Suggestions:
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {suggestions.map((alias) => (
+                  <button
+                    key={alias}
+                    onClick={() => handleCopySuggestion(alias)}
+                    className="rounded bg-blue-200 px-2 py-1 text-xs font-medium text-blue-900 hover:bg-blue-300 dark:bg-blue-800 dark:text-blue-100 dark:hover:bg-blue-700 transition-colors"
+                  >
+                    {alias.split("@")[0]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex gap-1 mb-3 bg-muted/70 p-1 rounded-lg border border-border/50">
         {(
