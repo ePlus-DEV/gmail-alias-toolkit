@@ -191,7 +191,10 @@ function injectIcon(input: EmailInputElement) {
   icon.style.transition = "opacity 0.2s";
   icon.style.flexShrink = "0";
 
+  let closeTimer: NodeJS.Timeout;
+
   icon.addEventListener("mouseenter", async () => {
+    clearTimeout(closeTimer);
     icon.style.opacity = "1";
     input.classList.add("gmail-alias-input-highlight");
 
@@ -222,13 +225,26 @@ function injectIcon(input: EmailInputElement) {
     popup.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
     popup.style.top = `${rect.bottom + 8}px`;
     popup.style.zIndex = "999999";
+
+    // Keep popup open when hovering over it
+    popup.addEventListener("mouseenter", () => {
+      clearTimeout(closeTimer);
+    });
+
+    popup.addEventListener("mouseleave", () => {
+      closeTimer = setTimeout(() => {
+        popup.remove();
+      }, 100);
+    });
   });
 
   icon.addEventListener("mouseleave", () => {
     icon.style.opacity = "0.85";
     input.classList.remove("gmail-alias-input-highlight");
-    // Close popup on mouse leave
-    document.querySelectorAll(".gmail-alias-popup").forEach((p) => p.remove());
+    // Delay close to allow mouse movement to popup
+    closeTimer = setTimeout(() => {
+      document.querySelectorAll(".gmail-alias-popup").forEach((p) => p.remove());
+    }, 150);
   });
 
   input.__gmailAliasIcon = icon;
