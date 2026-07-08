@@ -78,7 +78,11 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
 }
 
 /** Create popup element with suggestions. */
-function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
+function createPopup(
+  data: SuggestionData,
+  onSelect: (alias: string) => void,
+  input?: EmailInputElement,
+) {
   const popup = document.createElement("div");
   popup.className = "gmail-alias-popup";
   popup.innerHTML = `
@@ -138,6 +142,30 @@ function createPopup(data: SuggestionData, onSelect: (alias: string) => void) {
     closeBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       popup.remove();
+    });
+  }
+
+  // Handle suggestion item hover for preview
+  if (input) {
+    const originalValue = input.value;
+
+    popup.querySelectorAll(".gmail-alias-suggestion-item").forEach((item) => {
+      const useBtn = item.querySelector(
+        ".gmail-alias-suggestion-use",
+      ) as HTMLElement;
+      const alias = useBtn?.dataset.alias;
+
+      item.addEventListener("mouseenter", () => {
+        if (alias) {
+          // Show preview in input
+          fillInput(input, alias);
+        }
+      });
+
+      item.addEventListener("mouseleave", () => {
+        // Restore original input value
+        input.value = originalValue;
+      });
     });
   }
 
@@ -216,17 +244,21 @@ function injectIcon(input: EmailInputElement) {
       return;
     }
 
-    const popup = createPopup(data, async (alias) => {
-      fillInput(input, alias);
+    const popup = createPopup(
+      data,
+      async (alias) => {
+        fillInput(input, alias);
 
-      if (data.website) {
-        try {
-          await saveWebsiteAlias(data.activeEmail, data.website, alias);
-        } catch (error) {
-          console.debug("Error saving website alias:", error);
+        if (data.website) {
+          try {
+            await saveWebsiteAlias(data.activeEmail, data.website, alias);
+          } catch (error) {
+            console.debug("Error saving website alias:", error);
+          }
         }
-      }
-    });
+      },
+      input,
+    );
 
     document.body.appendChild(popup);
 
