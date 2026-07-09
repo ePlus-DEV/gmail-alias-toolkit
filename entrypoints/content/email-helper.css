@@ -1,37 +1,11 @@
-/* Email input helper icon and popup styles */
+/* Email input helper icon and popup styles - Tailwind+Custom */
 
-.gmail-alias-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  width: 100%;
-}
-
-.gmail-alias-input-wrapper > input {
-  flex: 1;
-  min-width: 0;
-}
-
+/* Icon wrapper styling */
 .gmail-alias-input-icon {
-  cursor: pointer;
-  opacity: 0.85;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  background: rgba(26, 210, 164, 0.1);
-  border: 1.5px solid rgba(26, 210, 164, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #1ad2a4;
 }
 
 .gmail-alias-input-icon:hover {
-  opacity: 1;
-  background: rgba(26, 210, 164, 0.15);
-  border-color: rgba(26, 210, 164, 0.6);
   transform: scale(1.1);
   box-shadow: 0 2px 8px rgba(26, 210, 164, 0.25);
 }
@@ -40,106 +14,49 @@
   transform: scale(0.95);
 }
 
-/* Highlight effect when hovering icon */
+/* Input highlight effect */
 input.gmail-alias-input-highlight {
   background-color: #ecfdf5 !important;
-  border-color: #7dd3fc !important;
-  box-shadow: inset 0 0 0 1px #7dd3fc !important;
-  transition: all 0.2s ease !important;
+  border-color: #10b981 !important;
+  box-shadow: inset 0 0 0 1px #10b981 !important;
 }
 
-/* Preview effect when hovering suggestion */
+/* Input preview effect */
 input.gmail-alias-input-preview {
   background-color: #d1fae5 !important;
-  border-color: #7dd3fc !important;
-  box-shadow: inset 0 0 0 1px #7dd3fc !important;
-  transition: all 0.15s ease !important;
+  border-color: #10b981 !important;
+  box-shadow: inset 0 0 0 1px #10b981 !important;
 }
 
-/* Popup styles */
+/* Popup base styles */
 .gmail-alias-popup {
-  position: fixed;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 999999;
-  min-width: 280px;
-  max-width: 320px;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.gmail-alias-popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
-  border-radius: 8px 8px 0 0;
+/* Tab styling */
+.gmail-alias-popup-tab:hover {
+  background: #f0f0f0;
 }
 
-.gmail-alias-popup-title {
-  font-weight: 600;
-  font-size: 13px;
-  text-transform: capitalize;
-  color: #374151;
+.gmail-alias-popup-tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6 !important;
 }
 
-.gmail-alias-popup-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: #9ca3af;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
+/* Tab content visibility */
+.gmail-alias-popup-tab-content {
+  display: none;
 }
 
-.gmail-alias-popup-close:hover {
-  color: #6b7280;
-}
-
-.gmail-alias-popup-content {
-  padding: 12px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.gmail-alias-prev-section {
-  margin-bottom: 12px;
-}
-
-.gmail-alias-prev-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #9ca3af;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-}
-
-.gmail-alias-prev-alias {
+.gmail-alias-popup-tab-content.active {
   display: block;
-  width: 100%;
-  padding: 8px 12px;
+}
+
+/* Previously used alias styling */
+.gmail-alias-prev-alias {
   background: #fef3c7;
-  border: 1px solid #fcd34d;
-  border-radius: 6px;
-  font-family: "Monaco", "Courier New", monospace;
-  font-size: 12px;
+  border-color: #fcd34d;
   color: #92400e;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s ease;
 }
 
 .gmail-alias-prev-alias:hover {
@@ -147,41 +64,11 @@ input.gmail-alias-input-preview {
   border-color: #fbbf24;
 }
 
-.gmail-alias-separator {
-  height: 1px;
-  background: #e5e7eb;
-  margin: 12px 0;
-}
-
-.gmail-alias-suggestions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.gmail-alias-suggestions-label {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #9ca3af;
-  letter-spacing: 0.5px;
-}
-
-.gmail-alias-suggestions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
+/* Suggestion item styling */
 .gmail-alias-suggestion-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
   background: #f0f9ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-color: #bfdbfe;
+  color: #1e40af;
 }
 
 .gmail-alias-suggestion-item:hover {
@@ -189,79 +76,16 @@ input.gmail-alias-input-preview {
   border-color: #7dd3fc;
 }
 
-.gmail-alias-suggestion-text {
-  flex: 1;
-  font-family: "Monaco", "Courier New", monospace;
-  font-size: 12px;
+/* History item styling */
+.gmail-alias-history-item {
+  background: #f0f9ff;
+  border-color: #bfdbfe;
   color: #1e40af;
-  text-align: left;
-  word-break: break-all;
 }
 
-.gmail-alias-suggestion-use {
-  padding: 4px 10px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.gmail-alias-suggestion-use:hover {
-  background: #2563eb;
-  transform: scale(1.05);
-}
-
-.gmail-alias-suggestion-use:active {
-  transform: scale(0.95);
-}
-
-/* Info panel with rules and features */
-.gmail-alias-info-panel {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
-  background: #f9fafb;
-  margin: 12px -12px -12px -12px;
-  padding: 12px;
-  border-radius: 0 0 8px 8px;
-}
-
-.gmail-alias-info-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #374151;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-}
-
-.gmail-alias-info-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 10px 0;
-  font-size: 12px;
-  color: #4b5563;
-  line-height: 1.6;
-}
-
-.gmail-alias-info-list li {
-  margin: 4px 0;
-}
-
-.gmail-alias-privacy-note {
-  font-size: 11px;
-  color: #6b7280;
-  line-height: 1.5;
-  font-style: italic;
-  padding: 8px;
-  background: white;
-  border-radius: 4px;
-  border-left: 2px solid #1ad2a4;
+.gmail-alias-history-item:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
 }
 
 /* Dark mode support */
@@ -272,21 +96,18 @@ input.gmail-alias-input-preview {
     color: #f3f4f6;
   }
 
-  .gmail-alias-popup-header {
-    background: #111827;
-    border-bottom-color: #374151;
-  }
-
-  .gmail-alias-popup-title {
-    color: #e5e7eb;
-  }
-
-  .gmail-alias-popup-close {
-    color: #6b7280;
-  }
-
-  .gmail-alias-popup-close:hover {
+  .gmail-alias-popup-tab {
     color: #9ca3af;
+  }
+
+  .gmail-alias-popup-tab:hover {
+    background: #374151;
+    color: #d1d5db;
+  }
+
+  .gmail-alias-popup-tab.active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
   }
 
   .gmail-alias-prev-alias {
@@ -300,13 +121,10 @@ input.gmail-alias-input-preview {
     border-color: #b45309;
   }
 
-  .gmail-alias-separator {
-    background: #374151;
-  }
-
   .gmail-alias-suggestion-item {
     background: #0c2340;
     border-color: #1e3a5f;
+    color: #93c5fd;
   }
 
   .gmail-alias-suggestion-item:hover {
@@ -314,35 +132,14 @@ input.gmail-alias-input-preview {
     border-color: #3b82f6;
   }
 
-  .gmail-alias-suggestion-text {
+  .gmail-alias-history-item {
+    background: #0c2340;
+    border-color: #1e3a5f;
     color: #93c5fd;
   }
 
-  .gmail-alias-suggestion-use {
+  .gmail-alias-history-item:hover {
     background: #1e3a5f;
-    color: #e0f2fe;
-  }
-
-  .gmail-alias-suggestion-use:hover {
-    background: #2d5a8c;
-  }
-
-  .gmail-alias-info-panel {
-    background: #111827;
-    border-top-color: #374151;
-  }
-
-  .gmail-alias-info-title {
-    color: #e5e7eb;
-  }
-
-  .gmail-alias-info-list {
-    color: #d1d5db;
-  }
-
-  .gmail-alias-privacy-note {
-    background: #1f2937;
-    color: #9ca3af;
-    border-left-color: #1ad2a4;
+    border-color: #3b82f6;
   }
 }

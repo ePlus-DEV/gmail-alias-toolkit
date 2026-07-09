@@ -84,51 +84,57 @@ function createPopup(
   input?: EmailInputElement,
 ) {
   const popup = document.createElement("div");
-  popup.className = "gmail-alias-popup";
+  popup.className = "gmail-alias-popup fixed bg-white border border-gray-200 rounded-lg shadow-xl z-[999999] min-w-[280px] max-w-[320px] text-sm text-gray-900";
   popup.innerHTML = `
-    <div class="gmail-alias-popup-header">
-      <span class="gmail-alias-popup-title">${data.website}</span>
-      <button class="gmail-alias-popup-close" aria-label="Close">✕</button>
+    <div class="gmail-alias-popup-header flex justify-between items-center px-4 py-3 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+      <span class="gmail-alias-popup-title font-semibold text-sm text-gray-700 capitalize">${data.website}</span>
+      <button class="gmail-alias-popup-close bg-none border-none cursor-pointer text-xl text-gray-400 p-0 w-6 h-6 flex items-center justify-center hover:text-gray-600 transition-colors" aria-label="Close">✕</button>
     </div>
-    <div class="gmail-alias-popup-content">
-      ${
-        data.previousAlias
-          ? `
-        <div class="gmail-alias-prev-section">
-          <div class="gmail-alias-prev-label">Previously used:</div>
-          <button class="gmail-alias-prev-alias" data-alias="${data.previousAlias}">
-            ${data.previousAlias}
-          </button>
-        </div>
-        <div class="gmail-alias-separator"></div>
-      `
-          : ""
-      }
-      <div class="gmail-alias-suggestions">
-        <div class="gmail-alias-suggestions-label">Suggestions:</div>
-        <div class="gmail-alias-suggestions-list">
-          ${data.suggestions
-            .filter((alias) => alias !== data.previousAlias)
-            .map(
-              (alias) => `
-            <div class="gmail-alias-suggestion-item" data-alias="${alias}">
-              <div class="gmail-alias-suggestion-text">${alias}</div>
-            </div>
-          `,
-            )
-            .join("")}
+    <div class="gmail-alias-popup-tabs" style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
+      <button class="gmail-alias-popup-tab active" data-tab="suggestions" style="flex: 1; padding: 8px 12px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">Suggestions</button>
+      <button class="gmail-alias-popup-tab" data-tab="generate" style="flex: 1; padding: 8px 12px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">Generate</button>
+      <button class="gmail-alias-popup-tab" data-tab="history" style="flex: 1; padding: 8px 12px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">History</button>
+    </div>
+    <div class="gmail-alias-popup-content" style="padding: 12px; max-height: 320px; overflow-y: auto;">
+      <div class="gmail-alias-popup-tab-content active" data-tab-content="suggestions">
+        ${
+          data.previousAlias
+            ? `
+          <div class="gmail-alias-prev-section mb-3">
+            <div class="gmail-alias-prev-label text-xs font-semibold uppercase text-gray-400 mb-2 tracking-wider">Previously used:</div>
+            <button class="gmail-alias-prev-alias block w-full px-3 py-2 rounded text-xs cursor-pointer text-left transition-all font-mono" data-alias="${data.previousAlias}">
+              ${data.previousAlias}
+            </button>
+          </div>
+          <div class="gmail-alias-separator h-px bg-gray-200 my-3"></div>
+        `
+            : ""
+        }
+        <div class="gmail-alias-suggestions flex flex-col gap-2">
+          <div class="gmail-alias-suggestions-label text-xs font-semibold uppercase text-gray-400 tracking-wider">Suggestions:</div>
+          <div class="gmail-alias-suggestions-list flex flex-col gap-1.5">
+            ${data.suggestions
+              .filter((alias) => alias !== data.previousAlias)
+              .map(
+                (alias) => `
+              <div class="gmail-alias-suggestion-item flex items-center gap-2 px-3 py-2 rounded cursor-pointer transition-all" data-alias="${alias}">
+                <div class="gmail-alias-suggestion-text flex-1 font-mono text-xs text-left break-all">${alias}</div>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
         </div>
       </div>
-      <div class="gmail-alias-info-panel">
-        <div class="gmail-alias-info-title">Gmail Plus Alias Manager</div>
-        <ul class="gmail-alias-info-list">
-          <li>📋 Auto-detect websites</li>
-          <li>💾 Save alias mappings</li>
-          <li>🔄 Reuse previous aliases</li>
-          <li>🔒 Local-first, no tracking</li>
-        </ul>
-        <div class="gmail-alias-privacy-note">
-          Gmail plus aliases help with filtering and tracking, but do not hide your real email address.
+      <div class="gmail-alias-popup-tab-content" data-tab-content="generate">
+        <div class="gmail-alias-generate-section flex gap-2 p-3">
+          <input type="text" class="gmail-alias-generate-input flex-1 px-3 py-2 border border-blue-200 rounded text-xs font-mono" placeholder="Enter custom alias">
+          <button class="gmail-alias-generate-btn px-4 py-2 bg-blue-500 text-white border-none rounded text-xs font-semibold cursor-pointer transition-all hover:bg-blue-600 whitespace-nowrap">Use</button>
+        </div>
+      </div>
+      <div class="gmail-alias-popup-tab-content" data-tab-content="history">
+        <div class="gmail-alias-history-section p-3">
+          <div class="gmail-alias-history-list flex flex-col gap-1.5"></div>
         </div>
       </div>
     </div>
@@ -144,6 +150,84 @@ function createPopup(
       popup.remove();
     });
   }
+
+  // Handle tab switching
+  popup.querySelectorAll(".gmail-alias-popup-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const tabName = (tab as HTMLElement).dataset.tab;
+
+      // Remove active from all tabs and contents
+      popup.querySelectorAll(".gmail-alias-popup-tab").forEach((t) => {
+        t.classList.remove("active");
+      });
+      popup.querySelectorAll(".gmail-alias-popup-tab-content").forEach((c) => {
+        c.classList.remove("active");
+      });
+
+      // Add active to clicked tab and corresponding content
+      tab.classList.add("active");
+      popup.querySelector(`[data-tab-content="${tabName}"]`)?.classList.add("active");
+    });
+  });
+
+  // Handle generate input
+  const generateBtn = popup.querySelector(".gmail-alias-generate-btn") as HTMLButtonElement;
+  const generateInput = popup.querySelector(".gmail-alias-generate-input") as HTMLInputElement;
+  if (generateBtn && generateInput) {
+    generateBtn.addEventListener("click", () => {
+      const alias = generateInput.value.trim();
+      if (alias) {
+        onSelect(alias);
+        popup.remove();
+      }
+    });
+    generateInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const alias = generateInput.value.trim();
+        if (alias) {
+          onSelect(alias);
+          popup.remove();
+        }
+      }
+    });
+  }
+
+  // Populate history tab
+  (async () => {
+    const historyList = popup.querySelector(".gmail-alias-history-list") as HTMLElement;
+    if (!historyList) return;
+
+    try {
+      const storage = (await browser.storage.local.get([
+        "website_aliases",
+      ])) as { website_aliases?: Record<string, Array<{ alias: string; timestamp?: number }>> };
+
+      if (storage.website_aliases && data.website in storage.website_aliases) {
+        const aliases = storage.website_aliases[data.website];
+        historyList.innerHTML = aliases
+          .slice()
+          .reverse()
+          .map((item) => `<div class="gmail-alias-history-item px-3 py-2 rounded font-mono text-xs cursor-pointer transition-all" data-alias="${item.alias}">${item.alias}</div>`)
+          .join("");
+
+        // Handle history item click
+        historyList.querySelectorAll(".gmail-alias-history-item").forEach((item) => {
+          item.addEventListener("click", () => {
+            const alias = (item as HTMLElement).dataset.alias;
+            if (alias) {
+              onSelect(alias);
+              popup.remove();
+            }
+          });
+        });
+      } else {
+        historyList.innerHTML = '<div class="px-3 py-3 text-gray-400 text-xs text-center">No history yet</div>';
+      }
+    } catch (error) {
+      console.debug("Error loading history:", error);
+      historyList.innerHTML = '<div class="px-3 py-3 text-gray-400 text-xs text-center">Error loading history</div>';
+    }
+  })();
 
   // Handle suggestion item hover for preview and click to select
   if (input) {
