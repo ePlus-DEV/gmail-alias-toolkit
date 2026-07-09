@@ -197,13 +197,19 @@ function createPopup(
 
       // Add active to clicked tab and corresponding content
       tab.classList.add("active");
-      popup.querySelector(`[data-tab-content="${tabName}"]`)?.classList.add("active");
+      popup
+        .querySelector(`[data-tab-content="${tabName}"]`)
+        ?.classList.add("active");
     });
   });
 
   // Handle custom generate input
-  const generateBtn = popup.querySelector(".gmail-alias-generate-btn") as HTMLButtonElement;
-  const generateInput = popup.querySelector(".gmail-alias-generate-input") as HTMLInputElement;
+  const generateBtn = popup.querySelector(
+    ".gmail-alias-generate-btn",
+  ) as HTMLButtonElement;
+  const generateInput = popup.querySelector(
+    ".gmail-alias-generate-input",
+  ) as HTMLInputElement;
   if (generateBtn && generateInput) {
     generateBtn.addEventListener("click", () => {
       const alias = generateInput.value.trim();
@@ -224,8 +230,12 @@ function createPopup(
   }
 
   // Handle random generate
-  const randomBtn = popup.querySelector(".gmail-alias-random-btn") as HTMLButtonElement;
-  const randomFormat = popup.querySelector(".gmail-alias-random-format") as HTMLSelectElement;
+  const randomBtn = popup.querySelector(
+    ".gmail-alias-random-btn",
+  ) as HTMLButtonElement;
+  const randomFormat = popup.querySelector(
+    ".gmail-alias-random-format",
+  ) as HTMLSelectElement;
   if (randomBtn && input && data.activeEmail) {
     randomBtn.addEventListener("click", () => {
       const format = randomFormat?.value || "private-mail";
@@ -241,38 +251,52 @@ function createPopup(
 
   // Populate history tab
   (async () => {
-    const historyList = popup.querySelector(".gmail-alias-history-list") as HTMLElement;
+    const historyList = popup.querySelector(
+      ".gmail-alias-history-list",
+    ) as HTMLElement;
     if (!historyList) return;
 
     try {
       const storage = (await browser.storage.local.get([
         "website_aliases",
-      ])) as { website_aliases?: Record<string, Array<{ alias: string; timestamp?: number }>> };
+      ])) as {
+        website_aliases?: Record<
+          string,
+          Array<{ alias: string; timestamp?: number }>
+        >;
+      };
 
       if (storage.website_aliases && data.website in storage.website_aliases) {
         const aliases = storage.website_aliases[data.website];
         historyList.innerHTML = aliases
           .slice()
           .reverse()
-          .map((item) => `<div class="gmail-alias-history-item" data-alias="${item.alias}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${item.alias}</div>`)
+          .map(
+            (item) =>
+              `<div class="gmail-alias-history-item" data-alias="${item.alias}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${item.alias}</div>`,
+          )
           .join("");
 
         // Handle history item click
-        historyList.querySelectorAll(".gmail-alias-history-item").forEach((item) => {
-          item.addEventListener("click", () => {
-            const alias = (item as HTMLElement).dataset.alias;
-            if (alias) {
-              onSelect(alias);
-              popup.remove();
-            }
+        historyList
+          .querySelectorAll(".gmail-alias-history-item")
+          .forEach((item) => {
+            item.addEventListener("click", () => {
+              const alias = (item as HTMLElement).dataset.alias;
+              if (alias) {
+                onSelect(alias);
+                popup.remove();
+              }
+            });
           });
-        });
       } else {
-        historyList.innerHTML = '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
+        historyList.innerHTML =
+          '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
       }
     } catch (error) {
       console.debug("Error loading history:", error);
-      historyList.innerHTML = '<div class="px-3 py-3 text-gray-400 text-xs text-center">Error loading history</div>';
+      historyList.innerHTML =
+        '<div class="px-3 py-3 text-gray-400 text-xs text-center">Error loading history</div>';
     }
   })();
 
@@ -481,8 +505,30 @@ function generateRandomString(format: string = "private-mail"): string {
   }
 
   if (format === "words") {
-    const adjectives = ["happy", "sunny", "calm", "bright", "swift", "brave", "cool", "smart", "quick", "zen"];
-    const nouns = ["fox", "bird", "bear", "wolf", "deer", "lion", "hawk", "eagle", "tiger", "panda"];
+    const adjectives = [
+      "happy",
+      "sunny",
+      "calm",
+      "bright",
+      "swift",
+      "brave",
+      "cool",
+      "smart",
+      "quick",
+      "zen",
+    ];
+    const nouns = [
+      "fox",
+      "bird",
+      "bear",
+      "wolf",
+      "deer",
+      "lion",
+      "hawk",
+      "eagle",
+      "tiger",
+      "panda",
+    ];
     const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
     const noun = nouns[Math.floor(Math.random() * nouns.length)];
     return `${adj}-${noun}`;
