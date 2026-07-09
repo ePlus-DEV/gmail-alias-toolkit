@@ -380,6 +380,9 @@ function injectIcon(input: EmailInputElement) {
     container.style.alignItems = "center";
     container.style.gap = "8px";
 
+    input.style.flex = "1";
+    input.style.minWidth = "0";
+
     icon.style.cursor = "pointer";
     icon.style.color = "#3b82f6";
     icon.style.opacity = "0.7";
