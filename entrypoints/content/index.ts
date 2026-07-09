@@ -108,11 +108,11 @@ function createPopup(
         <div class="gmail-alias-suggestions-label">Suggestions:</div>
         <div class="gmail-alias-suggestions-list">
           ${data.suggestions
+            .filter((alias) => alias !== data.previousAlias)
             .map(
               (alias) => `
-            <div class="gmail-alias-suggestion-item">
+            <div class="gmail-alias-suggestion-item" data-alias="${alias}">
               <div class="gmail-alias-suggestion-text">${alias}</div>
-              <button class="gmail-alias-suggestion-use" data-alias="${alias}">Use</button>
             </div>
           `,
             )
@@ -145,15 +145,12 @@ function createPopup(
     });
   }
 
-  // Handle suggestion item hover for preview
+  // Handle suggestion item hover for preview and click to select
   if (input) {
     const originalValue = input.value;
 
     popup.querySelectorAll(".gmail-alias-suggestion-item").forEach((item) => {
-      const useBtn = item.querySelector(
-        ".gmail-alias-suggestion-use",
-      ) as HTMLElement;
-      const alias = useBtn?.dataset.alias;
+      const alias = (item as HTMLElement).dataset.alias;
 
       item.addEventListener("mouseenter", () => {
         if (alias) {
@@ -168,21 +165,48 @@ function createPopup(
         input.value = originalValue;
         input.classList.remove("gmail-alias-input-preview");
       });
+
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (alias) {
+          onSelect(alias);
+          popup.remove();
+        }
+      });
     });
   }
 
-  // Handle "Use" button clicks
-  popup.querySelectorAll(".gmail-alias-suggestion-use").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+  // Handle previous alias button hover and click
+  const prevAliasBtn = popup.querySelector(
+    ".gmail-alias-prev-alias",
+  ) as HTMLElement;
+  if (prevAliasBtn && input) {
+    const originalValue = input.value;
+
+    prevAliasBtn.addEventListener("mouseenter", () => {
+      const alias = prevAliasBtn.dataset.alias;
+      if (alias) {
+        fillInput(input, alias);
+        input.classList.add("gmail-alias-input-preview");
+      }
+    });
+
+    prevAliasBtn.addEventListener("mouseleave", () => {
+      input.value = originalValue;
+      input.classList.remove("gmail-alias-input-preview");
+    });
+
+    prevAliasBtn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const alias = (btn as HTMLElement).dataset.alias;
+      const alias = prevAliasBtn.dataset.alias;
       if (alias) {
         onSelect(alias);
         popup.remove();
       }
     });
-  });
+  }
 
   // Close on outside click
   const handleOutsideClick = (e: MouseEvent) => {
@@ -252,6 +276,7 @@ function injectIcon(input: EmailInputElement) {
         data,
         async (alias) => {
           fillInput(input, alias);
+          input.classList.remove("gmail-alias-input-preview");
 
           if (data.website) {
             try {
@@ -266,11 +291,18 @@ function injectIcon(input: EmailInputElement) {
 
       document.body.appendChild(popup);
 
+      // const iconRect = icon.getBoundingClientRect();
+      // popup.style.position = "fixed";
+      // Position popup to the right of the icon, below it
+      // popup.style.left = `${Math.min(iconRect.right + 8, window.innerWidth - 280)}px`;
+      // popup.style.top = `${iconRect.bottom + 8}px`;
+      // popup.style.zIndex = "999999";
+
       const rect = icon.getBoundingClientRect();
       popup.style.position = "fixed";
       popup.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
       // Position popup slightly overlapping the input to prevent gap on hover
-      popup.style.top = `${rect.bottom - 4}px`;
+      popup.style.top = `${rect.top - 4}px`;
       popup.style.zIndex = "999999";
 
       // Keep popup open when hovering over it
@@ -327,7 +359,7 @@ function fillInput(input: EmailInputElement, alias: string) {
 /** Detect email inputs on page. */
 function detectEmailInputs() {
   const emailInputs = document.querySelectorAll<EmailInputElement>(
-    'input[type="email"], input[name*="email" i], input[placeholder*="email" i]',
+    'input[type="email"], input[name*="email" i], input[placeholder*="email" i], input[id*="email" i], input[aria-label*="email" i]',
   );
 
   console.debug(`[Gmail Alias] Found ${emailInputs.length} email inputs`);
@@ -367,17 +399,21 @@ function observeDOM() {
 export default defineContentScript({
   matches: ["<all_urls>"],
   main() {
-    // Initialize email input helper
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        detectEmailInputs();
-        observeDOM();
-      });
-    } else {
-      detectEmailInputs();
-      observeDOM();
-    }
+    // Setup observer immediately
+    const observer = observeDOM();
 
+    // Initial detect
+    detectEmailInputs();
+
+    // Periodic fallback scan for SPA/lazy-loaded inputs
+    const scanInterval = setInterval(() => {
+      detectEmailInputs();
+    }, 2000);
+
+    // Listen for DOM ready events
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", detectEmailInputs);
+    }
     window.addEventListener("load", detectEmailInputs);
 
     // Listen for context menu fill requests
@@ -411,6 +447,12 @@ export default defineContentScript({
           }, 500);
         }
       }
+    });
+
+    // Cleanup on unload
+    window.addEventListener("beforeunload", () => {
+      clearInterval(scanInterval);
+      observer.disconnect();
     });
   },
 });

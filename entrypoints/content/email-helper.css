@@ -8,14 +8,18 @@
   width: 100%;
 }
 
+.gmail-alias-input-wrapper > input {
+  flex: 1;
+  min-width: 0;
+}
+
 .gmail-alias-input-icon {
   cursor: pointer;
   opacity: 0.85;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  padding: 4px;
+  width: 36px;
+  height: 36px;
   border-radius: 6px;
   background: rgba(26, 210, 164, 0.1);
   border: 1.5px solid rgba(26, 210, 164, 0.3);
@@ -38,19 +42,17 @@
 
 /* Highlight effect when hovering icon */
 input.gmail-alias-input-highlight {
-  background-color: rgba(26, 210, 164, 0.08) !important;
-  border-color: rgba(26, 210, 164, 0.4) !important;
-  box-shadow:
-    0 0 0 2px rgba(26, 210, 164, 0.15),
-    inset 0 0 0 1px rgba(26, 210, 164, 0.2) !important;
+  background-color: #ecfdf5 !important;
+  border-color: #7dd3fc !important;
+  box-shadow: inset 0 0 0 1px #7dd3fc !important;
   transition: all 0.2s ease !important;
 }
 
 /* Preview effect when hovering suggestion */
 input.gmail-alias-input-preview {
-  background-color: rgba(59, 130, 246, 0.15) !important;
-  border-color: rgba(59, 130, 246, 0.5) !important;
-  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.3) !important;
+  background-color: #d1fae5 !important;
+  border-color: #7dd3fc !important;
+  box-shadow: inset 0 0 0 1px #7dd3fc !important;
   transition: all 0.15s ease !important;
 }
 
