@@ -75,6 +75,41 @@ const DEFAULT_SETTINGS: AppSettings = {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.0",
+    date: "2026-07-13",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Added website-aware alias suggestions based on the current hostname",
+          "Added an email input helper with inline icons, suggestion popups, live previews, and explicit Use actions",
+          "Added previous-alias navigation and an information panel explaining supported rules and local-only storage",
+          "Added expanded statistics metrics and Russian and Turkish translations",
+          "Added a product landing page with automated GitHub Pages deployment",
+        ],
+      },
+      {
+        type: "Changed",
+        items: [
+          "Enhanced the context menu with dynamic, website-specific alias suggestions",
+          "Updated the History tab to show aliases across websites and store history per email account",
+          "Improved popup navigation, layout, styling, and alias selection behavior",
+          "Reorganized the content script and colocated its email helper styles",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          "Preserved email input width and flex layout when injecting the helper icon",
+          "Improved helper popup positioning and hover behavior to prevent accidental closing",
+          "Hid the Tags statistics tab when there is not enough data for a useful chart",
+          "Hardened content rendering against client-side cross-site scripting",
+          "Resolved code quality, localization, and build workflow issues",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.2.0",
     date: "2026-07-03",
     changes: [
