@@ -19,6 +19,15 @@ interface EmailInputElement extends HTMLInputElement {
   __gmailAliasIcon?: HTMLElement;
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 interface SuggestionData {
   activeEmail: string;
   previousAlias: string | null;
@@ -98,9 +107,11 @@ function createPopup(
     font-size: 14px;
     color: #1f2937;
   `;
+  const safeWebsite = escapeHtml(data.website);
+  const safePreviousAlias = data.previousAlias ? escapeHtml(data.previousAlias) : "";
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
-      <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${data.website}</span>
+      <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
       <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="Close">✕</button>
     </div>
     <div class="gmail-alias-popup-tabs" style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
@@ -115,8 +126,8 @@ function createPopup(
             ? `
           <div class="gmail-alias-prev-section" style="margin-bottom: 12px;">
             <div class="gmail-alias-prev-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px;">Previously used:</div>
-            <button class="gmail-alias-prev-alias" data-alias="${data.previousAlias}" style="display: block; width: 100%; padding: 8px 12px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #92400e; cursor: pointer; text-align: left; transition: all 0.2s ease;">
-              ${data.previousAlias}
+            <button class="gmail-alias-prev-alias" data-alias="${safePreviousAlias}" style="display: block; width: 100%; padding: 8px 12px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #92400e; cursor: pointer; text-align: left; transition: all 0.2s ease;">
+              ${safePreviousAlias}
             </button>
           </div>
           <div class="gmail-alias-separator" style="height: 1px; background: #e5e7eb; margin: 12px 0;"></div>
@@ -128,13 +139,14 @@ function createPopup(
           <div class="gmail-alias-suggestions-list" style="display: flex; flex-direction: column; gap: 6px;">
             ${data.suggestions
               .filter((alias) => alias !== data.previousAlias)
-              .map(
-                (alias) => `
-              <div class="gmail-alias-suggestion-item" data-alias="${alias}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer; transition: all 0.2s ease;">
-                <div class="gmail-alias-suggestion-text" style="flex: 1; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; text-align: left; word-break: break-all;">${alias}</div>
+              .map((alias) => {
+                const safeAlias = escapeHtml(alias);
+                return `
+              <div class="gmail-alias-suggestion-item" data-alias="${safeAlias}" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer; transition: all 0.2s ease;">
+                <div class="gmail-alias-suggestion-text" style="flex: 1; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; text-align: left; word-break: break-all;">${safeAlias}</div>
               </div>
-            `,
-              )
+            `;
+              })
               .join("")}
           </div>
         </div>
