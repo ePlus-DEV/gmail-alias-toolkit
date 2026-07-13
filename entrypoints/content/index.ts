@@ -425,11 +425,19 @@ function injectIcon(input: EmailInputElement) {
     iconContainer.style.top = "50%";
     iconContainer.style.transform = "translateY(-50%)";
     iconContainer.style.pointerEvents = "none";
+    iconContainer.style.display = "flex";
+    iconContainer.style.alignItems = "center";
+    iconContainer.style.justifyContent = "center";
+    iconContainer.style.width = "28px";
+    iconContainer.style.height = "28px";
+    iconContainer.style.border = "1px solid #e5e7eb";
+    iconContainer.style.borderRadius = "4px";
+    iconContainer.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
 
     // Add right padding to input to make room for icon
     const currentPadding = window.getComputedStyle(input).paddingRight;
     const paddingValue = parseFloat(currentPadding) || 0;
-    input.style.paddingRight = `${paddingValue + 32}px`;
+    input.style.paddingRight = `${paddingValue + 40}px`;
     input.style.boxSizing = "border-box";
 
     icon.style.cursor = "pointer";
@@ -437,8 +445,8 @@ function injectIcon(input: EmailInputElement) {
     icon.style.opacity = "0.7";
     icon.style.transition = "opacity 0.2s";
     icon.style.pointerEvents = "auto";
-    icon.style.width = "24px";
-    icon.style.height = "24px";
+    icon.style.width = "18px";
+    icon.style.height = "18px";
 
     let closeTimer: NodeJS.Timeout;
 
