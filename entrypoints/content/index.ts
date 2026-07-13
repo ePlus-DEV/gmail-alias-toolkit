@@ -383,6 +383,10 @@ function injectIcon(input: EmailInputElement) {
   if (input.__gmailAliasIcon) return;
 
   try {
+    // Capture original computed styles before modifying
+    const originalWidth = window.getComputedStyle(input).width;
+    const originalFlex = window.getComputedStyle(input).flex;
+
     const container = document.createElement("div");
     container.className = "gmail-alias-input-wrapper";
     container.innerHTML = ICON_HTML;
@@ -403,9 +407,15 @@ function injectIcon(input: EmailInputElement) {
     container.style.display = "flex";
     container.style.alignItems = "center";
     container.style.gap = "8px";
-    container.style.flex = "1";
-    container.style.minWidth = "0";
     container.style.boxSizing = "border-box";
+
+    // Inherit original flex/width properties
+    if (originalFlex !== "none" && originalFlex !== "0 1 auto") {
+      container.style.flex = originalFlex;
+    } else {
+      container.style.width = originalWidth;
+    }
+    container.style.minWidth = "0";
 
     input.style.flex = "1";
     input.style.minWidth = "0";
