@@ -254,9 +254,7 @@ export default defineBackground(() => {
   }
 
   /** Handle website suggestion menu item. */
-  async function handleWebsiteSuggestion(
-    menuItemId: string,
-  ): Promise<string> {
+  async function handleWebsiteSuggestion(menuItemId: string): Promise<string> {
     const suggestionIndex = parseInt(
       String(menuItemId).replace("website-suggestion-", ""),
     );
