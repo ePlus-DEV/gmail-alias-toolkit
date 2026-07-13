@@ -528,7 +528,7 @@ function injectIcon(input: EmailInputElement) {
 }
 
 /** Generate random string for alias. */
-function generateRandomString(format: string = "private-mail"): string {
+function generateRandomString(format = "private-mail"): string {
   if (format === "private-mail") {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
@@ -613,7 +613,7 @@ function detectEmailInputs() {
 
   emailInputs.forEach((input, idx) => {
     const isVisible = input.offsetParent !== null;
-    const hasIcon = !!input.__gmailAliasIcon;
+    const hasIcon = Boolean(input.__gmailAliasIcon);
     const isWideEnough = input.offsetWidth > 50;
 
     console.debug(
