@@ -264,7 +264,7 @@ function createPopup(
     });
   }
 
-  // Populate history tab (show all aliases from all websites)
+  // Populate history tab
   (async () => {
     const historyList = popup.querySelector(
       ".gmail-alias-history-list",
@@ -272,50 +272,64 @@ function createPopup(
     if (!historyList) return;
 
     try {
-      const storage = (await browser.storage.local.get([
-        "website_aliases",
-      ])) as {
-        website_aliases?: Record<
-          string,
-          Array<{ alias: string; timestamp?: number }>
-        >;
-      };
+      // Get active email to build history key
+      const accountResult = (await browser.storage.local.get([
+        "email_accounts",
+        "base_email",
+      ])) as { email_accounts?: Array<{ isActive?: boolean; email: string }> };
+      let activeEmail = "your.email@gmail.com";
 
-      if (storage.website_aliases) {
-        // Collect all aliases from all websites
-        const allAliases: Array<{ alias: string; timestamp?: number }> = [];
-        Object.values(storage.website_aliases).forEach((websiteAliases) => {
-          allAliases.push(...websiteAliases);
-        });
-
-        if (allAliases.length > 0) {
-          // Sort by timestamp (most recent first)
-          allAliases.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-          historyList.innerHTML = allAliases
-            .slice()
-            .map(
-              (item) =>
-                `<div class="gmail-alias-history-item" data-alias="${item.alias}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${item.alias}</div>`,
-            )
-            .join("");
-
-          // Handle history item click
-          historyList
-            .querySelectorAll(".gmail-alias-history-item")
-            .forEach((item) => {
-              item.addEventListener("click", () => {
-                const alias = (item as HTMLElement).dataset.alias;
-                if (alias) {
-                  onSelect(alias);
-                  popup.remove();
-                }
-              });
-            });
-        } else {
-          historyList.innerHTML =
-            '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
+      if (
+        accountResult.email_accounts &&
+        Array.isArray(accountResult.email_accounts)
+      ) {
+        const activeAccount = accountResult.email_accounts.find(
+          (acc) => acc.isActive,
+        );
+        if (activeAccount) {
+          activeEmail = activeAccount.email;
         }
+      } else if (accountResult.base_email) {
+        activeEmail = accountResult.base_email;
+      }
+
+      // Build history key (same format as background.ts)
+      const historyKey = `gmail_alias_recent_${encodeURIComponent(activeEmail.trim().toLowerCase())}`;
+
+      const storage = (await browser.storage.local.get(historyKey)) as Record<
+        string,
+        Array<{ email: string; timestamp: number }> | undefined
+      >;
+      const history = (storage[historyKey] || []) as Array<{
+        email: string;
+        timestamp: number;
+      }>;
+
+      if (history.length > 0) {
+        // Sort by timestamp (most recent first)
+        const sorted = history
+          .slice()
+          .sort((a, b) => b.timestamp - a.timestamp);
+
+        historyList.innerHTML = sorted
+          .map(
+            (item) =>
+              `<div class="gmail-alias-history-item" data-alias="${escapeHtml(item.email)}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${escapeHtml(item.email)}</div>`,
+          )
+          .join("");
+
+        // Handle history item click
+        historyList
+          .querySelectorAll(".gmail-alias-history-item")
+          .forEach((item) => {
+            item.addEventListener("click", () => {
+              const alias = (item as HTMLElement).dataset.alias;
+              if (alias) {
+                onSelect(alias);
+                popup.remove();
+              }
+            });
+          });
       } else {
         historyList.innerHTML =
           '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
