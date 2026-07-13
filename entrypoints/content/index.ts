@@ -249,7 +249,7 @@ function createPopup(
     });
   }
 
-  // Populate history tab
+  // Populate history tab (show all aliases from all websites)
   (async () => {
     const historyList = popup.querySelector(
       ".gmail-alias-history-list",
@@ -266,29 +266,41 @@ function createPopup(
         >;
       };
 
-      if (storage.website_aliases && data.website in storage.website_aliases) {
-        const aliases = storage.website_aliases[data.website];
-        historyList.innerHTML = aliases
-          .slice()
-          .reverse()
-          .map(
-            (item) =>
-              `<div class="gmail-alias-history-item" data-alias="${item.alias}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${item.alias}</div>`,
-          )
-          .join("");
+      if (storage.website_aliases) {
+        // Collect all aliases from all websites
+        const allAliases: Array<{ alias: string; timestamp?: number }> = [];
+        Object.values(storage.website_aliases).forEach((websiteAliases) => {
+          allAliases.push(...websiteAliases);
+        });
 
-        // Handle history item click
-        historyList
-          .querySelectorAll(".gmail-alias-history-item")
-          .forEach((item) => {
-            item.addEventListener("click", () => {
-              const alias = (item as HTMLElement).dataset.alias;
-              if (alias) {
-                onSelect(alias);
-                popup.remove();
-              }
+        if (allAliases.length > 0) {
+          // Sort by timestamp (most recent first)
+          allAliases.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+          historyList.innerHTML = allAliases
+            .slice()
+            .map(
+              (item) =>
+                `<div class="gmail-alias-history-item" data-alias="${item.alias}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${item.alias}</div>`,
+            )
+            .join("");
+
+          // Handle history item click
+          historyList
+            .querySelectorAll(".gmail-alias-history-item")
+            .forEach((item) => {
+              item.addEventListener("click", () => {
+                const alias = (item as HTMLElement).dataset.alias;
+                if (alias) {
+                  onSelect(alias);
+                  popup.remove();
+                }
+              });
             });
-          });
+        } else {
+          historyList.innerHTML =
+            '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
+        }
       } else {
         historyList.innerHTML =
           '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
@@ -296,7 +308,7 @@ function createPopup(
     } catch (error) {
       console.debug("Error loading history:", error);
       historyList.innerHTML =
-        '<div class="px-3 py-3 text-gray-400 text-xs text-center">Error loading history</div>';
+        '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">Error loading history</div>';
     }
   })();
 
