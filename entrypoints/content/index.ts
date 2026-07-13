@@ -403,6 +403,8 @@ function injectIcon(input: EmailInputElement) {
     container.style.display = "flex";
     container.style.alignItems = "center";
     container.style.gap = "8px";
+    container.style.width = "100%";
+    container.style.boxSizing = "border-box";
 
     input.style.flex = "1";
     input.style.minWidth = "0";
