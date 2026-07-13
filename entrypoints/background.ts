@@ -271,12 +271,12 @@ export default defineBackground(() => {
   }
 
   /** Generate email based on menu item. */
-  async function generateEmail(
+  function generateEmail(
     menuItemId: string,
     username: string,
     domain: string,
     format = "private-mail",
-  ): Promise<string> {
+  ): string {
     if (menuItemId === "fill-random-email") {
       const randomTag = generateRandomTag(format);
       return `${username}+${randomTag}@${domain}`;
@@ -332,7 +332,7 @@ export default defineBackground(() => {
       emailToFill = await handleWebsiteSuggestion(String(info.menuItemId));
     } else {
       const format = result.app_settings?.randomFormat || "private-mail";
-      emailToFill = await generateEmail(
+      emailToFill = generateEmail(
         String(info.menuItemId),
         username,
         domain,
