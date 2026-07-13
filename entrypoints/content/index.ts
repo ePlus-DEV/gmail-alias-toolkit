@@ -19,6 +19,7 @@ interface EmailInputElement extends HTMLInputElement {
   __gmailAliasIcon?: HTMLElement;
 }
 
+/** Escape HTML special characters to prevent XSS attacks. */
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
