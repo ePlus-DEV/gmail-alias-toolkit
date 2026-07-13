@@ -214,11 +214,99 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
   }
+
+  /** Generate random tag based on format. */
+  function generateRandomTag(format = "private-mail"): string {
+    switch (format) {
+      case "private-mail": {
+        const chars = "abcdefghijklmnopqrstuvwxyz";
+        return Array.from(
+          { length: 8 },
+          () => chars[Math.floor(Math.random() * chars.length)],
+        ).join("");
+      }
+      case "alphanumeric": {
+        const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
+        return Array.from(
+          { length: 10 },
+          () => alphanum[Math.floor(Math.random() * alphanum.length)],
+        ).join("");
+      }
+      case "words": {
+        const words = [
+          "alpha",
+          "beta",
+          "gamma",
+          "delta",
+          "echo",
+          "foxtrot",
+          "golf",
+          "hotel",
+        ];
+        const word1 = words[Math.floor(Math.random() * words.length)];
+        const word2 = words[Math.floor(Math.random() * words.length)];
+        const num = Math.floor(Math.random() * 100);
+        return `${word1}${word2}${num}`;
+      }
+      default:
+        return Date.now().toString();
+    }
+  }
+
+  /** Handle website suggestion menu item. */
+  async function handleWebsiteSuggestion(
+    menuItemId: string,
+  ): Promise<string> {
+    const suggestionIndex = parseInt(
+      String(menuItemId).replace("website-suggestion-", ""),
+    );
+    const cacheResult = (await browser.storage.session?.get?.(
+      "contextMenuWebsiteSuggestions",
+    )) as
+      | {
+          contextMenuWebsiteSuggestions?: string[] | undefined;
+        }
+      | undefined;
+    const suggestions = (cacheResult?.contextMenuWebsiteSuggestions ||
+      []) as string[];
+    return suggestions[suggestionIndex] || "";
+  }
+
+  /** Generate email based on menu item. */
+  async function generateEmail(
+    menuItemId: string,
+    username: string,
+    domain: string,
+    format = "private-mail",
+  ): Promise<string> {
+    if (menuItemId === "fill-random-email") {
+      const randomTag = generateRandomTag(format);
+      return `${username}+${randomTag}@${domain}`;
+    }
+    if (String(menuItemId).startsWith("tag-")) {
+      const tag = String(menuItemId).replace("tag-", "");
+      return `${username}+${tag}@${domain}`;
+    }
+    if (menuItemId === "trick-dot") {
+      const pos = Math.floor(Math.random() * (username.length - 1)) + 1;
+      const dottedUsername = `${username.slice(0, pos)}.${username.slice(pos)}`;
+      return `${dottedUsername}@${domain}`;
+    }
+    if (menuItemId === "trick-googlemail") {
+      const altDomain = domain === "gmail.com" ? "googlemail.com" : "gmail.com";
+      return `${username}@${altDomain}`;
+    }
+    if (menuItemId === "trick-nodots") {
+      const noDots = username.replace(/\./g, "");
+      return `${noDots}@${domain}`;
+    }
+    return "";
+  }
+
   // Handle context menu clicks
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!tab?.id) return;
 
-    // Get base email from storage
     const result = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
@@ -242,98 +330,21 @@ export default defineBackground(() => {
     const [username, domain] = baseEmail.split("@");
     let emailToFill = "";
 
-    // Handle website-specific suggestions
     if (String(info.menuItemId).startsWith("website-suggestion-")) {
-      const suggestionIndex = parseInt(
-        String(info.menuItemId).replace("website-suggestion-", ""),
-      );
-      // The suggestion will be stored in a temp cache during menu show
-      const cacheResult = (await browser.storage.session?.get?.(
-        "contextMenuWebsiteSuggestions",
-      )) as
-        | {
-            contextMenuWebsiteSuggestions?: string[] | undefined;
-          }
-        | undefined;
-      const suggestions = (cacheResult?.contextMenuWebsiteSuggestions ||
-        []) as string[];
-      if (suggestions[suggestionIndex]) {
-        emailToFill = suggestions[suggestionIndex];
-      }
-    }
-
-    if (info.menuItemId === "fill-random-email") {
-      // Generate random email
+      emailToFill = await handleWebsiteSuggestion(String(info.menuItemId));
+    } else {
       const format = result.app_settings?.randomFormat || "private-mail";
-      let randomTag = "";
-
-      switch (format) {
-        case "private-mail": {
-          const chars = "abcdefghijklmnopqrstuvwxyz";
-          randomTag = Array.from(
-            { length: 8 },
-            () => chars[Math.floor(Math.random() * chars.length)],
-          ).join("");
-          break;
-        }
-        case "alphanumeric": {
-          const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
-          randomTag = Array.from(
-            { length: 10 },
-            () => alphanum[Math.floor(Math.random() * alphanum.length)],
-          ).join("");
-          break;
-        }
-        case "words": {
-          const words = [
-            "alpha",
-            "beta",
-            "gamma",
-            "delta",
-            "echo",
-            "foxtrot",
-            "golf",
-            "hotel",
-          ];
-          const word1 = words[Math.floor(Math.random() * words.length)];
-          const word2 = words[Math.floor(Math.random() * words.length)];
-          const num = Math.floor(Math.random() * 100);
-          randomTag = `${word1}${word2}${num}`;
-          break;
-        }
-        case "timestamp":
-          randomTag = Date.now().toString();
-          break;
-        default:
-          randomTag = Date.now().toString();
-          break;
-      }
-
-      emailToFill = `${username}+${randomTag}@${domain}`;
-    } else if (String(info.menuItemId).startsWith("tag-")) {
-      // Custom tag from preset
-      const tag = String(info.menuItemId).replace("tag-", "");
-      emailToFill = `${username}+${tag}@${domain}`;
-    } else if (info.menuItemId === "trick-dot") {
-      // Dot variation - insert dot at random position
-      const pos = Math.floor(Math.random() * (username.length - 1)) + 1;
-      const dottedUsername = `${username.slice(0, pos)}.${username.slice(pos)}`;
-      emailToFill = `${dottedUsername}@${domain}`;
-    } else if (info.menuItemId === "trick-googlemail") {
-      // Googlemail domain
-      const altDomain = domain === "gmail.com" ? "googlemail.com" : "gmail.com";
-      emailToFill = `${username}@${altDomain}`;
-    } else if (info.menuItemId === "trick-nodots") {
-      // Remove all dots
-      const noDots = username.replace(/\./g, "");
-      emailToFill = `${noDots}@${domain}`;
+      emailToFill = await generateEmail(
+        String(info.menuItemId),
+        username,
+        domain,
+        format,
+      );
     }
 
     if (emailToFill) {
-      // Save to history and statistics
       await saveToHistory(emailToFill, result.app_settings?.maxHistory || 20);
 
-      // If website suggestion was used, save the mapping
       if (String(info.menuItemId).startsWith("website-suggestion-")) {
         try {
           const { normalizeHostname } =
@@ -351,7 +362,6 @@ export default defineBackground(() => {
         }
       }
 
-      // Send message to content script to fill the input
       browser.tabs.sendMessage(tab.id, {
         action: "fillEmail",
         email: emailToFill,
