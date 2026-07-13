@@ -383,15 +383,12 @@ function injectIcon(input: EmailInputElement) {
   if (input.__gmailAliasIcon) return;
 
   try {
-    // Capture original computed styles before modifying
-    const originalWidth = window.getComputedStyle(input).width;
-    const originalFlex = window.getComputedStyle(input).flex;
+    // Create icon container (no wrapping, just for the icon)
+    const iconContainer = document.createElement("div");
+    iconContainer.className = "gmail-alias-input-icon-container";
+    iconContainer.innerHTML = ICON_HTML;
 
-    const container = document.createElement("div");
-    container.className = "gmail-alias-input-wrapper";
-    container.innerHTML = ICON_HTML;
-
-    const icon = container.querySelector(
+    const icon = iconContainer.querySelector(
       ".gmail-alias-input-icon",
     ) as SVGElement;
     if (!icon) {
@@ -399,36 +396,41 @@ function injectIcon(input: EmailInputElement) {
       return;
     }
 
-    input.parentNode?.insertBefore(container, input.nextSibling);
-    container.insertBefore(input, container.firstChild);
+    // Insert icon after input (as sibling, don't move input)
+    input.parentNode?.insertBefore(iconContainer, input.nextSibling);
 
     console.debug("[Gmail Alias] Icon injected successfully");
 
-    container.style.display = "flex";
-    container.style.alignItems = "center";
-    container.style.gap = "8px";
-    container.style.boxSizing = "border-box";
-
-    // Inherit original flex/width properties
-    if (originalFlex !== "none" && originalFlex !== "0 1 auto") {
-      container.style.flex = originalFlex;
-    } else {
-      container.style.width = originalWidth;
+    // Position icon next to input using relative positioning on parent
+    const parent = input.parentNode as HTMLElement;
+    if (parent && window.getComputedStyle(parent).position === "static") {
+      parent.style.position = "relative";
     }
-    container.style.minWidth = "0";
 
-    input.style.flex = "1";
-    input.style.minWidth = "0";
+    // Style icon container for absolute positioning
+    iconContainer.style.position = "absolute";
+    iconContainer.style.right = "4px";
+    iconContainer.style.top = "50%";
+    iconContainer.style.transform = "translateY(-50%)";
+    iconContainer.style.pointerEvents = "none";
+
+    // Add right padding to input to make room for icon
+    const currentPadding = window.getComputedStyle(input).paddingRight;
+    const paddingValue = parseFloat(currentPadding) || 0;
+    input.style.paddingRight = `${paddingValue + 32}px`;
+    input.style.boxSizing = "border-box";
 
     icon.style.cursor = "pointer";
     icon.style.color = "#3b82f6";
     icon.style.opacity = "0.7";
     icon.style.transition = "opacity 0.2s";
-    icon.style.flexShrink = "0";
+    icon.style.pointerEvents = "auto";
+    icon.style.width = "24px";
+    icon.style.height = "24px";
 
     let closeTimer: NodeJS.Timeout;
 
-    icon.addEventListener("mouseenter", async () => {
+    iconContainer.addEventListener("mouseenter", async () => {
       clearTimeout(closeTimer);
       icon.style.opacity = "1";
       input.classList.add("gmail-alias-input-highlight");
@@ -488,7 +490,7 @@ function injectIcon(input: EmailInputElement) {
       });
     });
 
-    icon.addEventListener("mouseleave", () => {
+    iconContainer.addEventListener("mouseleave", () => {
       icon.style.opacity = "0.85";
       input.classList.remove("gmail-alias-input-highlight");
       // Delay close to allow mouse movement to popup (with overlap, 250ms buffer)
