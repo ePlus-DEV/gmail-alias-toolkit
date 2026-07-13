@@ -108,7 +108,9 @@ function createPopup(
     color: #1f2937;
   `;
   const safeWebsite = escapeHtml(data.website);
-  const safePreviousAlias = data.previousAlias ? escapeHtml(data.previousAlias) : "";
+  const safePreviousAlias = data.previousAlias
+    ? escapeHtml(data.previousAlias)
+    : "";
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
       <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
