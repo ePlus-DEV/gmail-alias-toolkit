@@ -1545,11 +1545,7 @@ function MockFooter({ t, isDark }: { t: (typeof translations)[Locale]; isDark: b
 }
 
 /** Demonstrates the complete inline-helper workflow beside a website form. */
-function InlinePopupSection({
-  t,
-}: {
-  t: (typeof translations)[Locale];
-}) {
+function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] = useState<
     "suggestions" | "generate" | "history"
   >("suggestions");
