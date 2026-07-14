@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "अभी कोई टैग नहीं"
   },
+  "disableInlineForSite": { "message": "इस वेबसाइट पर इनलाइन सहायक बंद करें" },
+  "inlineDisabledSites": { "message": "इनलाइन सहायक बंद वाली वेबसाइटें" },
+  "inlineDisabledSitesDescription": { "message": "इन वेबसाइटों पर इनलाइन आइकन और त्वरित पॉपअप छिपे रहेंगे।" },
+  "noDisabledSites": { "message": "कोई वेबसाइट बंद नहीं है" },
+  "enableInlineForSite": { "message": "चालू करें" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

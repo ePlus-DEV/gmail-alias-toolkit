@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Noch keine Tags"
   },
+  "disableInlineForSite": { "message": "Inline-Hilfe auf dieser Website deaktivieren" },
+  "inlineDisabledSites": { "message": "Websites mit deaktivierter Inline-Hilfe" },
+  "inlineDisabledSitesDescription": { "message": "Inline-Symbol und Schnell-Popup sind auf diesen Websites ausgeblendet." },
+  "noDisabledSites": { "message": "Keine deaktivierten Websites" },
+  "enableInlineForSite": { "message": "Aktivieren" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

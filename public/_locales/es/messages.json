@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Aún no hay etiquetas"
   },
+  "disableInlineForSite": { "message": "Desactivar el asistente integrado en este sitio" },
+  "inlineDisabledSites": { "message": "Sitios con el asistente integrado desactivado" },
+  "inlineDisabledSitesDescription": { "message": "El icono y la ventana rápida se ocultan en estos sitios web." },
+  "noDisabledSites": { "message": "No hay sitios desactivados" },
+  "enableInlineForSite": { "message": "Activar" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Ancora nessun tag"
   },
+  "disableInlineForSite": { "message": "Disattiva l’assistente inline su questo sito" },
+  "inlineDisabledSites": { "message": "Siti con assistente inline disattivato" },
+  "inlineDisabledSitesDescription": { "message": "L’icona inline e il popup rapido sono nascosti su questi siti." },
+  "noDisabledSites": { "message": "Nessun sito disattivato" },
+  "enableInlineForSite": { "message": "Attiva" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

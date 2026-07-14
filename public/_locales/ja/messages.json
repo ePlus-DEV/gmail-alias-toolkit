@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "タグはまだありません"
   },
+  "disableInlineForSite": { "message": "このサイトでインラインヘルパーを無効にする" },
+  "inlineDisabledSites": { "message": "インラインヘルパーを無効にしたサイト" },
+  "inlineDisabledSitesDescription": { "message": "これらのサイトではインラインアイコンとクイックポップアップが非表示になります。" },
+  "noDisabledSites": { "message": "無効にしたサイトはありません" },
+  "enableInlineForSite": { "message": "有効にする" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

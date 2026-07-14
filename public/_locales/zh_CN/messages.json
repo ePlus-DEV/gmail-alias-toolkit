@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "还没有标签"
   },
+  "disableInlineForSite": { "message": "在此网站上关闭内联助手" },
+  "inlineDisabledSites": { "message": "已关闭内联助手的网站" },
+  "inlineDisabledSitesDescription": { "message": "在这些网站上将隐藏内联图标和快捷弹窗。" },
+  "noDisabledSites": { "message": "没有已关闭的网站" },
+  "enableInlineForSite": { "message": "启用" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

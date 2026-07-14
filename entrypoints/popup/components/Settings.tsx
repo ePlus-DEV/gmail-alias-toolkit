@@ -16,6 +16,10 @@ import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { getAccountStorageKey, validateEmail } from "../utils";
 import { t } from "../../../lib/i18n";
+import {
+  INLINE_DISABLED_SITES_KEY,
+  parseDisabledInlineSites,
+} from "src/utils/inlineSiteSettings";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -660,6 +664,7 @@ export default function Settings({
     "general" | "accounts" | "presets" | "advanced" | "changelog"
   >("general");
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
+  const [disabledInlineSites, setDisabledInlineSites] = useState<string[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const [editingEmail, setEditingEmail] = useState("");
@@ -706,10 +711,25 @@ export default function Settings({
 
   /** Loads saved app settings from extension storage, merged over defaults. */
   const loadSettings = async () => {
-    const result = await browser.storage.local.get("app_settings");
+    const result = await browser.storage.local.get([
+      "app_settings",
+      INLINE_DISABLED_SITES_KEY,
+    ]);
     if (result.app_settings) {
       setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
     }
+    setDisabledInlineSites(
+      parseDisabledInlineSites(result[INLINE_DISABLED_SITES_KEY]),
+    );
+  };
+
+  /** Re-enables the inline helper for one previously disabled website. */
+  const enableInlineForSite = async (site: string) => {
+    const nextSites = disabledInlineSites.filter((item) => item !== site);
+    setDisabledInlineSites(nextSites);
+    await browser.storage.local.set({
+      [INLINE_DISABLED_SITES_KEY]: nextSites,
+    });
   };
 
   /** Loads the email accounts list from extension storage. */
@@ -1243,6 +1263,62 @@ export default function Settings({
                       settings={settings}
                       saveSettings={saveSettings}
                     />
+                  ),
+                },
+                {
+                  id: "inline-helper-sites",
+                  title: t("inlineDisabledSites"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 2v10m6.36-6.36a9 9 0 11-12.72 0"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <p className="text-xs text-muted-foreground">
+                        {t("inlineDisabledSitesDescription")}
+                      </p>
+                      {disabledInlineSites.length === 0 ? (
+                        <p className="rounded-xl border border-dashed border-border px-3 py-3 text-center text-xs text-muted-foreground">
+                          {t("noDisabledSites")}
+                        </p>
+                      ) : (
+                        <div className="max-h-36 space-y-1.5 overflow-y-auto">
+                          {disabledInlineSites.map((site) => (
+                            <div
+                              key={site}
+                              className="flex items-center justify-between gap-2 rounded-xl border border-border bg-muted/45 px-3 py-2"
+                            >
+                              <span className="min-w-0 truncate font-mono text-xs text-foreground">
+                                {site}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="shrink-0 rounded-lg px-2 text-xs text-primary hover:bg-primary/10"
+                                onClick={() => enableInlineForSite(site)}
+                                aria-label={`${t("enableInlineForSite")}: ${site}`}
+                              >
+                                {t("enableInlineForSite")}
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ),
                 },
                 {

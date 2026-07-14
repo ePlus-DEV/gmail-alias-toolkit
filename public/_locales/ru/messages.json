@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Пока нет тегов"
   },
+  "disableInlineForSite": { "message": "Отключить встроенного помощника на этом сайте" },
+  "inlineDisabledSites": { "message": "Сайты с отключённым встроенным помощником" },
+  "inlineDisabledSitesDescription": { "message": "На этих сайтах встроенный значок и быстрое окно будут скрыты." },
+  "noDisabledSites": { "message": "Нет отключённых сайтов" },
+  "enableInlineForSite": { "message": "Включить" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

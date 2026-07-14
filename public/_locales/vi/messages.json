@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Chưa có thẻ"
   },
+  "disableInlineForSite": { "message": "Tắt trợ lý nhanh trên website này" },
+  "inlineDisabledSites": { "message": "Website đã tắt trợ lý nhanh" },
+  "inlineDisabledSitesDescription": { "message": "Biểu tượng và popup thao tác nhanh sẽ bị ẩn trên các website này." },
+  "noDisabledSites": { "message": "Chưa tắt trên website nào" },
+  "enableInlineForSite": { "message": "Bật lại" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

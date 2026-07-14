@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Henüz etiket yok"
   },
+  "disableInlineForSite": { "message": "Bu web sitesinde satır içi yardımcıyı kapat" },
+  "inlineDisabledSites": { "message": "Satır içi yardımcının kapalı olduğu siteler" },
+  "inlineDisabledSitesDescription": { "message": "Bu sitelerde satır içi simge ve hızlı açılır pencere gizlenir." },
+  "noDisabledSites": { "message": "Devre dışı bırakılmış site yok" },
+  "enableInlineForSite": { "message": "Etkinleştir" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

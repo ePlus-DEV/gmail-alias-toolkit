@@ -1,4 +1,9 @@
 import { normalizeHostname } from "src/utils/hostnameNormalizer";
+import {
+  INLINE_DISABLED_SITES_KEY,
+  normalizeSiteHostname,
+  parseDisabledInlineSites,
+} from "src/utils/inlineSiteSettings";
 import { t } from "../../lib/i18n";
 import {
   getPreviousAliasForWebsite,
@@ -29,6 +34,37 @@ const ICON_HTML = `
 interface EmailInputElement extends HTMLInputElement {
   __gmailAliasIcon?: HTMLElement;
   __gmailAliasPosition?: () => void;
+  __gmailAliasCleanup?: () => void;
+}
+
+let inlineDisabledForCurrentSite = false;
+
+const currentSiteHostname = () => normalizeSiteHostname(window.location.hostname);
+
+function removeInlineHelpers() {
+  document
+    .querySelectorAll<EmailInputElement>("input")
+    .forEach((input) => input.__gmailAliasCleanup?.());
+  document
+    .querySelectorAll(".gmail-alias-popup, .gmail-alias-input-icon-container")
+    .forEach((element) => element.remove());
+}
+
+async function disableInlineForCurrentSite() {
+  const site = currentSiteHostname();
+  if (!site) return;
+
+  const result = await browser.storage.local.get(INLINE_DISABLED_SITES_KEY);
+  const disabledSites = parseDisabledInlineSites(
+    result[INLINE_DISABLED_SITES_KEY],
+  );
+  await browser.storage.local.set({
+    [INLINE_DISABLED_SITES_KEY]: Array.from(
+      new Set([...disabledSites, site]),
+    ).sort((a, b) => a.localeCompare(b)),
+  });
+  inlineDisabledForCurrentSite = true;
+  removeInlineHelpers();
 }
 
 /** Escape HTML special characters to prevent XSS attacks. */
@@ -164,11 +200,17 @@ function createPopup(
     az: escapeHtml(t("az")),
     previousPage: escapeHtml(t("previousPage")),
     nextPage: escapeHtml(t("nextPage")),
+    disableInlineForSite: escapeHtml(t("disableInlineForSite")),
   };
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
       <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
-      <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="${labels.close}">✕</button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button class="gmail-alias-popup-disable-site" type="button" title="${labels.disableInlineForSite}" aria-label="${labels.disableInlineForSite}">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2v10m6.36-6.36a9 9 0 1 1-12.72 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="${labels.close}">✕</button>
+      </div>
     </div>
     <div class="gmail-alias-popup-tabs" style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
       <button class="gmail-alias-popup-tab active" data-tab="suggestions" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">${labels.suggestions}</button>
@@ -289,6 +331,15 @@ function createPopup(
       popup.remove();
     });
   }
+
+  const disableSiteBtn = popup.querySelector(
+    ".gmail-alias-popup-disable-site",
+  ) as HTMLButtonElement | null;
+  disableSiteBtn?.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    void disableInlineForCurrentSite();
+  });
 
   // Handle tab switching
   popup.querySelectorAll(".gmail-alias-popup-tab").forEach((tab) => {
@@ -815,6 +866,7 @@ function injectIcon(input: EmailInputElement) {
       iconContainer.remove();
       input.__gmailAliasIcon = undefined;
       input.__gmailAliasPosition = undefined;
+      input.__gmailAliasCleanup = undefined;
     };
 
     const isInputInViewport = (rect: DOMRect) =>
@@ -1066,6 +1118,7 @@ function injectIcon(input: EmailInputElement) {
       }
     };
     input.__gmailAliasPosition = positionIconOutsideInput;
+    input.__gmailAliasCleanup = cleanupPositioning;
     positionIconOutsideInput();
     window.addEventListener("resize", positionIconOutsideInput);
     window.addEventListener("scroll", positionIconOutsideInput, true);
@@ -1302,6 +1355,11 @@ function fillInput(input: EmailInputElement, alias: string) {
 
 /** Detect email inputs on page. */
 function detectEmailInputs() {
+  if (inlineDisabledForCurrentSite) {
+    removeInlineHelpers();
+    return;
+  }
+
   const emailInputs = document.querySelectorAll<EmailInputElement>(
     'input[type="email"], input[name*="email" i], input[placeholder*="email" i], input[id*="email" i], input[aria-label*="email" i]',
   );
@@ -1344,7 +1402,14 @@ function observeDOM() {
 
 export default defineContentScript({
   matches: ["<all_urls>"],
-  main() {
+  async main() {
+    const disabledSitesResult = await browser.storage.local.get(
+      INLINE_DISABLED_SITES_KEY,
+    );
+    inlineDisabledForCurrentSite = parseDisabledInlineSites(
+      disabledSitesResult[INLINE_DISABLED_SITES_KEY],
+    ).includes(currentSiteHostname());
+
     // Setup observer immediately
     const observer = observeDOM();
 
@@ -1393,6 +1458,15 @@ export default defineContentScript({
           }, 500);
         }
       }
+    });
+
+    browser.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName !== "local" || !changes[INLINE_DISABLED_SITES_KEY]) return;
+      inlineDisabledForCurrentSite = parseDisabledInlineSites(
+        changes[INLINE_DISABLED_SITES_KEY].newValue,
+      ).includes(currentSiteHostname());
+      if (inlineDisabledForCurrentSite) removeInlineHelpers();
+      else detectEmailInputs();
     });
 
     // Cleanup on unload

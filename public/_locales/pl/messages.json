@@ -736,6 +736,11 @@
   "noTagsYet": {
     "message": "Brak tagów"
   },
+  "disableInlineForSite": { "message": "Wyłącz pomocnika inline w tej witrynie" },
+  "inlineDisabledSites": { "message": "Witryny z wyłączonym pomocnikiem inline" },
+  "inlineDisabledSitesDescription": { "message": "Ikona inline i szybkie okno są ukryte w tych witrynach." },
+  "noDisabledSites": { "message": "Brak wyłączonych witryn" },
+  "enableInlineForSite": { "message": "Włącz" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {
