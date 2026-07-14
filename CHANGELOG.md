@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Added comprehensive JSDoc comments to all functions and components to meet documentation standards
+- Fixed async/await anti-patterns by replacing `void` statements with proper `.catch()` error handlers
+- Improved variable declarations to use `const` where appropriate
+- Optimized JSX component nesting by extracting inline form input into a separate component
+- Resolved all DeepSource code quality warnings (24 issues)
+
 ## [1.3.0] - 2026-07-13
 
 ### Added
