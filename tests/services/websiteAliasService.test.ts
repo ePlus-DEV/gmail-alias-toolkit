@@ -20,7 +20,7 @@ type MockBrowser = {
   };
 };
 
-global.browser = {
+vi.stubGlobal("browser", {
   storage: {
     local: {
       get: vi.fn((keys: string[]) => {
@@ -45,7 +45,7 @@ global.browser = {
       }),
     },
   },
-} as unknown as MockBrowser;
+} as unknown as MockBrowser);
 
 // Mock the getAccountStorageKey utility
 vi.mock("../../entrypoints/popup/utils", () => ({

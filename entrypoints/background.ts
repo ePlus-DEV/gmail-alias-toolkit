@@ -552,7 +552,17 @@ export default defineBackground(() => {
   }
 
   // Update website suggestions when context menu is shown
-  browser.contextMenus.onShown?.addListener?.(async (info) => {
+  const dynamicContextMenus = browser.contextMenus as typeof browser.contextMenus & {
+  onShown?: {
+    addListener(
+      listener: (info: { pageUrl?: string }) => void | Promise<void>,
+    ): void;
+  };
+  refresh?: () => void | Promise<void>;
+};
+
+// Update website suggestions when the context menu is shown.
+dynamicContextMenus.onShown?.addListener(async (info) => {
     try {
       if (!info.pageUrl) return;
 
@@ -599,20 +609,34 @@ export default defineBackground(() => {
           contextMenuWebsiteSuggestions: suggestions,
         });
       }
+    // Rebuild dynamic items safely. Repeated menu openings otherwise
+    // reuse the same IDs and leave stale suggestions behind.
+    const dynamicItemIds = [
+      "website-loading",
+      "website-suggestion-0",
+      "website-suggestion-1",
+      "website-suggestion-2",
+    ];
+    await Promise.all(
+      dynamicItemIds.map(async (id) => {
+        try {
+          await browser.contextMenus.remove(id);
+        } catch {
+          // The item may not exist on the first or a later menu opening.
+        }
+      }),
+    );
 
-      // Remove placeholder and add suggestions
-      await browser.contextMenus.remove("website-loading");
-
-      suggestions.slice(0, 3).forEach((suggestion, index) => {
-        browser.contextMenus.create({
-          id: `website-suggestion-${index}`,
-          parentId: "website-alias-parent",
-          title: suggestion.split("@")[0],
-          contexts: ["editable"],
-        });
+    for (const [index, suggestion] of suggestions.slice(0, 3).entries()) {
+      browser.contextMenus.create({
+        id: `website-suggestion-${index}`,
+        parentId: "website-alias-parent",
+        title: suggestion.split("@")[0],
+        contexts: ["editable"],
       });
+    }
 
-      await browser.contextMenus.refresh?.();
+    await dynamicContextMenus.refresh?.();
     } catch (error) {
       console.debug("Error updating website suggestions:", error);
     }
