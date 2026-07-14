@@ -859,6 +859,8 @@ function injectIcon(input: EmailInputElement) {
 
     let inputResizeObserver: ResizeObserver | undefined;
     let activePopup: HTMLElement | null = null;
+    let iconPlacementDirection: "left" | "right" | "above" | "below" | null =
+      null;
     const cleanupPositioning = () => {
       window.removeEventListener("resize", positionIconOutsideInput);
       window.removeEventListener("scroll", positionIconOutsideInput, true);
@@ -938,7 +940,11 @@ function injectIcon(input: EmailInputElement) {
       const leftRoom = inputRect.left - viewportPadding;
       const rightRoom = window.innerWidth - inputRect.right - viewportPadding;
       const horizontalChrome = inputGap + iconSize + popupGap;
-      const preferredHorizontalSide = getPreferredHorizontalSide(inputRect);
+      const preferredHorizontalSide =
+        iconPlacementDirection === "left" ||
+        iconPlacementDirection === "right"
+          ? iconPlacementDirection
+          : null;
       const canUseLeft = preferredHorizontalSide === "left";
       const canUseRight = preferredHorizontalSide === "right";
       const centeredIconTop = Math.min(
@@ -991,23 +997,32 @@ function injectIcon(input: EmailInputElement) {
       } else {
         const roomBelow = window.innerHeight - inputRect.bottom - inputGap;
         const roomAbove = inputRect.top - inputGap;
-        const placeBelow = roomBelow >= roomAbove;
+        const placeBelow =
+          iconPlacementDirection === "below" ||
+          (iconPlacementDirection !== "above" && roomBelow >= roomAbove);
         const popupWidth = Math.min(
           maxPopupWidth,
           window.innerWidth - viewportPadding * 2,
         );
-        const left = Math.min(
-          window.innerWidth - popupWidth - viewportPadding,
-          Math.max(
-            viewportPadding,
-            inputRect.left + inputRect.width / 2 - popupWidth / 2,
-          ),
-        );
+        const currentIconLeft = Number.parseFloat(iconContainer.style.left);
+        const centeredIconLeft =
+          inputRect.left + inputRect.width / 2 - iconSize / 2;
         const iconLeft = Math.min(
           window.innerWidth - iconSize - viewportPadding,
           Math.max(
             viewportPadding,
-            inputRect.left + inputRect.width / 2 - iconSize / 2,
+            Number.isFinite(currentIconLeft)
+              ? currentIconLeft
+              : centeredIconLeft,
+          ),
+        );
+        // For vertical layouts, the popup follows the icon rather than the
+        // input center so collision-adjusted icons never look detached.
+        const left = Math.min(
+          window.innerWidth - popupWidth - viewportPadding,
+          Math.max(
+            viewportPadding,
+            iconLeft + iconSize / 2 - popupWidth / 2,
           ),
         );
         popup.style.width = `${popupWidth}px`;
@@ -1112,6 +1127,7 @@ function injectIcon(input: EmailInputElement) {
 
       iconContainer.style.left = `${placement.left}px`;
       iconContainer.style.top = `${placement.top}px`;
+      iconPlacementDirection = placement.direction;
       setIconPointerDirection(placement.direction);
       if (activePopup?.isConnected) {
         positionPopupNextToInput(activePopup);
