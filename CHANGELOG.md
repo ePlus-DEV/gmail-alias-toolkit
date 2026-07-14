@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved variable declarations to use `const` where appropriate
 - Optimized JSX component nesting by extracting inline form input into a separate component
 - Resolved all DeepSource code quality warnings (24 issues)
+- Optimized alias filtering by normalizing search input once and using a set for favorites
+- Added regression coverage for plus-addressed Gmail validation and trimmed searches
+- Removed generated TypeScript build-info files from version control
 
 ## [1.3.0] - 2026-07-13
 
