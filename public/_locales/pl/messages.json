@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "Ikona inline i szybkie okno są ukryte w tych witrynach." },
   "noDisabledSites": { "message": "Brak wyłączonych witryn" },
   "enableInlineForSite": { "message": "Włącz" },
+  "reportReview": { "message": "Zgłoś / Oceń" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

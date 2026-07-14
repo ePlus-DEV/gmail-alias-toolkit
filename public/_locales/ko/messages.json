@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "이 웹사이트에서는 인라인 아이콘과 빠른 팝업이 숨겨집니다." },
   "noDisabledSites": { "message": "비활성화된 웹사이트가 없습니다" },
   "enableInlineForSite": { "message": "사용" },
+  "reportReview": { "message": "신고 / 리뷰" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

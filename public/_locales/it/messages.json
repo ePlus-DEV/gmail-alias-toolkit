@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "L’icona inline e il popup rapido sono nascosti su questi siti." },
   "noDisabledSites": { "message": "Nessun sito disattivato" },
   "enableInlineForSite": { "message": "Attiva" },
+  "reportReview": { "message": "Segnala / Recensisci" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "На этих сайтах встроенный значок и быстрое окно будут скрыты." },
   "noDisabledSites": { "message": "Нет отключённых сайтов" },
   "enableInlineForSite": { "message": "Включить" },
+  "reportReview": { "message": "Сообщить / Оценить" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

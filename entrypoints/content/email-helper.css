@@ -132,6 +132,9 @@ input.gmail-alias-input-preview::placeholder {
 
 /* Popup base styles */
 .gmail-alias-popup {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -189,6 +192,66 @@ input.gmail-alias-input-preview::placeholder {
 .gmail-alias-history-item:hover {
   background: #e0f2fe;
   border-color: #7dd3fc;
+}
+
+.gmail-alias-popup-header,
+.gmail-alias-popup-tabs,
+.gmail-alias-popup-footer {
+  flex: none;
+}
+
+.gmail-alias-popup-content {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.gmail-alias-popup-footer {
+  position: sticky;
+  z-index: 1;
+  bottom: 0;
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  box-shadow: 0 -2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.gmail-alias-popup-home {
+  display: flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.gmail-alias-popup-home:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.gmail-alias-popup-footer-divider {
+  width: 1px;
+  height: 20px;
+  background: #d1d5db;
+}
+
+.gmail-alias-popup-review {
+  flex: 1;
+  color: #6b7280;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.gmail-alias-popup-review:hover {
+  color: #2563eb;
 }
 
 .gmail-alias-popup-disable-site {
@@ -427,6 +490,25 @@ input.gmail-alias-input-preview::placeholder {
     background: #1f2937 !important;
     border-color: #374151 !important;
     color: #f3f4f6 !important;
+  }
+
+  .gmail-alias-popup-footer {
+    border-top-color: #374151;
+    background: #111827;
+  }
+
+  .gmail-alias-popup-footer-divider {
+    background: #4b5563;
+  }
+
+  .gmail-alias-popup-home,
+  .gmail-alias-popup-review {
+    color: #9ca3af;
+  }
+
+  .gmail-alias-popup-home:hover {
+    background: #374151;
+    color: #f3f4f6;
   }
 
   .gmail-alias-popup-tab {

@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "Bu sitelerde satır içi simge ve hızlı açılır pencere gizlenir." },
   "noDisabledSites": { "message": "Devre dışı bırakılmış site yok" },
   "enableInlineForSite": { "message": "Etkinleştir" },
+  "reportReview": { "message": "Bildir / Değerlendir" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

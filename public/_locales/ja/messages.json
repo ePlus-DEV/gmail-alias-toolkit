@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "これらのサイトではインラインアイコンとクイックポップアップが非表示になります。" },
   "noDisabledSites": { "message": "無効にしたサイトはありません" },
   "enableInlineForSite": { "message": "有効にする" },
+  "reportReview": { "message": "報告 / レビュー" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

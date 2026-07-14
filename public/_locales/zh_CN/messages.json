@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "在这些网站上将隐藏内联图标和快捷弹窗。" },
   "noDisabledSites": { "message": "没有已关闭的网站" },
   "enableInlineForSite": { "message": "启用" },
+  "reportReview": { "message": "报告 / 评价" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

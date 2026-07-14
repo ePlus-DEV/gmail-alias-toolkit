@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "Biểu tượng và popup thao tác nhanh sẽ bị ẩn trên các website này." },
   "noDisabledSites": { "message": "Chưa tắt trên website nào" },
   "enableInlineForSite": { "message": "Bật lại" },
+  "reportReview": { "message": "Báo lỗi / Đánh giá" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

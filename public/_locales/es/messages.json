@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "El icono y la ventana rápida se ocultan en estos sitios web." },
   "noDisabledSites": { "message": "No hay sitios desactivados" },
   "enableInlineForSite": { "message": "Activar" },
+  "reportReview": { "message": "Informar / Valorar" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

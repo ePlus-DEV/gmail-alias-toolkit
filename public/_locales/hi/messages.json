@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "इन वेबसाइटों पर इनलाइन आइकन और त्वरित पॉपअप छिपे रहेंगे।" },
   "noDisabledSites": { "message": "कोई वेबसाइट बंद नहीं है" },
   "enableInlineForSite": { "message": "चालू करें" },
+  "reportReview": { "message": "रिपोर्ट / समीक्षा" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "The inline icon and quick popup are hidden on these websites." },
   "noDisabledSites": { "message": "No disabled websites" },
   "enableInlineForSite": { "message": "Enable" },
+  "reportReview": { "message": "Report / Review" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {

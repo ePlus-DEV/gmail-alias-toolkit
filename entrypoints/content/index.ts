@@ -39,7 +39,8 @@ interface EmailInputElement extends HTMLInputElement {
 
 let inlineDisabledForCurrentSite = false;
 
-const currentSiteHostname = () => normalizeSiteHostname(window.location.hostname);
+const currentSiteHostname = () =>
+  normalizeSiteHostname(window.location.hostname);
 
 function removeInlineHelpers() {
   document
@@ -154,9 +155,19 @@ function createPopup(
   input?: EmailInputElement,
 ) {
   const popup = document.createElement("div");
+  const isFirefox =
+    browser.runtime.getURL("").startsWith("moz-extension://") ||
+    navigator.userAgent.includes("Firefox");
+  const reviewUrl = isFirefox
+    ? "https://addons.mozilla.org/en-US/firefox/addon/gmail-alias-toolkit/reviews/"
+    : "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl/reviews?hl=vi";
+  const homepageUrl = "https://eplus-dev.github.io/gmail-alias-toolkit/";
   popup.className = "gmail-alias-popup";
   popup.style.cssText = `
     position: fixed;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
@@ -201,10 +212,12 @@ function createPopup(
     previousPage: escapeHtml(t("previousPage")),
     nextPage: escapeHtml(t("nextPage")),
     disableInlineForSite: escapeHtml(t("disableInlineForSite")),
+    extensionName: escapeHtml(t("extensionName")),
+    reportReview: escapeHtml(t("reportReview")),
   };
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
-      <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
+      <span class="gmail-alias-popup-title" title="${safeWebsite}" style="font-weight: 600; font-size: 13px; color: #374151;">${labels.extensionName}</span>
       <div class="gmail-alias-popup-header-actions" style="display: flex; align-items: center; gap: 6px;">
         <button class="gmail-alias-popup-disable-site" type="button" data-tooltip="${labels.disableInlineForSite}" aria-label="${labels.disableInlineForSite}">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -322,6 +335,16 @@ function createPopup(
           </div>
         </div>
       </div>
+    </div>
+    <div class="gmail-alias-popup-footer">
+      <a class="gmail-alias-popup-home" href="${homepageUrl}" target="_blank" rel="noopener noreferrer" aria-label="${labels.extensionName}" title="${labels.extensionName}">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 10 9-7 9 7" />
+          <path d="M5 9v11h14V9" />
+        </svg>
+      </a>
+      <span class="gmail-alias-popup-footer-divider" aria-hidden="true"></span>
+      <a class="gmail-alias-popup-review" href="${reviewUrl}" target="_blank" rel="noopener noreferrer">${labels.reportReview}</a>
     </div>
   `;
 
@@ -917,8 +940,7 @@ function injectIcon(input: EmailInputElement) {
           (option) =>
             option.room >= requiredRoom &&
             option.iconLeft >= viewportPadding &&
-            option.iconLeft + iconSize <=
-              window.innerWidth - viewportPadding &&
+            option.iconLeft + iconSize <= window.innerWidth - viewportPadding &&
             !isPlacementBlocked(option.iconLeft, centeredTop, iconSize),
         )
         .sort((a, b) => b.room - a.room);
@@ -945,8 +967,7 @@ function injectIcon(input: EmailInputElement) {
       const rightRoom = window.innerWidth - inputRect.right - viewportPadding;
       const horizontalChrome = inputGap + iconSize + popupGap;
       const preferredHorizontalSide =
-        iconPlacementDirection === "left" ||
-        iconPlacementDirection === "right"
+        iconPlacementDirection === "left" || iconPlacementDirection === "right"
           ? iconPlacementDirection
           : null;
       const canUseLeft = preferredHorizontalSide === "left";
@@ -963,10 +984,7 @@ function injectIcon(input: EmailInputElement) {
       if (canUseRight || canUseLeft) {
         const placeRight = canUseRight;
         const room = placeRight ? rightRoom : leftRoom;
-        const popupWidth = Math.min(
-          maxPopupWidth,
-          room - horizontalChrome,
-        );
+        const popupWidth = Math.min(maxPopupWidth, room - horizontalChrome);
         popup.style.width = `${popupWidth}px`;
         popup.style.minWidth = `${popupWidth}px`;
         popup.style.maxWidth = `${popupWidth}px`;
@@ -1024,10 +1042,7 @@ function injectIcon(input: EmailInputElement) {
         // input center so collision-adjusted icons never look detached.
         const left = Math.min(
           window.innerWidth - popupWidth - viewportPadding,
-          Math.max(
-            viewportPadding,
-            iconLeft + iconSize / 2 - popupWidth / 2,
-          ),
+          Math.max(viewportPadding, iconLeft + iconSize / 2 - popupWidth / 2),
         );
         popup.style.width = `${popupWidth}px`;
         popup.style.minWidth = `${popupWidth}px`;
@@ -1049,10 +1064,7 @@ function injectIcon(input: EmailInputElement) {
         } else {
           const iconTop = inputRect.top - inputGap - iconSize;
           const popupRect = popup.getBoundingClientRect();
-          availableHeight = Math.max(
-            120,
-            iconTop - popupGap - viewportPadding,
-          );
+          availableHeight = Math.max(120, iconTop - popupGap - viewportPadding);
           iconContainer.style.top = `${iconTop}px`;
           popup.style.top = `${Math.max(
             viewportPadding,
@@ -1065,7 +1077,7 @@ function injectIcon(input: EmailInputElement) {
       iconContainer.style.display = "flex";
       popup.style.position = "fixed";
       popup.style.maxHeight = `${availableHeight}px`;
-      popup.style.overflowY = "auto";
+      popup.style.overflowY = "hidden";
       popup.style.zIndex = "999999";
     };
 

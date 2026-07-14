@@ -741,6 +741,7 @@
   "inlineDisabledSitesDescription": { "message": "O ícone inline e o popup rápido ficam ocultos nestes sites." },
   "noDisabledSites": { "message": "Nenhum site desativado" },
   "enableInlineForSite": { "message": "Ativar" },
+  "reportReview": { "message": "Relatar / Avaliar" },
   "percentLabel": {
     "message": "$PERCENT$%",
     "placeholders": {
