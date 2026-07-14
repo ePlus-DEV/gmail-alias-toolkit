@@ -894,17 +894,17 @@ function injectIcon(input: EmailInputElement) {
     };
 
     const state = {
-      state.inputResizeObserver: undefined as ResizeObserver | undefined,
-      state.activePopup: null as HTMLElement | null,
-      state.iconPlacementDirection: null as "left" | "right" | "above" | "below" | null,
-      state.positionIconOutsideInput: (() => {}) as () => void,
+      inputResizeObserver: undefined as ResizeObserver | undefined,
+      activePopup: null as HTMLElement | null,
+      iconPlacementDirection: null as "left" | "right" | "above" | "below" | null,
+      positionIconOutsideInput: (() => {}) as () => void,
     };
 
     /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
-      window.removeEventListener("resize", state.state.positionIconOutsideInput);
-      window.removeEventListener("scroll", state.state.positionIconOutsideInput, true);
-      state.state.inputResizeObserver?.disconnect();
+      window.removeEventListener("resize", state.positionIconOutsideInput);
+      window.removeEventListener("scroll", state.positionIconOutsideInput, true);
+      state.inputResizeObserver?.disconnect();
       iconContainer.remove();
       input.__gmailAliasIcon = undefined;
       input.__gmailAliasPosition = undefined;
