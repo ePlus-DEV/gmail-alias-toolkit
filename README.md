@@ -73,6 +73,6 @@ MIT. See `LICENSE.md`.
 
 ## Version
 
-Current version: `1.2.0`
+Current version: `1.3.0`
 
 See `CHANGELOG.md` for release notes.
