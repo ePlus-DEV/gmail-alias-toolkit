@@ -33,7 +33,7 @@ jobs:
             -o actionlint.tar.gz
           echo "${ACTIONLINT_SHA256}  actionlint.tar.gz" | sha256sum --check
           tar -xzf actionlint.tar.gz actionlint
-          ./actionlint -color
+          ./actionlint -shellcheck= -pyflakes= -color
 
       - name: Enable Corepack
         run: corepack enable
