@@ -1205,7 +1205,12 @@ function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
 }
 
 /** Interactive landing-page version of the extension's Settings screen. */
-function MockSettingsPanel({ t, isDark, activeEmail, onClose }: {
+function MockSettingsPanel({
+  t,
+  isDark,
+  activeEmail,
+  onClose,
+}: {
   t: (typeof translations)[Locale];
   isDark: boolean;
   activeEmail: string;
@@ -1214,26 +1219,54 @@ function MockSettingsPanel({ t, isDark, activeEmail, onClose }: {
   const english = t.mock.settings === "Settings";
   const labels = english
     ? {
-        general: "General", accounts: "Accounts", changelog: "Changelog",
-        appearance: "Appearance & display", inline: "Inline helper disabled sites",
-        generation: "Alias generation", presets: "Custom presets", data: "Data management",
-        badge: "Badge counter", notifications: "Copy notifications", format: "Random alias format",
-        limit: "Auto-save limit", enable: "Enable", export: "Export", import: "Import", clear: "Clear",
-        add: "Add account", current: "Active",
+        general: "General",
+        accounts: "Accounts",
+        changelog: "Changelog",
+        appearance: "Appearance & display",
+        inline: "Inline helper disabled sites",
+        generation: "Alias generation",
+        presets: "Custom presets",
+        data: "Data management",
+        badge: "Badge counter",
+        notifications: "Copy notifications",
+        format: "Random alias format",
+        limit: "Auto-save limit",
+        enable: "Enable",
+        export: "Export",
+        import: "Import",
+        clear: "Clear",
+        add: "Add account",
+        current: "Active",
       }
     : {
-        general: "Chung", accounts: "Tài khoản", changelog: "Thay đổi",
-        appearance: "Giao diện & hiển thị", inline: "Website đã tắt Inline Helper",
-        generation: "Tạo alias", presets: "Preset tùy chỉnh", data: "Quản lý dữ liệu",
-        badge: "Bộ đếm trên badge", notifications: "Thông báo khi sao chép", format: "Định dạng alias ngẫu nhiên",
-        limit: "Giới hạn tự lưu", enable: "Bật lại", export: "Xuất", import: "Nhập", clear: "Xóa",
-        add: "Thêm tài khoản", current: "Đang dùng",
+        general: "Chung",
+        accounts: "Tài khoản",
+        changelog: "Thay đổi",
+        appearance: "Giao diện & hiển thị",
+        inline: "Website đã tắt Inline Helper",
+        generation: "Tạo alias",
+        presets: "Preset tùy chỉnh",
+        data: "Quản lý dữ liệu",
+        badge: "Bộ đếm trên badge",
+        notifications: "Thông báo khi sao chép",
+        format: "Định dạng alias ngẫu nhiên",
+        limit: "Giới hạn tự lưu",
+        enable: "Bật lại",
+        export: "Xuất",
+        import: "Nhập",
+        clear: "Xóa",
+        add: "Thêm tài khoản",
+        current: "Đang dùng",
       };
-  const [tab, setTab] = useState<"general" | "accounts" | "changelog">("general");
+  const [tab, setTab] = useState<"general" | "accounts" | "changelog">(
+    "general",
+  );
   const [section, setSection] = useState("appearance");
   const [notifications, setNotifications] = useState(true);
   const [disabledSites, setDisabledSites] = useState(["voidzero.dev"]);
-  const panel = isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white";
+  const panel = isDark
+    ? "border-slate-700 bg-slate-900"
+    : "border-slate-200 bg-white";
   const muted = isDark ? "bg-slate-950/70" : "bg-slate-50";
   const sections = [
     ["appearance", labels.appearance],
@@ -1250,19 +1283,39 @@ function MockSettingsPanel({ t, isDark, activeEmail, onClose }: {
       className={`absolute inset-3 z-30 flex overflow-hidden rounded-3xl border shadow-2xl ${panel}`}
     >
       <div className="flex min-h-0 w-full flex-col">
-        <div className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}>
+        <div
+          className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+        >
           <div className="flex items-center gap-2">
-            <button type="button" onClick={onClose} className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`} aria-label="Back">
+            <button
+              type="button"
+              onClick={onClose}
+              className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
+              aria-label="Back"
+            >
               <ArrowRight className="h-4 w-4 rotate-180" />
             </button>
             <h3 className="text-sm font-black">{t.mock.settings}</h3>
           </div>
-          <span className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}>v1.3.0</span>
+          <span
+            className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
+          >
+            v1.3.0
+          </span>
         </div>
-        <div className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}>
-          <div className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}>
+        <div
+          className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+        >
+          <div
+            className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
+          >
             {(["general", "accounts", "changelog"] as const).map((id) => (
-              <button key={id} type="button" onClick={() => setTab(id)} className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow" : "text-slate-500"}`}>
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
+              >
                 {labels[id]}
               </button>
             ))}
@@ -1270,47 +1323,220 @@ function MockSettingsPanel({ t, isDark, activeEmail, onClose }: {
         </div>
         <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
           {tab === "general" ? (
-            <div className={`divide-y overflow-hidden rounded-2xl border ${panel}`}>
+            <div
+              className={`divide-y overflow-hidden rounded-2xl border ${panel}`}
+            >
               {sections.map(([id, label]) => (
                 <div key={id}>
-                  <button type="button" onClick={() => setSection(section === id ? "" : id)} className={`flex h-12 w-full items-center justify-between px-3 text-left text-xs font-black ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-50"}`}>
-                    <span className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-lg bg-blue-50 text-blue-600"><Settings className="h-3.5 w-3.5" /></span>{label}</span>
-                    <ChevronDown className={`h-4 w-4 transition ${section === id ? "rotate-180" : ""}`} />
+                  <button
+                    type="button"
+                    onClick={() => setSection(section === id ? "" : id)}
+                    className={`flex h-12 w-full items-center justify-between px-3 text-left text-xs font-black ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-50"}`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="grid h-7 w-7 place-items-center rounded-lg bg-blue-50 text-blue-600">
+                        <Settings className="h-3.5 w-3.5" />
+                      </span>
+                      {label}
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition ${section === id ? "rotate-180" : ""}`}
+                    />
                   </button>
                   {section === id ? (
-                    <div className={`border-t p-3 text-xs ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}>
+                    <div
+                      className={`border-t p-3 text-xs ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}
+                    >
                       {id === "appearance" ? (
                         <div className="space-y-3">
-                          <MockSettingSelect label={labels.badge} options={["Total generated (all time)", "Created today", "This week", "None (hidden)"]} isDark={isDark} />
-                          <div className="flex items-center justify-between border-t border-slate-200 pt-3"><span className="font-bold">{labels.notifications}</span><MockSwitch enabled={notifications} onChange={setNotifications} /></div>
+                          <MockSettingSelect
+                            label={labels.badge}
+                            options={[
+                              "Total generated (all time)",
+                              "Created today",
+                              "This week",
+                              "None (hidden)",
+                            ]}
+                            isDark={isDark}
+                          />
+                          <div className="flex items-center justify-between border-t border-slate-200 pt-3">
+                            <span className="font-bold">
+                              {labels.notifications}
+                            </span>
+                            <MockSwitch
+                              enabled={notifications}
+                              onChange={setNotifications}
+                            />
+                          </div>
                         </div>
                       ) : null}
                       {id === "inline" ? (
-                        disabledSites.length ? disabledSites.map((site) => <div key={site} className={`flex items-center justify-between rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}><span className="font-mono">{site}</span><button type="button" onClick={() => setDisabledSites([])} className="font-bold text-blue-600">{labels.enable}</button></div>) : <p className="rounded-xl border border-dashed p-3 text-center text-slate-500">No disabled sites</p>
+                        disabledSites.length ? (
+                          disabledSites.map((site) => (
+                            <div
+                              key={site}
+                              className={`flex items-center justify-between rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}
+                            >
+                              <span className="font-mono">{site}</span>
+                              <button
+                                type="button"
+                                onClick={() => setDisabledSites([])}
+                                className="font-bold text-blue-600"
+                              >
+                                {labels.enable}
+                              </button>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="rounded-xl border border-dashed p-3 text-center text-slate-500">
+                            No disabled sites
+                          </p>
+                        )
                       ) : null}
-                      {id === "generation" ? <div className="space-y-3"><MockSettingSelect label={labels.format} options={["Private Mail", "Random Characters", "Random Words", "Timestamp"]} isDark={isDark} /><MockSettingSelect label={labels.limit} options={["20 aliases", "50 aliases", "100 aliases", "200 aliases"]} isDark={isDark} /></div> : null}
-                      {id === "presets" ? <div className="space-y-2">{["Shopping +shopping", "Development +dev"].map((item) => <div key={item} className={`rounded-xl border px-3 py-2 font-mono ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}>{item}</div>)}</div> : null}
-                      {id === "data" ? <div className="grid grid-cols-3 gap-2">{[labels.export, labels.import, labels.clear].map((item) => <button type="button" key={item} className={`rounded-xl border px-2 py-2 font-bold ${isDark ? "border-slate-700 hover:bg-slate-800" : "border-slate-200 hover:bg-slate-50"}`}>{item}</button>)}</div> : null}
+                      {id === "generation" ? (
+                        <div className="space-y-3">
+                          <MockSettingSelect
+                            label={labels.format}
+                            options={[
+                              "Private Mail",
+                              "Random Characters",
+                              "Random Words",
+                              "Timestamp",
+                            ]}
+                            isDark={isDark}
+                          />
+                          <MockSettingSelect
+                            label={labels.limit}
+                            options={[
+                              "20 aliases",
+                              "50 aliases",
+                              "100 aliases",
+                              "200 aliases",
+                            ]}
+                            isDark={isDark}
+                          />
+                        </div>
+                      ) : null}
+                      {id === "presets" ? (
+                        <div className="space-y-2">
+                          {["Shopping +shopping", "Development +dev"].map(
+                            (item) => (
+                              <div
+                                key={item}
+                                className={`rounded-xl border px-3 py-2 font-mono ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}
+                              >
+                                {item}
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      ) : null}
+                      {id === "data" ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          {[labels.export, labels.import, labels.clear].map(
+                            (item) => (
+                              <button
+                                type="button"
+                                key={item}
+                                className={`rounded-xl border px-2 py-2 font-bold ${isDark ? "border-slate-700 hover:bg-slate-800" : "border-slate-200 hover:bg-slate-50"}`}
+                              >
+                                {item}
+                              </button>
+                            ),
+                          )}
+                        </div>
+                      ) : null}
                     </div>
                   ) : null}
                 </div>
               ))}
             </div>
           ) : null}
-          {tab === "accounts" ? <div className="space-y-2"><button type="button" className="w-full rounded-xl bg-blue-600 py-2.5 text-xs font-black text-white">+ {labels.add}</button>{[activeEmail, "work@gmail.com"].map((email, index) => <div key={email} className={`flex items-center gap-2 rounded-xl border p-3 ${panel}`}><Mail className="h-4 w-4 text-blue-600" /><span className="min-w-0 flex-1 truncate text-xs font-bold">{email}</span>{index === 0 ? <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600">{labels.current}</span> : null}</div>)}</div> : null}
-          {tab === "changelog" ? <div className={`rounded-2xl border p-4 ${panel}`}><p className="text-sm font-black">Version 1.3.0</p><p className="mt-1 text-[11px] text-slate-500">2026-07-13</p><ul className="mt-3 space-y-2 text-xs text-slate-500"><li>• Inline helper on every domain</li><li>• Interactive Generate and History</li><li>• Unified BeUI styling and dark mode</li></ul></div> : null}
+          {tab === "accounts" ? (
+            <div className="space-y-2">
+              <button
+                type="button"
+                className="w-full rounded-xl bg-blue-600 py-2.5 text-xs font-black text-white"
+              >
+                + {labels.add}
+              </button>
+              {[activeEmail, "work@gmail.com"].map((email, index) => (
+                <div
+                  key={email}
+                  className={`flex items-center gap-2 rounded-xl border p-3 ${panel}`}
+                >
+                  <Mail className="h-4 w-4 text-blue-600" />
+                  <span className="min-w-0 flex-1 truncate text-xs font-bold">
+                    {email}
+                  </span>
+                  {index === 0 ? (
+                    <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600">
+                      {labels.current}
+                    </span>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {tab === "changelog" ? (
+            <div className={`rounded-2xl border p-4 ${panel}`}>
+              <p className="text-sm font-black">Version 1.3.0</p>
+              <p className="mt-1 text-[11px] text-slate-500">2026-07-13</p>
+              <ul className="mt-3 space-y-2 text-xs text-slate-500">
+                <li>• Inline helper on every domain</li>
+                <li>• Interactive Generate and History</li>
+                <li>• Unified BeUI styling and dark mode</li>
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
     </motion.div>
   );
 }
 
-function MockSettingSelect({ label, options, isDark }: { label: string; options: string[]; isDark: boolean }) {
-  return <label className="block font-bold"><span className="mb-1.5 block">{label}</span><select className={`h-10 w-full rounded-xl border px-3 text-xs ${isDark ? "border-slate-700 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-800"}`}>{options.map((option) => <option key={option}>{option}</option>)}</select></label>;
+function MockSettingSelect({
+  label,
+  options,
+  isDark,
+}: {
+  label: string;
+  options: string[];
+  isDark: boolean;
+}) {
+  return (
+    <label className="block font-bold">
+      <span className="mb-1.5 block">{label}</span>
+      <select
+        className={`h-10 w-full rounded-xl border px-3 text-xs ${isDark ? "border-slate-700 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-800"}`}
+      >
+        {options.map((option) => (
+          <option key={option}>{option}</option>
+        ))}
+      </select>
+    </label>
+  );
 }
 
-function MockSwitch({ enabled, onChange }: { enabled: boolean; onChange: (enabled: boolean) => void }) {
-  return <button type="button" aria-pressed={enabled} onClick={() => onChange(!enabled)} className={`relative h-6 w-11 rounded-full transition ${enabled ? "bg-blue-600" : "bg-slate-300"}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${enabled ? "left-6" : "left-1"}`} /></button>;
+function MockSwitch({
+  enabled,
+  onChange,
+}: {
+  enabled: boolean;
+  onChange: (enabled: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={enabled}
+      onClick={() => onChange(!enabled)}
+      className={`relative h-6 w-11 rounded-full transition ${enabled ? "bg-blue-600" : "bg-slate-300"}`}
+    >
+      <span
+        className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${enabled ? "left-6" : "left-1"}`}
+      />
+    </button>
+  );
 }
 
 /** Renders the header inside the extension popup mockup. */
@@ -1342,8 +1568,20 @@ function MockHeader({
         </div>
       </div>
       <div className="flex gap-1">
-        <ThemeToggle checked={isDark} onCheckedChange={() => onToggleDark()} variant="circle" start="center" className="h-9 w-9 rounded-2xl text-blue-50 hover:bg-white/15" iconClassName="h-4 w-4" />
-        <button type="button" aria-label={t.mock.settings} onClick={onOpenSettings} className="grid h-9 w-9 place-items-center rounded-2xl text-blue-50 hover:bg-white/15">
+        <ThemeToggle
+          checked={isDark}
+          onCheckedChange={() => onToggleDark()}
+          variant="circle"
+          start="center"
+          className="h-9 w-9 rounded-2xl text-blue-50 hover:bg-white/15"
+          iconClassName="h-4 w-4"
+        />
+        <button
+          type="button"
+          aria-label={t.mock.settings}
+          onClick={onOpenSettings}
+          className="grid h-9 w-9 place-items-center rounded-2xl text-blue-50 hover:bg-white/15"
+        >
           <Settings className="h-4 w-4" />
         </button>
       </div>
@@ -1352,7 +1590,14 @@ function MockHeader({
 }
 
 /** Mirrors the active-account selector used by the current popup. */
-function MockAccountSwitcher({ t, isDark, activeEmail, isOpen, onToggle, onSelect }: {
+function MockAccountSwitcher({
+  t,
+  isDark,
+  activeEmail,
+  isOpen,
+  onToggle,
+  onSelect,
+}: {
   t: (typeof translations)[Locale];
   isDark: boolean;
   activeEmail: string;
@@ -1360,26 +1605,51 @@ function MockAccountSwitcher({ t, isDark, activeEmail, isOpen, onToggle, onSelec
   onToggle: () => void;
   onSelect: (email: string) => void;
 }) {
-  const accounts = ["david@gmail.com", "work@gmail.com", "alias.team@gmail.com"];
+  const accounts = [
+    "david@gmail.com",
+    "work@gmail.com",
+    "alias.team@gmail.com",
+  ];
   return (
     <div className="relative p-3">
-      <p className={`mb-1.5 text-xs font-bold ${isDark ? "text-slate-200" : "text-slate-700"}`}>
+      <p
+        className={`mb-1.5 text-xs font-bold ${isDark ? "text-slate-200" : "text-slate-700"}`}
+      >
         {t.mock.activeEmail}
       </p>
       <div className="flex gap-2">
-        <button type="button" aria-expanded={isOpen} onClick={onToggle} className={`flex h-10 min-w-0 flex-1 items-center gap-2 rounded-2xl border px-3 text-xs font-bold ${isDark ? "border-slate-700 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-800"}`}>
+        <button
+          type="button"
+          aria-expanded={isOpen}
+          onClick={onToggle}
+          className={`flex h-10 min-w-0 flex-1 items-center gap-2 rounded-2xl border px-3 text-xs font-bold ${isDark ? "border-slate-700 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-800"}`}
+        >
           <Mail className="h-4 w-4 shrink-0 text-slate-500" />
-          <span className="min-w-0 flex-1 truncate text-left">{activeEmail}</span>
+          <span className="min-w-0 flex-1 truncate text-left">
+            {activeEmail}
+          </span>
           <ChevronDown className="h-4 w-4 text-slate-400" />
         </button>
-        <button type="button" aria-label="Add Gmail account" onClick={() => onSelect("new.account@gmail.com")} className="grid h-10 w-10 place-items-center rounded-2xl bg-blue-600 text-white hover:bg-blue-700">
+        <button
+          type="button"
+          aria-label="Add Gmail account"
+          onClick={() => onSelect("new.account@gmail.com")}
+          className="grid h-10 w-10 place-items-center rounded-2xl bg-blue-600 text-white hover:bg-blue-700"
+        >
           <Plus className="h-4 w-4" />
         </button>
       </div>
       {isOpen ? (
-        <div className={`absolute inset-x-3 top-[76px] z-20 overflow-hidden rounded-2xl border p-1 shadow-xl ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-white"}`}>
+        <div
+          className={`absolute inset-x-3 top-[76px] z-20 overflow-hidden rounded-2xl border p-1 shadow-xl ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-white"}`}
+        >
           {accounts.map((email) => (
-            <button key={email} type="button" onClick={() => onSelect(email)} className={`block w-full rounded-xl px-3 py-2 text-left text-xs font-bold ${email === activeEmail ? "bg-blue-50 text-blue-700" : isDark ? "text-slate-200 hover:bg-slate-700" : "text-slate-700 hover:bg-slate-50"}`}>
+            <button
+              key={email}
+              type="button"
+              onClick={() => onSelect(email)}
+              className={`block w-full rounded-xl px-3 py-2 text-left text-xs font-bold ${email === activeEmail ? "bg-blue-50 text-blue-700" : isDark ? "text-slate-200 hover:bg-slate-700" : "text-slate-700 hover:bg-slate-50"}`}
+            >
               {email}
             </button>
           ))}
@@ -1458,19 +1728,29 @@ function MockGeneratorPanel({
       className={`rounded-2xl border p-3 shadow-sm ${isDark ? "border-slate-700 bg-slate-800/70" : "border-slate-200 bg-slate-50/60"}`}
     >
       <div className="grid grid-cols-[minmax(0,1fr)_74px] gap-2">
-        <div className={`min-w-0 rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
+        <div
+          className={`min-w-0 rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}
+        >
           <p className="text-[11px] font-black uppercase text-slate-400">
             {t.mock.format}
           </p>
-          <p className={`truncate text-sm font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+          <p
+            className={`truncate text-sm font-black ${isDark ? "text-white" : "text-slate-950"}`}
+          >
             {currentTab.title}
           </p>
         </div>
-        <div className={`rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
+        <div
+          className={`rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}
+        >
           <p className="text-[11px] font-black uppercase text-slate-400">
             {t.mock.count}
           </p>
-          <p className={`text-sm font-black ${isDark ? "text-white" : "text-slate-950"}`}>10</p>
+          <p
+            className={`text-sm font-black ${isDark ? "text-white" : "text-slate-950"}`}
+          >
+            10
+          </p>
         </div>
       </div>
       <motion.button
@@ -1481,7 +1761,9 @@ function MockGeneratorPanel({
       >
         <Sparkles className="h-4 w-4" /> {t.mock.generate}
       </motion.button>
-      <div className={`mt-3 rounded-xl border p-3 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}>
+      <div
+        className={`mt-3 rounded-xl border p-3 ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-slate-50"}`}
+      >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-black text-slate-500">
             {t.mock.generated}
@@ -1505,55 +1787,79 @@ function MockGeneratorPanel({
 }
 
 /** Renders recent alias rows in the popup mockup. */
-function MockHistory({ t, isDark }: { t: (typeof translations)[Locale]; isDark: boolean }) {
+function MockHistory({
+  t,
+  isDark,
+}: {
+  t: (typeof translations)[Locale];
+  isDark: boolean;
+}) {
   return (
-    <div className={`overflow-hidden p-3 ${isDark ? "bg-slate-900" : "bg-white"}`}>
-      <div className={`overflow-hidden rounded-xl border ${isDark ? "border-slate-700" : "border-slate-200"}`}>
-      <div className={`flex items-center justify-between border-b px-3 py-2 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}>
-        <div className={`flex items-center gap-2 text-xs font-black ${isDark ? "text-slate-200" : "text-slate-700"}`}>
-          <History className="h-3.5 w-3.5" /> {t.mock.recent}
-        </div>
-        <div className="flex items-center gap-1 text-xs font-bold text-slate-500">
-          <Search className="h-3.5 w-3.5" /> {t.mock.search}
-        </div>
-      </div>
-      <div>
-        {historyItems.slice(0, 2).map((item, index) => (
-          <motion.div
-            key={item.alias}
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.08 * index }}
-            className={`flex items-center gap-2 border-b px-3 py-2.5 last:border-b-0 ${isDark ? "border-slate-800" : "border-slate-100"}`}
+    <div
+      className={`overflow-hidden p-3 ${isDark ? "bg-slate-900" : "bg-white"}`}
+    >
+      <div
+        className={`overflow-hidden rounded-xl border ${isDark ? "border-slate-700" : "border-slate-200"}`}
+      >
+        <div
+          className={`flex items-center justify-between border-b px-3 py-2 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}
+        >
+          <div
+            className={`flex items-center gap-2 text-xs font-black ${isDark ? "text-slate-200" : "text-slate-700"}`}
           >
-            <div className="min-w-0 flex-1">
-              <p className={`truncate font-mono text-xs font-bold ${isDark ? "text-blue-300" : "text-slate-800"}`}>
-                {item.alias}
-              </p>
-              <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
-                {item.tag}
-              </p>
-            </div>
-            <Star
-              className={`h-4 w-4 ${
-                item.favorite
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-slate-300"
-              }`}
-            />
-            <Clipboard className="h-4 w-4 text-blue-600" />
-          </motion.div>
-        ))}
-      </div>
+            <History className="h-3.5 w-3.5" /> {t.mock.recent}
+          </div>
+          <div className="flex items-center gap-1 text-xs font-bold text-slate-500">
+            <Search className="h-3.5 w-3.5" /> {t.mock.search}
+          </div>
+        </div>
+        <div>
+          {historyItems.slice(0, 2).map((item, index) => (
+            <motion.div
+              key={item.alias}
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.08 * index }}
+              className={`flex items-center gap-2 border-b px-3 py-2.5 last:border-b-0 ${isDark ? "border-slate-800" : "border-slate-100"}`}
+            >
+              <div className="min-w-0 flex-1">
+                <p
+                  className={`truncate font-mono text-xs font-bold ${isDark ? "text-blue-300" : "text-slate-800"}`}
+                >
+                  {item.alias}
+                </p>
+                <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
+                  {item.tag}
+                </p>
+              </div>
+              <Star
+                className={`h-4 w-4 ${
+                  item.favorite
+                    ? "fill-amber-400 text-amber-400"
+                    : "text-slate-300"
+                }`}
+              />
+              <Clipboard className="h-4 w-4 text-blue-600" />
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 /** Renders compact utility actions in the popup mockup footer. */
-function MockFooter({ t, isDark }: { t: (typeof translations)[Locale]; isDark: boolean }) {
+function MockFooter({
+  t,
+  isDark,
+}: {
+  t: (typeof translations)[Locale];
+  isDark: boolean;
+}) {
   return (
-    <div className={`flex h-11 items-center justify-between px-3 text-xs font-black ${isDark ? "bg-slate-800 text-slate-200" : "bg-slate-50 text-slate-700"}`}>
+    <div
+      className={`flex h-11 items-center justify-between px-3 text-xs font-black ${isDark ? "bg-slate-800 text-slate-200" : "bg-slate-50 text-slate-700"}`}
+    >
       <span>{t.mock.viewStatistics}</span>
       <BarChart3 className="h-4 w-4 text-slate-500" />
     </div>
