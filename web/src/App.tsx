@@ -1283,46 +1283,46 @@ function MockSettingsPanel({
       className={`absolute inset-3 z-30 flex overflow-hidden rounded-3xl border shadow-2xl ${panel}`}
     >
       <div className="flex min-h-0 w-full flex-col">
-      <div
-        className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
-      >
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
-            aria-label="Back"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" />
-          </button>
-          <h3 className="text-sm font-black">{t.mock.settings}</h3>
-        </div>
-        <span
-          className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
-        >
-          v1.3.0
-        </span>
-      </div>
-      <div
-        className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
-      >
         <div
-          className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
+          className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
         >
-          {(["general", "accounts", "changelog"] as const).map((id) => (
+          <div className="flex items-center gap-2">
             <button
-              key={id}
               type="button"
-              onClick={() => setTab(id)}
-              className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
+              onClick={onClose}
+              className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
+              aria-label="Back"
             >
-              {labels[id]}
+              <ArrowRight className="h-4 w-4 rotate-180" />
             </button>
-          ))}
+            <h3 className="text-sm font-black">{t.mock.settings}</h3>
+          </div>
+          <span
+            className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
+          >
+            v1.3.0
+          </span>
         </div>
-      </div>
-      <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
-        {tab === "general" ? (
+        <div
+          className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+        >
+          <div
+            className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
+          >
+            {(["general", "accounts", "changelog"] as const).map((id) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
+              >
+                {labels[id]}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
+          {tab === "general" ? (
             <div
               className={`divide-y overflow-hidden rounded-2xl border ${panel}`}
             >
