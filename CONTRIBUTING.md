@@ -149,84 +149,84 @@ The repository includes GitHub Actions for:
 
 ## Publishing to Extension Stores
 
+### Submission Workflow
+
+The extension submits to **Chrome Web Store** and **Firefox Add-ons**.
+
+Credentials are stored in `.env.submit` (excluded from git):
+
+```env
+CHROME_EXTENSION_ID="..."
+CHROME_CLIENT_ID="..."
+CHROME_CLIENT_SECRET="..."
+CHROME_REFRESH_TOKEN="..."
+FIREFOX_EXTENSION_ID="..."
+FIREFOX_JWT_ISSUER="..."
+FIREFOX_JWT_SECRET="..."
+```
+
 ### Pre-submission Checklist
 
-Before submitting to extension stores:
+1. **Update version** in `package.json` following semantic versioning
+2. **Run tests** — `yarn test` (all tests must pass)
+3. **Run quality checks** — `yarn compile` + DeepSource review
+4. **Update CHANGELOG.md** with release notes
+5. **Test submission** — Run the submission test script
 
-1. **Update version** in `package.json` and `manifest.json` following semantic versioning
-2. **Run full test suite** — `yarn test` (all tests must pass)
-3. **Run quality checks** — `yarn compile` + DeepSource review required
-4. **Build extension** — `yarn build` or `yarn build:firefox`
-5. **Create archives** — `yarn zip` or `yarn zip:firefox`
-6. **Update CHANGELOG.md** with release notes
+### Test Submission Readiness
 
-### Building and Packaging
+```bash
+./scripts/test-submission.sh
+```
 
-**Chrome Web Store:**
+This script:
+
+- Validates `yarn` is installed
+- Checks `.env.submit` credentials are loaded
+- Builds the extension
+- Creates submission packages
+- Shows ready-to-submit commands
+
+### Build and Submit
+
+**For Chrome Web Store:**
 
 ```bash
 yarn build
 yarn zip
-# Creates: gmail-alias-toolkit-{version}-chrome.zip
+
+# Load credentials and submit (dry-run to test)
+source .env.submit
+yarn wxt submit --dry-run --chrome-zip .output/gmail-alias-toolkit-{version}-chrome.zip
+
+# Production submit
+yarn wxt submit \
+  --chrome-zip .output/gmail-alias-toolkit-{version}-chrome.zip \
+  --chrome-extension-id $CHROME_EXTENSION_ID \
+  --chrome-client-id $CHROME_CLIENT_ID \
+  --chrome-client-secret $CHROME_CLIENT_SECRET \
+  --chrome-refresh-token $CHROME_REFRESH_TOKEN
 ```
 
-**Firefox Add-ons:**
+**For Firefox Add-ons:**
 
 ```bash
 yarn build:firefox
 yarn zip:firefox
-# Creates: gmail-alias-toolkit-{version}-firefox.zip
-# Also need source zip: yarn zip:sources
+
+# Load credentials and submit
+source .env.submit
+yarn wxt submit \
+  --firefox-zip .output/gmail-alias-toolkit-{version}-firefox.zip \
+  --firefox-sources-zip .output/gmail-alias-toolkit-{version}-sources.zip \
+  --firefox-extension-id $FIREFOX_EXTENSION_ID \
+  --firefox-jwt-issuer $FIREFOX_JWT_ISSUER \
+  --firefox-jwt-secret $FIREFOX_JWT_SECRET
 ```
-
-### Submission Commands
-
-**Dry-run (test without uploading):**
-
-```bash
-yarn publish --dry-run \
-  --chrome-zip gmail-alias-toolkit-{version}-chrome.zip \
-  --firefox-zip gmail-alias-toolkit-{version}-firefox.zip \
-  --firefox-sources-zip gmail-alias-toolkit-{version}-sources.zip
-```
-
-**Production Submission:**
-
-```bash
-yarn publish \
-  --chrome-zip gmail-alias-toolkit-{version}-chrome.zip \
-  --firefox-zip gmail-alias-toolkit-{version}-firefox.zip \
-  --firefox-sources-zip gmail-alias-toolkit-{version}-sources.zip \
-  --edge-zip gmail-alias-toolkit-{version}-edge.zip
-```
-
-### Store-Specific Requirements
-
-**Chrome Web Store:**
-
-- Version must be higher than previous release
-- Manifest V3 required
-- Privacy policy must be accessible
-- Active Chrome Web Store developer account
-
-**Firefox Add-ons:**
-
-- Source code archive required for review
-- Version must be higher than previous release
-- Privacy policy required
-- Active Mozilla developer account
-
-**Microsoft Edge:**
-
-- Compatible with Chrome Web Store manifest
-- Version must be higher than previous release
-- Partner Center account required
 
 ### After Submission
 
-- Monitor store review queues for approval (typically 1-7 days)
+- Monitor store review queues for approval (Chrome: 1-2 hours, Firefox: 1-7 days)
 - Update GitHub Release with store links once approved
-- Monitor user reviews and ratings
+- Monitor user reviews and ratings for feedback
 - Keep dependencies updated between releases
-
-For more details, see [CLAUDE.md](CLAUDE.md#testing--ci).
