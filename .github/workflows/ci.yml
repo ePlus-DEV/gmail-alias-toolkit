@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    name: Build
+    name: Compile, Test, Build
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +36,12 @@ jobs:
 
       - name: Prepare WXT types
         run: yarn exec wxt prepare
+
+      - name: Compile TypeScript
+        run: yarn compile
+
+      - name: Run tests
+        run: yarn test
 
       - name: Build extension
         run: yarn build
