@@ -35,6 +35,8 @@ import {
 
 const chromeUrl =
   "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl";
+const firefoxUrl =
+  "https://addons.mozilla.org/en-US/firefox/addon/gmail-alias-toolkit/";
 const githubUrl = "https://github.com/ePlus-DEV/gmail-alias-toolkit";
 
 type Locale = "vi" | "en";
@@ -52,6 +54,7 @@ const translations = {
       features: "Tính năng",
       privacy: "Quyền riêng tư",
       install: "Thêm vào Chrome",
+      installFirefox: "Thêm vào Firefox",
     },
     hero: {
       badge: "Tiện ích Chrome cho Gmail plus addressing",
@@ -59,6 +62,7 @@ const translations = {
       titleHighlight: "popup nhỏ gọn.",
       desc: "Tạo địa chỉ dạng david+tag@gmail.com trong popup chính hoặc thao tác ngay cạnh ô email bằng Inline Popup, với gợi ý theo website, lịch sử, yêu thích và xuất dữ liệu.",
       install: "Cài tiện ích",
+      installFirefox: "Cài cho Firefox",
       source: "Xem mã nguồn",
       stats: [
         ["4", "định dạng random"],
@@ -266,6 +270,7 @@ const translations = {
       title: "Sẵn sàng biến Gmail alias thành workflow gọn gàng?",
       desc: "Cài Gmail Alias Toolkit để tạo alias traceable cho đăng ký tài khoản, newsletter, testing và bảo vệ inbox mỗi ngày.",
       install: "Thêm vào Chrome",
+      installFirefox: "Thêm vào Firefox",
     },
   },
   en: {
@@ -275,6 +280,7 @@ const translations = {
       features: "Features",
       privacy: "Privacy",
       install: "Add to Chrome",
+      installFirefox: "Add to Firefox",
     },
     hero: {
       badge: "Chrome extension for Gmail plus addressing",
@@ -282,6 +288,7 @@ const translations = {
       titleHighlight: "compact popup.",
       desc: "Create david+tag@gmail.com aliases in the main popup or work beside any email field with website-aware inline suggestions, history, favorites and export tools.",
       install: "Install extension",
+      installFirefox: "Install for Firefox",
       source: "View source",
       stats: [
         ["4", "random formats"],
@@ -489,6 +496,7 @@ const translations = {
       title: "Ready to turn Gmail aliases into a tidy workflow?",
       desc: "Install Gmail Alias Toolkit to create traceable aliases for signups, newsletters, testing and everyday inbox protection.",
       install: "Add to Chrome",
+      installFirefox: "Add to Firefox",
     },
   },
 } as const;
@@ -689,6 +697,11 @@ function HeaderActions({
           {t.nav.install} <ArrowRight className="h-4 w-4" />
         </MagneticLink>
       </div>
+      <div className="hidden xl:block">
+        <MagneticLink href={firefoxUrl} variant="secondary">
+          {t.nav.installFirefox} <Download className="h-4 w-4" />
+        </MagneticLink>
+      </div>
     </div>
   );
 }
@@ -780,6 +793,9 @@ function HeroActions({ t }: { t: (typeof translations)[Locale] }) {
     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
       <MagneticLink href={chromeUrl}>
         {t.hero.install} <ArrowRight className="h-5 w-5" />
+      </MagneticLink>
+      <MagneticLink href={firefoxUrl} variant="secondary">
+        <Download className="h-5 w-5" /> {t.hero.installFirefox}
       </MagneticLink>
       <MagneticLink href={githubUrl} variant="secondary">
         <Github className="h-5 w-5" /> {t.hero.source}
@@ -2197,7 +2213,7 @@ function CtaSection({ t }: { t: (typeof translations)[Locale] }) {
         <p className="mx-auto mt-4 max-w-2xl leading-7 text-slate-300">
           {t.cta.desc}
         </p>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <motion.a
             href={chromeUrl}
             target="_blank"
@@ -2207,6 +2223,16 @@ function CtaSection({ t }: { t: (typeof translations)[Locale] }) {
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-black text-slate-950"
           >
             {t.cta.install} <ArrowRight className="h-5 w-5" />
+          </motion.a>
+          <motion.a
+            href={firefoxUrl}
+            target="_blank"
+            rel="noreferrer"
+            whileHover={{ y: -3, scale: 1.025 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 text-sm font-black text-white"
+          >
+            <Download className="h-5 w-5" /> {t.cta.installFirefox}
           </motion.a>
         </div>
       </motion.div>
