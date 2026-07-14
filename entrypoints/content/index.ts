@@ -788,6 +788,9 @@ function injectIcon(input: EmailInputElement) {
 
           const rect = element.getBoundingClientRect();
           const style = window.getComputedStyle(element);
+          const isInteractiveControl = element.matches(
+            "button, select, textarea, a[href], [role='button'], [role='combobox'], [contenteditable='true'], input",
+          );
           const isCompactControl = rect.width <= 96 && rect.height <= 96;
           const isCompactOverlay =
             (style.position === "fixed" || style.position === "absolute") &&
@@ -797,7 +800,7 @@ function injectIcon(input: EmailInputElement) {
           return (
             style.visibility !== "hidden" &&
             style.display !== "none" &&
-            (isCompactControl || isCompactOverlay)
+            (isInteractiveControl || isCompactControl || isCompactOverlay)
           );
         }),
       );
@@ -834,6 +837,37 @@ function injectIcon(input: EmailInputElement) {
       iconContainer.classList.add(`gmail-alias-icon-${direction}`);
     };
 
+    const getPreferredHorizontalSide = (rect: DOMRect) => {
+      const viewportPadding = 8;
+      const inputGap = 6;
+      const iconSize = 32;
+      const requiredRoom = inputGap + iconSize + 8 + 240;
+      const centeredTop = rect.top + (rect.height - iconSize) / 2;
+      const options = [
+        {
+          side: "right" as const,
+          room: window.innerWidth - rect.right - viewportPadding,
+          iconLeft: rect.right + inputGap,
+        },
+        {
+          side: "left" as const,
+          room: rect.left - viewportPadding,
+          iconLeft: rect.left - inputGap - iconSize,
+        },
+      ]
+        .filter(
+          (option) =>
+            option.room >= requiredRoom &&
+            option.iconLeft >= viewportPadding &&
+            option.iconLeft + iconSize <=
+              window.innerWidth - viewportPadding &&
+            !isPlacementBlocked(option.iconLeft, centeredTop, iconSize),
+        )
+        .sort((a, b) => b.room - a.room);
+
+      return options[0]?.side ?? null;
+    };
+
     /** Places the icon and its popup as one group without covering the input. */
     const positionPopupNextToInput = (popup: HTMLElement) => {
       const inputRect = input.getBoundingClientRect();
@@ -848,13 +882,13 @@ function injectIcon(input: EmailInputElement) {
       const inputGap = 6;
       const popupGap = 8;
       const iconSize = 32;
-      const minPopupWidth = 240;
       const maxPopupWidth = 320;
       const leftRoom = inputRect.left - viewportPadding;
       const rightRoom = window.innerWidth - inputRect.right - viewportPadding;
       const horizontalChrome = inputGap + iconSize + popupGap;
-      const canUseLeft = leftRoom >= minPopupWidth + horizontalChrome;
-      const canUseRight = rightRoom >= minPopupWidth + horizontalChrome;
+      const preferredHorizontalSide = getPreferredHorizontalSide(inputRect);
+      const canUseLeft = preferredHorizontalSide === "left";
+      const canUseRight = preferredHorizontalSide === "right";
       const centeredIconTop = Math.min(
         window.innerHeight - iconSize - viewportPadding,
         Math.max(
@@ -865,8 +899,7 @@ function injectIcon(input: EmailInputElement) {
 
       let availableHeight = window.innerHeight - viewportPadding * 2;
       if (canUseRight || canUseLeft) {
-        const placeRight =
-          canUseRight && (!canUseLeft || rightRoom >= leftRoom);
+        const placeRight = canUseRight;
         const room = placeRight ? rightRoom : leftRoom;
         const popupWidth = Math.min(
           maxPopupWidth,
@@ -989,16 +1022,28 @@ function injectIcon(input: EmailInputElement) {
       const right = rect.right + gap;
       const left = rect.left - iconSize - gap;
       const rightAligned = clampLeft(rect.right - iconSize);
-      const shiftedLeft = clampLeft(rightAligned - iconSize - gap);
+      const centeredIconLeft = clampLeft(
+        rect.left + rect.width / 2 - iconSize / 2,
+      );
       const above = rect.top - iconSize - gap;
       const below = rect.bottom + gap;
+      const preferredHorizontalSide = getPreferredHorizontalSide(rect);
+      const roomBelow = window.innerHeight - rect.bottom - gap;
+      const roomAbove = rect.top - gap;
+      const verticalCandidate =
+        roomBelow >= roomAbove
+          ? { left: centeredIconLeft, top: below, direction: "below" as const }
+          : { left: centeredIconLeft, top: above, direction: "above" as const };
       const candidates = [
-        { left: right, top: centeredTop, direction: "right" as const },
-        { left, top: centeredTop, direction: "left" as const },
+        ...(preferredHorizontalSide === "right"
+          ? [{ left: right, top: centeredTop, direction: "right" as const }]
+          : []),
+        ...(preferredHorizontalSide === "left"
+          ? [{ left, top: centeredTop, direction: "left" as const }]
+          : []),
+        ...(!preferredHorizontalSide ? [verticalCandidate] : []),
         { left: rightAligned, top: above, direction: "above" as const },
-        { left: shiftedLeft, top: above, direction: "above" as const },
         { left: rightAligned, top: below, direction: "below" as const },
-        { left: shiftedLeft, top: below, direction: "below" as const },
       ].filter(
         (candidate) =>
           candidate.left >= 4 &&
