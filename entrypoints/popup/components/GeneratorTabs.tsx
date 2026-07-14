@@ -283,7 +283,7 @@ function RandomAliasListHeader({
   saveRecentAliases,
   setToastMessage,
 }: RandomAliasListHeaderProps) {
-  /** Copies all generated aliases and records them in recent history. */
+  /** Copies all generated aliases and records the copied batch. */
   const copyAllAliases = async () => {
     try {
       await navigator.clipboard.writeText(generatedRandomList.join("\n"));

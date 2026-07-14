@@ -8,6 +8,8 @@ import {
   generateDotVariations,
   getDotVariationCandidates,
   filterAliases,
+  getAliasTags,
+  paginateItems,
 } from "../../entrypoints/popup/utils";
 
 // ─── getAccountStorageKey ────────────────────────────────────────────────────
@@ -378,5 +380,26 @@ describe("filterAliases", () => {
       sortBy: "recent",
     });
     expect(result).toHaveLength(0);
+  });
+});
+
+describe("shared history helpers", () => {
+  it("extracts unique plus tags", () => {
+    expect(
+      getAliasTags([
+        { email: "user+work@gmail.com" },
+        { email: "user+shop@gmail.com" },
+        { email: "user+work@gmail.com" },
+        { email: "user@gmail.com" },
+      ]),
+    ).toEqual(["work", "shop"]);
+  });
+
+  it("paginates and clamps an out-of-range page", () => {
+    const result = paginateItems([1, 2, 3, 4, 5], 9, 2);
+    expect(result.items).toEqual([5]);
+    expect(result.currentPage).toBe(3);
+    expect(result.totalPages).toBe(3);
+    expect(result.totalItems).toBe(5);
   });
 });

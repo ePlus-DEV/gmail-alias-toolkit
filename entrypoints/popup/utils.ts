@@ -241,3 +241,38 @@ export function filterAliases(
         : a.email.localeCompare(b.email),
     );
 }
+
+/** Extracts the unique plus-addressing tags used by a history collection. */
+export function getAliasTags(
+  aliases: Array<{ email: string }>,
+): string[] {
+  return [
+    ...new Set(
+      aliases
+        .map((alias) => alias.email.match(/\+([^@]+)@/)?.[1])
+        .filter((tag): tag is string => Boolean(tag)),
+    ),
+  ];
+}
+
+/** Returns a safe page slice and its normalized pagination metadata. */
+export function paginateItems<T>(
+  items: T[],
+  requestedPage: number,
+  itemsPerPage: number,
+) {
+  const safeItemsPerPage = Math.max(1, itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(items.length / safeItemsPerPage));
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
+  const startIndex = (currentPage - 1) * safeItemsPerPage;
+  const endIndex = startIndex + safeItemsPerPage;
+
+  return {
+    items: items.slice(startIndex, endIndex),
+    currentPage,
+    totalPages,
+    startIndex,
+    endIndex,
+    totalItems: items.length,
+  };
+}

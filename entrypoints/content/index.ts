@@ -4,6 +4,16 @@ import {
   generateSuggestionsForWebsite,
   saveWebsiteAlias,
 } from "src/services/websiteAliasService";
+import {
+  generateAlias,
+  generateRandomString,
+  filterAliases,
+  getAccountStorageKey,
+  getAliasTags,
+  getDotVariationCandidates,
+  paginateItems,
+  type RandomFormat,
+} from "../popup/utils";
 import "./email-helper.css";
 
 const ICON_HTML = `
@@ -106,7 +116,7 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
 /** Create popup element with suggestions. */
 function createPopup(
   data: SuggestionData,
-  onSelect: (alias: string) => void,
+  onSelect: (alias: string, recordUsage?: boolean) => void,
   input?: EmailInputElement,
 ) {
   const popup = document.createElement("div");
@@ -171,32 +181,72 @@ function createPopup(
         </div>
       </div>
       <div class="gmail-alias-popup-tab-content" data-tab-content="generate">
-        <div style="padding: 12px; display: flex; flex-direction: column; gap: 12px;">
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label style="font-size: 11px; font-weight: 600; color: #6b7280;">Custom Alias</label>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" class="gmail-alias-generate-input" placeholder="Enter custom alias" style="flex: 1; padding: 8px 12px; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; font-family: 'Monaco', 'Courier New', monospace;">
-              <button class="gmail-alias-generate-btn" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap;">Use</button>
-            </div>
+        <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+          <button class="gmail-alias-generate-mode active" data-mode="random">Random</button>
+          <button class="gmail-alias-generate-mode" data-mode="tags">Tags</button>
+          <button class="gmail-alias-generate-mode" data-mode="tricks">Tricks</button>
+        </div>
+        <div class="gmail-alias-generate-panel active" data-generate-panel="random">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px; gap: 6px;">
+            <select class="gmail-alias-random-format">
+              <option value="private-mail">Private Mail</option>
+              <option value="alphanumeric">Alphanumeric</option>
+              <option value="words">Words</option>
+              <option value="timestamp">Timestamp</option>
+            </select>
+            <input type="number" class="gmail-alias-random-count" min="1" max="20" value="5" aria-label="Number of aliases">
           </div>
-          <div style="height: 1px; background: #e5e7eb;"></div>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label style="font-size: 11px; font-weight: 600; color: #6b7280;">Random Alias</label>
-            <div style="display: flex; gap: 8px;">
-              <select class="gmail-alias-random-format" style="flex: 1; padding: 8px 12px; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px;">
-                <option value="private-mail">Private Mail</option>
-                <option value="alphanumeric">Alphanumeric</option>
-                <option value="words">Words</option>
-                <option value="timestamp">Timestamp</option>
-              </select>
-              <button class="gmail-alias-random-btn" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; white-space: nowrap;">Generate</button>
-            </div>
+          <button class="gmail-alias-quick-action gmail-alias-random-btn">Generate aliases</button>
+          <div class="gmail-alias-generated-list"></div>
+        </div>
+        <div class="gmail-alias-generate-panel" data-generate-panel="tags">
+          <div style="display: flex; gap: 6px;">
+            <input type="text" class="gmail-alias-generate-input" placeholder="Enter custom tag">
+            <button class="gmail-alias-generate-btn">Use</button>
           </div>
+          <div class="gmail-alias-preset-list"></div>
+        </div>
+        <div class="gmail-alias-generate-panel" data-generate-panel="tricks">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px; gap: 6px;">
+            <select class="gmail-alias-trick-type">
+              <option value="dot">Dot trick</option>
+              <option value="plus">Plus tags</option>
+              <option value="googlemail">Googlemail</option>
+              <option value="nodots">Remove dots</option>
+            </select>
+            <input type="number" class="gmail-alias-trick-count" min="1" max="20" value="5" aria-label="Number of variations">
+          </div>
+          <button class="gmail-alias-quick-action gmail-alias-trick-btn">Generate tricks</button>
+          <div class="gmail-alias-trick-list"></div>
         </div>
       </div>
       <div class="gmail-alias-popup-tab-content" data-tab-content="history">
-        <div class="gmail-alias-history-section" style="padding: 12px;">
+        <div class="gmail-alias-history-section">
+          <input type="search" class="gmail-alias-history-search" placeholder="Search history..." aria-label="Search history">
+          <div class="gmail-alias-history-filters">
+            <select class="gmail-alias-history-view" aria-label="History view">
+              <option value="all">All aliases</option>
+              <option value="favorites">Favorites</option>
+            </select>
+            <select class="gmail-alias-history-tag" aria-label="Filter by tag">
+              <option value="all">All tags</option>
+            </select>
+            <select class="gmail-alias-history-sort" aria-label="Sort history">
+              <option value="recent">Most recent</option>
+              <option value="alphabetical">A–Z</option>
+            </select>
+            <select class="gmail-alias-history-page-size" aria-label="Aliases per page">
+              <option value="5">5 / page</option>
+              <option value="10">10 / page</option>
+              <option value="20">20 / page</option>
+            </select>
+          </div>
           <div class="gmail-alias-history-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+          <div class="gmail-alias-history-pagination">
+            <button type="button" class="gmail-alias-history-prev" aria-label="Previous page">‹</button>
+            <span class="gmail-alias-history-page-info">1 / 1</span>
+            <button type="button" class="gmail-alias-history-next" aria-label="Next page">›</button>
+          </div>
         </div>
       </div>
     </div>
@@ -238,6 +288,23 @@ function createPopup(
     });
   });
 
+  // Switch between the compact Random, Tags, and Tricks generators.
+  popup.querySelectorAll(".gmail-alias-generate-mode").forEach((button) => {
+    button.addEventListener("click", () => {
+      const mode = (button as HTMLElement).dataset.mode;
+      popup.querySelectorAll(".gmail-alias-generate-mode").forEach((item) =>
+        item.classList.remove("active"),
+      );
+      popup.querySelectorAll(".gmail-alias-generate-panel").forEach((panel) =>
+        panel.classList.remove("active"),
+      );
+      button.classList.add("active");
+      popup
+        .querySelector(`[data-generate-panel="${mode}"]`)
+        ?.classList.add("active");
+    });
+  });
+
   // Handle custom generate input
   const generateBtn = popup.querySelector(
     ".gmail-alias-generate-btn",
@@ -264,25 +331,211 @@ function createPopup(
     });
   }
 
-  // Handle random generate
+  // Load the same custom tag presets used by the main popup.
+  void browser.storage.local.get("app_settings").then((settingsStorage) => {
+    const presetList = popup.querySelector(
+      ".gmail-alias-preset-list",
+    ) as HTMLElement | null;
+    if (!presetList) return;
+
+    const settings = settingsStorage.app_settings as
+      | {
+          customPresets?: Array<{ id?: string; label: string; tag: string }>;
+          randomFormat?: RandomFormat;
+        }
+      | undefined;
+    const formatSelect = popup.querySelector(
+      ".gmail-alias-random-format",
+    ) as HTMLSelectElement | null;
+    if (formatSelect && settings?.randomFormat) {
+      formatSelect.value = settings.randomFormat;
+    }
+    const presets = settings?.customPresets || [];
+    presetList.innerHTML = presets.length
+      ? `<div class="gmail-alias-quick-label">Your presets</div>${presets
+          .map(
+            (preset) =>
+              `<button class="gmail-alias-preset-item" data-tag="${escapeHtml(preset.tag)}">${escapeHtml(preset.label)}</button>`,
+          )
+          .join("")}`
+      : '<div class="gmail-alias-quick-empty">No presets yet</div>';
+    presetList
+      .querySelectorAll(".gmail-alias-preset-item")
+      .forEach((presetButton) => {
+        presetButton.addEventListener("click", () => {
+          const tag = (presetButton as HTMLElement).dataset.tag;
+          if (tag) {
+            onSelect(createCustomAlias(data.activeEmail, tag));
+            popup.remove();
+          }
+        });
+      });
+  });
+
+  // Generate a batch with the same formats as the main popup.
   const randomBtn = popup.querySelector(
     ".gmail-alias-random-btn",
   ) as HTMLButtonElement;
   const randomFormat = popup.querySelector(
     ".gmail-alias-random-format",
   ) as HTMLSelectElement;
-  if (randomBtn && input && data.activeEmail) {
+  const randomCount = popup.querySelector(
+    ".gmail-alias-random-count",
+  ) as HTMLInputElement;
+  const generatedList = popup.querySelector(
+    ".gmail-alias-generated-list",
+  ) as HTMLElement;
+  if (randomBtn && data.activeEmail) {
+    randomFormat?.addEventListener("change", async () => {
+      const settingsStorage = await browser.storage.local.get("app_settings");
+      await browser.storage.local.set({
+        app_settings: {
+          ...(settingsStorage.app_settings || {}),
+          randomFormat: randomFormat.value,
+        },
+      });
+    });
     randomBtn.addEventListener("click", () => {
-      const format = randomFormat?.value || "private-mail";
-      const randomTag = generateRandomString(format);
-      const emailParts = data.activeEmail.split("@");
-      if (emailParts.length === 2) {
-        const alias = `${emailParts[0]}+${randomTag}@${emailParts[1]}`;
-        onSelect(alias);
-        popup.remove();
+      const format = (randomFormat?.value || "private-mail") as RandomFormat;
+      const count = clampQuickCount(randomCount?.value);
+      const aliases = Array.from({ length: count }, (_, index) =>
+        generateAlias(
+          data.activeEmail,
+          generateRandomString(format, Date.now() + index),
+        ),
+      ).filter((alias): alias is string => Boolean(alias));
+      if (generatedList) {
+        renderQuickAliasList(generatedList, aliases, onSelect, input);
       }
     });
   }
+
+  // Generate commonly used Gmail trick variations.
+  const trickBtn = popup.querySelector(
+    ".gmail-alias-trick-btn",
+  ) as HTMLButtonElement;
+  const trickType = popup.querySelector(
+    ".gmail-alias-trick-type",
+  ) as HTMLSelectElement;
+  const trickCount = popup.querySelector(
+    ".gmail-alias-trick-count",
+  ) as HTMLInputElement;
+  const trickList = popup.querySelector(
+    ".gmail-alias-trick-list",
+  ) as HTMLElement;
+  trickBtn?.addEventListener("click", () => {
+    const aliases = generateQuickTricks(
+      data.activeEmail,
+      trickType?.value || "dot",
+      clampQuickCount(trickCount?.value),
+    );
+    if (trickList) {
+      renderQuickAliasList(trickList, aliases, onSelect, input);
+    }
+  });
+
+  let currentHistory: Array<{ email: string; timestamp: number }> = [];
+  let currentFavorites: string[] = [];
+  let historyPage = 1;
+  const historySearch = popup.querySelector(
+    ".gmail-alias-history-search",
+  ) as HTMLInputElement | null;
+  const historyView = popup.querySelector(
+    ".gmail-alias-history-view",
+  ) as HTMLSelectElement | null;
+  const historyTag = popup.querySelector(
+    ".gmail-alias-history-tag",
+  ) as HTMLSelectElement | null;
+  const historySort = popup.querySelector(
+    ".gmail-alias-history-sort",
+  ) as HTMLSelectElement | null;
+  const historyPageSize = popup.querySelector(
+    ".gmail-alias-history-page-size",
+  ) as HTMLSelectElement | null;
+  const historyPrev = popup.querySelector(
+    ".gmail-alias-history-prev",
+  ) as HTMLButtonElement | null;
+  const historyNext = popup.querySelector(
+    ".gmail-alias-history-next",
+  ) as HTMLButtonElement | null;
+  const historyPageInfo = popup.querySelector(
+    ".gmail-alias-history-page-info",
+  ) as HTMLElement | null;
+  const historyPagination = popup.querySelector(
+    ".gmail-alias-history-pagination",
+  ) as HTMLElement | null;
+
+  /** Filters, sorts, and paginates history using the popup's shared logic. */
+  function renderHistory() {
+    const historyList = popup.querySelector(
+      ".gmail-alias-history-list",
+    ) as HTMLElement | null;
+    if (!historyList) return;
+
+    const filtered = filterAliases(currentHistory, {
+      viewMode: historyView?.value === "favorites" ? "favorites" : "all",
+      favorites: currentFavorites,
+      searchQuery: historySearch?.value || "",
+      filterTag: historyTag?.value || "all",
+      sortBy: historySort?.value === "alphabetical" ? "alphabetical" : "recent",
+    });
+    const page = paginateItems(
+      filtered,
+      historyPage,
+      Number(historyPageSize?.value || 5),
+    );
+    historyPage = page.currentPage;
+
+    if (historyPageInfo) {
+      historyPageInfo.textContent = page.totalItems
+        ? `${page.startIndex + 1}-${Math.min(page.endIndex, page.totalItems)} / ${page.totalItems}`
+        : "0 / 0";
+    }
+    if (historyPrev) historyPrev.disabled = historyPage <= 1;
+    if (historyNext) historyNext.disabled = historyPage >= page.totalPages;
+    if (historyPagination) {
+      historyPagination.hidden = page.totalPages <= 1;
+    }
+
+    if (page.items.length === 0) {
+      const emptyMessage =
+        currentHistory.length === 0
+          ? "No history yet"
+          : historyView?.value === "favorites"
+            ? "No favorite aliases"
+            : "No matching aliases";
+      historyList.innerHTML = `<div class="gmail-alias-quick-empty">${emptyMessage}</div>`;
+      return;
+    }
+
+    renderQuickAliasList(
+      historyList,
+      page.items.map((item) => item.email),
+      onSelect,
+      input,
+      false,
+    );
+  }
+
+  [historySearch, historyView, historyTag, historySort, historyPageSize].forEach(
+    (control) => {
+      control?.addEventListener(
+        control === historySearch ? "input" : "change",
+        () => {
+          historyPage = 1;
+          renderHistory();
+        },
+      );
+    },
+  );
+  historyPrev?.addEventListener("click", () => {
+    historyPage -= 1;
+    renderHistory();
+  });
+  historyNext?.addEventListener("click", () => {
+    historyPage += 1;
+    renderHistory();
+  });
 
   /** Loads the latest account history whenever the popup or History tab opens. */
   async function loadHistory() {
@@ -293,15 +546,18 @@ function createPopup(
 
     try {
       // Use the same account that was used to generate this popup's aliases.
-      const historyKey = `gmail_alias_recent_${encodeURIComponent(data.activeEmail.trim().toLowerCase())}`;
+      const historyKey = getAccountStorageKey(
+        data.activeEmail,
+        "gmail_alias_recent",
+      );
+      const favoritesKey = getAccountStorageKey(data.activeEmail, "favorites");
 
       const storage = (await browser.storage.local.get([
         historyKey,
+        favoritesKey,
         "gmail_alias_recent",
-      ])) as Record<
-        string,
-        Array<{ email: string; timestamp: number }> | undefined
-      >;
+        "favorites",
+      ])) as Record<string, unknown>;
       // Older installations may still have history under the global key.
       const history = (storage[historyKey] ??
         storage.gmail_alias_recent ??
@@ -309,36 +565,34 @@ function createPopup(
         email: string;
         timestamp: number;
       }>;
+      currentHistory = history
+        .filter((item) => item && typeof item.email === "string")
+        .slice()
+        .sort((a, b) => b.timestamp - a.timestamp);
+      const favorites = (storage[favoritesKey] ?? storage.favorites ?? []) as
+        | Array<{ email?: string } | string>
+        | undefined;
+      currentFavorites = Array.isArray(favorites)
+        ? favorites
+            .map((favorite) =>
+              typeof favorite === "string" ? favorite : favorite.email,
+            )
+            .filter((email): email is string => Boolean(email))
+        : [];
 
-      if (history.length > 0) {
-        // Sort by timestamp (most recent first)
-        const sorted = history
-          .slice()
-          .sort((a, b) => b.timestamp - a.timestamp);
-
-        historyList.innerHTML = sorted
-          .map(
-            (item) =>
-              `<div class="gmail-alias-history-item" data-alias="${escapeHtml(item.email)}" style="padding: 8px 12px; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; transition: all 0.2s ease;">${escapeHtml(item.email)}</div>`,
-          )
-          .join("");
-
-        // Handle history item click
-        historyList
-          .querySelectorAll(".gmail-alias-history-item")
-          .forEach((item) => {
-            item.addEventListener("click", () => {
-              const alias = (item as HTMLElement).dataset.alias;
-              if (alias) {
-                onSelect(alias);
-                popup.remove();
-              }
-            });
-          });
-      } else {
-        historyList.innerHTML =
-          '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">No history yet</div>';
+      if (historyTag) {
+        const selectedTag = historyTag.value;
+        historyTag.innerHTML = [
+          '<option value="all">All tags</option>',
+          ...getAliasTags(currentHistory).map(
+            (tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`,
+          ),
+        ].join("");
+        historyTag.value = getAliasTags(currentHistory).includes(selectedTag)
+          ? selectedTag
+          : "all";
       }
+      renderHistory();
     } catch (error) {
       console.debug("Error loading history:", error);
       historyList.innerHTML =
@@ -351,6 +605,7 @@ function createPopup(
   // Handle suggestion item hover for preview and click to select
   if (input) {
     const originalValue = input.value;
+    let suggestionCommitted = false;
 
     popup.querySelectorAll(".gmail-alias-suggestion-item").forEach((item) => {
       const alias = (item as HTMLElement).dataset.alias;
@@ -364,8 +619,9 @@ function createPopup(
       });
 
       item.addEventListener("mouseleave", () => {
+        if (suggestionCommitted) return;
         // Restore original input value
-        input.value = originalValue;
+        fillInput(input, originalValue);
         input.classList.remove("gmail-alias-input-preview");
       });
 
@@ -373,6 +629,7 @@ function createPopup(
         e.preventDefault();
         e.stopPropagation();
         if (alias) {
+          suggestionCommitted = true;
           onSelect(alias);
           popup.remove();
         }
@@ -386,6 +643,7 @@ function createPopup(
   ) as HTMLElement;
   if (prevAliasBtn && input) {
     const originalValue = input.value;
+    let previousAliasCommitted = false;
 
     prevAliasBtn.addEventListener("mouseenter", () => {
       const alias = prevAliasBtn.dataset.alias;
@@ -396,7 +654,8 @@ function createPopup(
     });
 
     prevAliasBtn.addEventListener("mouseleave", () => {
-      input.value = originalValue;
+      if (previousAliasCommitted) return;
+      fillInput(input, originalValue);
       input.classList.remove("gmail-alias-input-preview");
     });
 
@@ -405,6 +664,7 @@ function createPopup(
       e.stopPropagation();
       const alias = prevAliasBtn.dataset.alias;
       if (alias) {
+        previousAliasCommitted = true;
         onSelect(alias);
         popup.remove();
       }
@@ -503,18 +763,19 @@ function injectIcon(input: EmailInputElement) {
 
       const popup = createPopup(
         data,
-        async (alias) => {
+        async (alias, recordUsage = true) => {
           fillInput(input, alias);
           input.classList.remove("gmail-alias-input-preview");
 
           try {
-            const tasks: Promise<unknown>[] = [
-              browser.runtime.sendMessage({
+            const tasks: Promise<unknown>[] = [];
+            if (recordUsage) {
+              tasks.push(browser.runtime.sendMessage({
                 action: "saveAliasToHistory",
                 alias,
                 accountEmail: data.activeEmail,
-              }),
-            ];
+              }));
+            }
 
             if (data.website) {
               tasks.push(
@@ -550,9 +811,18 @@ function injectIcon(input: EmailInputElement) {
       popup.addEventListener("mouseenter", () => {
         clearTimeout(closeTimer);
       });
+      popup.addEventListener("focusin", () => {
+        clearTimeout(closeTimer);
+      });
+      popup.addEventListener("pointerdown", () => {
+        clearTimeout(closeTimer);
+      });
 
       popup.addEventListener("mouseleave", () => {
         closeTimer = setTimeout(() => {
+          // Native select menus are rendered outside the popup bounds. Their
+          // control remains focused, so this is still an active popup session.
+          if (popup.matches(":focus-within")) return;
           popup.remove();
         }, 100);
       });
@@ -565,7 +835,11 @@ function injectIcon(input: EmailInputElement) {
       closeTimer = setTimeout(() => {
         document
           .querySelectorAll(".gmail-alias-popup")
-          .forEach((p) => p.remove());
+          .forEach((popupElement) => {
+            if (!popupElement.matches(":focus-within")) {
+              popupElement.remove();
+            }
+          });
       }, 250);
     });
 
@@ -575,58 +849,96 @@ function injectIcon(input: EmailInputElement) {
   }
 }
 
-/** Generate random string for alias. */
-function generateRandomString(format = "private-mail"): string {
-  if (format === "private-mail") {
-    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return `private-mail-${result}`;
+/** Restricts quick generator batch sizes to keep the inline popup responsive. */
+function clampQuickCount(value?: string): number {
+  return Math.min(20, Math.max(1, Number.parseInt(value || "5", 10) || 5));
+}
+
+/** Renders aliases as quick-fill buttons. */
+function renderQuickAliasList(
+  container: HTMLElement,
+  aliases: string[],
+  onSelect: (alias: string, recordUsage?: boolean) => void,
+  input?: EmailInputElement,
+  recordUsage = true,
+) {
+  container.innerHTML = aliases.length
+    ? aliases
+        .map(
+          (alias) =>
+            `<button class="gmail-alias-quick-alias" data-alias="${escapeHtml(alias)}">${escapeHtml(alias)}</button>`,
+        )
+        .join("")
+    : '<div class="gmail-alias-quick-empty">No aliases generated</div>';
+
+  const originalValue = input?.value || "";
+  let committed = false;
+
+  container.querySelectorAll(".gmail-alias-quick-alias").forEach((button) => {
+    button.addEventListener("mouseenter", () => {
+      const alias = (button as HTMLElement).dataset.alias;
+      if (!alias || !input) return;
+      fillInput(input, alias);
+      input.classList.add("gmail-alias-input-preview");
+    });
+
+    button.addEventListener("mouseleave", () => {
+      if (!input || committed) return;
+      fillInput(input, originalValue);
+      input.classList.remove("gmail-alias-input-preview");
+    });
+
+    button.addEventListener("click", () => {
+      const alias = (button as HTMLElement).dataset.alias;
+      if (!alias) return;
+      committed = true;
+      onSelect(alias, recordUsage);
+      button.closest(".gmail-alias-popup")?.remove();
+    });
+  });
+}
+
+/** Generates the most useful Gmail tricks for the compact helper. */
+function generateQuickTricks(
+  baseEmail: string,
+  trick: string,
+  count: number,
+): string[] {
+  const [username, domain] = baseEmail.split("@");
+  if (!username || !domain) return [];
+
+  const commonTags = [
+    "newsletter",
+    "shop",
+    "work",
+    "personal",
+    "test",
+    "promo",
+    "social",
+    "finance",
+    "travel",
+    "spam",
+  ];
+  if (trick === "plus") {
+    return commonTags.slice(0, count).map((tag) => `${username}+${tag}@${domain}`);
+  }
+  if (trick === "nodots") {
+    const noDots = username.replace(/\./g, "");
+    return [
+      `${noDots}@${domain}`,
+      ...commonTags.map((tag) => `${noDots}+${tag}@${domain}`),
+    ].slice(0, count);
   }
 
-  if (format === "timestamp") {
-    return Date.now().toString(36);
-  }
-
-  if (format === "words") {
-    const adjectives = [
-      "happy",
-      "sunny",
-      "calm",
-      "bright",
-      "swift",
-      "brave",
-      "cool",
-      "smart",
-      "quick",
-      "zen",
-    ];
-    const nouns = [
-      "fox",
-      "bird",
-      "bear",
-      "wolf",
-      "deer",
-      "lion",
-      "hawk",
-      "eagle",
-      "tiger",
-      "panda",
-    ];
-    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    return `${adj}-${noun}`;
-  }
-
-  // alphanumeric
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
+  const outputDomain =
+    trick === "googlemail"
+      ? domain.toLowerCase() === "gmail.com"
+        ? "googlemail.com"
+        : "gmail.com"
+      : domain;
+  return getDotVariationCandidates(username, count).map(
+    (variation) => `${variation}@${outputDomain}`,
+  );
 }
 
 /** Converts a custom tag into an alias, while preserving a complete email. */

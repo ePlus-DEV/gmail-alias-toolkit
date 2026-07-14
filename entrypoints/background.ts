@@ -468,6 +468,18 @@ export default defineBackground(() => {
     maxRecent: number,
     accountEmail?: string,
   ) {
+    await saveAliasesToHistory([email], maxRecent, accountEmail);
+  }
+
+  /** Atomically saves a generated batch to history and statistics. */
+  async function saveAliasesToHistory(
+    emails: string[],
+    maxRecent: number,
+    accountEmail?: string,
+  ) {
+    const uniqueEmails = [...new Set(emails.filter(Boolean))];
+    if (uniqueEmails.length === 0) return;
+
     // Get active account
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
@@ -501,15 +513,16 @@ export default defineBackground(() => {
     ])) as Record<string, Alias[] | AliasStats | undefined>;
     const recentAliases = (result[historyKey] as Alias[]) || [];
 
-    // Add to history (remove duplicates, add to top)
-    const newAlias: Alias = {
+    // Add the batch to history (remove duplicates, newest first).
+    const now = Date.now();
+    const newAliases: Alias[] = uniqueEmails.map((email, index) => ({
       email,
-      timestamp: Date.now(),
-    };
-
+      timestamp: now - index,
+    }));
+    const newEmailSet = new Set(uniqueEmails);
     const updated = [
-      newAlias,
-      ...recentAliases.filter((a) => a.email !== email),
+      ...newAliases,
+      ...recentAliases.filter((alias) => !newEmailSet.has(alias.email)),
     ].slice(0, maxRecent);
 
     // Update statistics
@@ -517,15 +530,16 @@ export default defineBackground(() => {
       total: 0,
       tags: {},
     };
-    stats.total = (stats.total || 0) + 1;
+    stats.total = (stats.total || 0) + uniqueEmails.length;
 
-    // Extract tag from email (if it has + addressing)
-    const tagMatch = email.match(/\+([^@]+)@/);
-    if (tagMatch) {
-      const tag = tagMatch[1];
-      stats.tags = stats.tags || {};
-      stats.tags[tag] = (stats.tags[tag] || 0) + 1;
-    }
+    stats.tags = stats.tags || {};
+    uniqueEmails.forEach((email) => {
+      const tagMatch = email.match(/\+([^@]+)@/);
+      if (tagMatch) {
+        const tag = tagMatch[1];
+        stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+      }
+    });
 
     // Save to storage with account-specific keys
     await browser.storage.local.set({

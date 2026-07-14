@@ -399,14 +399,15 @@ function App() {
   // stale-closure / lost-update race that happens when saveRecentAlias is called
   // N times in a tight loop (e.g. "Copy All").
   const saveRecentAliases = (emails: string[]) => {
-    if (emails.length === 0) return;
+    const uniqueEmails = [...new Set(emails.filter(Boolean))];
+    if (uniqueEmails.length === 0) return;
 
     const now = Date.now();
-    const newAliases: Alias[] = emails.map((email, i) => ({
+    const newAliases: Alias[] = uniqueEmails.map((email, i) => ({
       email,
       timestamp: now - i,
     }));
-    const newEmailSet = new Set(emails);
+    const newEmailSet = new Set(uniqueEmails);
 
     const updated = [
       ...newAliases,
@@ -420,7 +421,7 @@ function App() {
     browser.storage.local.set({ [historyKey]: updated });
 
     // Update statistics
-    updateStats(emails);
+    updateStats(uniqueEmails);
   };
 
   /** Saves a single alias to recent history. */

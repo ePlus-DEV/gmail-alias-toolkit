@@ -89,6 +89,176 @@ input.gmail-alias-input-preview {
   border-color: #7dd3fc;
 }
 
+/* Compact quick-access generator and history controls */
+.gmail-alias-generate-mode {
+  flex: 1;
+  padding: 7px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gmail-alias-generate-mode.active {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.gmail-alias-generate-panel {
+  display: none;
+}
+
+.gmail-alias-generate-panel.active {
+  display: block;
+}
+
+.gmail-alias-generate-panel input,
+.gmail-alias-generate-panel select,
+.gmail-alias-history-search,
+.gmail-alias-history-filters select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #fff;
+  color: #1f2937;
+  font-size: 12px;
+  outline: none;
+}
+
+.gmail-alias-generate-btn,
+.gmail-alias-quick-action {
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gmail-alias-generate-btn {
+  padding: 8px 14px;
+}
+
+.gmail-alias-quick-action {
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 12px;
+}
+
+.gmail-alias-generated-list,
+.gmail-alias-trick-list,
+.gmail-alias-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.gmail-alias-preset-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.gmail-alias-quick-label {
+  width: 100%;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.gmail-alias-preset-item {
+  padding: 6px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.gmail-alias-quick-alias {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 7px;
+  background: #f0f9ff;
+  color: #1e40af;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: 11px;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.gmail-alias-quick-alias:hover {
+  background: #dbeafe;
+}
+
+.gmail-alias-history-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gmail-alias-history-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.gmail-alias-history-filters select {
+  padding: 7px 8px;
+}
+
+.gmail-alias-history-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.gmail-alias-history-pagination[hidden] {
+  display: none;
+}
+
+.gmail-alias-history-pagination button {
+  width: 30px;
+  height: 28px;
+  border: 1px solid #bfdbfe;
+  border-radius: 7px;
+  background: #fff;
+  color: #1d4ed8;
+  cursor: pointer;
+}
+
+.gmail-alias-history-pagination button:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.gmail-alias-history-page-info {
+  min-width: 72px;
+  color: #6b7280;
+  font-size: 11px;
+  text-align: center;
+}
+
+.gmail-alias-quick-empty {
+  width: 100%;
+  padding: 10px;
+  color: #9ca3af;
+  font-size: 11px;
+  text-align: center;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .gmail-alias-popup {
@@ -142,5 +312,33 @@ input.gmail-alias-input-preview {
   .gmail-alias-history-item:hover {
     background: #1e3a5f;
     border-color: #3b82f6;
+  }
+
+  .gmail-alias-generate-mode,
+  .gmail-alias-generate-panel input,
+  .gmail-alias-generate-panel select,
+  .gmail-alias-history-search,
+  .gmail-alias-history-filters select,
+  .gmail-alias-history-pagination button {
+    border-color: #4b5563;
+    background: #111827;
+    color: #e5e7eb;
+  }
+
+  .gmail-alias-generate-mode.active,
+  .gmail-alias-preset-item {
+    border-color: #1d4ed8;
+    background: #172554;
+    color: #93c5fd;
+  }
+
+  .gmail-alias-quick-alias {
+    border-color: #1e3a5f;
+    background: #0c2340;
+    color: #93c5fd;
+  }
+
+  .gmail-alias-quick-alias:hover {
+    background: #1e3a5f;
   }
 }
