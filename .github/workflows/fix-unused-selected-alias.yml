@@ -1,0 +1,57 @@
+name: Fix unused selectedAlias
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - .github/workflows/fix-unused-selected-alias.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Remove unused selectedAlias prop
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          path = Path("web/src/App.tsx")
+          text = path.read_text(encoding="utf-8")
+
+          replacements = [
+              ("  selectedAlias,\n", ""),
+              ("  selectedAlias: string;\n", ""),
+              ("          selectedAlias={selectedAlias}\n", ""),
+          ]
+
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(
+                      f"Expected exactly one occurrence of {old!r}, found {count}"
+                  )
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit fix and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/fix-unused-selected-alias.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/src/App.tsx .github/workflows/fix-unused-selected-alias.yml
+          git commit -m "fix(web): remove unused selectedAlias prop"
+          git push origin HEAD:dev
