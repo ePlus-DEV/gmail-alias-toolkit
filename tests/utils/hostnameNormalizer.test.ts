@@ -30,9 +30,7 @@ describe("normalizeHostname", () => {
     expect(normalizeHostname("example.dev")).toBe("example");
     expect(normalizeHostname("localhost:3000")).toBe("localhost");
     expect(normalizeHostname("https://127.0.0.1:3000")).toBe("local");
-    expect(normalizeHostname("https://xn--mnchen-3ya.de")).toBe(
-      "xnmnchen3ya",
-    );
+    expect(normalizeHostname("https://xn--mnchen-3ya.de")).toBe("xnmnchen3ya");
   });
 
   it("rejects invalid input", () => {

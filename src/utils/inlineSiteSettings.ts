@@ -2,7 +2,11 @@ export const INLINE_DISABLED_SITES_KEY = "inline_disabled_sites";
 
 /** Returns a stable, human-readable key for per-site inline-helper settings. */
 export function normalizeSiteHostname(hostname: string): string {
-  return hostname.trim().toLowerCase().replace(/^www\./, "").replace(/\.$/, "");
+  return hostname
+    .trim()
+    .toLowerCase()
+    .replace(/^www\./, "")
+    .replace(/\.$/, "");
 }
 
 /** Sanitizes storage values written by current or older extension versions. */
