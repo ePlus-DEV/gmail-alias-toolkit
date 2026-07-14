@@ -896,14 +896,23 @@ function injectIcon(input: EmailInputElement) {
     const state = {
       inputResizeObserver: undefined as ResizeObserver | undefined,
       activePopup: null as HTMLElement | null,
-      iconPlacementDirection: null as "left" | "right" | "above" | "below" | null,
+      iconPlacementDirection: null as
+        | "left"
+        | "right"
+        | "above"
+        | "below"
+        | null,
       positionIconOutsideInput: (() => {}) as () => void,
     };
 
     /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
       window.removeEventListener("resize", state.positionIconOutsideInput);
-      window.removeEventListener("scroll", state.positionIconOutsideInput, true);
+      window.removeEventListener(
+        "scroll",
+        state.positionIconOutsideInput,
+        true,
+      );
       state.inputResizeObserver?.disconnect();
       iconContainer.remove();
       input.__gmailAliasIcon = undefined;
@@ -983,7 +992,8 @@ function injectIcon(input: EmailInputElement) {
       const rightRoom = window.innerWidth - inputRect.right - viewportPadding;
       const horizontalChrome = inputGap + iconSize + popupGap;
       const preferredHorizontalSide =
-        state.iconPlacementDirection === "left" || state.iconPlacementDirection === "right"
+        state.iconPlacementDirection === "left" ||
+        state.iconPlacementDirection === "right"
           ? state.iconPlacementDirection
           : null;
       const canUseLeft = preferredHorizontalSide === "left";
@@ -1171,7 +1181,9 @@ function injectIcon(input: EmailInputElement) {
     state.positionIconOutsideInput();
     window.addEventListener("resize", state.positionIconOutsideInput);
     window.addEventListener("scroll", state.positionIconOutsideInput, true);
-    state.inputResizeObserver = new ResizeObserver(state.positionIconOutsideInput);
+    state.inputResizeObserver = new ResizeObserver(
+      state.positionIconOutsideInput,
+    );
     state.inputResizeObserver.observe(input);
 
     icon.style.cursor = "pointer";
