@@ -75,8 +75,10 @@ describe("t", () => {
     for (const locale of readdirSync(localesDir)) {
       const messages = readMessages(locale);
       for (const [key, definition] of Object.entries(messages)) {
-        expect(definition.message.trim(), `${locale}.${key} should not be empty`)
-          .not.toBe("");
+        expect(
+          definition.message.trim(),
+          `${locale}.${key} should not be empty`,
+        ).not.toBe("");
         expect(
           Object.keys(definition.placeholders || {}).sort(),
           `${locale}.${key} placeholders should match en`,

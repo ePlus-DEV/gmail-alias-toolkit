@@ -322,12 +322,12 @@ function createPopup(
   popup.querySelectorAll(".gmail-alias-generate-mode").forEach((button) => {
     button.addEventListener("click", () => {
       const mode = (button as HTMLElement).dataset.mode;
-      popup.querySelectorAll(".gmail-alias-generate-mode").forEach((item) =>
-        item.classList.remove("active"),
-      );
-      popup.querySelectorAll(".gmail-alias-generate-panel").forEach((panel) =>
-        panel.classList.remove("active"),
-      );
+      popup
+        .querySelectorAll(".gmail-alias-generate-mode")
+        .forEach((item) => item.classList.remove("active"));
+      popup
+        .querySelectorAll(".gmail-alias-generate-panel")
+        .forEach((panel) => panel.classList.remove("active"));
       button.classList.add("active");
       popup
         .querySelector(`[data-generate-panel="${mode}"]`)
@@ -547,17 +547,21 @@ function createPopup(
     );
   }
 
-  [historySearch, historyView, historyTag, historySort, historyPageSize].forEach(
-    (control) => {
-      control?.addEventListener(
-        control === historySearch ? "input" : "change",
-        () => {
-          historyPage = 1;
-          renderHistory();
-        },
-      );
-    },
-  );
+  [
+    historySearch,
+    historyView,
+    historyTag,
+    historySort,
+    historyPageSize,
+  ].forEach((control) => {
+    control?.addEventListener(
+      control === historySearch ? "input" : "change",
+      () => {
+        historyPage = 1;
+        renderHistory();
+      },
+    );
+  });
   historyPrev?.addEventListener("click", () => {
     historyPage -= 1;
     renderHistory();
@@ -615,7 +619,8 @@ function createPopup(
         historyTag.innerHTML = [
           `<option value="all">${escapeHtml(t("allTags"))}</option>`,
           ...getAliasTags(currentHistory).map(
-            (tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`,
+            (tag) =>
+              `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`,
           ),
         ].join("");
         historyTag.value = getAliasTags(currentHistory).includes(selectedTag)
@@ -625,8 +630,7 @@ function createPopup(
       renderHistory();
     } catch (error) {
       console.debug("Error loading history:", error);
-      historyList.innerHTML =
-        `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
+      historyList.innerHTML = `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
     }
   }
 
@@ -800,11 +804,13 @@ function injectIcon(input: EmailInputElement) {
           try {
             const tasks: Promise<unknown>[] = [];
             if (recordUsage) {
-              tasks.push(browser.runtime.sendMessage({
-                action: "saveAliasToHistory",
-                alias,
-                accountEmail: data.activeEmail,
-              }));
+              tasks.push(
+                browser.runtime.sendMessage({
+                  action: "saveAliasToHistory",
+                  alias,
+                  accountEmail: data.activeEmail,
+                }),
+              );
             }
 
             if (data.website) {
@@ -950,7 +956,9 @@ function generateQuickTricks(
     "spam",
   ];
   if (trick === "plus") {
-    return commonTags.slice(0, count).map((tag) => `${username}+${tag}@${domain}`);
+    return commonTags
+      .slice(0, count)
+      .map((tag) => `${username}+${tag}@${domain}`);
   }
   if (trick === "nodots") {
     const noDots = username.replace(/\./g, "");

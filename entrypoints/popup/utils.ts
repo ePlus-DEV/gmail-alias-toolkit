@@ -243,9 +243,7 @@ export function filterAliases(
 }
 
 /** Extracts the unique plus-addressing tags used by a history collection. */
-export function getAliasTags(
-  aliases: Array<{ email: string }>,
-): string[] {
+export function getAliasTags(aliases: Array<{ email: string }>): string[] {
   return [
     ...new Set(
       aliases
