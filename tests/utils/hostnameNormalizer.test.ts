@@ -3,7 +3,16 @@ import { normalizeHostname } from "../../src/utils/hostnameNormalizer";
 
 describe("normalizeHostname", () => {
   it("normalizes a regular domain", () => {
-    expect(normalizeHostname("https://www.github.com/path")).toBe("github");
+    expect(normalizeHostname("https://github.com/path")).toBe("github");
+  });
+
+  it("preserves subdomains in hostname", () => {
+    expect(normalizeHostname("https://www.github.com/path")).toBe("www.github");
+    expect(normalizeHostname("https://api.github.com")).toBe("api.github");
+    expect(normalizeHostname("https://mail.google.com")).toBe("mail.google");
+    expect(normalizeHostname("https://api.v2.example.com")).toBe(
+      "api.v2.example",
+    );
   });
 
   it("supports modern TLDs that are not in the legacy allowlist", () => {
@@ -18,10 +27,10 @@ describe("normalizeHostname", () => {
 
   it("handles compound and private public suffixes", () => {
     expect(normalizeHostname("https://shop.example.co.uk/account")).toBe(
-      "example",
+      "shop.example",
     );
     expect(normalizeHostname("https://shop.example.com.au/account")).toBe(
-      "example",
+      "shop.example",
     );
     expect(normalizeHostname("https://alice.github.io/project")).toBe("alice");
   });

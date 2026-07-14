@@ -163,7 +163,7 @@ function createPopup(
     navigator.userAgent.includes("Firefox");
   const reviewUrl = isFirefox
     ? "https://addons.mozilla.org/en-US/firefox/addon/gmail-alias-toolkit/reviews/"
-    : "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl/reviews?hl=vi";
+    : "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl/reviews";
   const homepageUrl = "https://eplus-dev.github.io/gmail-alias-toolkit/";
   popup.className = "gmail-alias-popup";
   popup.style.cssText = `

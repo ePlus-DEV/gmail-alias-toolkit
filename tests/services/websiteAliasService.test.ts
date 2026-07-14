@@ -143,16 +143,17 @@ describe("websiteAliasService", () => {
     });
 
     it("accepts both URL and hostname", async () => {
+      // Save alias with normalized key "github"
       await saveWebsiteAlias(testEmail, "github", testAlias);
 
-      // Test with full URL
+      // Test with full URL that normalizes to "github"
       const resultUrl = await getPreviousAliasForWebsite(
         testEmail,
         "https://github.com/user",
       );
       expect(resultUrl?.alias).toBe(testAlias);
 
-      // Test with hostname
+      // Test with raw hostname
       const resultHostname = await getPreviousAliasForWebsite(
         testEmail,
         "github",

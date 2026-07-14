@@ -11,9 +11,9 @@ import { parse } from "tldts";
  *
  * Examples:
  *   "https://github.com" → "github"
- *   "https://api.github.com" → "github"
+ *   "https://api.github.com" → "api.github"
  *   "shopee.com.vn" → "shopee"
- *   "mail.google.com" → "google"
+ *   "mail.google.com" → "mail.google"
  *   "localhost:3000" → "localhost"
  */
 export function normalizeHostname(urlOrHostname: string): string | null {
@@ -28,13 +28,27 @@ export function normalizeHostname(urlOrHostname: string): string | null {
   if (result.isIp) return "local";
   if (result.hostname === "localhost") return "localhost";
 
-  // Public Suffix List parsing handles every registered TLD, compound suffixes
-  // (.com.au), private suffixes (.github.io), and punycode/IDN hostnames.
-  const aliasKey =
-    result.domainWithoutSuffix ||
-    (!result.hostname.includes(".") ? result.hostname : null);
+  // Preserve subdomains by removing only the public suffix
+  // Examples: api.github.com → api.github, mail.google.com → mail.google
+  let aliasKey: string | null = null;
 
-  return aliasKey?.replace(/[^a-z0-9]/g, "") || null;
+  // If we have a domain without suffix (like github when visiting github.com),
+  // use it directly. Otherwise, extract hostname minus the public suffix.
+  if (result.domainWithoutSuffix) {
+    // We have a proper domain (e.g., github.com → github)
+    aliasKey = result.domainWithoutSuffix.replace(/[^a-z0-9]/g, "");
+    // If there's a subdomain, prepend it (e.g., api.github.com → api.github)
+    // Multiple subdomains are preserved as one unit (e.g., api.v2.example.com → api.v2.example)
+    if (result.subdomain) {
+      const cleanSubdomain = result.subdomain.replace(/[^a-z0-9.]/g, "");
+      aliasKey = `${cleanSubdomain}.${aliasKey}`;
+    }
+  } else if (!result.hostname.includes(".")) {
+    // Single-label hostname (e.g., "localhost", "github")
+    aliasKey = result.hostname;
+  }
+
+  return aliasKey && aliasKey.length > 0 ? aliasKey : null;
 }
 
 /**
