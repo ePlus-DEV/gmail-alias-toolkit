@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  filterAliases,
-  validateEmail,
-} from "../../entrypoints/popup/utils";
+import { filterAliases, validateEmail } from "../../entrypoints/popup/utils";
 
 describe("PR review regressions", () => {
   it("accepts plus-addressed Gmail usernames", () => {
@@ -25,8 +22,6 @@ describe("PR review regressions", () => {
       sortBy: "recent",
     });
 
-    expect(result).toEqual([
-      { email: "user+work@gmail.com", timestamp: 2000 },
-    ]);
+    expect(result).toEqual([{ email: "user+work@gmail.com", timestamp: 2000 }]);
   });
 });

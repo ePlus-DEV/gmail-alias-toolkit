@@ -219,10 +219,7 @@ export function filterAliases(
 
   return aliases
     .filter((alias) => {
-      if (
-        opts.viewMode === "favorites" &&
-        !favoriteEmails.has(alias.email)
-      )
+      if (opts.viewMode === "favorites" && !favoriteEmails.has(alias.email))
         return false;
       if (
         normalizedSearchQuery &&
