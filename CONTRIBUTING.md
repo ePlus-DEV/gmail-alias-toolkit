@@ -171,21 +171,7 @@ FIREFOX_JWT_SECRET="..."
 2. **Run tests** — `yarn test` (all tests must pass)
 3. **Run quality checks** — `yarn compile` + DeepSource review
 4. **Update CHANGELOG.md** with release notes
-5. **Test submission** — Run the submission test script
-
-### Test Submission Readiness
-
-```bash
-./scripts/test-submission.sh
-```
-
-This script:
-
-- Validates `yarn` is installed
-- Checks `.env.submit` credentials are loaded
-- Builds the extension
-- Creates submission packages
-- Shows ready-to-submit commands
+5. **Verify credentials** — Ensure `.env.submit` has valid Chrome & Firefox credentials
 
 ### Build and Submit
 
