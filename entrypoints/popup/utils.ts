@@ -214,18 +214,19 @@ export function filterAliases(
     sortBy: "recent" | "alphabetical";
   },
 ): Array<{ email: string; timestamp: number }> {
+  const normalizedSearchQuery = opts.searchQuery.trim().toLowerCase();
+  const favoriteEmails = new Set(opts.favorites);
+
   return aliases
     .filter((alias) => {
       if (
         opts.viewMode === "favorites" &&
-        !opts.favorites.includes(alias.email)
+        !favoriteEmails.has(alias.email)
       )
         return false;
       if (
-        opts.searchQuery &&
-        !alias.email
-          .toLowerCase()
-          .includes(opts.searchQuery.trim().toLowerCase())
+        normalizedSearchQuery &&
+        !alias.email.toLowerCase().includes(normalizedSearchQuery)
       )
         return false;
       if (opts.filterTag !== "all") {
