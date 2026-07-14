@@ -1275,6 +1275,7 @@ function MockSettingsPanelTabs({
   );
 }
 
+/** Settings panel with tabs for general, accounts, and changelog. */
 function MockSettingsPanel({
   t,
   isDark,
@@ -2042,6 +2043,53 @@ function InlineDemoContainer({
   );
 }
 
+/** Content grid with workflow steps and demo for inline popup. */
+function InlinePopupGrid({
+  t,
+  activeTab,
+  setActiveTab,
+  hoveredAlias,
+  setHoveredAlias,
+  selectedAlias,
+  setSelectedAlias,
+  aliases,
+  inputValue,
+}: {
+  t: (typeof translations)[Locale];
+  activeTab: "suggestions" | "generate" | "history";
+  setActiveTab: (tab: "suggestions" | "generate" | "history") => void;
+  hoveredAlias: string;
+  setHoveredAlias: (alias: string) => void;
+  selectedAlias: string;
+  setSelectedAlias: (alias: string) => void;
+  aliases: string[];
+  inputValue: string;
+}) {
+  return (
+    <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(520px,1.28fr)]">
+          <InlineWorkflowSteps steps={t.inlineHelper.steps} />
+          <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
+            <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
+              <p className="text-sm font-black">{t.inlineHelper.demoTitle}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                {t.inlineHelper.previewHint}
+              </p>
+            </div>
+            <InlineDemoContainer
+              t={t}
+              inputValue={inputValue}
+              hoveredAlias={hoveredAlias}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              setHoveredAlias={setHoveredAlias}
+              setSelectedAlias={setSelectedAlias}
+              aliases={aliases}
+            />
+          </div>
+        </div>
+      );
+}
+
 /** Demonstrates the complete inline-helper workflow beside a website form. */
 function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] = useState<
@@ -2068,27 +2116,17 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
           title={t.inlineHelper.title}
           desc={t.inlineHelper.desc}
         />
-        <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(520px,1.28fr)]">
-          <InlineWorkflowSteps steps={t.inlineHelper.steps} />
-          <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
-            <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
-              <p className="text-sm font-black">{t.inlineHelper.demoTitle}</p>
-              <p className="mt-1 text-xs text-slate-400">
-                {t.inlineHelper.previewHint}
-              </p>
-            </div>
-            <InlineDemoContainer
-              t={t}
-              inputValue={inputValue}
-              hoveredAlias={hoveredAlias}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              setHoveredAlias={setHoveredAlias}
-              setSelectedAlias={setSelectedAlias}
-              aliases={aliases}
-            />
-          </div>
-        </div>
+        <InlinePopupGrid
+          t={t}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          hoveredAlias={hoveredAlias}
+          setHoveredAlias={setHoveredAlias}
+          selectedAlias={selectedAlias}
+          setSelectedAlias={setSelectedAlias}
+          aliases={aliases}
+          inputValue={inputValue}
+        />
       </div>
     </section>
   );

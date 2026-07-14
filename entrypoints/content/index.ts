@@ -902,6 +902,7 @@ function injectIcon(input: EmailInputElement) {
         | "above"
         | "below"
         | null,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       positionIconOutsideInput: (() => {}) as () => void,
     };
 
