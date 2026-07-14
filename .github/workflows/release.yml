@@ -227,6 +227,12 @@ jobs:
             --squash \
             --delete-branch
 
+      - name: Restore release tag workspace
+        run: |
+          set -euo pipefail
+          git reset --hard
+          git checkout --detach "$RELEASE_TAG"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
