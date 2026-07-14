@@ -39,9 +39,11 @@ interface EmailInputElement extends HTMLInputElement {
 
 let inlineDisabledForCurrentSite = false;
 
+/** Gets the normalized hostname for the current site. */
 const currentSiteHostname = () =>
   normalizeSiteHostname(window.location.hostname);
 
+/** Removes all inline helper icons and popups from the page. */
 function removeInlineHelpers() {
   document
     .querySelectorAll<EmailInputElement>("input")
@@ -51,6 +53,7 @@ function removeInlineHelpers() {
     .forEach((element) => element.remove());
 }
 
+/** Disables the inline helper for the current website and removes all helpers. */
 async function disableInlineForCurrentSite() {
   const site = currentSiteHostname();
   if (!site) return;
@@ -365,7 +368,9 @@ function createPopup(
   disableSiteBtn?.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
-    void disableInlineForCurrentSite();
+    disableInlineForCurrentSite().catch((error) => {
+      console.debug("Error disabling inline helper:", error);
+    });
   });
 
   // Handle tab switching
@@ -388,7 +393,9 @@ function createPopup(
         ?.classList.add("active");
 
       if (tabName === "history") {
-        void loadHistory();
+        loadHistory().catch((error) => {
+          console.debug("Error loading history:", error);
+        });
       }
     });
   });
@@ -437,7 +444,7 @@ function createPopup(
   }
 
   // Load the same custom tag presets used by the main popup.
-  void browser.storage.local.get("app_settings").then((settingsStorage) => {
+  browser.storage.local.get("app_settings").then((settingsStorage) => {
     const presetList = popup.querySelector(
       ".gmail-alias-preset-list",
     ) as HTMLElement | null;
@@ -709,7 +716,9 @@ function createPopup(
     }
   }
 
-  void loadHistory();
+  loadHistory().catch((error) => {
+    console.debug("Error loading history:", error);
+  });
 
   // Handle suggestion item hover for preview and click to select
   if (input) {
@@ -888,6 +897,8 @@ function injectIcon(input: EmailInputElement) {
     let activePopup: HTMLElement | null = null;
     let iconPlacementDirection: "left" | "right" | "above" | "below" | null =
       null;
+
+    /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
       window.removeEventListener("resize", positionIconOutsideInput);
       window.removeEventListener("scroll", positionIconOutsideInput, true);
@@ -898,6 +909,7 @@ function injectIcon(input: EmailInputElement) {
       input.__gmailAliasCleanup = undefined;
     };
 
+    /** Checks if the input field is within the viewport bounds. */
     const isInputInViewport = (rect: DOMRect) =>
       rect.width > 0 &&
       rect.height > 0 &&
@@ -906,6 +918,7 @@ function injectIcon(input: EmailInputElement) {
       rect.top < window.innerHeight &&
       rect.left < window.innerWidth;
 
+    /** Updates the icon's directional pointer class to match placement. */
     const setIconPointerDirection = (
       direction: "left" | "right" | "above" | "below",
     ) => {
@@ -918,6 +931,7 @@ function injectIcon(input: EmailInputElement) {
       iconContainer.classList.add(`gmail-alias-icon-${direction}`);
     };
 
+    /** Determines the best horizontal side (left/right) for the icon and popup. */
     const getPreferredHorizontalSide = (rect: DOMRect) => {
       const viewportPadding = 8;
       const inputGap = 6;
@@ -1099,6 +1113,7 @@ function injectIcon(input: EmailInputElement) {
       iconContainer.style.display = "flex";
       const iconSize = 32;
       const gap = 6;
+      /** Clamps the left position to keep the icon within viewport bounds. */
       const clampLeft = (left: number) =>
         Math.min(window.innerWidth - iconSize - 4, Math.max(4, left));
       const centeredTop = rect.top + (rect.height - iconSize) / 2;

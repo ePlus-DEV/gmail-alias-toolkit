@@ -1283,46 +1283,46 @@ function MockSettingsPanel({
       className={`absolute inset-3 z-30 flex overflow-hidden rounded-3xl border shadow-2xl ${panel}`}
     >
       <div className="flex min-h-0 w-full flex-col">
-        <div
-          className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+      <div
+        className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+      >
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
+            aria-label="Back"
+          >
+            <ArrowRight className="h-4 w-4 rotate-180" />
+          </button>
+          <h3 className="text-sm font-black">{t.mock.settings}</h3>
+        </div>
+        <span
+          className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
         >
-          <div className="flex items-center gap-2">
+          v1.3.0
+        </span>
+      </div>
+      <div
+        className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+      >
+        <div
+          className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
+        >
+          {(["general", "accounts", "changelog"] as const).map((id) => (
             <button
+              key={id}
               type="button"
-              onClick={onClose}
-              className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
-              aria-label="Back"
+              onClick={() => setTab(id)}
+              className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
             >
-              <ArrowRight className="h-4 w-4 rotate-180" />
+              {labels[id]}
             </button>
-            <h3 className="text-sm font-black">{t.mock.settings}</h3>
-          </div>
-          <span
-            className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
-          >
-            v1.3.0
-          </span>
+          ))}
         </div>
-        <div
-          className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
-        >
-          <div
-            className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
-          >
-            {(["general", "accounts", "changelog"] as const).map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setTab(id)}
-                className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
-              >
-                {labels[id]}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
-          {tab === "general" ? (
+      </div>
+      <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
+        {tab === "general" ? (
             <div
               className={`divide-y overflow-hidden rounded-2xl border ${panel}`}
             >
@@ -1495,6 +1495,7 @@ function MockSettingsPanel({
   );
 }
 
+/** Renders a mock settings dropdown select for the extension settings demo. */
 function MockSettingSelect({
   label,
   options,
@@ -1518,6 +1519,7 @@ function MockSettingSelect({
   );
 }
 
+/** Renders a mock toggle switch for the extension settings demo. */
 function MockSwitch({
   enabled,
   onChange,
@@ -1866,6 +1868,42 @@ function MockFooter({
   );
 }
 
+/** Renders the input form for the inline popup demo. */
+function InlineFormInput({
+  inputValue,
+  t,
+}: {
+  inputValue: string;
+  t: (typeof translations)[Locale];
+}) {
+  return (
+    <>
+      <label className="mb-2 block text-sm font-black text-slate-800">
+        {t.inlineHelper.email}
+      </label>
+      <div className="flex items-stretch gap-2">
+        <div
+          className={`flex h-12 min-w-0 flex-1 items-center rounded-xl border bg-white px-4 transition ${
+            inputValue
+              ? "border-emerald-400 bg-emerald-50 text-emerald-950 ring-1 ring-emerald-400"
+              : "border-slate-300 text-slate-400"
+          }`}
+        >
+          <span className="min-w-0 truncate font-mono text-sm">
+            {inputValue || t.inlineHelper.email}
+          </span>
+        </div>
+        <button
+          type="button"
+          className="h-12 shrink-0 rounded-xl bg-slate-950 px-4 text-xs font-black text-white"
+        >
+          Submit
+        </button>
+      </div>
+    </>
+  );
+}
+
 /** Demonstrates the complete inline-helper workflow beside a website form. */
 function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] = useState<
@@ -1902,28 +1940,7 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
               </p>
             </div>
             <div className="relative min-h-[610px] bg-[linear-gradient(180deg,#fff,#f8fafc)] p-5 md:p-8">
-              <label className="mb-2 block text-sm font-black text-slate-800">
-                {t.inlineHelper.email}
-              </label>
-              <div className="flex items-stretch gap-2">
-                <div
-                  className={`flex h-12 min-w-0 flex-1 items-center rounded-xl border bg-white px-4 transition ${
-                    inputValue
-                      ? "border-emerald-400 bg-emerald-50 text-emerald-950 ring-1 ring-emerald-400"
-                      : "border-slate-300 text-slate-400"
-                  }`}
-                >
-                  <span className="min-w-0 truncate font-mono text-sm">
-                    {inputValue || t.inlineHelper.email}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  className="h-12 shrink-0 rounded-xl bg-slate-950 px-4 text-xs font-black text-white"
-                >
-                  Submit
-                </button>
-              </div>
+              <InlineFormInput inputValue={inputValue} t={t} />
 
               <motion.div
                 animate={{ y: hoveredAlias ? -2 : 0 }}
@@ -1999,6 +2016,7 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   );
 }
 
+/** Renders numbered workflow steps for the inline popup demo section. */
 function InlineWorkflowSteps({ steps }: { steps: readonly string[] }) {
   return (
     <div className="space-y-3">
@@ -2023,6 +2041,7 @@ function InlineWorkflowSteps({ steps }: { steps: readonly string[] }) {
   );
 }
 
+/** Renders the header for the inline popup demo with controls. */
 function InlineDemoHeader() {
   return (
     <div className="flex h-12 items-center justify-between border-b border-slate-200 bg-slate-50 px-3">
@@ -2040,6 +2059,7 @@ function InlineDemoHeader() {
   );
 }
 
+/** Renders the suggested aliases panel for the inline popup demo. */
 function InlineSuggestions({
   aliases,
   label,
@@ -2076,6 +2096,7 @@ function InlineSuggestions({
   );
 }
 
+/** Renders the generate tab demo for the inline popup section. */
 function InlineGenerateDemo({
   t,
   aliases,
@@ -2124,6 +2145,7 @@ function InlineGenerateDemo({
   );
 }
 
+/** Renders the history tab demo for the inline popup section. */
 function InlineHistoryDemo({
   t,
   aliases,
