@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: 24.x
           cache: yarn
+          cache-dependency-path: yarn.lock
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
@@ -62,3 +63,6 @@ jobs:
 
       - name: Build extension
         run: yarn build
+
+      - name: Build website
+        run: yarn workspace gmail-alias-toolkit-web build
