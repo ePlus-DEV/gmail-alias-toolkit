@@ -33,6 +33,7 @@ declare module "lucide-react" {
   export const Shuffle: LucideIcon;
   export const Sparkles: LucideIcon;
   export const Star: LucideIcon;
+  export const Sun: LucideIcon;
   export const Tags: LucideIcon;
   export const X: LucideIcon;
   export const Zap: LucideIcon;

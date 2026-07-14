@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import extensionIconUrl from "../../assets/icon.png?url";
+import { ThemeToggle } from "src/components/motion/theme-toggle";
 import {
   ArrowRight,
   AtSign,
@@ -1176,54 +1177,124 @@ function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
         </div>
       </div>
       {settingsOpen ? (
-        <div
-          className={`absolute inset-3 z-30 rounded-3xl border p-4 shadow-2xl ${
-            isDark
-              ? "border-slate-700 bg-slate-900 text-white"
-              : "border-slate-200 bg-white text-slate-900"
-          }`}
-        >
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-            <div className="flex items-center gap-2 text-sm font-black">
-              <Settings className="h-4 w-4 text-blue-600" /> {t.mock.settings}
-            </div>
-            <button
-              type="button"
-              aria-label="Close settings"
-              onClick={() => setSettingsOpen(false)}
-              className="grid h-8 w-8 place-items-center rounded-xl text-slate-400 hover:bg-slate-100"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-          <button
-            type="button"
-            onClick={() => setIsDark((value) => !value)}
-            className={`mt-4 flex w-full items-center justify-between rounded-2xl border p-3 text-left text-sm font-bold ${
-              isDark
-                ? "border-slate-700 bg-slate-800"
-                : "border-slate-200 bg-slate-50"
-            }`}
-          >
-            <span className="flex items-center gap-2">
-              <Moon className="h-4 w-4 text-blue-600" /> Dark mode
-            </span>
-            <span
-              className={`relative h-6 w-11 rounded-full transition ${isDark ? "bg-blue-600" : "bg-slate-300"}`}
-            >
-              <span
-                className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${isDark ? "left-6" : "left-1"}`}
-              />
-            </span>
-          </button>
-          <div className={`mt-3 rounded-2xl border p-3 text-xs ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}>
-            <p className="font-black">{t.mock.activeEmail}</p>
-            <p className="mt-1 text-slate-500">{activeEmail}</p>
-          </div>
-        </div>
+        <MockSettingsPanel
+          t={t}
+          isDark={isDark}
+          activeEmail={activeEmail}
+          onClose={() => setSettingsOpen(false)}
+        />
       ) : null}
     </motion.div>
   );
+}
+
+/** Interactive landing-page version of the extension's Settings screen. */
+function MockSettingsPanel({ t, isDark, activeEmail, onClose }: {
+  t: (typeof translations)[Locale];
+  isDark: boolean;
+  activeEmail: string;
+  onClose: () => void;
+}) {
+  const english = t.mock.settings === "Settings";
+  const labels = english
+    ? {
+        general: "General", accounts: "Accounts", changelog: "Changelog",
+        appearance: "Appearance & display", inline: "Inline helper disabled sites",
+        generation: "Alias generation", presets: "Custom presets", data: "Data management",
+        badge: "Badge counter", notifications: "Copy notifications", format: "Random alias format",
+        limit: "Auto-save limit", enable: "Enable", export: "Export", import: "Import", clear: "Clear",
+        add: "Add account", current: "Active",
+      }
+    : {
+        general: "Chung", accounts: "Tài khoản", changelog: "Thay đổi",
+        appearance: "Giao diện & hiển thị", inline: "Website đã tắt Inline Helper",
+        generation: "Tạo alias", presets: "Preset tùy chỉnh", data: "Quản lý dữ liệu",
+        badge: "Bộ đếm trên badge", notifications: "Thông báo khi sao chép", format: "Định dạng alias ngẫu nhiên",
+        limit: "Giới hạn tự lưu", enable: "Bật lại", export: "Xuất", import: "Nhập", clear: "Xóa",
+        add: "Thêm tài khoản", current: "Đang dùng",
+      };
+  const [tab, setTab] = useState<"general" | "accounts" | "changelog">("general");
+  const [section, setSection] = useState("appearance");
+  const [notifications, setNotifications] = useState(true);
+  const [disabledSites, setDisabledSites] = useState(["voidzero.dev"]);
+  const panel = isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white";
+  const muted = isDark ? "bg-slate-950/70" : "bg-slate-50";
+  const sections = [
+    ["appearance", labels.appearance],
+    ["inline", labels.inline],
+    ["generation", labels.generation],
+    ["presets", labels.presets],
+    ["data", labels.data],
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={`absolute inset-3 z-30 flex overflow-hidden rounded-3xl border shadow-2xl ${panel}`}
+    >
+      <div className="flex min-h-0 w-full flex-col">
+        <div className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={onClose} className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`} aria-label="Back">
+              <ArrowRight className="h-4 w-4 rotate-180" />
+            </button>
+            <h3 className="text-sm font-black">{t.mock.settings}</h3>
+          </div>
+          <span className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}>v1.3.0</span>
+        </div>
+        <div className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}>
+          <div className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}>
+            {(["general", "accounts", "changelog"] as const).map((id) => (
+              <button key={id} type="button" onClick={() => setTab(id)} className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow" : "text-slate-500"}`}>
+                {labels[id]}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
+          {tab === "general" ? (
+            <div className={`divide-y overflow-hidden rounded-2xl border ${panel}`}>
+              {sections.map(([id, label]) => (
+                <div key={id}>
+                  <button type="button" onClick={() => setSection(section === id ? "" : id)} className={`flex h-12 w-full items-center justify-between px-3 text-left text-xs font-black ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-50"}`}>
+                    <span className="flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-lg bg-blue-50 text-blue-600"><Settings className="h-3.5 w-3.5" /></span>{label}</span>
+                    <ChevronDown className={`h-4 w-4 transition ${section === id ? "rotate-180" : ""}`} />
+                  </button>
+                  {section === id ? (
+                    <div className={`border-t p-3 text-xs ${isDark ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}>
+                      {id === "appearance" ? (
+                        <div className="space-y-3">
+                          <MockSettingSelect label={labels.badge} options={["Total generated (all time)", "Created today", "This week", "None (hidden)"]} isDark={isDark} />
+                          <div className="flex items-center justify-between border-t border-slate-200 pt-3"><span className="font-bold">{labels.notifications}</span><MockSwitch enabled={notifications} onChange={setNotifications} /></div>
+                        </div>
+                      ) : null}
+                      {id === "inline" ? (
+                        disabledSites.length ? disabledSites.map((site) => <div key={site} className={`flex items-center justify-between rounded-xl border px-3 py-2 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}><span className="font-mono">{site}</span><button type="button" onClick={() => setDisabledSites([])} className="font-bold text-blue-600">{labels.enable}</button></div>) : <p className="rounded-xl border border-dashed p-3 text-center text-slate-500">No disabled sites</p>
+                      ) : null}
+                      {id === "generation" ? <div className="space-y-3"><MockSettingSelect label={labels.format} options={["Private Mail", "Random Characters", "Random Words", "Timestamp"]} isDark={isDark} /><MockSettingSelect label={labels.limit} options={["20 aliases", "50 aliases", "100 aliases", "200 aliases"]} isDark={isDark} /></div> : null}
+                      {id === "presets" ? <div className="space-y-2">{["Shopping +shopping", "Development +dev"].map((item) => <div key={item} className={`rounded-xl border px-3 py-2 font-mono ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-50"}`}>{item}</div>)}</div> : null}
+                      {id === "data" ? <div className="grid grid-cols-3 gap-2">{[labels.export, labels.import, labels.clear].map((item) => <button type="button" key={item} className={`rounded-xl border px-2 py-2 font-bold ${isDark ? "border-slate-700 hover:bg-slate-800" : "border-slate-200 hover:bg-slate-50"}`}>{item}</button>)}</div> : null}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {tab === "accounts" ? <div className="space-y-2"><button type="button" className="w-full rounded-xl bg-blue-600 py-2.5 text-xs font-black text-white">+ {labels.add}</button>{[activeEmail, "work@gmail.com"].map((email, index) => <div key={email} className={`flex items-center gap-2 rounded-xl border p-3 ${panel}`}><Mail className="h-4 w-4 text-blue-600" /><span className="min-w-0 flex-1 truncate text-xs font-bold">{email}</span>{index === 0 ? <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600">{labels.current}</span> : null}</div>)}</div> : null}
+          {tab === "changelog" ? <div className={`rounded-2xl border p-4 ${panel}`}><p className="text-sm font-black">Version 1.3.0</p><p className="mt-1 text-[11px] text-slate-500">2026-07-13</p><ul className="mt-3 space-y-2 text-xs text-slate-500"><li>• Inline helper on every domain</li><li>• Interactive Generate and History</li><li>• Unified BeUI styling and dark mode</li></ul></div> : null}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function MockSettingSelect({ label, options, isDark }: { label: string; options: string[]; isDark: boolean }) {
+  return <label className="block font-bold"><span className="mb-1.5 block">{label}</span><select className={`h-10 w-full rounded-xl border px-3 text-xs ${isDark ? "border-slate-700 bg-slate-800 text-white" : "border-slate-200 bg-white text-slate-800"}`}>{options.map((option) => <option key={option}>{option}</option>)}</select></label>;
+}
+
+function MockSwitch({ enabled, onChange }: { enabled: boolean; onChange: (enabled: boolean) => void }) {
+  return <button type="button" aria-pressed={enabled} onClick={() => onChange(!enabled)} className={`relative h-6 w-11 rounded-full transition ${enabled ? "bg-blue-600" : "bg-slate-300"}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${enabled ? "left-6" : "left-1"}`} /></button>;
 }
 
 /** Renders the header inside the extension popup mockup. */
@@ -1255,9 +1326,7 @@ function MockHeader({
         </div>
       </div>
       <div className="flex gap-1">
-        <button type="button" aria-label="Toggle dark mode" aria-pressed={isDark} onClick={onToggleDark} className="grid h-9 w-9 place-items-center rounded-2xl text-blue-50 hover:bg-white/15">
-          <Moon className="h-4 w-4" />
-        </button>
+        <ThemeToggle checked={isDark} onCheckedChange={() => onToggleDark()} variant="circle" start="center" className="h-9 w-9 rounded-2xl text-blue-50 hover:bg-white/15" iconClassName="h-4 w-4" />
         <button type="button" aria-label={t.mock.settings} onClick={onOpenSettings} className="grid h-9 w-9 place-items-center rounded-2xl text-blue-50 hover:bg-white/15">
           <Settings className="h-4 w-4" />
         </button>
