@@ -463,15 +463,20 @@ export default defineBackground(() => {
   }
 
   // Helper function to save email to history and stats
-  async function saveToHistory(email: string, maxRecent: number) {
+  async function saveToHistory(
+    email: string,
+    maxRecent: number,
+    accountEmail?: string,
+  ) {
     // Get active account
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
     ])) as { email_accounts?: EmailAccount[]; base_email?: string };
-    let activeEmail = "your.email@gmail.com";
+    let activeEmail = accountEmail?.trim() || "your.email@gmail.com";
 
     if (
+      !accountEmail &&
       accountResult.email_accounts &&
       Array.isArray(accountResult.email_accounts)
     ) {
@@ -481,7 +486,7 @@ export default defineBackground(() => {
       if (activeAccount) {
         activeEmail = activeAccount.email;
       }
-    } else if (accountResult.base_email) {
+    } else if (!accountEmail && accountResult.base_email) {
       activeEmail = accountResult.base_email;
     }
 
@@ -621,6 +626,16 @@ export default defineBackground(() => {
             message.email,
             message.normalizedHostname,
             message.alias,
+          );
+          sendResponse({ success: true });
+        } else if (message.action === "saveAliasToHistory") {
+          const settingsResult = (await browser.storage.local.get(
+            "app_settings",
+          )) as { app_settings?: AppSettings };
+          await saveToHistory(
+            message.alias,
+            settingsResult.app_settings?.maxHistory || 20,
+            message.accountEmail,
           );
           sendResponse({ success: true });
         }

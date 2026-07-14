@@ -85,7 +85,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const fieldRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const mirrorRef = useRef<HTMLSpanElement>(null);
-  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+  // Keep the forwarded handle stable. Recreating it on every render causes
+  // callback refs that focus on mount to steal focus from sibling inputs.
+  useImperativeHandle(
+    ref,
+    () => inputRef.current as HTMLInputElement,
+    [],
+  );
 
   const hasError = Boolean(error);
   const errorMessage = typeof error === "string" ? error : null;

@@ -36,6 +36,36 @@ interface SuggestionData {
   website: string;
 }
 
+interface StoredAccountData {
+  email_accounts?: Array<{ isActive?: boolean; email: string }>;
+  base_email?: string;
+}
+
+/** Removes accidental text appended after a configured Gmail domain. */
+function normalizeConfiguredEmail(email: string): string {
+  const trimmed = email.trim();
+  const gmailMatch = trimmed.match(
+    /^([^@\s]+)@(gmail\.com|googlemail\.com)(?:[^@\s]+)?$/i,
+  );
+
+  return gmailMatch
+    ? `${gmailMatch[1]}@${gmailMatch[2].toLowerCase()}`
+    : trimmed;
+}
+
+/** Returns the configured active account with safe legacy fallbacks. */
+function resolveActiveEmail(accountData: StoredAccountData): string {
+  const accounts = Array.isArray(accountData.email_accounts)
+    ? accountData.email_accounts
+    : [];
+  return normalizeConfiguredEmail(
+    accounts.find((account) => account.isActive)?.email ||
+      accountData.base_email ||
+      accounts[0]?.email ||
+      "your.email@gmail.com",
+  );
+}
+
 /** Fetch suggestion data for current page. */
 async function fetchSuggestions(): Promise<SuggestionData | null> {
   try {
@@ -49,22 +79,8 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
-    ])) as { email_accounts?: Array<{ isActive?: boolean; email: string }> };
-    let email = "your.email@gmail.com";
-
-    if (
-      accountResult.email_accounts &&
-      Array.isArray(accountResult.email_accounts)
-    ) {
-      const activeAccount = accountResult.email_accounts.find(
-        (acc) => acc.isActive,
-      );
-      if (activeAccount) {
-        email = activeAccount.email;
-      }
-    } else if (accountResult.base_email) {
-      email = accountResult.base_email;
-    }
+    ])) as StoredAccountData;
+    const email = resolveActiveEmail(accountResult);
 
     const previousAlias = await getPreviousAliasForWebsite(
       email,
@@ -215,6 +231,10 @@ function createPopup(
       popup
         .querySelector(`[data-tab-content="${tabName}"]`)
         ?.classList.add("active");
+
+      if (tabName === "history") {
+        void loadHistory();
+      }
     });
   });
 
@@ -227,17 +247,17 @@ function createPopup(
   ) as HTMLInputElement;
   if (generateBtn && generateInput) {
     generateBtn.addEventListener("click", () => {
-      const alias = generateInput.value.trim();
-      if (alias) {
-        onSelect(alias);
+      const value = generateInput.value.trim();
+      if (value) {
+        onSelect(createCustomAlias(data.activeEmail, value));
         popup.remove();
       }
     });
     generateInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
-        const alias = generateInput.value.trim();
-        if (alias) {
-          onSelect(alias);
+        const value = generateInput.value.trim();
+        if (value) {
+          onSelect(createCustomAlias(data.activeEmail, value));
           popup.remove();
         }
       }
@@ -264,43 +284,28 @@ function createPopup(
     });
   }
 
-  // Populate history tab
-  (async () => {
+  /** Loads the latest account history whenever the popup or History tab opens. */
+  async function loadHistory() {
     const historyList = popup.querySelector(
       ".gmail-alias-history-list",
     ) as HTMLElement;
     if (!historyList) return;
 
     try {
-      // Get active email to build history key
-      const accountResult = (await browser.storage.local.get([
-        "email_accounts",
-        "base_email",
-      ])) as { email_accounts?: Array<{ isActive?: boolean; email: string }> };
-      let activeEmail = "your.email@gmail.com";
+      // Use the same account that was used to generate this popup's aliases.
+      const historyKey = `gmail_alias_recent_${encodeURIComponent(data.activeEmail.trim().toLowerCase())}`;
 
-      if (
-        accountResult.email_accounts &&
-        Array.isArray(accountResult.email_accounts)
-      ) {
-        const activeAccount = accountResult.email_accounts.find(
-          (acc) => acc.isActive,
-        );
-        if (activeAccount) {
-          activeEmail = activeAccount.email;
-        }
-      } else if (accountResult.base_email) {
-        activeEmail = accountResult.base_email;
-      }
-
-      // Build history key (same format as background.ts)
-      const historyKey = `gmail_alias_recent_${encodeURIComponent(activeEmail.trim().toLowerCase())}`;
-
-      const storage = (await browser.storage.local.get(historyKey)) as Record<
+      const storage = (await browser.storage.local.get([
+        historyKey,
+        "gmail_alias_recent",
+      ])) as Record<
         string,
         Array<{ email: string; timestamp: number }> | undefined
       >;
-      const history = (storage[historyKey] || []) as Array<{
+      // Older installations may still have history under the global key.
+      const history = (storage[historyKey] ??
+        storage.gmail_alias_recent ??
+        []) as Array<{
         email: string;
         timestamp: number;
       }>;
@@ -339,7 +344,9 @@ function createPopup(
       historyList.innerHTML =
         '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">Error loading history</div>';
     }
-  })();
+  }
+
+  void loadHistory();
 
   // Handle suggestion item hover for preview and click to select
   if (input) {
@@ -500,12 +507,24 @@ function injectIcon(input: EmailInputElement) {
           fillInput(input, alias);
           input.classList.remove("gmail-alias-input-preview");
 
-          if (data.website) {
-            try {
-              await saveWebsiteAlias(data.activeEmail, data.website, alias);
-            } catch (error) {
-              console.debug("Error saving website alias:", error);
+          try {
+            const tasks: Promise<unknown>[] = [
+              browser.runtime.sendMessage({
+                action: "saveAliasToHistory",
+                alias,
+                accountEmail: data.activeEmail,
+              }),
+            ];
+
+            if (data.website) {
+              tasks.push(
+                saveWebsiteAlias(data.activeEmail, data.website, alias),
+              );
             }
+
+            await Promise.all(tasks);
+          } catch (error) {
+            console.debug("Error saving selected alias:", error);
           }
         },
         input,
@@ -610,6 +629,16 @@ function generateRandomString(format = "private-mail"): string {
   return result;
 }
 
+/** Converts a custom tag into an alias, while preserving a complete email. */
+function createCustomAlias(baseEmail: string, value: string): string {
+  if (value.includes("@")) return value;
+
+  const atIndex = baseEmail.lastIndexOf("@");
+  if (atIndex <= 0) return value;
+
+  return `${baseEmail.slice(0, atIndex)}+${value}${baseEmail.slice(atIndex)}`;
+}
+
 /** Fill email input with alias (supports controlled inputs). */
 function fillInput(input: EmailInputElement, alias: string) {
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
@@ -623,7 +652,7 @@ function fillInput(input: EmailInputElement, alias: string) {
     input.value = alias;
   }
 
-  ["input", "change", "blur"].forEach((eventType) => {
+  ["input", "change"].forEach((eventType) => {
     input.dispatchEvent(
       new Event(eventType, { bubbles: true, composed: true }),
     );

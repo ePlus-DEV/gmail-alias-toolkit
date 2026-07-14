@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
 import { Tooltip } from "src/components/motion/tooltip";
 import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
-import { getAccountStorageKey } from "../utils";
+import { getAccountStorageKey, validateEmail } from "../utils";
 import { t } from "../../../lib/i18n";
 
 interface SettingsProps {
@@ -849,11 +849,6 @@ export default function Settings({
 
   /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
-    if (emailAccounts.length === 1) {
-      showToast(t("cannotDeleteLastAccountTitle"));
-      return;
-    }
-
     const confirmMsg = t("deleteAccountMessage", [
       account.label,
       account.email,
@@ -875,8 +870,10 @@ export default function Settings({
     );
     const statsKey = getAccountStorageKey(account.email, "alias_stats");
     const favoritesKey = getAccountStorageKey(account.email, "favorites");
-
-    await browser.storage.local.remove([historyKey, statsKey, favoritesKey]);
+    const websiteAliasesKey = getAccountStorageKey(
+      account.email,
+      "website_alias_map",
+    );
 
     // Remove from accounts list
     let updated = emailAccounts.filter((acc) => acc.id !== account.id);
@@ -890,9 +887,22 @@ export default function Settings({
       await browser.storage.local.set({ base_email: updated[0].email });
     }
 
+    await browser.storage.local.remove([
+      historyKey,
+      statsKey,
+      favoritesKey,
+      websiteAliasesKey,
+      ...(updated.length === 0
+        ? ["base_email", "gmail_alias_recent", "alias_stats", "favorites"]
+        : []),
+    ]);
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
     showToast(t("toastAccountDeleted"));
+
+    if (updated.length === 0) {
+      onClose();
+    }
   };
 
   /** Enters edit mode for the given account. */
@@ -916,7 +926,12 @@ export default function Settings({
       return;
     }
 
-    if (!editingEmail.trim() || !editingEmail.includes("@")) {
+    let newEmail = editingEmail.trim();
+    if (newEmail && !newEmail.includes("@")) {
+      newEmail += "@gmail.com";
+    }
+
+    if (!validateEmail(newEmail).isValid) {
       showToast(t("errorInvalidEmail"));
       return;
     }
@@ -925,7 +940,6 @@ export default function Settings({
     if (!account) return;
 
     const oldEmail = account.email;
-    const newEmail = editingEmail.trim();
 
     // Check if email changed
     if (oldEmail !== newEmail) {
@@ -957,6 +971,10 @@ export default function Settings({
       );
       const oldStatsKey = getAccountStorageKey(oldEmail, "alias_stats");
       const oldFavoritesKey = getAccountStorageKey(oldEmail, "favorites");
+      const oldWebsiteAliasesKey = getAccountStorageKey(
+        oldEmail,
+        "website_alias_map",
+      );
 
       const newHistoryKey = getAccountStorageKey(
         newEmail,
@@ -964,12 +982,17 @@ export default function Settings({
       );
       const newStatsKey = getAccountStorageKey(newEmail, "alias_stats");
       const newFavoritesKey = getAccountStorageKey(newEmail, "favorites");
+      const newWebsiteAliasesKey = getAccountStorageKey(
+        newEmail,
+        "website_alias_map",
+      );
 
       // Get old data
       const oldData = await browser.storage.local.get([
         oldHistoryKey,
         oldStatsKey,
         oldFavoritesKey,
+        oldWebsiteAliasesKey,
       ]);
 
       // Save to new keys
@@ -977,6 +1000,7 @@ export default function Settings({
         [newHistoryKey]: oldData[oldHistoryKey] || [],
         [newStatsKey]: oldData[oldStatsKey] || { total: 0, tags: {} },
         [newFavoritesKey]: oldData[oldFavoritesKey] || [],
+        [newWebsiteAliasesKey]: oldData[oldWebsiteAliasesKey] || {},
       });
 
       // Delete old keys
@@ -984,6 +1008,7 @@ export default function Settings({
         oldHistoryKey,
         oldStatsKey,
         oldFavoritesKey,
+        oldWebsiteAliasesKey,
       ]);
 
       // Update base_email if this is the active account
@@ -995,7 +1020,7 @@ export default function Settings({
     // Update account in list
     const updated = emailAccounts.map((acc) =>
       acc.id === accountId
-        ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() }
+        ? { ...acc, label: editingLabel.trim(), email: newEmail }
         : acc,
     );
 
@@ -1566,11 +1591,7 @@ export default function Settings({
                               </Button>
                             </Tooltip>
                             <Tooltip
-                              content={
-                                emailAccounts.length === 1
-                                  ? t("cannotDeleteLastAccountTitle")
-                                  : t("deleteThisAccount")
-                              }
+                              content={t("deleteThisAccount")}
                               side="left"
                             >
                               <Button
@@ -1579,13 +1600,8 @@ export default function Settings({
                                   e.stopPropagation();
                                   handleDeleteAccount(account);
                                 }}
-                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                                aria-label={
-                                  emailAccounts.length === 1
-                                    ? t("cannotDeleteLastAccountTitle")
-                                    : t("deleteThisAccount")
-                                }
-                                disabled={emailAccounts.length === 1}
+                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors"
+                                aria-label={t("deleteThisAccount")}
                               >
                                 <svg
                                   className="w-4 h-4"
