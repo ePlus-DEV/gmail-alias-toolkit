@@ -898,6 +898,9 @@ function injectIcon(input: EmailInputElement) {
     let iconPlacementDirection: "left" | "right" | "above" | "below" | null =
       null;
 
+    /** Anchors near the input while avoiding password-manager/site controls. */
+    let positionIconOutsideInput: () => void;
+
     /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
       window.removeEventListener("resize", positionIconOutsideInput);
@@ -1095,8 +1098,8 @@ function injectIcon(input: EmailInputElement) {
       popup.style.zIndex = "999999";
     };
 
-    /** Anchors near the input while avoiding password-manager/site controls. */
-    const positionIconOutsideInput = () => {
+    // Assign the positioning function (declared earlier to fix forward reference)
+    positionIconOutsideInput = () => {
       if (!input.isConnected) {
         cleanupPositioning();
         return;

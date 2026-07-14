@@ -6,10 +6,19 @@ import {
   generateSuggestionsForWebsite,
   clearWebsiteAliasMap,
 } from "../../src/services/websiteAliasService";
-import * as hostnameNormalizer from "../../src/utils/hostnameNormalizer";
 
 // Mock the browser storage API
 const mockStorageData: Record<string, unknown> = {};
+
+type MockBrowser = {
+  storage: {
+    local: {
+      get: ReturnType<typeof vi.fn>;
+      set: ReturnType<typeof vi.fn>;
+      remove: ReturnType<typeof vi.fn>;
+    };
+  };
+};
 
 global.browser = {
   storage: {
@@ -33,7 +42,7 @@ global.browser = {
       }),
     },
   },
-} as any;
+} as unknown as MockBrowser;
 
 // Mock the getAccountStorageKey utility
 vi.mock("../../entrypoints/popup/utils", () => ({
