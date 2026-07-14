@@ -205,9 +205,13 @@ function createPopup(
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
       <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
-      <div style="display: flex; align-items: center; gap: 4px;">
-        <button class="gmail-alias-popup-disable-site" type="button" title="${labels.disableInlineForSite}" aria-label="${labels.disableInlineForSite}">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2v10m6.36-6.36a9 9 0 1 1-12.72 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <div class="gmail-alias-popup-header-actions" style="display: flex; align-items: center; gap: 6px;">
+        <button class="gmail-alias-popup-disable-site" type="button" data-tooltip="${labels.disableInlineForSite}" aria-label="${labels.disableInlineForSite}">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="2.5" />
+            <path d="M4 4l16 16" />
+          </svg>
         </button>
         <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="${labels.close}">✕</button>
       </div>
