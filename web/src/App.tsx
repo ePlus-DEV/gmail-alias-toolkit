@@ -2050,7 +2050,6 @@ function InlinePopupGrid({
   setActiveTab,
   hoveredAlias,
   setHoveredAlias,
-  selectedAlias,
   setSelectedAlias,
   aliases,
   inputValue,
@@ -2060,7 +2059,6 @@ function InlinePopupGrid({
   setActiveTab: (tab: "suggestions" | "generate" | "history") => void;
   hoveredAlias: string;
   setHoveredAlias: (alias: string) => void;
-  selectedAlias: string;
   setSelectedAlias: (alias: string) => void;
   aliases: string[];
   inputValue: string;
@@ -2122,7 +2120,6 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
           setActiveTab={setActiveTab}
           hoveredAlias={hoveredAlias}
           setHoveredAlias={setHoveredAlias}
-          selectedAlias={selectedAlias}
           setSelectedAlias={setSelectedAlias}
           aliases={aliases}
           inputValue={inputValue}
