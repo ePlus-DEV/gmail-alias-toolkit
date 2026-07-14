@@ -30,100 +30,109 @@ jobs:
         shell: bash
         run: |
           python <<'PY'
+          import re
           from pathlib import Path
-
-          def replace_once(path: str, old: str, new: str) -> None:
-              file_path = Path(path)
-              text = file_path.read_text(encoding="utf-8")
-              count = text.count(old)
-              if count != 1:
-                  raise SystemExit(
-                      f"Expected exactly one occurrence in {path}, found {count}: {old[:100]!r}"
-                  )
-              file_path.write_text(text.replace(old, new, 1), encoding="utf-8")
 
           background_path = Path("entrypoints/background.ts")
           background = background_path.read_text(encoding="utf-8")
+
           if "const dynamicContextMenus" not in background:
-              replace_once(
-                  "entrypoints/background.ts",
-                  '''  // Update website suggestions when context menu is shown
-            browser.contextMenus.onShown?.addListener?.(async (info) => {''',
-                  '''  // Chromium exposes dynamic context-menu hooks that are missing from
-            // some WebExtension type definitions used by WXT.
-            const dynamicContextMenus = browser.contextMenus as typeof browser.contextMenus & {
-              onShown?: {
-                addListener(
-                  listener: (info: { pageUrl?: string }) => void | Promise<void>,
-                ): void;
-              };
-              refresh?: () => void | Promise<void>;
+              old_listener = "browser.contextMenus.onShown?.addListener?.(async (info) => {"
+              if background.count(old_listener) != 1:
+                  raise SystemExit(
+                      f"Expected one contextMenus.onShown listener, found {background.count(old_listener)}"
+                  )
+
+              listener_replacement = '''const dynamicContextMenus = browser.contextMenus as typeof browser.contextMenus & {
+            onShown?: {
+              addListener(
+                listener: (info: { pageUrl?: string }) => void | Promise<void>,
+              ): void;
             };
+            refresh?: () => void | Promise<void>;
+          };
 
-            // Update website suggestions when the context menu is shown.
-            dynamicContextMenus.onShown?.addListener(async (info) => {''',
+          // Update website suggestions when the context menu is shown.
+          dynamicContextMenus.onShown?.addListener(async (info) => {'''
+              background = background.replace(
+                  old_listener,
+                  listener_replacement,
+                  1,
               )
 
-              replace_once(
-                  "entrypoints/background.ts",
-                  '''      // Remove placeholder and add suggestions
-                  await browser.contextMenus.remove("website-loading");
-
-                  suggestions.slice(0, 3).forEach((suggestion, index) => {
-                    browser.contextMenus.create({
-                      id: `website-suggestion-${index}`,
-                      parentId: "website-alias-parent",
-                      title: suggestion.split("@")[0],
-                      contexts: ["editable"],
-                    });
-                  });
-
-                  await browser.contextMenus.refresh?.();''',
-                  '''      // Rebuild dynamic items safely. Repeated menu openings otherwise
-                  // reuse the same IDs and leave stale suggestions behind.
-                  const dynamicItemIds = [
-                    "website-loading",
-                    "website-suggestion-0",
-                    "website-suggestion-1",
-                    "website-suggestion-2",
-                  ];
-                  await Promise.all(
-                    dynamicItemIds.map(async (id) => {
-                      try {
-                        await browser.contextMenus.remove(id);
-                      } catch {
-                        // The item may not exist on the first or a later menu opening.
-                      }
-                    }),
-                  );
-
-                  for (const [index, suggestion] of suggestions
-                    .slice(0, 3)
-                    .entries()) {
-                    browser.contextMenus.create({
-                      id: `website-suggestion-${index}`,
-                      parentId: "website-alias-parent",
-                      title: suggestion.split("@")[0],
-                      contexts: ["editable"],
-                    });
+              dynamic_block_pattern = re.compile(
+                  r'''\s*// Remove placeholder and add suggestions\n'''
+                  r'''\s*await browser\.contextMenus\.remove\("website-loading"\);\n'''
+                  r'''\s*suggestions\.slice\(0, 3\)\.forEach\(\(suggestion, index\) => \{\n'''
+                  r'''\s*browser\.contextMenus\.create\(\{\n'''
+                  r'''\s*id: `website-suggestion-\$\{index\}`,\n'''
+                  r'''\s*parentId: "website-alias-parent",\n'''
+                  r'''\s*title: suggestion\.split\("@"\)\[0\],\n'''
+                  r'''\s*contexts: \["editable"\],\n'''
+                  r'''\s*\}\);\n'''
+                  r'''\s*\}\);\n'''
+                  r'''\s*await browser\.contextMenus\.refresh\?\.\(\);''',
+                  re.MULTILINE,
+              )
+              dynamic_block_replacement = '''
+              // Rebuild dynamic items safely. Repeated menu openings otherwise
+              // reuse the same IDs and leave stale suggestions behind.
+              const dynamicItemIds = [
+                "website-loading",
+                "website-suggestion-0",
+                "website-suggestion-1",
+                "website-suggestion-2",
+              ];
+              await Promise.all(
+                dynamicItemIds.map(async (id) => {
+                  try {
+                    await browser.contextMenus.remove(id);
+                  } catch {
+                    // The item may not exist on the first or a later menu opening.
                   }
+                }),
+              );
 
-                  await dynamicContextMenus.refresh?.();''',
+              for (const [index, suggestion] of suggestions.slice(0, 3).entries()) {
+                browser.contextMenus.create({
+                  id: `website-suggestion-${index}`,
+                  parentId: "website-alias-parent",
+                  title: suggestion.split("@")[0],
+                  contexts: ["editable"],
+                });
+              }
+
+              await dynamicContextMenus.refresh?.();'''
+              background, replacements = dynamic_block_pattern.subn(
+                  dynamic_block_replacement,
+                  background,
+                  count=1,
               )
+              if replacements != 1:
+                  raise SystemExit(
+                      f"Expected one dynamic context-menu block, replaced {replacements}"
+                  )
+
+              background_path.write_text(background, encoding="utf-8")
 
           test_path = Path("tests/services/websiteAliasService.test.ts")
           test_text = test_path.read_text(encoding="utf-8")
           if 'vi.stubGlobal("browser"' not in test_text:
-              replace_once(
-                  "tests/services/websiteAliasService.test.ts",
+              if test_text.count("global.browser = {") != 1:
+                  raise SystemExit("Unable to locate global.browser assignment")
+              if test_text.count("} as unknown as MockBrowser;") != 1:
+                  raise SystemExit("Unable to locate MockBrowser assignment terminator")
+              test_text = test_text.replace(
                   "global.browser = {",
                   'vi.stubGlobal("browser", {',
+                  1,
               )
-              replace_once(
-                  "tests/services/websiteAliasService.test.ts",
+              test_text = test_text.replace(
                   "} as unknown as MockBrowser;",
                   "} as unknown as MockBrowser);",
+                  1,
               )
+              test_path.write_text(test_text, encoding="utf-8")
 
           temporary_workflow = Path(".github/workflows/apply-typescript-fixes.yml")
           if temporary_workflow.exists():
