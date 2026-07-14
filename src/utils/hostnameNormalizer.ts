@@ -3,80 +3,7 @@
  * Examples: shopee.com.vn → "shopee", github.com → "github", api.github.com → "github"
  */
 
-const COMMON_SUBDOMAINS = new Set([
-  "www",
-  "mail",
-  "api",
-  "staging",
-  "dev",
-  "test",
-  "prod",
-  "app",
-  "m",
-  "mobile",
-  "admin",
-  "server",
-]);
-
-const TLDS = new Set([
-  "com",
-  "vn",
-  "co.uk",
-  "co.jp",
-  "fr",
-  "de",
-  "it",
-  "es",
-  "ru",
-  "cn",
-  "in",
-  "io",
-  "net",
-  "org",
-  "gov",
-  "edu",
-  "co",
-  "au",
-  "ca",
-  "nz",
-]);
-
-/**
- * Extract hostname from URL string.
- */
-function extractHostname(url: string): string | null {
-  try {
-    const urlObj = new URL(url);
-    return urlObj.hostname;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Check if a string is an IP address.
- */
-function isIpAddress(hostname: string): boolean {
-  return /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname) || hostname === "localhost";
-}
-
-/**
- * Get TLD from hostname. Handles compound TLDs like co.uk.
- */
-function getTLD(hostname: string): string | null {
-  const parts = hostname.split(".").reverse();
-  if (parts.length < 2) return null;
-
-  if (TLDS.has(`${parts[1]}.${parts[0]}`) && parts.length >= 3) {
-    return `${parts[1]}.${parts[0]}`;
-  }
-
-  if (TLDS.has(parts[0])) return parts[0];
-
-  // Accept modern generic/country TLDs (for example .dev, .app, .tech)
-  // instead of rejecting every suffix not present in the legacy allowlist.
-  return /^[a-z0-9-]{2,63}$/.test(parts[0]) ? parts[0] : null;
-}
+import { parse } from "tldts";
 
 /**
  * Normalize URL/hostname to a clean keyword.
@@ -94,51 +21,20 @@ export function normalizeHostname(urlOrHostname: string): string | null {
     return null;
   }
 
-  let hostname = urlOrHostname.toLowerCase().trim();
+  const value = urlOrHostname.toLowerCase().trim();
+  const result = parse(value, { allowPrivateDomains: true });
 
-  // Try to extract hostname from URL
-  if (hostname.includes("://") || hostname.includes(".")) {
-    const extracted = extractHostname(hostname);
-    if (!extracted) return null;
-    hostname = extracted;
-  }
+  if (!result.hostname) return null;
+  if (result.isIp) return "local";
+  if (result.hostname === "localhost") return "localhost";
 
-  // Remove port
-  hostname = hostname.split(":")[0];
+  // Public Suffix List parsing handles every registered TLD, compound suffixes
+  // (.com.au), private suffixes (.github.io), and punycode/IDN hostnames.
+  const aliasKey =
+    result.domainWithoutSuffix ||
+    (!result.hostname.includes(".") ? result.hostname : null);
 
-  // Handle IP or localhost
-  if (isIpAddress(hostname)) {
-    return hostname === "localhost" ? "localhost" : "local";
-  }
-
-  const parts = hostname.split(".").filter(Boolean);
-  if (parts.length === 0) return null;
-
-  // Get TLD
-  const tld = getTLD(hostname);
-  if (!tld) {
-    // No recognized TLD, return the full hostname if it's short enough
-    return parts.length === 1 ? parts[0] : null;
-  }
-
-  // Remove TLD and get domain parts
-  const domainParts = parts.slice(0, -tld.split(".").length);
-  if (domainParts.length === 0) return null;
-
-  // Remove common subdomains from the end
-  while (
-    domainParts.length > 0 &&
-    COMMON_SUBDOMAINS.has(domainParts[domainParts.length - 1])
-  ) {
-    domainParts.pop();
-  }
-
-  // Get the main domain (rightmost label)
-  const mainDomain = domainParts[domainParts.length - 1];
-  if (!mainDomain) return null;
-
-  // Clean: lowercase + alphanumeric only
-  return mainDomain.replace(/[^a-z0-9]/g, "") || null;
+  return aliasKey?.replace(/[^a-z0-9]/g, "") || null;
 }
 
 /**

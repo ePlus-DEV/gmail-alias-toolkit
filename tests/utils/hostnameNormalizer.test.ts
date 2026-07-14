@@ -13,11 +13,25 @@ describe("normalizeHostname", () => {
       ),
     ).toBe("voidzero");
     expect(normalizeHostname("https://example.app/signup")).toBe("example");
+    expect(normalizeHostname("example.anyfuturetld")).toBe("example");
   });
 
-  it("keeps compound TLD handling", () => {
+  it("handles compound and private public suffixes", () => {
     expect(normalizeHostname("https://shop.example.co.uk/account")).toBe(
       "example",
+    );
+    expect(normalizeHostname("https://shop.example.com.au/account")).toBe(
+      "example",
+    );
+    expect(normalizeHostname("https://alice.github.io/project")).toBe("alice");
+  });
+
+  it("accepts raw hostnames, localhost, IPs, and IDN punycode", () => {
+    expect(normalizeHostname("example.dev")).toBe("example");
+    expect(normalizeHostname("localhost:3000")).toBe("localhost");
+    expect(normalizeHostname("https://127.0.0.1:3000")).toBe("local");
+    expect(normalizeHostname("https://xn--mnchen-3ya.de")).toBe(
+      "xnmnchen3ya",
     );
   });
 

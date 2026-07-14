@@ -4001,6 +4001,7 @@ __metadata:
     react-dom: "npm:^19.2.3"
     tailwind-merge: "npm:^2.6.0"
     tailwindcss: "npm:^4"
+    tldts: "npm:^7.4.8"
     typescript: "npm:^5.9.3"
     vite: "npm:^8.1.1"
     vitest: "npm:^4.1.9"
@@ -6978,6 +6979,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tldts-core@npm:^7.4.8":
+  version: 7.4.8
+  resolution: "tldts-core@npm:7.4.8"
+  checksum: 10c0/94edee2a06cb1929fae4a26045628b01dd865ee8e28661df29128228522fb8dcf29c2f68ffa7286ee41a2a2c98da3e6814dbf49a1f6509de3fe2c9448e0db1b7
+  languageName: node
+  linkType: hard
+
 "tldts@npm:^7.0.5":
   version: 7.4.5
   resolution: "tldts@npm:7.4.5"
@@ -6986,6 +6994,17 @@ __metadata:
   bin:
     tldts: bin/cli.js
   checksum: 10c0/c2b4c0b6015330c9ca73f9e6f334d555799a7119137f13bfad871ffaa1545b4136d765edfe84334585ffa5ad4c881bc707748673533b0acd5b476197dab1aff8
+  languageName: node
+  linkType: hard
+
+"tldts@npm:^7.4.8":
+  version: 7.4.8
+  resolution: "tldts@npm:7.4.8"
+  dependencies:
+    tldts-core: "npm:^7.4.8"
+  bin:
+    tldts: bin/cli.js
+  checksum: 10c0/438b379a43b105359311427b8ab9d73572244996b4f6dd1fbe9112bd274c308d4ffb33b6f644302e79c8bc60f2e2539463b00dd91ee1063b92d9fc8b10882b6c
   languageName: node
   linkType: hard
 
