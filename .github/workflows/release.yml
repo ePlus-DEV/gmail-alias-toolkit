@@ -1,4 +1,4 @@
-name: "Submit to Web Store"
+name: Submit to Web Store
 permissions:
   contents: write
 
@@ -6,10 +6,6 @@ on:
   push:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   build-and-release:
@@ -27,32 +23,30 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup Node.js with Yarn cache
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 24.x
-          cache: "yarn"
+          cache: yarn
 
       - name: Install dependencies
-        run: yarn install --immutable --mode=skip-build
+        run: yarn install --frozen-lockfile
 
       - name: Prepare WXT types
-        run: yarn exec wxt prepare
+        run: yarn wxt prepare
 
-      - name: Build the extension
+      - name: Run tests
+        run: yarn test
+
+      - name: Build extension
         run: |
           yarn zip
-          yarn zip:firefox --mv3
-          yarn zip -b edge
-          yarn zip -b opera
+          yarn zip:firefox
 
       - name: Verify build outputs
-        run: ls -l .output/*.zip
+        run: ls -lh .output/*.zip
 
       - name: Update CHANGELOG
         id: changelog
@@ -69,19 +63,16 @@ jobs:
           file_pattern: CHANGELOG.md
 
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
-          name: "v.${{ github.ref_name }}"
-          draft: true
+          name: "v${{ github.ref_name }}"
+          draft: false
           generate_release_notes: true
-          body_path: INSTALL.md
           files: .output/*.zip
 
       - name: Submit to stores
-        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          yarn exec wxt submit \
+          yarn wxt submit \
             --chrome-zip .output/*-chrome.zip \
             --firefox-zip .output/*-firefox.zip \
             --firefox-sources-zip .output/*-sources.zip

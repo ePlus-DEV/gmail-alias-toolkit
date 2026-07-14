@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "プラスアドレスとプリセットで Gmail エイリアスを生成・管理します"
+    "message": "+tag アドレスとプリセットで Gmail エイリアスを生成・管理"
   },
   "headerSubtitle": {
-    "message": "プラスアドレスでエイリアスを生成"
+    "message": "+tag アドレスでエイリアスを生成"
   },
   "settings": {
     "message": "設定"
@@ -56,7 +56,7 @@
     }
   },
   "gmailWarning": {
-    "message": "これは Gmail アドレスではないようです。プラスアドレスは Gmail で最も効果的に機能します。"
+    "message": "Gmail アドレスではないようです。プラスアドレスは Gmail で最もよく機能します。"
   },
   "random": {
     "message": "ランダム"
@@ -65,7 +65,7 @@
     "message": "カスタムタグ"
   },
   "gmailTricks": {
-    "message": "Gmail の便利機能"
+    "message": "Gmail の小技"
   },
   "tabTagsShort": {
     "message": "タグ"
@@ -97,7 +97,7 @@
     }
   },
   "pageLabel": {
-    "message": "$PAGE$ページ",
+    "message": "ページ $PAGE$",
     "placeholders": {
       "page": {
         "content": "$1"
@@ -138,10 +138,10 @@
     "message": "生成されたバリエーション"
   },
   "gmailTrickInfoLabel": {
-    "message": "Gmailの小技:"
+    "message": "Gmail の小技:"
   },
   "gmailTrickInfo": {
-    "message": "ドットは無視され、+ 以降はすべて同じ受信トレイに届きます"
+    "message": "ドットは無視され、+ の後ろはすべて同じ受信トレイに届きます"
   },
   "format": {
     "message": "形式"
@@ -162,7 +162,7 @@
     "message": "エイリアス数"
   },
   "generateRandomAliases": {
-    "message": "$COUNT$ 件のランダムエイリアスを生成",
+    "message": "$COUNT$ 個のランダムエイリアス$PLURAL$を生成",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -176,7 +176,7 @@
     "message": "生成されたエイリアス"
   },
   "totalCount": {
-    "message": "合計 $COUNT$ 件",
+    "message": "合計 $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -184,7 +184,7 @@
     }
   },
   "copiedAliases": {
-    "message": "$COUNT$ 件のエイリアスをコピーしました！",
+    "message": "$COUNT$ 個のエイリアスをコピーしました！",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -195,13 +195,13 @@
     "message": "コピーに失敗しました"
   },
   "formatPrivateMail": {
-    "message": "形式：private-mail-xxxx"
+    "message": "形式: private-mail-xxxx"
   },
   "formatAlphanumeric": {
-    "message": "8 文字のランダム文字"
+    "message": "8 個のランダム文字"
   },
   "formatWords": {
-    "message": "2 つのランダム単語"
+    "message": "2 個のランダム単語"
   },
   "formatTimestamp": {
     "message": "Unix タイムスタンプ"
@@ -216,7 +216,7 @@
     "message": "あなたのプリセット"
   },
   "example": {
-    "message": "例："
+    "message": "例:"
   },
   "copyExample": {
     "message": "例をコピー"
@@ -240,7 +240,7 @@
     "message": "選択"
   },
   "starredCount": {
-    "message": "$COUNT$ 件をスター付き",
+    "message": "$COUNT$ 件にスター",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -248,13 +248,13 @@
     }
   },
   "deselectAll": {
-    "message": "選択解除"
+    "message": "すべて選択解除"
   },
   "selectAll": {
     "message": "すべて選択"
   },
   "selectedCount": {
-    "message": "$COUNT$ 件選択中",
+    "message": "$COUNT$ 件を選択",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -292,7 +292,7 @@
     "message": "すべてのタグ"
   },
   "mostRecent": {
-    "message": "最新順"
+    "message": "最新"
   },
   "az": {
     "message": "A-Z"
@@ -301,13 +301,13 @@
     "message": "お気に入りはまだありません"
   },
   "starEmailsHint": {
-    "message": "履歴内のメールにスターを付けると、ここからすばやくアクセスできます"
+    "message": "履歴のメールにスターを付けると、ここからすばやくアクセスできます"
   },
   "noResultsFound": {
     "message": "結果が見つかりません"
   },
   "differentSearchHint": {
-    "message": "別の検索語またはフィルターを試してください"
+    "message": "別の検索またはフィルターを試してください"
   },
   "showQrCode": {
     "message": "QR コードを表示"
@@ -319,7 +319,7 @@
     "message": "お気に入りに追加"
   },
   "showingRange": {
-    "message": "$TOTAL$ 件中 $START$〜$END$ 件を表示",
+    "message": "$TOTAL$ 件中 $START$-$END$ を表示",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -389,7 +389,7 @@
     "message": "履歴内の合計"
   },
   "badgeAllTime": {
-    "message": "総生成数"
+    "message": "総生成数（全期間）"
   },
   "badgeToday": {
     "message": "今日作成"
@@ -410,7 +410,7 @@
     "message": "自動保存上限"
   },
   "aliasesLimit": {
-    "message": "$COUNT$ 件のエイリアス",
+    "message": "$COUNT$ 個のエイリアス",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -463,7 +463,7 @@
     "message": "メールアカウント"
   },
   "manageAccountsDescription": {
-    "message": "Gmail アカウントを管理します。各アカウントには個別の履歴、統計、お気に入りがあります。"
+    "message": "Gmail アカウントを管理します。各アカウントには独自の履歴、統計、お気に入りがあります。"
   },
   "noAccountsFound": {
     "message": "アカウントが見つかりません。メイン画面からアカウントを追加してください。"
@@ -499,7 +499,7 @@
     "message": "アカウントを削除しますか？"
   },
   "deleteAccountMessage": {
-    "message": "「$LABEL$」（$EMAIL$）を削除しますか？\n\nこれにより以下が完全に削除されます：\n- このアカウントのすべての履歴\n- すべての統計\n- すべてのお気に入り\n\nこの操作は元に戻せません。",
+    "message": "\"$LABEL$\"（$EMAIL$）を削除しますか？\n\nこれにより次の内容が完全に削除されます:\n- このアカウントのすべての履歴\n- すべての統計\n- すべてのお気に入り\n\nこの操作は元に戻せません。",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -516,7 +516,7 @@
     "message": "アカウントのメールを変更しますか？"
   },
   "changeAccountEmailMessage": {
-    "message": "メールを\n$OLD_EMAIL$\nから\n$NEW_EMAIL$\nに変更しますか？\n\nこれにより：\n- すべての履歴、統計、お気に入りが新しいメールに移行されます\n- アカウントのメールが更新されます\n- 古いメールに関連付けられたデータが削除されます\n\n続行しますか？",
+    "message": "メールを\n$OLD_EMAIL$\nから\n$NEW_EMAIL$\nに変更しますか？\n\nこれにより次の処理が行われます:\n- すべての履歴、統計、お気に入りを新しいメールへ移行\n- アカウントのメールを更新\n- 古いメールに関連するデータを削除\n\n続行しますか？",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "メールを変更"
   },
+  "menuForThisWebsite": {
+    "message": "このウェブサイト用"
+  },
+  "menuLoading": {
+    "message": "読み込み中..."
+  },
   "menuRandomEmailAlias": {
     "message": "ランダムメールエイリアス"
   },
@@ -539,10 +545,10 @@
     "message": "プリセットなし - 設定で追加"
   },
   "menuGmailTricks": {
-    "message": "Gmail の便利機能"
+    "message": "Gmail の小技"
   },
   "menuDotVariation": {
-    "message": "ドットバリエーション"
+    "message": "ドットのバリエーション"
   },
   "menuGooglemailDomain": {
     "message": "Googlemail ドメイン"
@@ -566,7 +572,7 @@
     "message": "インポートに失敗しました - 無効なファイル"
   },
   "toastSettingsReset": {
-    "message": "設定をデフォルトに戻しました"
+    "message": "設定をデフォルトにリセットしました"
   },
   "toastAccountSwitched": {
     "message": "アカウントを切り替えました"
@@ -592,19 +598,19 @@
     "message": "有効なメールアドレスを入力してください"
   },
   "errorDuplicateEmail": {
-    "message": "このメールアドレスは別のアカウントで既に使用されています"
+    "message": "このメールアドレスは別のアカウントですでに使用されています"
   },
   "errorEnterEmail": {
     "message": "メールアドレスを入力してください"
   },
   "errorAccountExists": {
-    "message": "このアカウントは既に存在します"
+    "message": "このアカウントはすでに存在します"
   },
   "toastQrFailed": {
     "message": "QR コードの生成に失敗しました"
   },
   "toastExportedAliases": {
-    "message": "$COUNT$ 件のエイリアスをエクスポートしました",
+    "message": "$COUNT$ 個のエイリアスをエクスポートしました",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -612,7 +618,7 @@
     }
   },
   "toastDeletedAliases": {
-    "message": "$COUNT$ 件のエイリアスを削除しました",
+    "message": "$COUNT$ 個のエイリアスを削除しました",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -649,10 +655,10 @@
     "message": "始めましょう"
   },
   "enterGmailAddress": {
-    "message": "Gmail アドレスを入力してください"
+    "message": "Gmail アドレスを入力"
   },
   "pressTabForGmail": {
-    "message": "$KEY$ を押して @gmail.com を入力",
+    "message": "@gmail.com には $KEY$ を押してください",
     "placeholders": {
       "key": {
         "content": "$1"
@@ -663,13 +669,13 @@
     "message": "設定中..."
   },
   "getStarted": {
-    "message": "始める"
+    "message": "開始"
   },
   "advancedSetup": {
     "message": "設定で詳細セットアップ"
   },
   "whatYouCanDo": {
-    "message": "できること："
+    "message": "できること:"
   },
   "featurePrivateEmail": {
     "message": "プライベートメール生成"
@@ -678,7 +684,7 @@
     "message": "カスタムタグとプリセット"
   },
   "featureGmailTricks": {
-    "message": "Gmail 高度な便利機能"
+    "message": "Gmail の高度な小技"
   },
   "welcomeFooter": {
     "message": "すべてのデータはローカルに保存されます。追跡なし、サーバーなし。"
@@ -692,6 +698,56 @@
     }
   },
   "clickStarHint": {
-    "message": "履歴内の任意のエイリアスのスターをクリックすると、ここに追加できます"
+    "message": "履歴内の任意のエイリアスのスターをクリックして、ここに追加します"
+  },
+  "viewStatistics": {
+    "message": "統計を表示"
+  },
+  "statistics": {
+    "message": "統計"
+  },
+  "metricsTab": {
+    "message": "指標"
+  },
+  "timelineTab": {
+    "message": "タイムライン"
+  },
+  "tagsTab": {
+    "message": "タグ"
+  },
+  "totalGenerated": {
+    "message": "総生成数"
+  },
+  "createdToday": {
+    "message": "今日作成"
+  },
+  "thisWeek": {
+    "message": "今週"
+  },
+  "thisMonth": {
+    "message": "今月"
+  },
+  "topTag": {
+    "message": "上位タグ"
+  },
+  "totalTags": {
+    "message": "タグ合計"
+  },
+  "noTagsYet": {
+    "message": "タグはまだありません"
+  },
+  "disableInlineForSite": { "message": "このサイトでインラインヘルパーを無効にする" },
+  "inlineDisabledSites": { "message": "インラインヘルパーを無効にしたサイト" },
+  "inlineDisabledSitesDescription": { "message": "これらのサイトではインラインアイコンとクイックポップアップが非表示になります。" },
+  "noDisabledSites": { "message": "無効にしたサイトはありません" },
+  "enableInlineForSite": { "message": "有効にする" },
+  "reportReview": { "message": "報告 / レビュー" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

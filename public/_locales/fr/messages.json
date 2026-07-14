@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "Générez et gérez des alias Gmail avec l’adressage plus et des préréglages"
+    "message": "Générez et gérez des alias Gmail avec des adresses +tag et des préréglages"
   },
   "headerSubtitle": {
-    "message": "Générez des alias avec l’adressage plus"
+    "message": "Générez des alias avec des adresses +tag"
   },
   "settings": {
     "message": "Paramètres"
@@ -89,7 +89,7 @@
     "message": "Alias"
   },
   "copyEmailTooltip": {
-    "message": "$EMAIL$ - cliquer pour copier",
+    "message": "$EMAIL$ - cliquez pour copier",
     "placeholders": {
       "email": {
         "content": "$1"
@@ -105,10 +105,10 @@
     }
   },
   "dotTrick": {
-    "message": "Astuce points"
+    "message": "Astuce des points"
   },
   "plusTags": {
-    "message": "Tags +"
+    "message": "Tags Plus (+)"
   },
   "googlemail": {
     "message": "Googlemail"
@@ -117,7 +117,7 @@
     "message": "Supprimer les points"
   },
   "dotPlus": {
-    "message": "Points + tags"
+    "message": "Point + Plus"
   },
   "allCombos": {
     "message": "Toutes les combinaisons"
@@ -126,13 +126,13 @@
     "message": "Nombre de variantes"
   },
   "randomizeDotPositions": {
-    "message": "Positions des points aléatoires"
+    "message": "Positionner les points au hasard"
   },
   "sequential": {
     "message": "Séquentiel"
   },
   "generateTricks": {
-    "message": "Générer les astuces"
+    "message": "Générer des astuces"
   },
   "generatedVariations": {
     "message": "Variantes générées"
@@ -141,13 +141,13 @@
     "message": "Astuce Gmail :"
   },
   "gmailTrickInfo": {
-    "message": "Les points sont ignorés et tout ce qui suit + arrive dans la même boîte"
+    "message": "Les points sont ignorés et tout ce qui suit + arrive dans la même boîte de réception"
   },
   "format": {
     "message": "Format"
   },
   "privateMailFormat": {
-    "message": "Private Mail (private-mail-xxxx)"
+    "message": "E-mail privé (private-mail-xxxx)"
   },
   "randomCharactersFormat": {
     "message": "Caractères aléatoires (abc123xy)"
@@ -162,7 +162,7 @@
     "message": "Nombre d’alias"
   },
   "generateRandomAliases": {
-    "message": "Générer $COUNT$ alias aléatoire(s)",
+    "message": "Générer $COUNT$ alias aléatoire$PLURAL$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -207,7 +207,7 @@
     "message": "Horodatage Unix"
   },
   "tagPlaceholder": {
-    "message": "Saisir un tag (ex. shopping, travail)"
+    "message": "Saisir un tag (ex. shopping, work)"
   },
   "generate": {
     "message": "Générer"
@@ -240,7 +240,7 @@
     "message": "Sélectionner"
   },
   "starredCount": {
-    "message": "$COUNT$ favoris",
+    "message": "$COUNT$ étoilés",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -254,7 +254,7 @@
     "message": "Tout sélectionner"
   },
   "selectedCount": {
-    "message": "$COUNT$ sélectionné(s)",
+    "message": "$COUNT$ sélectionnés",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -292,7 +292,7 @@
     "message": "Tous les tags"
   },
   "mostRecent": {
-    "message": "Les plus récents"
+    "message": "Plus récents"
   },
   "az": {
     "message": "A-Z"
@@ -319,7 +319,7 @@
     "message": "Ajouter aux favoris"
   },
   "showingRange": {
-    "message": "Affichage de $START$ à $END$ sur $TOTAL$",
+    "message": "Affichage de $START$-$END$ sur $TOTAL$",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -377,7 +377,7 @@
     "message": "Sombre"
   },
   "themeAuto": {
-    "message": "Système (Auto)"
+    "message": "Système (auto)"
   },
   "badgeCounter": {
     "message": "Compteur de badge"
@@ -389,7 +389,7 @@
     "message": "Total dans l’historique"
   },
   "badgeAllTime": {
-    "message": "Total généré (tous temps)"
+    "message": "Total généré (depuis le début)"
   },
   "badgeToday": {
     "message": "Créés aujourd’hui"
@@ -448,7 +448,7 @@
     "message": "Réinitialiser les paramètres ?"
   },
   "resetSettingsMessage": {
-    "message": "Tous les paramètres seront restaurés à leur valeur par défaut."
+    "message": "Cela restaurera chaque paramètre à sa valeur par défaut."
   },
   "reset": {
     "message": "Réinitialiser"
@@ -457,7 +457,7 @@
     "message": "Effacer les alias récents ?"
   },
   "clearHistoryMessage": {
-    "message": "Cela supprime tous les alias de la liste d’historique récent."
+    "message": "Cela supprime tous les alias de la liste d’historique récente."
   },
   "emailAccounts": {
     "message": "Comptes e-mail"
@@ -499,7 +499,7 @@
     "message": "Supprimer le compte ?"
   },
   "deleteAccountMessage": {
-    "message": "Supprimer « $LABEL$ » ($EMAIL$) ?\n\nCela supprimera définitivement :\n- Tout l’historique de ce compte\n- Toutes les statistiques\n- Tous les favoris\n\nCette action est irréversible.",
+    "message": "Supprimer \"$LABEL$\" ($EMAIL$) ?\n\nCela supprimera définitivement :\n- Tout l’historique de ce compte\n- Toutes les statistiques\n- Tous les favoris\n\nCette action est irréversible.",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -513,7 +513,7 @@
     "message": "Supprimer"
   },
   "changeAccountEmailTitle": {
-    "message": "Changer l’e-mail du compte ?"
+    "message": "Modifier l’e-mail du compte ?"
   },
   "changeAccountEmailMessage": {
     "message": "Changer l’e-mail de\n$OLD_EMAIL$\nvers\n$NEW_EMAIL$ ?\n\nCela va :\n- Migrer tout l’historique, les statistiques et les favoris vers le nouvel e-mail\n- Mettre à jour l’e-mail du compte\n- Supprimer les données associées à l’ancien e-mail\n\nContinuer ?",
@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "Changer l’e-mail"
   },
+  "menuForThisWebsite": {
+    "message": "Pour ce site"
+  },
+  "menuLoading": {
+    "message": "Chargement..."
+  },
   "menuRandomEmailAlias": {
     "message": "Alias e-mail aléatoire"
   },
@@ -536,13 +542,13 @@
     "message": "Tags personnalisés"
   },
   "menuNoPresets": {
-    "message": "Aucun préréglage - Ajoutez-en dans les paramètres"
+    "message": "Aucun préréglage - ajoutez-en dans Paramètres"
   },
   "menuGmailTricks": {
     "message": "Astuces Gmail"
   },
   "menuDotVariation": {
-    "message": "Variation avec points"
+    "message": "Variante avec points"
   },
   "menuGooglemailDomain": {
     "message": "Domaine Googlemail"
@@ -643,7 +649,7 @@
     "message": "Bienvenue dans Gmail Alias Toolkit"
   },
   "welcomeSubtitle": {
-    "message": "Générez des alias e-mail illimités pour la confidentialité et l’organisation"
+    "message": "Générez un nombre illimité d’alias e-mail pour la confidentialité et l’organisation"
   },
   "letsGetStarted": {
     "message": "Commençons"
@@ -660,7 +666,7 @@
     }
   },
   "settingUp": {
-    "message": "Configuration en cours..."
+    "message": "Configuration..."
   },
   "getStarted": {
     "message": "Commencer"
@@ -672,19 +678,19 @@
     "message": "Ce que vous pouvez faire :"
   },
   "featurePrivateEmail": {
-    "message": "Générateur d’e-mail privé"
+    "message": "Générateur d’e-mails privés"
   },
   "featureCustomTags": {
     "message": "Tags et préréglages personnalisés"
   },
   "featureGmailTricks": {
-    "message": "Astuces Gmail avancées"
+    "message": "Astuces avancées Gmail"
   },
   "welcomeFooter": {
     "message": "Toutes les données sont stockées localement. Aucun suivi, aucun serveur."
   },
   "favoritesSaved": {
-    "message": "$COUNT$ enregistré(s)",
+    "message": "$COUNT$ enregistrés",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -693,5 +699,55 @@
   },
   "clickStarHint": {
     "message": "Cliquez sur l’étoile d’un alias dans l’historique pour l’ajouter ici"
+  },
+  "viewStatistics": {
+    "message": "Voir les statistiques"
+  },
+  "statistics": {
+    "message": "Statistiques"
+  },
+  "metricsTab": {
+    "message": "Métriques"
+  },
+  "timelineTab": {
+    "message": "Chronologie"
+  },
+  "tagsTab": {
+    "message": "Tags"
+  },
+  "totalGenerated": {
+    "message": "Total généré"
+  },
+  "createdToday": {
+    "message": "Créés aujourd’hui"
+  },
+  "thisWeek": {
+    "message": "Cette semaine"
+  },
+  "thisMonth": {
+    "message": "Ce mois-ci"
+  },
+  "topTag": {
+    "message": "Top tag"
+  },
+  "totalTags": {
+    "message": "Total des tags"
+  },
+  "noTagsYet": {
+    "message": "Aucun tag pour le moment"
+  },
+  "disableInlineForSite": { "message": "Désactiver l’assistant intégré sur ce site" },
+  "inlineDisabledSites": { "message": "Sites avec l’assistant intégré désactivé" },
+  "inlineDisabledSitesDescription": { "message": "L’icône et la fenêtre rapide sont masquées sur ces sites." },
+  "noDisabledSites": { "message": "Aucun site désactivé" },
+  "enableInlineForSite": { "message": "Activer" },
+  "reportReview": { "message": "Signaler / Évaluer" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

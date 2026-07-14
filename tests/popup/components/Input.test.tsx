@@ -60,4 +60,25 @@ describe("Input", () => {
       "email",
     );
   });
+
+  it("does not let a mount-focus ref steal focus after rerender", () => {
+    const focusOnMount = (element: HTMLInputElement | null) => element?.focus();
+    const { rerender } = render(
+      <>
+        <Input ref={focusOnMount} value="Primary" onChange={vi.fn()} />
+        <Input type="email" value="user@gmail.com" onChange={vi.fn()} />
+      </>,
+    );
+    const emailInput = screen.getByDisplayValue("user@gmail.com");
+    emailInput.focus();
+
+    rerender(
+      <>
+        <Input ref={focusOnMount} value="Primary" onChange={vi.fn()} />
+        <Input type="email" value="next@gmail.com" onChange={vi.fn()} />
+      </>,
+    );
+
+    expect(emailInput).toHaveFocus();
+  });
 });

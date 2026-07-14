@@ -118,6 +118,31 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
 
+    // Website-specific submenu (populated on demand)
+    browser.contextMenus.create({
+      id: "website-alias-parent",
+      parentId: "gmail-alias-parent",
+      title: t("menuForThisWebsite") || "For this website",
+      contexts: ["editable"],
+    });
+
+    // Placeholder for website suggestions (will be replaced dynamically)
+    browser.contextMenus.create({
+      id: "website-loading",
+      parentId: "website-alias-parent",
+      title: t("menuLoading") || "Loading...",
+      contexts: ["editable"],
+      enabled: false,
+    });
+
+    // Separator
+    browser.contextMenus.create({
+      id: "separator-1",
+      parentId: "gmail-alias-parent",
+      type: "separator",
+      contexts: ["editable"],
+    });
+
     // Random email submenu
     browser.contextMenus.create({
       id: "fill-random-email",
@@ -189,11 +214,97 @@ export default defineBackground(() => {
       contexts: ["editable"],
     });
   }
+
+  /** Generate random tag based on format. */
+  function generateRandomTag(format = "private-mail"): string {
+    switch (format) {
+      case "private-mail": {
+        const chars = "abcdefghijklmnopqrstuvwxyz";
+        return Array.from(
+          { length: 8 },
+          () => chars[Math.floor(Math.random() * chars.length)],
+        ).join("");
+      }
+      case "alphanumeric": {
+        const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
+        return Array.from(
+          { length: 10 },
+          () => alphanum[Math.floor(Math.random() * alphanum.length)],
+        ).join("");
+      }
+      case "words": {
+        const words = [
+          "alpha",
+          "beta",
+          "gamma",
+          "delta",
+          "echo",
+          "foxtrot",
+          "golf",
+          "hotel",
+        ];
+        const word1 = words[Math.floor(Math.random() * words.length)];
+        const word2 = words[Math.floor(Math.random() * words.length)];
+        const num = Math.floor(Math.random() * 100);
+        return `${word1}${word2}${num}`;
+      }
+      default:
+        return Date.now().toString();
+    }
+  }
+
+  /** Handle website suggestion menu item. */
+  async function handleWebsiteSuggestion(menuItemId: string): Promise<string> {
+    const suggestionIndex = parseInt(
+      String(menuItemId).replace("website-suggestion-", ""),
+    );
+    const cacheResult = (await browser.storage.session?.get?.(
+      "contextMenuWebsiteSuggestions",
+    )) as
+      | {
+          contextMenuWebsiteSuggestions?: string[] | undefined;
+        }
+      | undefined;
+    const suggestions = (cacheResult?.contextMenuWebsiteSuggestions ||
+      []) as string[];
+    return suggestions[suggestionIndex] || "";
+  }
+
+  /** Generate email based on menu item. */
+  function generateEmail(
+    menuItemId: string,
+    username: string,
+    domain: string,
+    format = "private-mail",
+  ): string {
+    if (menuItemId === "fill-random-email") {
+      const randomTag = generateRandomTag(format);
+      return `${username}+${randomTag}@${domain}`;
+    }
+    if (String(menuItemId).startsWith("tag-")) {
+      const tag = String(menuItemId).replace("tag-", "");
+      return `${username}+${tag}@${domain}`;
+    }
+    if (menuItemId === "trick-dot") {
+      const pos = Math.floor(Math.random() * (username.length - 1)) + 1;
+      const dottedUsername = `${username.slice(0, pos)}.${username.slice(pos)}`;
+      return `${dottedUsername}@${domain}`;
+    }
+    if (menuItemId === "trick-googlemail") {
+      const altDomain = domain === "gmail.com" ? "googlemail.com" : "gmail.com";
+      return `${username}@${altDomain}`;
+    }
+    if (menuItemId === "trick-nodots") {
+      const noDots = username.replace(/\./g, "");
+      return `${noDots}@${domain}`;
+    }
+    return "";
+  }
+
   // Handle context menu clicks
   browser.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!tab?.id) return;
 
-    // Get base email from storage
     const result = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
@@ -217,78 +328,38 @@ export default defineBackground(() => {
     const [username, domain] = baseEmail.split("@");
     let emailToFill = "";
 
-    if (info.menuItemId === "fill-random-email") {
-      // Generate random email
+    if (String(info.menuItemId).startsWith("website-suggestion-")) {
+      emailToFill = await handleWebsiteSuggestion(String(info.menuItemId));
+    } else {
       const format = result.app_settings?.randomFormat || "private-mail";
-      let randomTag = "";
-
-      switch (format) {
-        case "private-mail": {
-          const chars = "abcdefghijklmnopqrstuvwxyz";
-          randomTag = Array.from(
-            { length: 8 },
-            () => chars[Math.floor(Math.random() * chars.length)],
-          ).join("");
-          break;
-        }
-        case "alphanumeric": {
-          const alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
-          randomTag = Array.from(
-            { length: 10 },
-            () => alphanum[Math.floor(Math.random() * alphanum.length)],
-          ).join("");
-          break;
-        }
-        case "words": {
-          const words = [
-            "alpha",
-            "beta",
-            "gamma",
-            "delta",
-            "echo",
-            "foxtrot",
-            "golf",
-            "hotel",
-          ];
-          const word1 = words[Math.floor(Math.random() * words.length)];
-          const word2 = words[Math.floor(Math.random() * words.length)];
-          const num = Math.floor(Math.random() * 100);
-          randomTag = `${word1}${word2}${num}`;
-          break;
-        }
-        case "timestamp":
-          randomTag = Date.now().toString();
-          break;
-        default:
-          randomTag = Date.now().toString();
-          break;
-      }
-
-      emailToFill = `${username}+${randomTag}@${domain}`;
-    } else if (String(info.menuItemId).startsWith("tag-")) {
-      // Custom tag from preset
-      const tag = String(info.menuItemId).replace("tag-", "");
-      emailToFill = `${username}+${tag}@${domain}`;
-    } else if (info.menuItemId === "trick-dot") {
-      // Dot variation - insert dot at random position
-      const pos = Math.floor(Math.random() * (username.length - 1)) + 1;
-      const dottedUsername = `${username.slice(0, pos)}.${username.slice(pos)}`;
-      emailToFill = `${dottedUsername}@${domain}`;
-    } else if (info.menuItemId === "trick-googlemail") {
-      // Googlemail domain
-      const altDomain = domain === "gmail.com" ? "googlemail.com" : "gmail.com";
-      emailToFill = `${username}@${altDomain}`;
-    } else if (info.menuItemId === "trick-nodots") {
-      // Remove all dots
-      const noDots = username.replace(/\./g, "");
-      emailToFill = `${noDots}@${domain}`;
+      emailToFill = generateEmail(
+        String(info.menuItemId),
+        username,
+        domain,
+        format,
+      );
     }
 
     if (emailToFill) {
-      // Save to history and statistics
       await saveToHistory(emailToFill, result.app_settings?.maxHistory || 20);
 
-      // Send message to content script to fill the input
+      if (String(info.menuItemId).startsWith("website-suggestion-")) {
+        try {
+          const { normalizeHostname } =
+            await import("../src/utils/hostnameNormalizer");
+          const { saveWebsiteAlias } =
+            await import("../src/services/websiteAliasService");
+          if (tab.url) {
+            const normalized = normalizeHostname(tab.url);
+            if (normalized) {
+              await saveWebsiteAlias(baseEmail, normalized, emailToFill);
+            }
+          }
+        } catch (error) {
+          console.debug("Error saving website alias:", error);
+        }
+      }
+
       browser.tabs.sendMessage(tab.id, {
         action: "fillEmail",
         email: emailToFill,
@@ -392,15 +463,32 @@ export default defineBackground(() => {
   }
 
   // Helper function to save email to history and stats
-  async function saveToHistory(email: string, maxRecent: number) {
+  async function saveToHistory(
+    email: string,
+    maxRecent: number,
+    accountEmail?: string,
+  ) {
+    await saveAliasesToHistory([email], maxRecent, accountEmail);
+  }
+
+  /** Atomically saves a generated batch to history and statistics. */
+  async function saveAliasesToHistory(
+    emails: string[],
+    maxRecent: number,
+    accountEmail?: string,
+  ) {
+    const uniqueEmails = [...new Set(emails.filter(Boolean))];
+    if (uniqueEmails.length === 0) return;
+
     // Get active account
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
     ])) as { email_accounts?: EmailAccount[]; base_email?: string };
-    let activeEmail = "your.email@gmail.com";
+    let activeEmail = accountEmail?.trim() || "your.email@gmail.com";
 
     if (
+      !accountEmail &&
       accountResult.email_accounts &&
       Array.isArray(accountResult.email_accounts)
     ) {
@@ -410,7 +498,7 @@ export default defineBackground(() => {
       if (activeAccount) {
         activeEmail = activeAccount.email;
       }
-    } else if (accountResult.base_email) {
+    } else if (!accountEmail && accountResult.base_email) {
       activeEmail = accountResult.base_email;
     }
 
@@ -425,15 +513,16 @@ export default defineBackground(() => {
     ])) as Record<string, Alias[] | AliasStats | undefined>;
     const recentAliases = (result[historyKey] as Alias[]) || [];
 
-    // Add to history (remove duplicates, add to top)
-    const newAlias: Alias = {
+    // Add the batch to history (remove duplicates, newest first).
+    const now = Date.now();
+    const newAliases: Alias[] = uniqueEmails.map((email, index) => ({
       email,
-      timestamp: Date.now(),
-    };
-
+      timestamp: now - index,
+    }));
+    const newEmailSet = new Set(uniqueEmails);
     const updated = [
-      newAlias,
-      ...recentAliases.filter((a) => a.email !== email),
+      ...newAliases,
+      ...recentAliases.filter((alias) => !newEmailSet.has(alias.email)),
     ].slice(0, maxRecent);
 
     // Update statistics
@@ -441,15 +530,16 @@ export default defineBackground(() => {
       total: 0,
       tags: {},
     };
-    stats.total = (stats.total || 0) + 1;
+    stats.total = (stats.total || 0) + uniqueEmails.length;
 
-    // Extract tag from email (if it has + addressing)
-    const tagMatch = email.match(/\+([^@]+)@/);
-    if (tagMatch) {
-      const tag = tagMatch[1];
-      stats.tags = stats.tags || {};
-      stats.tags[tag] = (stats.tags[tag] || 0) + 1;
-    }
+    stats.tags = stats.tags || {};
+    uniqueEmails.forEach((email) => {
+      const tagMatch = email.match(/\+([^@]+)@/);
+      if (tagMatch) {
+        const tag = tagMatch[1];
+        stats.tags[tag] = (stats.tags[tag] || 0) + 1;
+      }
+    });
 
     // Save to storage with account-specific keys
     await browser.storage.local.set({
@@ -460,4 +550,138 @@ export default defineBackground(() => {
     // Update badge
     await updateBadge();
   }
+
+  // Update website suggestions when context menu is shown
+  const dynamicContextMenus =
+    browser.contextMenus as typeof browser.contextMenus & {
+      onShown?: {
+        addListener(
+          listener: (info: { pageUrl?: string }) => void | Promise<void>,
+        ): void;
+      };
+      refresh?: () => void | Promise<void>;
+    };
+
+  // Update website suggestions when the context menu is shown.
+  dynamicContextMenus.onShown?.addListener(async (info) => {
+    try {
+      if (!info.pageUrl) return;
+
+      // Import services inline to avoid circular dependencies
+      const { normalizeHostname } =
+        await import("../src/utils/hostnameNormalizer");
+      const { generateSuggestionsForWebsite } =
+        await import("../src/services/websiteAliasService");
+
+      const normalized = normalizeHostname(info.pageUrl);
+      if (!normalized) return;
+
+      // Get active email
+      const accountResult = (await browser.storage.local.get([
+        "email_accounts",
+        "base_email",
+      ])) as { email_accounts?: EmailAccount[]; base_email?: string };
+      let activeEmail = "your.email@gmail.com";
+
+      if (
+        accountResult.email_accounts &&
+        Array.isArray(accountResult.email_accounts)
+      ) {
+        const activeAccount = accountResult.email_accounts.find(
+          (acc) => acc.isActive,
+        );
+        if (activeAccount) {
+          activeEmail = activeAccount.email;
+        }
+      } else if (accountResult.base_email) {
+        activeEmail = accountResult.base_email;
+      }
+
+      // Generate suggestions
+      const suggestions = await generateSuggestionsForWebsite(
+        activeEmail,
+        info.pageUrl,
+      );
+      if (suggestions.length === 0) return;
+
+      // Store suggestions in session storage for retrieval in click handler
+      if (browser.storage.session) {
+        await browser.storage.session.set({
+          contextMenuWebsiteSuggestions: suggestions,
+        });
+      }
+      // Rebuild dynamic items safely. Repeated menu openings otherwise
+      // reuse the same IDs and leave stale suggestions behind.
+      const dynamicItemIds = [
+        "website-loading",
+        "website-suggestion-0",
+        "website-suggestion-1",
+        "website-suggestion-2",
+      ];
+      await Promise.all(
+        dynamicItemIds.map(async (id) => {
+          try {
+            await browser.contextMenus.remove(id);
+          } catch {
+            // The item may not exist on the first or a later menu opening.
+          }
+        }),
+      );
+
+      for (const [index, suggestion] of suggestions.slice(0, 3).entries()) {
+        browser.contextMenus.create({
+          id: `website-suggestion-${index}`,
+          parentId: "website-alias-parent",
+          title: suggestion.split("@")[0],
+          contexts: ["editable"],
+        });
+      }
+
+      await dynamicContextMenus.refresh?.();
+    } catch (error) {
+      console.debug("Error updating website suggestions:", error);
+    }
+  });
+
+  // Handle messages from popup/content script
+  browser.runtime.onMessage.addListener(
+    async (message, sender, sendResponse) => {
+      try {
+        if (message.action === "getActiveTabUrl") {
+          const tabs = await browser.tabs.query({
+            active: true,
+            currentWindow: true,
+          });
+          const tab = tabs[0];
+          sendResponse({
+            url: tab?.url,
+            title: tab?.title,
+          });
+        } else if (message.action === "saveWebsiteAlias") {
+          // Import service inline to avoid circular dependencies
+          const { saveWebsiteAlias } =
+            await import("../src/services/websiteAliasService");
+          await saveWebsiteAlias(
+            message.email,
+            message.normalizedHostname,
+            message.alias,
+          );
+          sendResponse({ success: true });
+        } else if (message.action === "saveAliasToHistory") {
+          const settingsResult = (await browser.storage.local.get(
+            "app_settings",
+          )) as { app_settings?: AppSettings };
+          await saveToHistory(
+            message.alias,
+            settingsResult.app_settings?.maxHistory || 20,
+            message.accountEmail,
+          );
+          sendResponse({ success: true });
+        }
+      } catch (error) {
+        console.error("Message handler error:", error);
+        sendResponse({ error: String(error) });
+      }
+    },
+  );
 });

@@ -3,10 +3,10 @@
     "message": "Gmail Alias Toolkit"
   },
   "extensionDescription": {
-    "message": "使用加号地址和预设生成并管理 Gmail 别名"
+    "message": "使用 +tag 地址和预设生成并管理 Gmail 别名"
   },
   "headerSubtitle": {
-    "message": "使用加号地址生成别名"
+    "message": "使用 +tag 地址生成别名"
   },
   "settings": {
     "message": "设置"
@@ -33,19 +33,19 @@
     "message": "当前 Gmail 地址"
   },
   "addNewAccount": {
-    "message": "添加新账户"
+    "message": "添加新账号"
   },
   "addAccount": {
-    "message": "添加账户"
+    "message": "添加账号"
   },
   "addNewAccountTitle": {
-    "message": "添加新账户"
+    "message": "添加新账号"
   },
   "emailPlaceholder": {
     "message": "your.email"
   },
   "accountLabelPlaceholder": {
-    "message": "标签（可选，例如工作、个人）"
+    "message": "标签（可选，例如：工作、个人）"
   },
   "pressTabToAddGmail": {
     "message": "按 $KEY$ 添加 @gmail.com",
@@ -56,7 +56,7 @@
     }
   },
   "gmailWarning": {
-    "message": "这看起来不像 Gmail 地址。加号地址最适合 Gmail。"
+    "message": "这看起来不像 Gmail 地址。加号地址最适合 Gmail 使用。"
   },
   "random": {
     "message": "随机"
@@ -135,19 +135,19 @@
     "message": "生成技巧"
   },
   "generatedVariations": {
-    "message": "已生成的变体"
+    "message": "已生成变体"
   },
   "gmailTrickInfoLabel": {
     "message": "Gmail 技巧："
   },
   "gmailTrickInfo": {
-    "message": "点号会被忽略，+ 后面的所有内容都会进入同一个收件箱"
+    "message": "点号会被忽略，+ 之后的所有内容都会进入同一个收件箱"
   },
   "format": {
     "message": "格式"
   },
   "privateMailFormat": {
-    "message": "Private Mail（private-mail-xxxx）"
+    "message": "私人邮件（private-mail-xxxx）"
   },
   "randomCharactersFormat": {
     "message": "随机字符（abc123xy）"
@@ -162,7 +162,7 @@
     "message": "别名数量"
   },
   "generateRandomAliases": {
-    "message": "生成 $COUNT$ 个随机别名",
+    "message": "生成 $COUNT$ 个随机别名$PLURAL$",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -173,7 +173,7 @@
     }
   },
   "generatedAliases": {
-    "message": "已生成的别名"
+    "message": "已生成别名"
   },
   "totalCount": {
     "message": "共 $COUNT$ 个",
@@ -207,7 +207,7 @@
     "message": "Unix 时间戳"
   },
   "tagPlaceholder": {
-    "message": "输入标签（例如 shopping、work）"
+    "message": "输入标签（例如：shopping、work）"
   },
   "generate": {
     "message": "生成"
@@ -222,7 +222,7 @@
     "message": "复制示例"
   },
   "recentAliases": {
-    "message": "最近的别名"
+    "message": "最近别名"
   },
   "favorites": {
     "message": "收藏"
@@ -240,7 +240,7 @@
     "message": "选择"
   },
   "starredCount": {
-    "message": "$COUNT$ 个已收藏",
+    "message": "已加星 $COUNT$ 个",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -301,7 +301,7 @@
     "message": "还没有收藏"
   },
   "starEmailsHint": {
-    "message": "将历史记录中的邮件加星标，以便在这里快速访问"
+    "message": "为历史记录中的邮件加星，方便在这里快速访问"
   },
   "noResultsFound": {
     "message": "未找到结果"
@@ -319,7 +319,7 @@
     "message": "添加到收藏"
   },
   "showingRange": {
-    "message": "显示第 $START$-$END$ 项，共 $TOTAL$ 项",
+    "message": "显示 $START$-$END$，共 $TOTAL$ 个",
     "placeholders": {
       "start": {
         "content": "$1"
@@ -353,13 +353,13 @@
     "message": "最后一页"
   },
   "scanToCopyAlias": {
-    "message": "扫码复制别名"
+    "message": "扫描以复制别名"
   },
   "general": {
-    "message": "常规"
+    "message": "通用"
   },
   "accounts": {
-    "message": "账户"
+    "message": "账号"
   },
   "changelog": {
     "message": "更新日志"
@@ -386,7 +386,7 @@
     "message": "无（隐藏）"
   },
   "badgeTotal": {
-    "message": "历史记录总数"
+    "message": "历史总数"
   },
   "badgeAllTime": {
     "message": "总生成数（全部时间）"
@@ -407,7 +407,7 @@
     "message": "随机别名格式"
   },
   "autoSaveLimit": {
-    "message": "自动保存上限"
+    "message": "自动保存限制"
   },
   "aliasesLimit": {
     "message": "$COUNT$ 个别名",
@@ -448,31 +448,31 @@
     "message": "重置设置？"
   },
   "resetSettingsMessage": {
-    "message": "这会将所有设置恢复为默认值。"
+    "message": "这会将每项设置恢复为默认值。"
   },
   "reset": {
     "message": "重置"
   },
   "clearHistoryTitle": {
-    "message": "清除最近的别名？"
+    "message": "清除最近别名？"
   },
   "clearHistoryMessage": {
     "message": "这会从最近历史列表中移除所有别名。"
   },
   "emailAccounts": {
-    "message": "邮箱账户"
+    "message": "邮箱账号"
   },
   "manageAccountsDescription": {
-    "message": "管理你的 Gmail 账户。每个账户都有自己的历史记录、统计数据和收藏。"
+    "message": "管理你的 Gmail 账号。每个账号都有自己的历史、统计和收藏。"
   },
   "noAccountsFound": {
-    "message": "未找到账户。请从主屏幕添加账户。"
+    "message": "未找到账号。请从主屏幕添加账号。"
   },
   "emailAddress": {
     "message": "邮箱地址"
   },
   "accountLabel": {
-    "message": "账户标签"
+    "message": "账号标签"
   },
   "emailAddressPlaceholder": {
     "message": "your.email@gmail.com"
@@ -487,19 +487,19 @@
     "message": "当前"
   },
   "editAccount": {
-    "message": "编辑账户"
+    "message": "编辑账号"
   },
   "cannotDeleteLastAccountTitle": {
-    "message": "无法删除最后一个账户"
+    "message": "无法删除最后一个账号"
   },
   "deleteThisAccount": {
-    "message": "删除此账户"
+    "message": "删除此账号"
   },
   "deleteAccountTitle": {
-    "message": "删除账户？"
+    "message": "删除账号？"
   },
   "deleteAccountMessage": {
-    "message": "删除“$LABEL$”（$EMAIL$）？\n\n这将永久删除：\n- 此账户的所有历史记录\n- 所有统计数据\n- 所有收藏\n\n此操作无法撤销。",
+    "message": "删除“$LABEL$”（$EMAIL$）？\n\n这将永久删除：\n- 此账号的所有历史记录\n- 所有统计数据\n- 所有收藏\n\n此操作无法撤销。",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -513,10 +513,10 @@
     "message": "删除"
   },
   "changeAccountEmailTitle": {
-    "message": "更改账户邮箱？"
+    "message": "更改账号邮箱？"
   },
   "changeAccountEmailMessage": {
-    "message": "将邮箱从\n$OLD_EMAIL$\n更改为\n$NEW_EMAIL$？\n\n这将：\n- 将所有历史记录、统计数据和收藏迁移到新邮箱\n- 更新账户邮箱\n- 删除与旧邮箱关联的数据\n\n继续？",
+    "message": "将邮箱从\n$OLD_EMAIL$\n更改为\n$NEW_EMAIL$？\n\n这将：\n- 将所有历史、统计和收藏迁移到新邮箱\n- 更新账号邮箱\n- 删除与旧邮箱关联的数据\n\n继续？",
     "placeholders": {
       "old_email": {
         "content": "$1"
@@ -528,6 +528,12 @@
   },
   "changeEmail": {
     "message": "更改邮箱"
+  },
+  "menuForThisWebsite": {
+    "message": "用于此网站"
+  },
+  "menuLoading": {
+    "message": "正在加载..."
   },
   "menuRandomEmailAlias": {
     "message": "随机邮箱别名"
@@ -551,10 +557,10 @@
     "message": "移除所有点号"
   },
   "toastPresetAdded": {
-    "message": "已添加预设"
+    "message": "预设已添加"
   },
   "toastPresetRemoved": {
-    "message": "已移除预设"
+    "message": "预设已移除"
   },
   "toastSettingsExported": {
     "message": "设置已导出"
@@ -569,16 +575,16 @@
     "message": "设置已重置为默认值"
   },
   "toastAccountSwitched": {
-    "message": "已切换账户"
+    "message": "账号已切换"
   },
   "toastAccountDeleted": {
-    "message": "账户已删除"
+    "message": "账号已删除"
   },
   "toastAccountUpdated": {
-    "message": "账户已更新"
+    "message": "账号已更新"
   },
   "toastAccountAdded": {
-    "message": "已添加 $LABEL$",
+    "message": "$LABEL$ 已添加",
     "placeholders": {
       "label": {
         "content": "$1"
@@ -592,16 +598,16 @@
     "message": "请输入有效的邮箱地址"
   },
   "errorDuplicateEmail": {
-    "message": "此邮箱地址已被另一个账户使用"
+    "message": "此邮箱地址已被另一个账号使用"
   },
   "errorEnterEmail": {
     "message": "请输入邮箱地址"
   },
   "errorAccountExists": {
-    "message": "此账户已存在"
+    "message": "此账号已存在"
   },
   "toastQrFailed": {
-    "message": "生成二维码失败"
+    "message": "二维码生成失败"
   },
   "toastExportedAliases": {
     "message": "已导出 $COUNT$ 个别名",
@@ -620,13 +626,13 @@
     }
   },
   "toastHistoryCleared": {
-    "message": "历史记录已清除"
+    "message": "历史已清除"
   },
   "toastFavoriteAdded": {
     "message": "已添加到收藏"
   },
   "toastFavoriteRemoved": {
-    "message": "已从收藏中移除"
+    "message": "已从收藏移除"
   },
   "toastCopiedEmail": {
     "message": "已复制 $EMAIL$",
@@ -643,10 +649,10 @@
     "message": "欢迎使用 Gmail Alias Toolkit"
   },
   "welcomeSubtitle": {
-    "message": "生成无限邮箱别名，用于隐私保护和整理"
+    "message": "生成无限邮箱别名，保护隐私并便于整理"
   },
   "letsGetStarted": {
-    "message": "开始使用"
+    "message": "开始吧"
   },
   "enterGmailAddress": {
     "message": "输入你的 Gmail 地址"
@@ -663,16 +669,16 @@
     "message": "正在设置..."
   },
   "getStarted": {
-    "message": "开始"
+    "message": "开始使用"
   },
   "advancedSetup": {
-    "message": "在设置中进行高级设置"
+    "message": "在设置中进行高级配置"
   },
   "whatYouCanDo": {
     "message": "你可以做什么："
   },
   "featurePrivateEmail": {
-    "message": "私密邮箱生成器"
+    "message": "私人邮箱生成器"
   },
   "featureCustomTags": {
     "message": "自定义标签和预设"
@@ -692,6 +698,56 @@
     }
   },
   "clickStarHint": {
-    "message": "点击历史记录中任意别名的星标，即可将其添加到这里"
+    "message": "点击历史中任意别名的星标，即可添加到这里"
+  },
+  "viewStatistics": {
+    "message": "查看统计"
+  },
+  "statistics": {
+    "message": "统计"
+  },
+  "metricsTab": {
+    "message": "指标"
+  },
+  "timelineTab": {
+    "message": "时间线"
+  },
+  "tagsTab": {
+    "message": "标签"
+  },
+  "totalGenerated": {
+    "message": "总生成数"
+  },
+  "createdToday": {
+    "message": "今天创建"
+  },
+  "thisWeek": {
+    "message": "本周"
+  },
+  "thisMonth": {
+    "message": "本月"
+  },
+  "topTag": {
+    "message": "热门标签"
+  },
+  "totalTags": {
+    "message": "标签总数"
+  },
+  "noTagsYet": {
+    "message": "还没有标签"
+  },
+  "disableInlineForSite": { "message": "在此网站上关闭内联助手" },
+  "inlineDisabledSites": { "message": "已关闭内联助手的网站" },
+  "inlineDisabledSitesDescription": { "message": "在这些网站上将隐藏内联图标和快捷弹窗。" },
+  "noDisabledSites": { "message": "没有已关闭的网站" },
+  "enableInlineForSite": { "message": "启用" },
+  "reportReview": { "message": "报告 / 评价" },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
   }
 }

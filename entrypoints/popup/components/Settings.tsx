@@ -14,8 +14,12 @@ import { RadioGroup, RadioGroupItem } from "src/components/motion/radio";
 import { Tooltip } from "src/components/motion/tooltip";
 import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
-import { getAccountStorageKey } from "../utils";
+import { getAccountStorageKey, validateEmail } from "../utils";
 import { t } from "../../../lib/i18n";
+import {
+  INLINE_DISABLED_SITES_KEY,
+  parseDisabledInlineSites,
+} from "src/utils/inlineSiteSettings";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -74,6 +78,41 @@ const DEFAULT_SETTINGS: AppSettings = {
 };
 
 const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.3.0",
+    date: "2026-07-13",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Added website-aware alias suggestions based on the current hostname",
+          "Added an email input helper with inline icons, suggestion popups, live previews, and explicit Use actions",
+          "Added previous-alias navigation and an information panel explaining supported rules and local-only storage",
+          "Added expanded statistics metrics and Russian and Turkish translations",
+          "Added a product landing page with automated GitHub Pages deployment",
+        ],
+      },
+      {
+        type: "Changed",
+        items: [
+          "Enhanced the context menu with dynamic, website-specific alias suggestions",
+          "Updated the History tab to show aliases across websites and store history per email account",
+          "Improved popup navigation, layout, styling, and alias selection behavior",
+          "Reorganized the content script and colocated its email helper styles",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          "Preserved email input width and flex layout when injecting the helper icon",
+          "Improved helper popup positioning and hover behavior to prevent accidental closing",
+          "Hid the Tags statistics tab when there is not enough data for a useful chart",
+          "Hardened content rendering against client-side cross-site scripting",
+          "Resolved code quality, localization, and build workflow issues",
+        ],
+      },
+    ],
+  },
   {
     version: "1.2.0",
     date: "2026-07-03",
@@ -625,6 +664,7 @@ export default function Settings({
     "general" | "accounts" | "presets" | "advanced" | "changelog"
   >("general");
   const [emailAccounts, setEmailAccounts] = useState<EmailAccount[]>([]);
+  const [disabledInlineSites, setDisabledInlineSites] = useState<string[]>([]);
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const [editingEmail, setEditingEmail] = useState("");
@@ -671,10 +711,25 @@ export default function Settings({
 
   /** Loads saved app settings from extension storage, merged over defaults. */
   const loadSettings = async () => {
-    const result = await browser.storage.local.get("app_settings");
+    const result = await browser.storage.local.get([
+      "app_settings",
+      INLINE_DISABLED_SITES_KEY,
+    ]);
     if (result.app_settings) {
       setSettings({ ...DEFAULT_SETTINGS, ...result.app_settings });
     }
+    setDisabledInlineSites(
+      parseDisabledInlineSites(result[INLINE_DISABLED_SITES_KEY]),
+    );
+  };
+
+  /** Re-enables the inline helper for one previously disabled website. */
+  const enableInlineForSite = async (site: string) => {
+    const nextSites = disabledInlineSites.filter((item) => item !== site);
+    setDisabledInlineSites(nextSites);
+    await browser.storage.local.set({
+      [INLINE_DISABLED_SITES_KEY]: nextSites,
+    });
   };
 
   /** Loads the email accounts list from extension storage. */
@@ -814,11 +869,6 @@ export default function Settings({
 
   /** Deletes an account and all of its stored data after confirmation. */
   const handleDeleteAccount = async (account: EmailAccount) => {
-    if (emailAccounts.length === 1) {
-      showToast(t("cannotDeleteLastAccountTitle"));
-      return;
-    }
-
     const confirmMsg = t("deleteAccountMessage", [
       account.label,
       account.email,
@@ -840,8 +890,10 @@ export default function Settings({
     );
     const statsKey = getAccountStorageKey(account.email, "alias_stats");
     const favoritesKey = getAccountStorageKey(account.email, "favorites");
-
-    await browser.storage.local.remove([historyKey, statsKey, favoritesKey]);
+    const websiteAliasesKey = getAccountStorageKey(
+      account.email,
+      "website_alias_map",
+    );
 
     // Remove from accounts list
     let updated = emailAccounts.filter((acc) => acc.id !== account.id);
@@ -855,9 +907,22 @@ export default function Settings({
       await browser.storage.local.set({ base_email: updated[0].email });
     }
 
+    await browser.storage.local.remove([
+      historyKey,
+      statsKey,
+      favoritesKey,
+      websiteAliasesKey,
+      ...(updated.length === 0
+        ? ["base_email", "gmail_alias_recent", "alias_stats", "favorites"]
+        : []),
+    ]);
     await browser.storage.local.set({ email_accounts: updated });
     setEmailAccounts(updated);
     showToast(t("toastAccountDeleted"));
+
+    if (updated.length === 0) {
+      onClose();
+    }
   };
 
   /** Enters edit mode for the given account. */
@@ -881,7 +946,12 @@ export default function Settings({
       return;
     }
 
-    if (!editingEmail.trim() || !editingEmail.includes("@")) {
+    let newEmail = editingEmail.trim();
+    if (newEmail && !newEmail.includes("@")) {
+      newEmail += "@gmail.com";
+    }
+
+    if (!validateEmail(newEmail).isValid) {
       showToast(t("errorInvalidEmail"));
       return;
     }
@@ -890,7 +960,6 @@ export default function Settings({
     if (!account) return;
 
     const oldEmail = account.email;
-    const newEmail = editingEmail.trim();
 
     // Check if email changed
     if (oldEmail !== newEmail) {
@@ -922,6 +991,10 @@ export default function Settings({
       );
       const oldStatsKey = getAccountStorageKey(oldEmail, "alias_stats");
       const oldFavoritesKey = getAccountStorageKey(oldEmail, "favorites");
+      const oldWebsiteAliasesKey = getAccountStorageKey(
+        oldEmail,
+        "website_alias_map",
+      );
 
       const newHistoryKey = getAccountStorageKey(
         newEmail,
@@ -929,12 +1002,17 @@ export default function Settings({
       );
       const newStatsKey = getAccountStorageKey(newEmail, "alias_stats");
       const newFavoritesKey = getAccountStorageKey(newEmail, "favorites");
+      const newWebsiteAliasesKey = getAccountStorageKey(
+        newEmail,
+        "website_alias_map",
+      );
 
       // Get old data
       const oldData = await browser.storage.local.get([
         oldHistoryKey,
         oldStatsKey,
         oldFavoritesKey,
+        oldWebsiteAliasesKey,
       ]);
 
       // Save to new keys
@@ -942,6 +1020,7 @@ export default function Settings({
         [newHistoryKey]: oldData[oldHistoryKey] || [],
         [newStatsKey]: oldData[oldStatsKey] || { total: 0, tags: {} },
         [newFavoritesKey]: oldData[oldFavoritesKey] || [],
+        [newWebsiteAliasesKey]: oldData[oldWebsiteAliasesKey] || {},
       });
 
       // Delete old keys
@@ -949,6 +1028,7 @@ export default function Settings({
         oldHistoryKey,
         oldStatsKey,
         oldFavoritesKey,
+        oldWebsiteAliasesKey,
       ]);
 
       // Update base_email if this is the active account
@@ -960,7 +1040,7 @@ export default function Settings({
     // Update account in list
     const updated = emailAccounts.map((acc) =>
       acc.id === accountId
-        ? { ...acc, label: editingLabel.trim(), email: editingEmail.trim() }
+        ? { ...acc, label: editingLabel.trim(), email: newEmail }
         : acc,
     );
 
@@ -1071,7 +1151,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "general"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1095,7 +1175,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "accounts"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1119,7 +1199,7 @@ export default function Settings({
               className={`h-9 min-w-0 rounded-lg px-2 text-xs font-medium transition-colors ${
                 activeTab === "changelog"
                   ? "bg-background text-primary shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
               <svg
@@ -1183,6 +1263,62 @@ export default function Settings({
                       settings={settings}
                       saveSettings={saveSettings}
                     />
+                  ),
+                },
+                {
+                  id: "inline-helper-sites",
+                  title: t("inlineDisabledSites"),
+                  icon: (
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 2v10m6.36-6.36a9 9 0 11-12.72 0"
+                        />
+                      </svg>
+                    </span>
+                  ),
+                  description: (
+                    <div className="space-y-3">
+                      <p className="text-xs text-muted-foreground">
+                        {t("inlineDisabledSitesDescription")}
+                      </p>
+                      {disabledInlineSites.length === 0 ? (
+                        <p className="rounded-xl border border-dashed border-border px-3 py-3 text-center text-xs text-muted-foreground">
+                          {t("noDisabledSites")}
+                        </p>
+                      ) : (
+                        <div className="max-h-36 space-y-1.5 overflow-y-auto">
+                          {disabledInlineSites.map((site) => (
+                            <div
+                              key={site}
+                              className="flex items-center justify-between gap-2 rounded-xl border border-border bg-muted/45 px-3 py-2"
+                            >
+                              <span className="min-w-0 truncate font-mono text-xs text-foreground">
+                                {site}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="shrink-0 rounded-lg px-2 text-xs text-primary hover:bg-primary/10"
+                                onClick={() => enableInlineForSite(site)}
+                                aria-label={`${t("enableInlineForSite")}: ${site}`}
+                              >
+                                {t("enableInlineForSite")}
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ),
                 },
                 {
@@ -1459,7 +1595,7 @@ export default function Settings({
                             <Button
                               variant="ghost"
                               onClick={() => handleSaveEdit(account.id)}
-                              className="flex-1 rounded bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                              className="flex-1 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                               {t("saveChanges")}
                             </Button>
@@ -1531,11 +1667,7 @@ export default function Settings({
                               </Button>
                             </Tooltip>
                             <Tooltip
-                              content={
-                                emailAccounts.length === 1
-                                  ? t("cannotDeleteLastAccountTitle")
-                                  : t("deleteThisAccount")
-                              }
+                              content={t("deleteThisAccount")}
                               side="left"
                             >
                               <Button
@@ -1544,13 +1676,8 @@ export default function Settings({
                                   e.stopPropagation();
                                   handleDeleteAccount(account);
                                 }}
-                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                                aria-label={
-                                  emailAccounts.length === 1
-                                    ? t("cannotDeleteLastAccountTitle")
-                                    : t("deleteThisAccount")
-                                }
-                                disabled={emailAccounts.length === 1}
+                                className="p-1.5 text-destructive hover:bg-destructive/10 rounded transition-colors"
+                                aria-label={t("deleteThisAccount")}
                               >
                                 <svg
                                   className="w-4 h-4"

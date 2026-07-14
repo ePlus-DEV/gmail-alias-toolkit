@@ -22,6 +22,7 @@ import { Tooltip } from "src/components/motion/tooltip";
 import { Table, type TableColumn } from "src/components/motion/table";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { t } from "../../../lib/i18n";
+import { getAliasTags, paginateItems } from "../utils";
 
 interface Alias {
   email: string;
@@ -305,16 +306,7 @@ export default function HistorySection({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">{t("allTags")}</SelectItem>
-              {Array.from(
-                new Set(
-                  recentAliases
-                    .map((a) => {
-                      const match = a.email.match(/\+([^@]+)@/);
-                      return match ? match[1] : null;
-                    })
-                    .filter((t): t is string => t !== null),
-                ),
-              ).map((tag) => (
+              {getAliasTags(recentAliases).map((tag) => (
                 <SelectItem key={tag} value={tag}>
                   {tag}
                 </SelectItem>
@@ -390,11 +382,13 @@ function HistoryList({
   setQrAlias: (email: string | null) => void;
   viewMode: "all" | "favorites";
 }) {
-  const totalItems = filteredAliases.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedAliases = filteredAliases.slice(startIndex, endIndex);
+  const {
+    items: paginatedAliases,
+    totalItems,
+    totalPages,
+    startIndex,
+    endIndex,
+  } = paginateItems(filteredAliases, currentPage, itemsPerPage);
   const columns = useMemo<TableColumn<Alias>[]>(
     () => [
       ...(isSelectMode

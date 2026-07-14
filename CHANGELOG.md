@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Added comprehensive JSDoc comments to all functions and components to meet documentation standards
+- Fixed async/await anti-patterns by replacing `void` statements with proper `.catch()` error handlers
+- Improved variable declarations to use `const` where appropriate
+- Optimized JSX component nesting by extracting inline form input into a separate component
+- Resolved all DeepSource code quality warnings (24 issues)
+- Optimized alias filtering by normalizing search input once and using a set for favorites
+- Added regression coverage for plus-addressed Gmail validation and trimmed searches
+- Removed generated TypeScript build-info files from version control
+
+## [1.3.0] - 2026-07-13
+
+### Added
+
+- Added website-aware alias suggestions based on the current hostname
+- Added an email input helper with inline icons, suggestion popups, live previews, and explicit Use actions
+- Added previous-alias navigation and an information panel explaining supported rules and local-only storage
+- Added expanded statistics metrics and Russian and Turkish translations
+- Added a product landing page with automated GitHub Pages deployment
+
+### Changed
+
+- Enhanced the context menu with dynamic, website-specific alias suggestions
+- Updated the History tab to show aliases across websites and store history per email account
+- Improved popup navigation, layout, styling, and alias selection behavior
+- Reorganized the content script and colocated its email helper styles
+
+### Fixed
+
+- Preserved email input width and flex layout when injecting the helper icon
+- Improved helper popup positioning and hover behavior to prevent accidental closing
+- Hid the Tags statistics tab when there is not enough data for a useful chart
+- Hardened content rendering against client-side cross-site scripting
+- Resolved code quality, localization, and build workflow issues
+
 ## [1.2.0] - 2026-07-03
 
 ### Added

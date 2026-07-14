@@ -34,6 +34,13 @@ A lightweight browser extension that generates, manages, and organizes Gmail ali
 
 - Complete localization with automatic UI translation across all interfaces.
 
+### Code Quality
+
+- Comprehensive JSDoc documentation for all functions and components
+- Strict TypeScript type checking and anti-pattern detection
+- Clean, maintainable code following industry best practices
+- Automatic code formatting with Prettier
+
 ## Privacy
 
 - Data is stored locally in the browser extension storage.
@@ -68,6 +75,6 @@ MIT. See `LICENSE.md`.
 
 ## Version
 
-Current version: `1.2.0`
+Current version: `1.3.0`
 
 See `CHANGELOG.md` for release notes.

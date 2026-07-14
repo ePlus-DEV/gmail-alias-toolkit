@@ -214,18 +214,16 @@ export function filterAliases(
     sortBy: "recent" | "alphabetical";
   },
 ): Array<{ email: string; timestamp: number }> {
+  const normalizedSearchQuery = opts.searchQuery.trim().toLowerCase();
+  const favoriteEmails = new Set(opts.favorites);
+
   return aliases
     .filter((alias) => {
-      if (
-        opts.viewMode === "favorites" &&
-        !opts.favorites.includes(alias.email)
-      )
+      if (opts.viewMode === "favorites" && !favoriteEmails.has(alias.email))
         return false;
       if (
-        opts.searchQuery &&
-        !alias.email
-          .toLowerCase()
-          .includes(opts.searchQuery.trim().toLowerCase())
+        normalizedSearchQuery &&
+        !alias.email.toLowerCase().includes(normalizedSearchQuery)
       )
         return false;
       if (opts.filterTag !== "all") {
@@ -240,4 +238,37 @@ export function filterAliases(
         ? b.timestamp - a.timestamp
         : a.email.localeCompare(b.email),
     );
+}
+
+/** Extracts the unique plus-addressing tags used by a history collection. */
+export function getAliasTags(aliases: Array<{ email: string }>): string[] {
+  return [
+    ...new Set(
+      aliases
+        .map((alias) => alias.email.match(/\+([^@]+)@/)?.[1])
+        .filter((tag): tag is string => Boolean(tag)),
+    ),
+  ];
+}
+
+/** Returns a safe page slice and its normalized pagination metadata. */
+export function paginateItems<T>(
+  items: T[],
+  requestedPage: number,
+  itemsPerPage: number,
+) {
+  const safeItemsPerPage = Math.max(1, itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(items.length / safeItemsPerPage));
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
+  const startIndex = (currentPage - 1) * safeItemsPerPage;
+  const endIndex = startIndex + safeItemsPerPage;
+
+  return {
+    items: items.slice(startIndex, endIndex),
+    currentPage,
+    totalPages,
+    startIndex,
+    endIndex,
+    totalItems: items.length,
+  };
 }

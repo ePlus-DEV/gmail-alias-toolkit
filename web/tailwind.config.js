@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{ts,tsx}",
+    "../src/components/motion/theme-toggle.tsx",
+    "../src/components/motion/action-swap.tsx",
+  ],
   theme: {
     extend: {
       fontFamily: {
