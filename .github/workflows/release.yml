@@ -23,19 +23,26 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
-          cache: yarn
+
+      - name: Enable Corepack
+        run: |
+          npm install --global corepack@latest
+          corepack enable
+          corepack install --global yarn@4.14.1
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable --mode=skip-build
 
       - name: Prepare WXT types
-        run: yarn wxt prepare
+        run: yarn exec wxt prepare
 
       - name: Run tests
         run: yarn test
