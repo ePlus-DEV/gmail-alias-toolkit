@@ -90,11 +90,106 @@ Local-first: All mappings stored in browser.storage.local. No server or analytic
 
 ## Testing & CI
 
+### Automated Code Quality Checks
+
 Code is checked by DeepSource for:
 
-- Documentation completeness (JS-D1001)
+- Documentation completeness (JS-D1001) — All functions and components require JSDoc
 - Unused imports/variables (JS-0356)
 - Array index keys (JS-0437)
+- Anti-patterns: void statements, improper variable declarations
 - Other code quality issues
 
 All issues must be resolved before merging to `main`.
+
+### Unit Testing with Vitest
+
+The project uses **Vitest** for unit testing. Tests are located in the `tests/` directory mirroring the source structure.
+
+**Test File Locations:**
+
+- `tests/services/` — Tests for service layer (websiteAliasService, etc.)
+- `tests/utils/` — Tests for utility functions (hostnameNormalizer, inlineSiteSettings, etc.)
+- `tests/popup/` — Tests for popup components and utilities
+- `tests/content/` — Tests for content script helper functions
+
+**Running Tests:**
+
+```bash
+npm test                    # Run all tests
+npm test -- [file]         # Run specific test file
+npm test -- --ui           # Run with UI dashboard
+npm test -- --coverage     # Generate coverage report
+```
+
+**Test Standards:**
+
+1. **Coverage Requirements:**
+   - Utility functions: 100% line coverage
+   - Service layer: 90%+ line coverage
+   - Components: 80%+ line coverage
+
+2. **Test Organization:**
+   - One test file per module
+   - Use `describe()` blocks to group related tests
+   - Test both success and error paths
+   - Mock external dependencies (browser APIs, storage)
+
+3. **Best Practices:**
+   - Use descriptive test names that explain what is being tested
+   - Test edge cases and boundary conditions
+   - Mock browser storage and extension APIs
+   - Arrange → Act → Assert pattern for test structure
+   - Use `beforeEach()` to reset state between tests
+
+**Example Test Structure:**
+```typescript
+import { describe, expect, it, beforeEach, vi } from "vitest";
+
+describe("functionName", () => {
+  beforeEach(() => {
+    // Reset state before each test
+    vi.clearAllMocks();
+  });
+
+  it("should do something specific", () => {
+    // Arrange: Set up test data
+    const input = "test";
+    
+    // Act: Call the function
+    const result = functionName(input);
+    
+    // Assert: Verify the result
+    expect(result).toBe("expected");
+  });
+});
+```
+
+### Test Coverage
+
+**Current Coverage Areas:**
+
+- ✅ Hostname normalization and URL parsing
+- ✅ Website alias storage and retrieval
+- ✅ Alias suggestion generation
+- ✅ Email address normalization
+- ✅ HTML escaping (XSS prevention)
+- ✅ Inline site settings management
+- ✅ Gmail tricks generation (dot tricks, plus tags, etc.)
+- ✅ Custom alias creation
+- ✅ Popup components (Button, Input, Toggle, etc.)
+
+**Add Tests For:**
+- New utility functions (100% line coverage)
+- Service layer changes (test both happy path and error cases)
+- Complex component logic (interaction testing)
+- Browser API integrations (with proper mocking)
+
+### Continuous Integration
+
+Pull requests to `main` require:
+1. ✅ All tests passing
+2. ✅ Code coverage maintained
+3. ✅ DeepSource checks passing (zero issues)
+4. ✅ TypeScript type checking strict mode
+5. ✅ Prettier formatting compliance
