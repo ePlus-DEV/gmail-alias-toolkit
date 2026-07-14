@@ -1314,42 +1314,42 @@ function MockHistory({ t }: { t: (typeof translations)[Locale] }) {
   return (
     <div className="overflow-hidden bg-white p-3">
       <div className="overflow-hidden rounded-xl border border-slate-200">
-      <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
-        <div className="flex items-center gap-2 text-xs font-black text-slate-700">
-          <History className="h-3.5 w-3.5" /> {t.mock.recent}
+        <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-3 py-2">
+          <div className="flex items-center gap-2 text-xs font-black text-slate-700">
+            <History className="h-3.5 w-3.5" /> {t.mock.recent}
+          </div>
+          <div className="flex items-center gap-1 text-xs font-bold text-slate-500">
+            <Search className="h-3.5 w-3.5" /> {t.mock.search}
+          </div>
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold text-slate-500">
-          <Search className="h-3.5 w-3.5" /> {t.mock.search}
+        <div>
+          {historyItems.slice(0, 2).map((item, index) => (
+            <motion.div
+              key={item.alias}
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.08 * index }}
+              className="flex items-center gap-2 border-b border-slate-100 px-3 py-2.5 last:border-b-0"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-mono text-xs font-bold text-slate-800">
+                  {item.alias}
+                </p>
+                <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
+                  {item.tag}
+                </p>
+              </div>
+              <Star
+                className={`h-4 w-4 ${
+                  item.favorite
+                    ? "fill-amber-400 text-amber-400"
+                    : "text-slate-300"
+                }`}
+              />
+              <Clipboard className="h-4 w-4 text-blue-600" />
+            </motion.div>
+          ))}
         </div>
-      </div>
-      <div>
-        {historyItems.slice(0, 2).map((item, index) => (
-          <motion.div
-            key={item.alias}
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.08 * index }}
-            className="flex items-center gap-2 border-b border-slate-100 px-3 py-2.5 last:border-b-0"
-          >
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-mono text-xs font-bold text-slate-800">
-                {item.alias}
-              </p>
-              <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
-                {item.tag}
-              </p>
-            </div>
-            <Star
-              className={`h-4 w-4 ${
-                item.favorite
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-slate-300"
-              }`}
-            />
-            <Clipboard className="h-4 w-4 text-blue-600" />
-          </motion.div>
-        ))}
-      </div>
       </div>
     </div>
   );
@@ -1366,11 +1366,7 @@ function MockFooter({ t }: { t: (typeof translations)[Locale] }) {
 }
 
 /** Demonstrates the complete inline-helper workflow beside a website form. */
-function InlinePopupSection({
-  t,
-}: {
-  t: (typeof translations)[Locale];
-}) {
+function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] = useState<
     "suggestions" | "generate" | "history"
   >("suggestions");
