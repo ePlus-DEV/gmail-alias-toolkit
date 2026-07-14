@@ -2067,27 +2067,27 @@ function InlinePopupGrid({
 }) {
   return (
     <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(520px,1.28fr)]">
-          <InlineWorkflowSteps steps={t.inlineHelper.steps} />
-          <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
-            <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
-              <p className="text-sm font-black">{t.inlineHelper.demoTitle}</p>
-              <p className="mt-1 text-xs text-slate-400">
-                {t.inlineHelper.previewHint}
-              </p>
-            </div>
-            <InlineDemoContainer
-              t={t}
-              inputValue={inputValue}
-              hoveredAlias={hoveredAlias}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              setHoveredAlias={setHoveredAlias}
-              setSelectedAlias={setSelectedAlias}
-              aliases={aliases}
-            />
-          </div>
+      <InlineWorkflowSteps steps={t.inlineHelper.steps} />
+      <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-blue-950/10">
+        <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
+          <p className="text-sm font-black">{t.inlineHelper.demoTitle}</p>
+          <p className="mt-1 text-xs text-slate-400">
+            {t.inlineHelper.previewHint}
+          </p>
         </div>
-      );
+        <InlineDemoContainer
+          t={t}
+          inputValue={inputValue}
+          hoveredAlias={hoveredAlias}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setHoveredAlias={setHoveredAlias}
+          setSelectedAlias={setSelectedAlias}
+          aliases={aliases}
+        />
+      </div>
+    </div>
+  );
 }
 
 /** Demonstrates the complete inline-helper workflow beside a website form. */
