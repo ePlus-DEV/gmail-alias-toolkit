@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "E-Mail ändern"
   },
+  "menuForThisWebsite": {
+    "message": "Für diese Website"
+  },
+  "menuLoading": {
+    "message": "Wird geladen..."
+  },
   "menuRandomEmailAlias": {
     "message": "Zufälliger E-Mail-Alias"
   },

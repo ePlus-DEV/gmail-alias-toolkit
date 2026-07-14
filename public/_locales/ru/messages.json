@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "Изменить e-mail"
   },
+  "menuForThisWebsite": {
+    "message": "Для этого сайта"
+  },
+  "menuLoading": {
+    "message": "Загрузка..."
+  },
   "menuRandomEmailAlias": {
     "message": "Случайный e-mail псевдоним"
   },

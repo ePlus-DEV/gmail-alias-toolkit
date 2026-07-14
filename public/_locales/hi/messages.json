@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "ईमेल बदलें"
   },
+  "menuForThisWebsite": {
+    "message": "इस वेबसाइट के लिए"
+  },
+  "menuLoading": {
+    "message": "लोड हो रहा है..."
+  },
   "menuRandomEmailAlias": {
     "message": "रैंडम ईमेल उपनाम"
   },

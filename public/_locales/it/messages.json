@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "Cambia email"
   },
+  "menuForThisWebsite": {
+    "message": "Per questo sito"
+  },
+  "menuLoading": {
+    "message": "Caricamento..."
+  },
   "menuRandomEmailAlias": {
     "message": "Alias email casuale"
   },

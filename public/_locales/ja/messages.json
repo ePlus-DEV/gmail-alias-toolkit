@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "メールを変更"
   },
+  "menuForThisWebsite": {
+    "message": "このウェブサイト用"
+  },
+  "menuLoading": {
+    "message": "読み込み中..."
+  },
   "menuRandomEmailAlias": {
     "message": "ランダムメールエイリアス"
   },

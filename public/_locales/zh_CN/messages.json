@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "更改邮箱"
   },
+  "menuForThisWebsite": {
+    "message": "用于此网站"
+  },
+  "menuLoading": {
+    "message": "正在加载..."
+  },
   "menuRandomEmailAlias": {
     "message": "随机邮箱别名"
   },

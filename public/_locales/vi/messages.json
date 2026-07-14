@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "Thay đổi email"
   },
+  "menuForThisWebsite": {
+    "message": "Cho trang web này"
+  },
+  "menuLoading": {
+    "message": "Đang tải..."
+  },
   "menuRandomEmailAlias": {
     "message": "Bí danh email ngẫu nhiên"
   },

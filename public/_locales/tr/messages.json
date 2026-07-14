@@ -529,6 +529,12 @@
   "changeEmail": {
     "message": "E-postayı değiştir"
   },
+  "menuForThisWebsite": {
+    "message": "Bu web sitesi için"
+  },
+  "menuLoading": {
+    "message": "Yükleniyor..."
+  },
   "menuRandomEmailAlias": {
     "message": "Rastgele e-posta takma adı"
   },

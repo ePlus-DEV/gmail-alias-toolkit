@@ -1,4 +1,5 @@
 import { normalizeHostname } from "src/utils/hostnameNormalizer";
+import { t } from "../../lib/i18n";
 import {
   getPreviousAliasForWebsite,
   generateSuggestionsForWebsite,
@@ -138,15 +139,44 @@ function createPopup(
   const safePreviousAlias = data.previousAlias
     ? escapeHtml(data.previousAlias)
     : "";
+  const labels = {
+    close: escapeHtml(t("close")),
+    suggestions: escapeHtml(t("generatedAliases")),
+    generate: escapeHtml(t("generate")),
+    history: escapeHtml(t("recentAliases")),
+    previous: escapeHtml(t("recentAliases")),
+    random: escapeHtml(t("random")),
+    tags: escapeHtml(t("tabTagsShort")),
+    tricks: escapeHtml(t("tabTricksShort")),
+    privateMail: escapeHtml(t("privateMailFormat")),
+    alphanumeric: escapeHtml(t("randomCharactersFormat")),
+    words: escapeHtml(t("randomWordsFormat")),
+    timestamp: escapeHtml(t("timestampFormat")),
+    numberOfAliases: escapeHtml(t("numberOfAliases")),
+    tagPlaceholder: escapeHtml(t("tagPlaceholder")),
+    select: escapeHtml(t("select")),
+    dotTrick: escapeHtml(t("dotTrick")),
+    plusTags: escapeHtml(t("plusTags")),
+    googlemail: escapeHtml(t("googlemail")),
+    removeDots: escapeHtml(t("removeDots")),
+    generateTricks: escapeHtml(t("generateTricks")),
+    searchAliases: escapeHtml(t("searchAliases")),
+    favorites: escapeHtml(t("favorites")),
+    allTags: escapeHtml(t("allTags")),
+    mostRecent: escapeHtml(t("mostRecent")),
+    az: escapeHtml(t("az")),
+    previousPage: escapeHtml(t("previousPage")),
+    nextPage: escapeHtml(t("nextPage")),
+  };
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
       <span class="gmail-alias-popup-title" style="font-weight: 600; font-size: 13px; text-transform: capitalize; color: #374151;">${safeWebsite}</span>
-      <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="Close">✕</button>
+      <button class="gmail-alias-popup-close" style="background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease;" aria-label="${labels.close}">✕</button>
     </div>
     <div class="gmail-alias-popup-tabs" style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
-      <button class="gmail-alias-popup-tab active" data-tab="suggestions" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">Suggestions</button>
-      <button class="gmail-alias-popup-tab" data-tab="generate" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">Generate</button>
-      <button class="gmail-alias-popup-tab" data-tab="history" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">History</button>
+      <button class="gmail-alias-popup-tab active" data-tab="suggestions" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">${labels.suggestions}</button>
+      <button class="gmail-alias-popup-tab" data-tab="generate" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">${labels.generate}</button>
+      <button class="gmail-alias-popup-tab" data-tab="history" style="flex: 1; padding: 10px; border: none; background: none; border-bottom: 2px solid transparent; font-weight: 600; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s ease; text-transform: capitalize;">${labels.history}</button>
     </div>
     <div class="gmail-alias-popup-content" style="padding: 12px; max-height: 320px; overflow-y: auto;">
       <div class="gmail-alias-popup-tab-content active" data-tab-content="suggestions">
@@ -154,7 +184,7 @@ function createPopup(
           data.previousAlias
             ? `
           <div class="gmail-alias-prev-section" style="margin-bottom: 12px;">
-            <div class="gmail-alias-prev-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px;">Previously used:</div>
+            <div class="gmail-alias-prev-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px;">${labels.previous}:</div>
             <button class="gmail-alias-prev-alias" data-alias="${safePreviousAlias}" style="display: block; width: 100%; padding: 8px 12px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #92400e; cursor: pointer; text-align: left; transition: all 0.2s ease;">
               ${safePreviousAlias}
             </button>
@@ -164,7 +194,7 @@ function createPopup(
             : ""
         }
         <div class="gmail-alias-suggestions" style="display: flex; flex-direction: column; gap: 8px;">
-          <div class="gmail-alias-suggestions-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.5px;">Suggestions:</div>
+          <div class="gmail-alias-suggestions-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.5px;">${labels.suggestions}:</div>
           <div class="gmail-alias-suggestions-list" style="display: flex; flex-direction: column; gap: 6px;">
             ${data.suggestions
               .filter((alias) => alias !== data.previousAlias)
@@ -182,70 +212,70 @@ function createPopup(
       </div>
       <div class="gmail-alias-popup-tab-content" data-tab-content="generate">
         <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-          <button class="gmail-alias-generate-mode active" data-mode="random">Random</button>
-          <button class="gmail-alias-generate-mode" data-mode="tags">Tags</button>
-          <button class="gmail-alias-generate-mode" data-mode="tricks">Tricks</button>
+          <button class="gmail-alias-generate-mode active" data-mode="random">${labels.random}</button>
+          <button class="gmail-alias-generate-mode" data-mode="tags">${labels.tags}</button>
+          <button class="gmail-alias-generate-mode" data-mode="tricks">${labels.tricks}</button>
         </div>
         <div class="gmail-alias-generate-panel active" data-generate-panel="random">
           <div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px; gap: 6px;">
             <select class="gmail-alias-random-format">
-              <option value="private-mail">Private Mail</option>
-              <option value="alphanumeric">Alphanumeric</option>
-              <option value="words">Words</option>
-              <option value="timestamp">Timestamp</option>
+              <option value="private-mail">${labels.privateMail}</option>
+              <option value="alphanumeric">${labels.alphanumeric}</option>
+              <option value="words">${labels.words}</option>
+              <option value="timestamp">${labels.timestamp}</option>
             </select>
-            <input type="number" class="gmail-alias-random-count" min="1" max="20" value="5" aria-label="Number of aliases">
+            <input type="number" class="gmail-alias-random-count" min="1" max="20" value="5" aria-label="${labels.numberOfAliases}">
           </div>
-          <button class="gmail-alias-quick-action gmail-alias-random-btn">Generate aliases</button>
+          <button class="gmail-alias-quick-action gmail-alias-random-btn">${labels.generate}</button>
           <div class="gmail-alias-generated-list"></div>
         </div>
         <div class="gmail-alias-generate-panel" data-generate-panel="tags">
           <div style="display: flex; gap: 6px;">
-            <input type="text" class="gmail-alias-generate-input" placeholder="Enter custom tag">
-            <button class="gmail-alias-generate-btn">Use</button>
+            <input type="text" class="gmail-alias-generate-input" placeholder="${labels.tagPlaceholder}">
+            <button class="gmail-alias-generate-btn">${labels.select}</button>
           </div>
           <div class="gmail-alias-preset-list"></div>
         </div>
         <div class="gmail-alias-generate-panel" data-generate-panel="tricks">
           <div style="display: grid; grid-template-columns: minmax(0, 1fr) 58px; gap: 6px;">
             <select class="gmail-alias-trick-type">
-              <option value="dot">Dot trick</option>
-              <option value="plus">Plus tags</option>
-              <option value="googlemail">Googlemail</option>
-              <option value="nodots">Remove dots</option>
+              <option value="dot">${labels.dotTrick}</option>
+              <option value="plus">${labels.plusTags}</option>
+              <option value="googlemail">${labels.googlemail}</option>
+              <option value="nodots">${labels.removeDots}</option>
             </select>
-            <input type="number" class="gmail-alias-trick-count" min="1" max="20" value="5" aria-label="Number of variations">
+            <input type="number" class="gmail-alias-trick-count" min="1" max="20" value="5" aria-label="${labels.numberOfAliases}">
           </div>
-          <button class="gmail-alias-quick-action gmail-alias-trick-btn">Generate tricks</button>
+          <button class="gmail-alias-quick-action gmail-alias-trick-btn">${labels.generateTricks}</button>
           <div class="gmail-alias-trick-list"></div>
         </div>
       </div>
       <div class="gmail-alias-popup-tab-content" data-tab-content="history">
         <div class="gmail-alias-history-section">
-          <input type="search" class="gmail-alias-history-search" placeholder="Search history..." aria-label="Search history">
+          <input type="search" class="gmail-alias-history-search" placeholder="${labels.searchAliases}" aria-label="${labels.searchAliases}">
           <div class="gmail-alias-history-filters">
-            <select class="gmail-alias-history-view" aria-label="History view">
-              <option value="all">All aliases</option>
-              <option value="favorites">Favorites</option>
+            <select class="gmail-alias-history-view" aria-label="${labels.history}">
+              <option value="all">${labels.history}</option>
+              <option value="favorites">${labels.favorites}</option>
             </select>
-            <select class="gmail-alias-history-tag" aria-label="Filter by tag">
-              <option value="all">All tags</option>
+            <select class="gmail-alias-history-tag" aria-label="${labels.allTags}">
+              <option value="all">${labels.allTags}</option>
             </select>
-            <select class="gmail-alias-history-sort" aria-label="Sort history">
-              <option value="recent">Most recent</option>
-              <option value="alphabetical">A–Z</option>
+            <select class="gmail-alias-history-sort" aria-label="${labels.mostRecent}">
+              <option value="recent">${labels.mostRecent}</option>
+              <option value="alphabetical">${labels.az}</option>
             </select>
-            <select class="gmail-alias-history-page-size" aria-label="Aliases per page">
-              <option value="5">5 / page</option>
-              <option value="10">10 / page</option>
-              <option value="20">20 / page</option>
+            <select class="gmail-alias-history-page-size" aria-label="${labels.numberOfAliases}">
+              <option value="5">${escapeHtml(t("perPage", "5"))}</option>
+              <option value="10">${escapeHtml(t("perPage", "10"))}</option>
+              <option value="20">${escapeHtml(t("perPage", "20"))}</option>
             </select>
           </div>
           <div class="gmail-alias-history-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
           <div class="gmail-alias-history-pagination">
-            <button type="button" class="gmail-alias-history-prev" aria-label="Previous page">‹</button>
+            <button type="button" class="gmail-alias-history-prev" aria-label="${labels.previousPage}">‹</button>
             <span class="gmail-alias-history-page-info">1 / 1</span>
-            <button type="button" class="gmail-alias-history-next" aria-label="Next page">›</button>
+            <button type="button" class="gmail-alias-history-next" aria-label="${labels.nextPage}">›</button>
           </div>
         </div>
       </div>
@@ -352,13 +382,13 @@ function createPopup(
     }
     const presets = settings?.customPresets || [];
     presetList.innerHTML = presets.length
-      ? `<div class="gmail-alias-quick-label">Your presets</div>${presets
+      ? `<div class="gmail-alias-quick-label">${escapeHtml(t("yourPresets"))}</div>${presets
           .map(
             (preset) =>
               `<button class="gmail-alias-preset-item" data-tag="${escapeHtml(preset.tag)}">${escapeHtml(preset.label)}</button>`,
           )
           .join("")}`
-      : '<div class="gmail-alias-quick-empty">No presets yet</div>';
+      : `<div class="gmail-alias-quick-empty">${escapeHtml(t("noTagsYet"))}</div>`;
     presetList
       .querySelectorAll(".gmail-alias-preset-item")
       .forEach((presetButton) => {
@@ -500,10 +530,10 @@ function createPopup(
     if (page.items.length === 0) {
       const emptyMessage =
         currentHistory.length === 0
-          ? "No history yet"
+          ? t("noResultsFound")
           : historyView?.value === "favorites"
-            ? "No favorite aliases"
-            : "No matching aliases";
+            ? t("noFavoritesYet")
+            : t("noResultsFound");
       historyList.innerHTML = `<div class="gmail-alias-quick-empty">${emptyMessage}</div>`;
       return;
     }
@@ -583,7 +613,7 @@ function createPopup(
       if (historyTag) {
         const selectedTag = historyTag.value;
         historyTag.innerHTML = [
-          '<option value="all">All tags</option>',
+          `<option value="all">${escapeHtml(t("allTags"))}</option>`,
           ...getAliasTags(currentHistory).map(
             (tag) => `<option value="${escapeHtml(tag)}">${escapeHtml(tag)}</option>`,
           ),
@@ -596,7 +626,7 @@ function createPopup(
     } catch (error) {
       console.debug("Error loading history:", error);
       historyList.innerHTML =
-        '<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">Error loading history</div>';
+        `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
     }
   }
 
@@ -869,7 +899,7 @@ function renderQuickAliasList(
             `<button class="gmail-alias-quick-alias" data-alias="${escapeHtml(alias)}">${escapeHtml(alias)}</button>`,
         )
         .join("")
-    : '<div class="gmail-alias-quick-empty">No aliases generated</div>';
+    : `<div class="gmail-alias-quick-empty">${escapeHtml(t("noResultsFound"))}</div>`;
 
   const originalValue = input?.value || "";
   let committed = false;
