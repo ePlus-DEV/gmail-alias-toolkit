@@ -38,7 +38,24 @@ jobs:
         run: yarn exec wxt prepare
 
       - name: Compile TypeScript
-        run: yarn compile
+        id: compile
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          yarn compile --pretty false 2>&1 | tee compile.log
+
+      - name: Upload TypeScript diagnostics
+        if: steps.compile.outcome == 'failure'
+        uses: actions/upload-artifact@v5
+        with:
+          name: typescript-diagnostics
+          path: compile.log
+          if-no-files-found: error
+
+      - name: Fail on TypeScript errors
+        if: steps.compile.outcome == 'failure'
+        run: exit 1
 
       - name: Run tests
         run: yarn test
