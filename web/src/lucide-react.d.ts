@@ -13,6 +13,7 @@ declare module "lucide-react" {
   export const BadgeCheck: LucideIcon;
   export const BarChart3: LucideIcon;
   export const Clipboard: LucideIcon;
+  export const ChevronDown: LucideIcon;
   export const Copy: LucideIcon;
   export const Database: LucideIcon;
   export const Download: LucideIcon;
@@ -20,9 +21,11 @@ declare module "lucide-react" {
   export const FileJson: LucideIcon;
   export const Github: LucideIcon;
   export const History: LucideIcon;
+  export const Home: LucideIcon;
   export const Languages: LucideIcon;
   export const Mail: LucideIcon;
   export const Moon: LucideIcon;
+  export const Plus: LucideIcon;
   export const QrCode: LucideIcon;
   export const Search: LucideIcon;
   export const Settings: LucideIcon;
@@ -31,5 +34,11 @@ declare module "lucide-react" {
   export const Sparkles: LucideIcon;
   export const Star: LucideIcon;
   export const Tags: LucideIcon;
+  export const X: LucideIcon;
   export const Zap: LucideIcon;
+}
+
+declare module "*.svg?url" {
+  const url: string;
+  export default url;
 }
