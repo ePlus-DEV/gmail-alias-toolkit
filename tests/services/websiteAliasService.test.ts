@@ -37,8 +37,7 @@ global.browser = {
 
 // Mock the getAccountStorageKey utility
 vi.mock("../../entrypoints/popup/utils", () => ({
-  getAccountStorageKey: (email: string, suffix: string) =>
-    `${email}:${suffix}`,
+  getAccountStorageKey: (email: string, suffix: string) => `${email}:${suffix}`,
 }));
 
 describe("websiteAliasService", () => {
@@ -140,14 +139,14 @@ describe("websiteAliasService", () => {
       // Test with full URL
       const resultUrl = await getPreviousAliasForWebsite(
         testEmail,
-        "https://github.com/user"
+        "https://github.com/user",
       );
       expect(resultUrl?.alias).toBe(testAlias);
 
       // Test with hostname
       const resultHostname = await getPreviousAliasForWebsite(
         testEmail,
-        "github"
+        "github",
       );
       expect(resultHostname?.alias).toBe(testAlias);
     });
@@ -155,7 +154,7 @@ describe("websiteAliasService", () => {
     it("returns null for invalid hostname", async () => {
       const result = await getPreviousAliasForWebsite(
         testEmail,
-        "not a valid host"
+        "not a valid host",
       );
       expect(result).toBeNull();
     });
@@ -165,7 +164,7 @@ describe("websiteAliasService", () => {
     it("returns empty array for invalid hostname", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "not a valid host"
+        "not a valid host",
       );
       expect(suggestions).toEqual([]);
     });
@@ -173,7 +172,7 @@ describe("websiteAliasService", () => {
     it("generates up to 5 suggestions for new website", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
 
       expect(suggestions.length).toBeGreaterThan(0);
@@ -186,7 +185,7 @@ describe("websiteAliasService", () => {
       // First visit: no counter suggestion
       let suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
       expect(suggestions[1]).not.toMatch(/github001/);
 
@@ -196,7 +195,7 @@ describe("websiteAliasService", () => {
       // Second visit: includes counter suggestion
       suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
       expect(suggestions).toContainEqual(expect.stringMatching(/github002/));
     });
@@ -204,7 +203,7 @@ describe("websiteAliasService", () => {
     it("includes date-based suggestion with YYYYMMDD format", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
 
       const dateRegex = /github-\d{8}@gmail\.com/;
@@ -214,22 +213,24 @@ describe("websiteAliasService", () => {
     it("includes short code based on hostname", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
 
       // Short code uses first 3 letters of normalized hostname (github -> git, or ghi)
-      expect(suggestions.some((s) => s.includes("+git@") || s.includes("+ghi@"))).toBe(true);
+      expect(
+        suggestions.some((s) => s.includes("+git@") || s.includes("+ghi@")),
+      ).toBe(true);
     });
 
     it("generates random suffix suggestions", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
 
       const randomSuffixRegex = /github-[a-z0-9]{4}@gmail\.com/;
       const randomSuggestions = suggestions.filter((s) =>
-        randomSuffixRegex.test(s)
+        randomSuffixRegex.test(s),
       );
       expect(randomSuggestions.length).toBeGreaterThan(0);
     });
@@ -237,7 +238,7 @@ describe("websiteAliasService", () => {
     it("limits suggestions to 5", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
-        "https://github.com"
+        "https://github.com",
       );
 
       expect(suggestions.length).toBeLessThanOrEqual(5);
@@ -246,7 +247,7 @@ describe("websiteAliasService", () => {
     it("always uses @gmail.com for suggestions regardless of email domain", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         "user@example.com",
-        "https://github.com"
+        "https://github.com",
       );
 
       // Suggestions always use @gmail.com, not the original email domain

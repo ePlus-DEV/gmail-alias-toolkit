@@ -103,7 +103,7 @@ describe("Content script helpers", () => {
   describe("escapeHtml", () => {
     it("escapes HTML special characters", () => {
       expect(escapeHtml("<script>alert('XSS')</script>")).toBe(
-        "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;"
+        "&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;",
       );
     });
 
@@ -112,7 +112,7 @@ describe("Content script helpers", () => {
     });
 
     it("escapes double quotes", () => {
-      expect(escapeHtml('He said "hello"')).toBe('He said &quot;hello&quot;');
+      expect(escapeHtml('He said "hello"')).toBe("He said &quot;hello&quot;");
     });
 
     it("escapes single quotes", () => {
@@ -121,7 +121,7 @@ describe("Content script helpers", () => {
 
     it("handles multiple escapes in one string", () => {
       expect(escapeHtml('<div class="test">A&B\'s "quote"</div>')).toBe(
-        "&lt;div class=&quot;test&quot;&gt;A&amp;B&#39;s &quot;quote&quot;&lt;/div&gt;"
+        "&lt;div class=&quot;test&quot;&gt;A&amp;B&#39;s &quot;quote&quot;&lt;/div&gt;",
       );
     });
 
@@ -133,31 +133,31 @@ describe("Content script helpers", () => {
   describe("normalizeConfiguredEmail", () => {
     it("normalizes gmail.com addresses", () => {
       expect(normalizeConfiguredEmail("User.Name@GMAIL.COM")).toBe(
-        "User.Name@gmail.com"
+        "User.Name@gmail.com",
       );
     });
 
     it("normalizes googlemail.com addresses", () => {
       expect(normalizeConfiguredEmail("user@GOOGLEMAIL.COM")).toBe(
-        "user@googlemail.com"
+        "user@googlemail.com",
       );
     });
 
     it("preserves emails with extra text (only regex match works)", () => {
       expect(normalizeConfiguredEmail("user@gmail.com extra")).toBe(
-        "user@gmail.com extra"
+        "user@gmail.com extra",
       );
     });
 
     it("handles whitespace", () => {
       expect(normalizeConfiguredEmail("  user@gmail.com  ")).toBe(
-        "user@gmail.com"
+        "user@gmail.com",
       );
     });
 
     it("returns non-gmail addresses unchanged", () => {
       expect(normalizeConfiguredEmail("user@example.com")).toBe(
-        "user@example.com"
+        "user@example.com",
       );
     });
 
@@ -198,13 +198,13 @@ describe("Content script helpers", () => {
   describe("createCustomAlias", () => {
     it("creates custom alias with tag", () => {
       expect(createCustomAlias("user@gmail.com", "shopping")).toBe(
-        "user+shopping@gmail.com"
+        "user+shopping@gmail.com",
       );
     });
 
     it("returns full email if value includes @", () => {
       expect(createCustomAlias("user@gmail.com", "custom@example.com")).toBe(
-        "custom@example.com"
+        "custom@example.com",
       );
     });
 
@@ -214,19 +214,19 @@ describe("Content script helpers", () => {
 
     it("preserves domain case", () => {
       expect(createCustomAlias("user@GMAIL.COM", "tag")).toBe(
-        "user+tag@GMAIL.COM"
+        "user+tag@GMAIL.COM",
       );
     });
 
     it("handles dots in username", () => {
       expect(createCustomAlias("first.last@gmail.com", "work")).toBe(
-        "first.last+work@gmail.com"
+        "first.last+work@gmail.com",
       );
     });
 
     it("handles multiple @ symbols (takes last one)", () => {
       expect(createCustomAlias("user+old@domain.com", "new")).toBe(
-        "user+old+new@domain.com"
+        "user+old+new@domain.com",
       );
     });
   });
@@ -273,7 +273,7 @@ describe("Content script helpers", () => {
         const tricks = generateQuickTricks(
           "user@googlemail.com",
           "googlemail",
-          1
+          1,
         );
         expect(tricks[0]).toMatch(/@gmail\.com$/);
       });

@@ -143,6 +143,7 @@ npm test -- --coverage     # Generate coverage report
    - Use `beforeEach()` to reset state between tests
 
 **Example Test Structure:**
+
 ```typescript
 import { describe, expect, it, beforeEach, vi } from "vitest";
 
@@ -155,10 +156,10 @@ describe("functionName", () => {
   it("should do something specific", () => {
     // Arrange: Set up test data
     const input = "test";
-    
+
     // Act: Call the function
     const result = functionName(input);
-    
+
     // Assert: Verify the result
     expect(result).toBe("expected");
   });
@@ -180,6 +181,7 @@ describe("functionName", () => {
 - ✅ Popup components (Button, Input, Toggle, etc.)
 
 **Add Tests For:**
+
 - New utility functions (100% line coverage)
 - Service layer changes (test both happy path and error cases)
 - Complex component logic (interaction testing)
@@ -188,6 +190,7 @@ describe("functionName", () => {
 ### Continuous Integration
 
 Pull requests to `main` require:
+
 1. ✅ All tests passing
 2. ✅ Code coverage maintained
 3. ✅ DeepSource checks passing (zero issues)
