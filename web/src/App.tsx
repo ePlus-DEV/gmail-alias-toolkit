@@ -1955,6 +1955,8 @@ function InlineDemoContainer({
   hoveredAlias,
   activeTab,
   setActiveTab,
+  setHoveredAlias,
+  setSelectedAlias,
   aliases,
 }: {
   t: (typeof translations)[Locale];
@@ -1962,6 +1964,8 @@ function InlineDemoContainer({
   hoveredAlias: string;
   activeTab: "suggestions" | "generate" | "history";
   setActiveTab: (tab: "suggestions" | "generate" | "history") => void;
+  setHoveredAlias: (alias: string) => void;
+  setSelectedAlias: (alias: string) => void;
   aliases: string[];
 }) {
   return (
@@ -2015,8 +2019,8 @@ function InlineDemoContainer({
             <InlineSuggestions
               aliases={aliases}
               label={t.inlineHelper.generatedLabel}
-              onHover={() => {}}
-              onSelect={() => {}}
+              onHover={setHoveredAlias}
+              onSelect={setSelectedAlias}
             />
           ) : null}
           {activeTab === "generate" ? (
@@ -2079,6 +2083,8 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
               hoveredAlias={hoveredAlias}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              setHoveredAlias={setHoveredAlias}
+              setSelectedAlias={setSelectedAlias}
               aliases={aliases}
             />
           </div>
