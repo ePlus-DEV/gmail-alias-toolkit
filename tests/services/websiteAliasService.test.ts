@@ -23,22 +23,25 @@ type MockBrowser = {
 global.browser = {
   storage: {
     local: {
-      get: vi.fn(async (keys: string[]) => {
+      get: vi.fn((keys: string[]) => {
         const result: Record<string, unknown> = {};
         keys.forEach((key) => {
           if (key in mockStorageData) {
             result[key] = mockStorageData[key];
           }
         });
-        return result;
+        return Promise.resolve(result);
       }),
-      set: vi.fn(async (data: Record<string, unknown>) => {
+      set: vi.fn((data: Record<string, unknown>) => {
         Object.assign(mockStorageData, data);
+        return Promise.resolve();
       }),
-      remove: vi.fn(async (keys: string[]) => {
+      remove: vi.fn((keys: string[]) => {
         keys.forEach((key) => {
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
           delete mockStorageData[key];
         });
+        return Promise.resolve();
       }),
     },
   },
@@ -57,6 +60,7 @@ describe("websiteAliasService", () => {
   beforeEach(() => {
     // Clear mock storage before each test
     Object.keys(mockStorageData).forEach((key) => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete mockStorageData[key];
     });
     vi.clearAllMocks();

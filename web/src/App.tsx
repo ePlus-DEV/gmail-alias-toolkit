@@ -1205,6 +1205,76 @@ function ExtensionMockup({ t }: { t: (typeof translations)[Locale] }) {
 }
 
 /** Interactive landing-page version of the extension's Settings screen. */
+/** Settings panel header with back button and version. */
+function MockSettingsPanelHeader({
+  isDark,
+  muted,
+  t,
+  onClose,
+}: {
+  isDark: boolean;
+  muted: string;
+  t: (typeof translations)[Locale];
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+    >
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
+          aria-label="Back"
+        >
+          <ArrowRight className="h-4 w-4 rotate-180" />
+        </button>
+        <h3 className="text-sm font-black">{t.mock.settings}</h3>
+      </div>
+      <span
+        className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
+      >
+        v1.3.0
+      </span>
+    </div>
+  );
+}
+
+/** Settings panel tab navigation. */
+function MockSettingsPanelTabs({
+  isDark,
+  labels,
+  tab,
+  setTab,
+}: {
+  isDark: boolean;
+  labels: Record<string, string>;
+  tab: "general" | "accounts" | "changelog";
+  setTab: (tab: "general" | "accounts" | "changelog") => void;
+}) {
+  return (
+    <div
+      className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
+    >
+      <div
+        className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
+      >
+        {(["general", "accounts", "changelog"] as const).map((id) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setTab(id)}
+            className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
+          >
+            {labels[id]}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MockSettingsPanel({
   t,
   isDark,
@@ -1283,44 +1353,18 @@ function MockSettingsPanel({
       className={`absolute inset-3 z-30 flex overflow-hidden rounded-3xl border shadow-2xl ${panel}`}
     >
       <div className="flex min-h-0 w-full flex-col">
-        <div
-          className={`flex items-center justify-between border-b px-3 py-3 ${isDark ? "border-slate-700" : "border-slate-200"}`}
-        >
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className={`grid h-9 w-9 place-items-center rounded-xl ${isDark ? "hover:bg-slate-800" : "hover:bg-slate-100"}`}
-              aria-label="Back"
-            >
-              <ArrowRight className="h-4 w-4 rotate-180" />
-            </button>
-            <h3 className="text-sm font-black">{t.mock.settings}</h3>
-          </div>
-          <span
-            className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
-          >
-            v1.3.0
-          </span>
-        </div>
-        <div
-          className={`border-b p-2.5 ${isDark ? "border-slate-700" : "border-slate-200"}`}
-        >
-          <div
-            className={`grid grid-cols-3 gap-1 rounded-xl border p-1 ${isDark ? "border-slate-700 bg-slate-800" : "border-slate-200 bg-slate-100"}`}
-          >
-            {(["general", "accounts", "changelog"] as const).map((id) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setTab(id)}
-                className={`h-9 rounded-lg px-1 text-[11px] font-bold transition ${tab === id ? (isDark ? "bg-slate-950 text-blue-300 shadow" : "bg-white text-blue-700 shadow") : "text-slate-500"}`}
-              >
-                {labels[id]}
-              </button>
-            ))}
-          </div>
-        </div>
+        <MockSettingsPanelHeader
+          isDark={isDark}
+          muted={muted}
+          t={t}
+          onClose={onClose}
+        />
+        <MockSettingsPanelTabs
+          isDark={isDark}
+          labels={labels}
+          tab={tab}
+          setTab={setTab}
+        />
         <div className={`min-h-0 flex-1 overflow-y-auto p-3 ${muted}`}>
           {tab === "general" ? (
             <div
@@ -1904,6 +1948,96 @@ function InlineFormInput({
   );
 }
 
+/** Demo form container for inline helper popup. */
+function InlineDemoContainer({
+  t,
+  inputValue,
+  hoveredAlias,
+  activeTab,
+  setActiveTab,
+  aliases,
+}: {
+  t: (typeof translations)[Locale];
+  inputValue: string;
+  hoveredAlias: string;
+  activeTab: "suggestions" | "generate" | "history";
+  setActiveTab: (tab: "suggestions" | "generate" | "history") => void;
+  aliases: string[];
+}) {
+  return (
+    <div className="relative min-h-[610px] bg-[linear-gradient(180deg,#fff,#f8fafc)] p-5 md:p-8">
+      <InlineFormInput inputValue={inputValue} t={t} />
+
+      <motion.div
+        animate={{ y: hoveredAlias ? -2 : 0 }}
+        className="absolute right-7 top-[126px] z-10 grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-blue-600 shadow-lg md:right-10 md:top-[138px]"
+      >
+        <img
+          src={extensionIconUrl}
+          alt=""
+          className="h-5 w-5 rounded object-contain"
+        />
+        <span className="absolute -top-1 h-0 w-0 border-x-[5px] border-b-[6px] border-x-transparent border-b-slate-300" />
+      </motion.div>
+
+      <div className="absolute right-4 top-[176px] w-[min(320px,calc(100%-32px))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl md:right-8 md:top-[188px]">
+        <InlineDemoHeader />
+        <div className="grid grid-cols-3 border-b border-slate-200 bg-slate-50">
+          {(
+            [
+              ["suggestions", t.inlineHelper.suggestions],
+              ["generate", t.inlineHelper.generate],
+              ["history", t.inlineHelper.history],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActiveTab(id)}
+              className={`relative min-h-12 px-2 text-[11px] font-black transition ${
+                activeTab === id
+                  ? "text-blue-700"
+                  : "text-slate-500 hover:bg-slate-100"
+              }`}
+            >
+              {label}
+              {activeTab === id ? (
+                <motion.span
+                  layoutId="inline-demo-tab"
+                  className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600"
+                />
+              ) : null}
+            </button>
+          ))}
+        </div>
+        <div className="h-[252px] overflow-y-auto p-3">
+          {activeTab === "suggestions" ? (
+            <InlineSuggestions
+              aliases={aliases}
+              label={t.inlineHelper.generatedLabel}
+              onHover={() => {}}
+              onSelect={() => {}}
+            />
+          ) : null}
+          {activeTab === "generate" ? (
+            <InlineGenerateDemo t={t} aliases={aliases} />
+          ) : null}
+          {activeTab === "history" ? (
+            <InlineHistoryDemo t={t} aliases={aliases.slice(1)} />
+          ) : null}
+        </div>
+        <div className="flex h-9 items-center gap-2 border-t border-slate-200 bg-slate-50 px-3">
+          <Home className="h-4 w-4 text-slate-500" />
+          <span className="h-5 w-px bg-slate-300" />
+          <span className="flex-1 text-center text-[11px] font-bold text-slate-500 underline">
+            Report / Review
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** Demonstrates the complete inline-helper workflow beside a website form. */
 function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
   const [activeTab, setActiveTab] = useState<
@@ -1939,76 +2073,14 @@ function InlinePopupSection({ t }: { t: (typeof translations)[Locale] }) {
                 {t.inlineHelper.previewHint}
               </p>
             </div>
-            <div className="relative min-h-[610px] bg-[linear-gradient(180deg,#fff,#f8fafc)] p-5 md:p-8">
-              <InlineFormInput inputValue={inputValue} t={t} />
-
-              <motion.div
-                animate={{ y: hoveredAlias ? -2 : 0 }}
-                className="absolute right-7 top-[126px] z-10 grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-blue-600 shadow-lg md:right-10 md:top-[138px]"
-              >
-                <img
-                  src={extensionIconUrl}
-                  alt=""
-                  className="h-5 w-5 rounded object-contain"
-                />
-                <span className="absolute -top-1 h-0 w-0 border-x-[5px] border-b-[6px] border-x-transparent border-b-slate-300" />
-              </motion.div>
-
-              <div className="absolute right-4 top-[176px] w-[min(320px,calc(100%-32px))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl md:right-8 md:top-[188px]">
-                <InlineDemoHeader />
-                <div className="grid grid-cols-3 border-b border-slate-200 bg-slate-50">
-                  {(
-                    [
-                      ["suggestions", t.inlineHelper.suggestions],
-                      ["generate", t.inlineHelper.generate],
-                      ["history", t.inlineHelper.history],
-                    ] as const
-                  ).map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => setActiveTab(id)}
-                      className={`relative min-h-12 px-2 text-[11px] font-black transition ${
-                        activeTab === id
-                          ? "text-blue-700"
-                          : "text-slate-500 hover:bg-slate-100"
-                      }`}
-                    >
-                      {label}
-                      {activeTab === id ? (
-                        <motion.span
-                          layoutId="inline-demo-tab"
-                          className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600"
-                        />
-                      ) : null}
-                    </button>
-                  ))}
-                </div>
-                <div className="h-[252px] overflow-y-auto p-3">
-                  {activeTab === "suggestions" ? (
-                    <InlineSuggestions
-                      aliases={aliases}
-                      label={t.inlineHelper.generatedLabel}
-                      onHover={setHoveredAlias}
-                      onSelect={setSelectedAlias}
-                    />
-                  ) : null}
-                  {activeTab === "generate" ? (
-                    <InlineGenerateDemo t={t} aliases={aliases} />
-                  ) : null}
-                  {activeTab === "history" ? (
-                    <InlineHistoryDemo t={t} aliases={aliases.slice(1)} />
-                  ) : null}
-                </div>
-                <div className="flex h-9 items-center gap-2 border-t border-slate-200 bg-slate-50 px-3">
-                  <Home className="h-4 w-4 text-slate-500" />
-                  <span className="h-5 w-px bg-slate-300" />
-                  <span className="flex-1 text-center text-[11px] font-bold text-slate-500 underline">
-                    Report / Review
-                  </span>
-                </div>
-              </div>
-            </div>
+            <InlineDemoContainer
+              t={t}
+              inputValue={inputValue}
+              hoveredAlias={hoveredAlias}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              aliases={aliases}
+            />
           </div>
         </div>
       </div>
