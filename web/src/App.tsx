@@ -51,7 +51,7 @@ const translations = {
       badge: "Tiện ích Chrome cho Gmail plus addressing",
       titlePrefix: "Quản lý Gmail alias bằng một",
       titleHighlight: "popup nhỏ gọn.",
-      desc: "Tạo địa chỉ dạng david+tag@gmail.com, sao chép nhanh, tìm lại trong lịch sử, ghim mục yêu thích và xuất dữ liệu mà không rời khỏi trình duyệt.",
+      desc: "Tạo địa chỉ dạng david+tag@gmail.com trong popup chính hoặc thao tác ngay cạnh ô email bằng Inline Popup, với gợi ý theo website, lịch sử, yêu thích và xuất dữ liệu.",
       install: "Cài tiện ích",
       source: "Xem mã nguồn",
       stats: [
@@ -128,8 +128,8 @@ const translations = {
     },
     features: {
       eyebrow: "Tính năng tiện ích",
-      title: "Mỗi tính năng đều được mô phỏng như popup thật",
-      desc: "Trang giới thiệu không chỉ kể tính năng, mà mô phỏng đúng cách extension tạo, sao chép, lưu và xuất alias.",
+      title: "Đầy đủ từ popup chính đến trợ lý ngay trong form",
+      desc: "Extension tạo, xem trước, điền và quản lý alias ngay tại ô email; đồng thời giữ đầy đủ generator, history, favorites và công cụ dữ liệu trong popup chính.",
       items: [
         {
           title: "Tạo alias ngẫu nhiên",
@@ -179,6 +179,30 @@ const translations = {
           icon: ShieldCheck,
           sample: "local-first",
         },
+        {
+          title: "Inline Popup thao tác nhanh",
+          desc: "Tạo alias, dùng preset, Gmail tricks và tìm lịch sử ngay cạnh ô email mà không cần mở popup chính.",
+          icon: Zap,
+          sample: "Generate + History",
+        },
+        {
+          title: "Gợi ý theo website",
+          desc: "Tự nhận diện domain, đề xuất alias phù hợp và xem trước trực tiếp trong input khi hover.",
+          icon: Sparkles,
+          sample: "hover để xem trước",
+        },
+        {
+          title: "Điều khiển theo từng site",
+          desc: "Ẩn Inline Helper trên website bất kỳ và bật lại từ danh sách quản lý trong Settings.",
+          icon: EyeOff,
+          sample: "tắt / bật theo domain",
+        },
+        {
+          title: "14 ngôn ngữ",
+          desc: "Popup chính, Inline Popup và cài đặt được đồng bộ nội dung trên toàn bộ locale hỗ trợ.",
+          icon: Languages,
+          sample: "14 locales",
+        },
       ],
     },
     tricks: {
@@ -224,7 +248,7 @@ const translations = {
       badge: "Chrome extension for Gmail plus addressing",
       titlePrefix: "Manage Gmail aliases from one",
       titleHighlight: "compact popup.",
-      desc: "Create david+tag@gmail.com aliases, copy them quickly, search history, pin favorites and export data without leaving the browser.",
+      desc: "Create david+tag@gmail.com aliases in the main popup or work beside any email field with website-aware inline suggestions, history, favorites and export tools.",
       install: "Install extension",
       source: "View source",
       stats: [
@@ -301,8 +325,8 @@ const translations = {
     },
     features: {
       eyebrow: "Extension features",
-      title: "Every feature is mocked like the real popup",
-      desc: "The page does more than describe features: it simulates how the extension generates, copies, stores and exports aliases.",
+      title: "From the main popup to an assistant inside every form",
+      desc: "Generate, preview, fill and manage aliases beside an email field while keeping the complete generator, history, favorites and data tools in the main popup.",
       items: [
         {
           title: "Random generator",
@@ -351,6 +375,30 @@ const translations = {
           desc: "Data stays in browser storage, with no analytics and no tracking.",
           icon: ShieldCheck,
           sample: "local-first",
+        },
+        {
+          title: "Inline quick popup",
+          desc: "Generate aliases, use presets and Gmail tricks, or search history beside an email field without opening the main popup.",
+          icon: Zap,
+          sample: "Generate + History",
+        },
+        {
+          title: "Website-aware suggestions",
+          desc: "Detect the current domain, suggest relevant aliases and preview a selection directly in the input on hover.",
+          icon: Sparkles,
+          sample: "hover to preview",
+        },
+        {
+          title: "Per-site controls",
+          desc: "Hide the inline helper on any website and re-enable it later from the managed list in Settings.",
+          icon: EyeOff,
+          sample: "disable by domain",
+        },
+        {
+          title: "14 languages",
+          desc: "The main popup, inline helper and settings stay localized across every supported locale.",
+          icon: Languages,
+          sample: "14 locales",
         },
       ],
     },
