@@ -1,6 +1,58 @@
 /* Email input helper icon and popup styles - Tailwind+Custom */
 
 /* Icon wrapper styling */
+.gmail-alias-input-icon-container {
+  overflow: visible;
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.gmail-alias-input-icon-container::before,
+.gmail-alias-input-icon-container::after {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.gmail-alias-input-icon-container::before {
+  bottom: -7px;
+  border-top: 7px solid #d1d5db;
+}
+
+.gmail-alias-input-icon-container::after {
+  bottom: -5px;
+  border-right-width: 5px;
+  border-left-width: 5px;
+  border-top: 6px solid #fff;
+}
+
+.gmail-alias-input-icon-container.gmail-alias-icon-below::before {
+  top: -7px;
+  bottom: auto;
+  border-top: 0;
+  border-bottom: 7px solid #d1d5db;
+}
+
+.gmail-alias-input-icon-container.gmail-alias-icon-below::after {
+  top: -5px;
+  bottom: auto;
+  border-top: 0;
+  border-bottom: 6px solid #fff;
+}
+
+.gmail-alias-input-icon-container:hover {
+  box-shadow:
+    0 5px 14px rgba(15, 23, 42, 0.2),
+    0 2px 4px rgba(15, 23, 42, 0.12) !important;
+  transform: translateY(-1px);
+}
+
 .gmail-alias-input-icon {
   color: #1ad2a4;
 }

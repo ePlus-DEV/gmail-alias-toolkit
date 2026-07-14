@@ -28,6 +28,7 @@ const ICON_HTML = `
 
 interface EmailInputElement extends HTMLInputElement {
   __gmailAliasIcon?: HTMLElement;
+  __gmailAliasPosition?: () => void;
 }
 
 /** Escape HTML special characters to prevent XSS attacks. */
@@ -79,39 +80,35 @@ function resolveActiveEmail(accountData: StoredAccountData): string {
 
 /** Fetch suggestion data for current page. */
 async function fetchSuggestions(): Promise<SuggestionData | null> {
+  const normalized = normalizeHostname(window.location.href);
+  if (!normalized) return null;
+
+  let email = "your.email@gmail.com";
   try {
-    const normalized = normalizeHostname(window.location.href);
-
-    if (!normalized) {
-      return null;
-    }
-
-    // Get active email from storage
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
     ])) as StoredAccountData;
-    const email = resolveActiveEmail(accountResult);
-
-    const previousAlias = await getPreviousAliasForWebsite(
-      email,
-      window.location.href,
-    );
-    const suggestions = await generateSuggestionsForWebsite(
-      email,
-      window.location.href,
-    );
-
-    return {
-      activeEmail: email,
-      previousAlias: previousAlias?.alias || null,
-      suggestions,
-      website: normalized,
-    };
+    email = resolveActiveEmail(accountResult);
   } catch (error) {
-    console.debug("Error fetching suggestions:", error);
-    return null;
+    console.debug("Error resolving active email:", error);
   }
+
+  const [previousResult, suggestionsResult] = await Promise.allSettled([
+    getPreviousAliasForWebsite(email, window.location.href),
+    generateSuggestionsForWebsite(email, window.location.href),
+  ]);
+
+  return {
+    activeEmail: email,
+    previousAlias:
+      previousResult.status === "fulfilled"
+        ? previousResult.value?.alias || null
+        : null,
+    suggestions:
+      suggestionsResult.status === "fulfilled" ? suggestionsResult.value : [],
+    website: normalized,
+  };
 }
 
 /** Create popup element with suggestions. */
@@ -722,7 +719,10 @@ function createPopup(
 
 /** Inject icon next to email input. */
 function injectIcon(input: EmailInputElement) {
-  if (input.__gmailAliasIcon) return;
+  if (input.__gmailAliasIcon) {
+    input.__gmailAliasPosition?.();
+    return;
+  }
 
   try {
     // Create icon container (no wrapping, just for the icon)
@@ -738,42 +738,128 @@ function injectIcon(input: EmailInputElement) {
       return;
     }
 
-    // Insert icon after input (as sibling, don't move input)
-    input.parentNode?.insertBefore(iconContainer, input.nextSibling);
+    // Render the fixed helper at the document root so form wrappers with
+    // overflow/contain/stacking contexts cannot clip or remove it.
+    document.body.appendChild(iconContainer);
 
     console.debug("[Gmail Alias] Icon injected successfully");
 
-    // Position icon next to input using relative positioning on parent
-    const parent = input.parentNode as HTMLElement;
-    if (parent && window.getComputedStyle(parent).position === "static") {
-      parent.style.position = "relative";
-    }
-
-    // Style icon container for absolute positioning
-    iconContainer.style.position = "absolute";
-    iconContainer.style.right = "4px";
-    iconContainer.style.top = "50%";
-    iconContainer.style.transform = "translateY(-50%)";
-    iconContainer.style.pointerEvents = "none";
+    // Keep the helper outside the website's input and layout. Fixed positioning
+    // avoids colliding with native suffix icons or adjacent submit buttons.
+    iconContainer.style.position = "fixed";
+    iconContainer.style.pointerEvents = "auto";
     iconContainer.style.display = "flex";
     iconContainer.style.alignItems = "center";
     iconContainer.style.justifyContent = "center";
-    iconContainer.style.width = "28px";
-    iconContainer.style.height = "28px";
+    iconContainer.style.width = "32px";
+    iconContainer.style.height = "32px";
     iconContainer.style.border = "1px solid #e5e7eb";
-    iconContainer.style.borderRadius = "4px";
-    iconContainer.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+    iconContainer.style.borderRadius = "9999px";
+    iconContainer.style.backgroundColor = "#ffffff";
+    iconContainer.style.boxShadow =
+      "0 3px 10px rgba(15, 23, 42, 0.18), 0 1px 2px rgba(15, 23, 42, 0.1)";
+    iconContainer.style.zIndex = "999998";
 
-    // Add right padding to input to make room for icon
-    const currentPadding = window.getComputedStyle(input).paddingRight;
-    const paddingValue = parseFloat(currentPadding) || 0;
-    input.style.paddingRight = `${paddingValue + 40}px`;
-    input.style.boxSizing = "border-box";
+    /** Detects compact controls or floating overlays occupying a candidate. */
+    const isPlacementBlocked = (
+      left: number,
+      top: number,
+      iconSize: number,
+    ) => {
+      const inset = 4;
+      const points = [
+        [left + iconSize / 2, top + iconSize / 2],
+        [left + inset, top + inset],
+        [left + iconSize - inset, top + inset],
+        [left + inset, top + iconSize - inset],
+        [left + iconSize - inset, top + iconSize - inset],
+      ];
+
+      return points.some(([x, y]) =>
+        document.elementsFromPoint(x, y).some((element) => {
+          if (
+            element === input ||
+            element === document.body ||
+            element === document.documentElement ||
+            iconContainer.contains(element)
+          ) {
+            return false;
+          }
+
+          const rect = element.getBoundingClientRect();
+          const style = window.getComputedStyle(element);
+          const isCompactControl = rect.width <= 96 && rect.height <= 96;
+          const isCompactOverlay =
+            (style.position === "fixed" || style.position === "absolute") &&
+            rect.width <= 180 &&
+            rect.height <= 180;
+
+          return (
+            style.visibility !== "hidden" &&
+            style.display !== "none" &&
+            (isCompactControl || isCompactOverlay)
+          );
+        }),
+      );
+    };
+
+    let inputResizeObserver: ResizeObserver | undefined;
+    const cleanupPositioning = () => {
+      window.removeEventListener("resize", positionIconOutsideInput);
+      window.removeEventListener("scroll", positionIconOutsideInput, true);
+      inputResizeObserver?.disconnect();
+      iconContainer.remove();
+      input.__gmailAliasIcon = undefined;
+      input.__gmailAliasPosition = undefined;
+    };
+
+    /** Anchors near the input while avoiding password-manager/site controls. */
+    const positionIconOutsideInput = () => {
+      if (!input.isConnected) {
+        cleanupPositioning();
+        return;
+      }
+
+      const rect = input.getBoundingClientRect();
+      const iconSize = 32;
+      const gap = 6;
+      const clampLeft = (left: number) =>
+        Math.min(window.innerWidth - iconSize - 4, Math.max(4, left));
+      const rightAligned = clampLeft(rect.right - iconSize);
+      const shiftedLeft = clampLeft(rightAligned - iconSize - gap);
+      const above = rect.top - iconSize - gap;
+      const below = rect.bottom + gap;
+      const candidates = [
+        { left: rightAligned, top: above, below: false },
+        { left: shiftedLeft, top: above, below: false },
+        { left: rightAligned, top: below, below: true },
+        { left: shiftedLeft, top: below, below: true },
+      ].filter(
+        (candidate) =>
+          candidate.top >= 4 &&
+          candidate.top + iconSize <= window.innerHeight - 4,
+      );
+      const placement =
+        candidates.find(
+          (candidate) =>
+            !isPlacementBlocked(candidate.left, candidate.top, iconSize),
+        ) || candidates[0];
+      if (!placement) return;
+
+      iconContainer.style.left = `${placement.left}px`;
+      iconContainer.style.top = `${placement.top}px`;
+      iconContainer.classList.toggle("gmail-alias-icon-below", placement.below);
+    };
+    input.__gmailAliasPosition = positionIconOutsideInput;
+    positionIconOutsideInput();
+    window.addEventListener("resize", positionIconOutsideInput);
+    window.addEventListener("scroll", positionIconOutsideInput, true);
+    inputResizeObserver = new ResizeObserver(positionIconOutsideInput);
+    inputResizeObserver.observe(input);
 
     icon.style.cursor = "pointer";
     icon.style.color = "#3b82f6";
-    icon.style.opacity = "0.7";
-    icon.style.transition = "opacity 0.2s";
+    icon.style.opacity = "1";
     icon.style.pointerEvents = "auto";
     icon.style.width = "18px";
     icon.style.height = "18px";
@@ -791,7 +877,7 @@ function injectIcon(input: EmailInputElement) {
         .forEach((p) => p.remove());
 
       const data = await fetchSuggestions();
-      if (!data || data.suggestions.length === 0) {
+      if (!data) {
         return;
       }
 
@@ -836,11 +922,21 @@ function injectIcon(input: EmailInputElement) {
       // popup.style.top = `${iconRect.bottom + 8}px`;
       // popup.style.zIndex = "999999";
 
-      const rect = icon.getBoundingClientRect();
+      const rect = iconContainer.getBoundingClientRect();
+      const popupRect = popup.getBoundingClientRect();
+      const gap = 8;
+      const roomOnRight = window.innerWidth - rect.right - gap;
+      const left =
+        roomOnRight >= popupRect.width
+          ? rect.right + gap
+          : Math.max(gap, rect.left - popupRect.width - gap);
+      const top = Math.min(
+        Math.max(gap, rect.top),
+        Math.max(gap, window.innerHeight - popupRect.height - gap),
+      );
       popup.style.position = "fixed";
-      popup.style.left = `${Math.min(rect.left, window.innerWidth - 280)}px`;
-      // Position popup slightly overlapping the input to prevent gap on hover
-      popup.style.top = `${rect.top - 4}px`;
+      popup.style.left = `${left}px`;
+      popup.style.top = `${top}px`;
       popup.style.zIndex = "999999";
 
       // Keep popup open when hovering over it
@@ -865,7 +961,7 @@ function injectIcon(input: EmailInputElement) {
     });
 
     iconContainer.addEventListener("mouseleave", () => {
-      icon.style.opacity = "0.85";
+      icon.style.opacity = "1";
       input.classList.remove("gmail-alias-input-highlight");
       // Delay close to allow mouse movement to popup (with overlap, 250ms buffer)
       closeTimer = setTimeout(() => {
@@ -1028,8 +1124,10 @@ function detectEmailInputs() {
       `[Gmail Alias] Input ${idx}: visible=${isVisible}, hasIcon=${hasIcon}, width=${input.offsetWidth}px`,
     );
 
-    if (isVisible && !hasIcon && isWideEnough) {
-      console.debug(`[Gmail Alias] Injecting icon for input ${idx}`);
+    if (isVisible && isWideEnough) {
+      if (!hasIcon) {
+        console.debug(`[Gmail Alias] Injecting icon for input ${idx}`);
+      }
       injectIcon(input);
     }
   });

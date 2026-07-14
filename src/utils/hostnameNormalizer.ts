@@ -71,7 +71,11 @@ function getTLD(hostname: string): string | null {
     return `${parts[1]}.${parts[0]}`;
   }
 
-  return TLDS.has(parts[0]) ? parts[0] : null;
+  if (TLDS.has(parts[0])) return parts[0];
+
+  // Accept modern generic/country TLDs (for example .dev, .app, .tech)
+  // instead of rejecting every suffix not present in the legacy allowlist.
+  return /^[a-z0-9-]{2,63}$/.test(parts[0]) ? parts[0] : null;
 }
 
 /**
