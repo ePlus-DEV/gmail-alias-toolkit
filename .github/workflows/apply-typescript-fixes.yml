@@ -1,0 +1,125 @@
+name: Apply TypeScript fixes
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - .github/workflows/apply-typescript-fixes.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v7
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Apply fixes
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              file_path = Path(path)
+              text = file_path.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(
+                      f"Expected exactly one occurrence in {path}, found {count}: {old[:100]!r}"
+                  )
+              file_path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+          replace_once(
+              "entrypoints/background.ts",
+              '''  // Update website suggestions when context menu is shown
+          browser.contextMenus.onShown?.addListener?.(async (info) => {''',
+              '''  // Chromium exposes dynamic context-menu hooks that are missing from
+          // some WebExtension type definitions used by WXT.
+          const dynamicContextMenus = browser.contextMenus as typeof browser.contextMenus & {
+            onShown?: {
+              addListener(
+                listener: (info: { pageUrl?: string }) => void | Promise<void>,
+              ): void;
+            };
+            refresh?: () => void | Promise<void>;
+          };
+
+          // Update website suggestions when the context menu is shown.
+          dynamicContextMenus.onShown?.addListener(async (info) => {''',
+          )
+
+          replace_once(
+              "entrypoints/background.ts",
+              '''      // Remove placeholder and add suggestions
+                await browser.contextMenus.remove("website-loading");
+
+                suggestions.slice(0, 3).forEach((suggestion, index) => {
+                  browser.contextMenus.create({
+                    id: `website-suggestion-${index}`,
+                    parentId: "website-alias-parent",
+                    title: suggestion.split("@")[0],
+                    contexts: ["editable"],
+                  });
+                });
+
+                await browser.contextMenus.refresh?.();''',
+              '''      // Rebuild dynamic items safely. Repeated menu openings otherwise
+                // reuse the same IDs and leave stale suggestions behind.
+                const dynamicItemIds = [
+                  "website-loading",
+                  "website-suggestion-0",
+                  "website-suggestion-1",
+                  "website-suggestion-2",
+                ];
+                await Promise.all(
+                  dynamicItemIds.map(async (id) => {
+                    try {
+                      await browser.contextMenus.remove(id);
+                    } catch {
+                      // The item may not exist on the first or a later menu opening.
+                    }
+                  }),
+                );
+
+                for (const [index, suggestion] of suggestions
+                  .slice(0, 3)
+                  .entries()) {
+                  browser.contextMenus.create({
+                    id: `website-suggestion-${index}`,
+                    parentId: "website-alias-parent",
+                    title: suggestion.split("@")[0],
+                    contexts: ["editable"],
+                  });
+                }
+
+                await dynamicContextMenus.refresh?.();''',
+          )
+
+          replace_once(
+              "tests/services/websiteAliasService.test.ts",
+              "global.browser = {",
+              'vi.stubGlobal("browser", {',
+          )
+          replace_once(
+              "tests/services/websiteAliasService.test.ts",
+              "} as unknown as MockBrowser;",
+              "} as unknown as MockBrowser);",
+          )
+          PY
+
+      - name: Remove temporary workflow and commit
+        shell: bash
+        run: |
+          rm .github/workflows/apply-typescript-fixes.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add entrypoints/background.ts tests/services/websiteAliasService.test.ts .github/workflows/apply-typescript-fixes.yml
+          git commit -m "fix: resolve TypeScript compile errors"
+          git push origin HEAD:dev
