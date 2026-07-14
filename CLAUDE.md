@@ -196,3 +196,5 @@ Pull requests to `main` require:
 3. ✅ DeepSource checks passing (zero issues)
 4. ✅ TypeScript type checking strict mode
 5. ✅ Prettier formatting compliance
+
+See [CONTRIBUTING.md](CONTRIBUTING.md#publishing-to-extension-stores) for publishing and store submission procedures.
