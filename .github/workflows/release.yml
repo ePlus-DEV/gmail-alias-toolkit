@@ -38,16 +38,44 @@ jobs:
       CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
     steps:
+      - name: Verify release identities
+        env:
+          HOANGSVIT_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
+          EPLUS_BOT_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${HOANGSVIT_TOKEN:-}" ]; then
+            echo "::error::HOANGSVIT_TOKEN is empty."
+            exit 1
+          fi
+
+          if [ -z "${EPLUS_BOT_TOKEN:-}" ]; then
+            echo "::error::EPLUS_BOT_TOKEN is empty."
+            exit 1
+          fi
+
+          HOANG_LOGIN="$(GH_TOKEN="$HOANGSVIT_TOKEN" gh api user --jq .login)"
+          BOT_LOGIN="$(GH_TOKEN="$EPLUS_BOT_TOKEN" gh api user --jq .login)"
+
+          if [ "$HOANG_LOGIN" != "hoangsvit" ]; then
+            echo "::error::HOANGSVIT_TOKEN belongs to '$HOANG_LOGIN', expected 'hoangsvit'."
+            exit 1
+          fi
+
+          if [ "$BOT_LOGIN" != "eplus-bot" ]; then
+            echo "::error::EPLUS_BOT_TOKEN belongs to '$BOT_LOGIN', expected 'eplus-bot'."
+            exit 1
+          fi
+
       - name: Checkout release tag
         uses: actions/checkout@v7
         with:
           ref: ${{ env.RELEASE_TAG }}
           fetch-depth: 0
-          token: ${{ secrets.EPLUS_BOT_TOKEN }}
+          token: ${{ secrets.HOANGSVIT_TOKEN }}
 
-      - name: Validate release tag and bot token
-        env:
-          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
+      - name: Validate release tag
         run: |
           set -euo pipefail
 
@@ -57,17 +85,6 @@ jobs:
           fi
 
           git rev-parse --verify "refs/tags/$RELEASE_TAG^{commit}" >/dev/null
-
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "::error::EPLUS_BOT_TOKEN is empty."
-            exit 1
-          fi
-
-          BOT_LOGIN="$(gh api user --jq .login)"
-          if [ "$BOT_LOGIN" != "eplus-bot" ]; then
-            echo "::error::EPLUS_BOT_TOKEN belongs to '$BOT_LOGIN', expected 'eplus-bot'."
-            exit 1
-          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -112,10 +129,10 @@ jobs:
           tag: ${{ env.RELEASE_TAG }}
           writeToFile: true
 
-      - name: Create changelog pull request
+      - name: Create changelog pull request as hoangsvit
         id: changelog_pr
         env:
-          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
         run: |
           set -euo pipefail
 
@@ -125,10 +142,10 @@ jobs:
             exit 0
           fi
 
-          BRANCH="chore/changelog-$RELEASE_TAG"
+          BRANCH="chore/changelog-$RELEASE_TAG-hoangsvit"
 
-          git config user.name "eplus-bot"
-          git config user.email "157664013+eplus-bot@users.noreply.github.com"
+          git config user.name "hoangsvit"
+          git config user.email "11882322+hoangsvit@users.noreply.github.com"
           git checkout -B "$BRANCH"
           git add CHANGELOG.md
           git commit -m "docs: update CHANGELOG.md for $RELEASE_TAG"
@@ -147,48 +164,38 @@ jobs:
               --base main \
               --head "$BRANCH" \
               --title "docs: update changelog for $RELEASE_TAG" \
-              --body "Automated CHANGELOG.md update generated from release tag \`$RELEASE_TAG\`.\n\nThis pull request is created by the release workflow and will be approved and merged automatically after all required checks pass.")"
+              --body "Automated CHANGELOG.md update generated from release tag \`$RELEASE_TAG\`.\n\nCreated by @hoangsvit. The @eplus-bot account will approve it after all required checks pass, then @hoangsvit will merge it automatically.")"
             PR_NUMBER="${PR_URL##*/}"
+          fi
+
+          PR_AUTHOR="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json author --jq .author.login)"
+          if [ "$PR_AUTHOR" != "hoangsvit" ]; then
+            echo "::error::Changelog PR #$PR_NUMBER was created by '$PR_AUTHOR', expected 'hoangsvit'."
+            exit 1
           fi
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
-          echo "Created changelog PR #$PR_NUMBER."
+          echo "Created changelog PR #$PR_NUMBER as @hoangsvit."
 
-      - name: Approve changelog pull request
+      - name: Wait for checks and eplus-bot approval
         if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
           PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
         run: |
           set -euo pipefail
 
-          PR_AUTHOR="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json author --jq .author.login)"
-          APPROVER_LOGIN="$(gh api user --jq .login)"
-
-          if [ "$PR_AUTHOR" = "$APPROVER_LOGIN" ]; then
-            echo "::error::The PR author and approver are both '$APPROVER_LOGIN'. A pull request cannot approve itself."
-            exit 1
-          fi
-
-          gh pr review "$PR_NUMBER" \
-            --repo "$GITHUB_REPOSITORY" \
-            --approve \
-            --body "Automatically approved by the release workflow after generating CHANGELOG.md for $RELEASE_TAG."
-
-      - name: Wait for checks and merge changelog pull request
-        if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
-        env:
-          GH_TOKEN: ${{ secrets.EPLUS_BOT_TOKEN }}
-          PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
-        run: |
-          set -euo pipefail
-
-          checks_completed=false
+          ready_to_merge=false
 
           for attempt in {1..90}; do
-            PR_STATE="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json state,mergedAt --jq 'if .mergedAt then "merged" else (.state | ascii_downcase) end')"
+            PR_JSON="$(gh pr view "$PR_NUMBER" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json state,mergedAt,headRefOid)"
+
+            PR_STATE="$(jq -r 'if .mergedAt then "merged" else (.state | ascii_downcase) end' <<<"$PR_JSON")"
+            HEAD_SHA="$(jq -r '.headRefOid' <<<"$PR_JSON")"
 
             if [ "$PR_STATE" = "merged" ]; then
               echo "Changelog PR #$PR_NUMBER was already merged."
@@ -202,23 +209,40 @@ jobs:
             CI_COUNT="$(jq '[.[] | select(.name == "Compile, Test, Build")] | length' <<<"$CHECKS")"
             FAILING_COUNT="$(jq '[.[] | select(.bucket == "fail" or .bucket == "cancel")] | length' <<<"$CHECKS")"
             PENDING_COUNT="$(jq '[.[] | select(.bucket == "pending")] | length' <<<"$CHECKS")"
+            APPROVAL_COUNT="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" \
+              --paginate \
+              --jq "[.[] | select(.user.login == \"eplus-bot\" and .state == \"APPROVED\" and .commit_id == \"$HEAD_SHA\")] | length")"
 
             if [ "$FAILING_COUNT" -gt 0 ]; then
               jq -r '.[] | select(.bucket == "fail" or .bucket == "cancel") | "::error::\(.workflow): \(.name) failed"' <<<"$CHECKS"
               exit 1
             fi
 
-            if [ "$CI_COUNT" -gt 0 ] && [ "$PENDING_COUNT" -eq 0 ]; then
-              checks_completed=true
+            if [ "$CI_COUNT" -gt 0 ] && [ "$PENDING_COUNT" -eq 0 ] && [ "$APPROVAL_COUNT" -gt 0 ]; then
+              ready_to_merge=true
               break
             fi
 
-            echo "Waiting for changelog PR checks (attempt $attempt/90, CI found: $CI_COUNT, pending: $PENDING_COUNT)."
+            echo "Waiting for changelog PR (attempt $attempt/90, CI found: $CI_COUNT, pending: $PENDING_COUNT, eplus-bot approvals: $APPROVAL_COUNT)."
             sleep 10
           done
 
-          if [ "$checks_completed" != "true" ]; then
-            echo "::error::Timed out waiting for changelog PR checks."
+          if [ "$ready_to_merge" != "true" ]; then
+            echo "::error::Timed out waiting for changelog checks and eplus-bot approval."
+            exit 1
+          fi
+
+      - name: Merge changelog pull request as hoangsvit
+        if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
+          PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
+        run: |
+          set -euo pipefail
+
+          MERGER_LOGIN="$(gh api user --jq .login)"
+          if [ "$MERGER_LOGIN" != "hoangsvit" ]; then
+            echo "::error::Merge token belongs to '$MERGER_LOGIN', expected 'hoangsvit'."
             exit 1
           fi
 
