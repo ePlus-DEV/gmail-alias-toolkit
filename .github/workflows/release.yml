@@ -164,7 +164,7 @@ jobs:
               --base main \
               --head "$BRANCH" \
               --title "docs: update changelog for $RELEASE_TAG" \
-              --body "Automated CHANGELOG.md update generated from release tag \`$RELEASE_TAG\`.\n\nCreated by @hoangsvit. The @eplus-bot account will approve it after all required checks pass, then @hoangsvit will merge it automatically.")"
+              --body "Automated CHANGELOG.md update generated from release tag \`$RELEASE_TAG\`.\n\nCreated by @hoangsvit. @eplus-bot will approve after required checks pass. GitHub Auto-merge will then squash-merge the pull request automatically.")"
             PR_NUMBER="${PR_URL##*/}"
           fi
 
@@ -175,81 +175,50 @@ jobs:
           fi
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           echo "Created changelog PR #$PR_NUMBER as @hoangsvit."
 
-      - name: Wait for checks and eplus-bot approval
+      - name: Enable auto-merge for changelog pull request
         if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
           PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
         run: |
           set -euo pipefail
-
-          ready_to_merge=false
-
-          for attempt in {1..90}; do
-            PR_JSON="$(gh pr view "$PR_NUMBER" \
-              --repo "$GITHUB_REPOSITORY" \
-              --json state,mergedAt,headRefOid)"
-
-            PR_STATE="$(jq -r 'if .mergedAt then "merged" else (.state | ascii_downcase) end' <<<"$PR_JSON")"
-            HEAD_SHA="$(jq -r '.headRefOid' <<<"$PR_JSON")"
-
-            if [ "$PR_STATE" = "merged" ]; then
-              echo "Changelog PR #$PR_NUMBER was already merged."
-              exit 0
-            fi
-
-            CHECKS="$(gh pr checks "$PR_NUMBER" \
-              --repo "$GITHUB_REPOSITORY" \
-              --json bucket,name,workflow 2>/dev/null || echo '[]')"
-
-            CI_COUNT="$(jq '[.[] | select(.name == "Compile, Test, Build")] | length' <<<"$CHECKS")"
-            FAILING_COUNT="$(jq '[.[] | select(.bucket == "fail" or .bucket == "cancel")] | length' <<<"$CHECKS")"
-            PENDING_COUNT="$(jq '[.[] | select(.bucket == "pending")] | length' <<<"$CHECKS")"
-            APPROVAL_COUNT="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" \
-              --paginate \
-              --jq "[.[] | select(.user.login == \"eplus-bot\" and .state == \"APPROVED\" and .commit_id == \"$HEAD_SHA\")] | length")"
-
-            if [ "$FAILING_COUNT" -gt 0 ]; then
-              jq -r '.[] | select(.bucket == "fail" or .bucket == "cancel") | "::error::\(.workflow): \(.name) failed"' <<<"$CHECKS"
-              exit 1
-            fi
-
-            if [ "$CI_COUNT" -gt 0 ] && [ "$PENDING_COUNT" -eq 0 ] && [ "$APPROVAL_COUNT" -gt 0 ]; then
-              ready_to_merge=true
-              break
-            fi
-
-            echo "Waiting for changelog PR (attempt $attempt/90, CI found: $CI_COUNT, pending: $PENDING_COUNT, eplus-bot approvals: $APPROVAL_COUNT)."
-            sleep 10
-          done
-
-          if [ "$ready_to_merge" != "true" ]; then
-            echo "::error::Timed out waiting for changelog checks and eplus-bot approval."
-            exit 1
-          fi
-
-      - name: Merge changelog pull request as hoangsvit
-        if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
-        env:
-          GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
-          PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
-        run: |
-          set -euo pipefail
-
-          MERGER_LOGIN="$(gh api user --jq .login)"
-          if [ "$MERGER_LOGIN" != "hoangsvit" ]; then
-            echo "::error::Merge token belongs to '$MERGER_LOGIN', expected 'hoangsvit'."
-            exit 1
-          fi
 
           gh pr merge "$PR_NUMBER" \
             --repo "$GITHUB_REPOSITORY" \
+            --auto \
             --squash \
             --delete-branch
+
+          echo "Auto-merge enabled for changelog PR #$PR_NUMBER."
+
+      - name: Wait for changelog auto-merge
+        if: ${{ steps.changelog_pr.outputs.changed == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.HOANGSVIT_TOKEN }}
+          PR_NUMBER: ${{ steps.changelog_pr.outputs.number }}
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..90}; do
+            MERGED_AT="$(gh pr view "$PR_NUMBER" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json mergedAt \
+              --jq '.mergedAt // ""')"
+
+            if [ -n "$MERGED_AT" ]; then
+              echo "Changelog PR #$PR_NUMBER was auto-merged at $MERGED_AT."
+              exit 0
+            fi
+
+            echo "Waiting for GitHub Auto-merge (attempt $attempt/90)."
+            sleep 10
+          done
+
+          echo "::error::Timed out waiting for changelog PR #$PR_NUMBER to auto-merge."
+          exit 1
 
       - name: Restore release tag workspace
         run: |
