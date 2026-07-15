@@ -1,6 +1,17 @@
 version = 1
 
 exclude_patterns = [
+  ".github/**",
+  ".output/**",
+  ".yarn/**",
+  "**/_locales/**",
+  "CHANGELOG.md",
+  "README.md",
+  "LICENSE",
+  "docs/**",
+  "public/**",
+  "web/public/**",
+  "yarn.lock",
   "src/components/motion/**",
 ]
 
