@@ -94,13 +94,24 @@ jobs:
       - name: Run tests
         run: yarn test
 
-      - name: Build extension
+      - name: Build browser packages
         run: |
           yarn zip
           yarn zip:firefox
+          yarn zip:edge
+          yarn zip:opera
 
       - name: Verify build outputs
-        run: ls -lh .output/*.zip
+        run: |
+          set -euo pipefail
+          ls -lh .output/*.zip
+
+          for browser in chrome firefox edge opera; do
+            if ! find .output -maxdepth 1 -type f -name "*-${browser}.zip" -print -quit | grep -q .; then
+              echo "::error::Missing ${browser} release package."
+              exit 1
+            fi
+          done
 
       - name: Checkout latest main for changelog
         run: |
@@ -116,6 +127,14 @@ jobs:
           token: ${{ github.token }}
           tag: ${{ env.RELEASE_TAG }}
           writeToFile: true
+
+      - name: Generate GitHub release body
+        env:
+          CHANGELOG_NOTES: ${{ steps.changelog.outputs.changes }}
+        run: |
+          set -euo pipefail
+          sed "s/{version}/$RELEASE_TAG/g" INSTALL.md > RELEASE_NOTES.md
+          printf '\n\n---\n\n# Changelog\n\n%s\n' "$CHANGELOG_NOTES" >> RELEASE_NOTES.md
 
       - name: Create changelog pull request as eplus-bot
         id: changelog_pr
@@ -233,7 +252,7 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           name: "v${{ env.RELEASE_TAG }}"
-          body: ${{ steps.changelog.outputs.changes }}
+          body_path: RELEASE_NOTES.md
           draft: false
           fail_on_unmatched_files: true
           files: .output/*.zip
