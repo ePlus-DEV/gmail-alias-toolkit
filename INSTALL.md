@@ -1,29 +1,52 @@
-# How to Install
+# How to Install Gmail Alias Toolkit
 
-## Chromium
+## Choose a package
 
-1. Download and unzip the `gmail-alias-toolkit-{version}-chrome.zip` ([latest release desirable](https://github.com/ePlus-DEV/gmail-alias-toolkit/releases)).
-2. Rename the unzipped directory to `google-cloud-helper`.
-   - When you update manually, replace the **content** of the `google-cloud-helper` folder with the **content** of the latest zipped version. This ensures all extension settings are preserved.
-   - As long as the extension loads from the same folder path as it was originally installed, your settings will be kept.
-3. Open Chromium/Chrome and go to _Extensions_.
-4. Click to enable _Developer mode_.
-5. Click _Load unpacked extension..._.
-6. In the file selector dialog:
-   - Select the `google-cloud-helper` directory you created.
-   - Click _Open_.
+Download the package for your browser from the current GitHub release:
 
-The extension will now be available in your Chromium/Chromium-based browser.
+- `gmail-alias-toolkit-{version}-chrome.zip` — Google Chrome and Chromium browsers
+- `gmail-alias-toolkit-{version}-firefox.zip` — Mozilla Firefox
+- `gmail-alias-toolkit-{version}-edge.zip` — Microsoft Edge
+- `gmail-alias-toolkit-{version}-opera.zip` — Opera
 
-**Note:** You must update manually. For some users, manual updates are beneficial because:
+## Chrome, Edge, Opera, and other Chromium browsers
 
-- You can update when **you** want.
-- If a new version is unsatisfactory, you can easily reinstall the previous one.
+1. Download the ZIP file for your browser and extract it.
+2. Rename the extracted directory to `gmail-alias-toolkit`.
+3. Open your browser's extensions page:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
+   - Opera: `opera://extensions`
+4. Enable **Developer mode**.
+5. Choose **Load unpacked**.
+6. Select the extracted `gmail-alias-toolkit` directory.
 
-## Available Stores
+### Manual updates
 
-You can download the extension from the following official stores:
+To preserve extension settings when updating manually:
 
-[![Chrome Web Store](https://github.com/user-attachments/assets/4d8fd051-4c28-4290-afb8-9c182bb2b5d3)](https://chromewebstore.google.com/detail/cbapjlppdfbnfbopdegobofmfijnlibl?utm_source=item-share-cb?utm_source=github) [![Firefox Add-ons](https://github.com/user-attachments/assets/20177a18-81db-45ed-8838-64c29df48d34)](https://addons.mozilla.org/addon/gmail-alias-toolkit) [![Microsoft Edge Add-ons](https://github.com/user-attachments/assets/29994e96-2de9-4136-8f0e-b98c65c0cb28)](https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/?utm_source=github) [![Opera Add-ons](https://github.com/user-attachments/assets/56481763-2d91-408d-8c45-eba77e2dc4c4)](https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/?utm_source=github)
+1. Keep using the same `gmail-alias-toolkit` folder path.
+2. Replace the contents of that folder with the contents from the new ZIP file.
+3. Return to the extensions page and click **Reload**.
 
-**Note:** For browsers not listed above, you can manually install the extension by following the installation instructions provided earlier.
+## Firefox
+
+1. Download and extract `gmail-alias-toolkit-{version}-firefox.zip`.
+2. Open `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on**.
+4. Select `manifest.json` from the extracted folder.
+
+Temporary Firefox installations are removed when Firefox restarts. For normal use, install the signed version from Firefox Add-ons.
+
+## Official stores
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/cbapjlppdfbnfbopdegobofmfijnlibl?utm_source=github)
+- [Firefox Add-ons](https://addons.mozilla.org/addon/gmail-alias-toolkit)
+- [Microsoft Edge package](https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/latest)
+- [Opera package](https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/latest)
+
+## Notes
+
+- Manual installations do not update automatically.
+- Keep the extracted folder after installation; deleting or moving it can disable the unpacked extension.
+- The Edge and Opera packages are Chromium builds prepared specifically for their browser targets.
