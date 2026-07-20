@@ -862,9 +862,19 @@ function injectIcon(input: EmailInputElement) {
     return;
   }
 
+  let iconContainer: HTMLDivElement | undefined;
+  let state:
+    | {
+        inputResizeObserver: ResizeObserver | undefined;
+        activePopup: HTMLElement | null;
+        iconPlacementDirection: "left" | "right" | "above" | "below" | null;
+        positionIconOutsideInput: () => void;
+      }
+    | undefined;
+
   try {
     // Create icon container (no wrapping, just for the icon)
-    const iconContainer = document.createElement("div");
+    iconContainer = document.createElement("div");
     iconContainer.className = "gmail-alias-input-icon-container";
     iconContainer.innerHTML = ICON_HTML;
 
@@ -941,7 +951,7 @@ function injectIcon(input: EmailInputElement) {
       );
     };
 
-    const state = {
+    state = {
       inputResizeObserver: undefined as ResizeObserver | undefined,
       activePopup: null as HTMLElement | null,
       iconPlacementDirection: null as
@@ -1353,13 +1363,19 @@ function injectIcon(input: EmailInputElement) {
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
   } catch {
     // Clean up partial initialization to prevent duplicate injection
-    iconContainer.remove();
+    iconContainer?.remove();
     input.__gmailAliasIcon = undefined;
     input.__gmailAliasPosition = undefined;
     input.__gmailAliasCleanup = undefined;
-    state.inputResizeObserver?.disconnect();
-    window.removeEventListener("resize", state.positionIconOutsideInput);
-    window.removeEventListener("scroll", state.positionIconOutsideInput, true);
+    if (state) {
+      state.inputResizeObserver?.disconnect();
+      window.removeEventListener("resize", state.positionIconOutsideInput);
+      window.removeEventListener(
+        "scroll",
+        state.positionIconOutsideInput,
+        true,
+      );
+    }
   }
 }
 
