@@ -728,7 +728,45 @@ function createPopup(
       }
       renderHistory();
     } catch {
-      historyList.innerHTML = `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
+      // Show distinct error state with retry option
+      const retryBtn = document.createElement("button");
+      retryBtn.textContent = t("retry") || "Retry";
+      retryBtn.style.cssText = `
+        margin-top: 8px;
+        padding: 6px 12px;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      `;
+      retryBtn.onmouseover = () => {
+        retryBtn.style.background = "#fee2e2";
+        retryBtn.style.borderColor = "#fca5a5";
+      };
+      retryBtn.onmouseout = () => {
+        retryBtn.style.background = "#fef2f2";
+        retryBtn.style.borderColor = "#fecaca";
+      };
+      retryBtn.onclick = () => loadHistory();
+
+      const errorDiv = document.createElement("div");
+      errorDiv.style.cssText = `
+        padding: 12px;
+        color: #7f1d1d;
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        font-size: 12px;
+        text-align: center;
+      `;
+      errorDiv.textContent = t("storageError") || "Failed to load history. Check storage access.";
+      errorDiv.appendChild(retryBtn);
+
+      historyList.innerHTML = "";
+      historyList.appendChild(errorDiv);
     }
   }
 
