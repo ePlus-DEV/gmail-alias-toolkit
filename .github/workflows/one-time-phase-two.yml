@@ -1,0 +1,68 @@
+name: One-time Phase Two integration
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - scripts/trigger-phase-two
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-phase-two:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v7
+        with:
+          ref: dev
+          token: ${{ github.token }}
+
+      - name: Integrate product tour
+        shell: python
+        run: |
+          from pathlib import Path
+
+          app = Path("web/src/App.tsx")
+          text = app.read_text(encoding="utf-8")
+          import_line = 'import { PhaseTwoSections } from "./PhaseTwoSections";\n'
+          anchor = 'import { ThemeToggle } from "src/components/motion/theme-toggle";\n'
+          if import_line not in text:
+              if anchor not in text:
+                  raise SystemExit("App import anchor not found")
+              text = text.replace(anchor, anchor + import_line, 1)
+
+          old = '      <TricksSection t={copy} />\n      <PrivacySection t={copy} />'
+          new = '      <TricksSection t={copy} />\n      <PhaseTwoSections locale={locale} />\n      <PrivacySection t={copy} />'
+          if new not in text:
+              if old not in text:
+                  raise SystemExit("App section anchor not found")
+              text = text.replace(old, new, 1)
+          app.write_text(text, encoding="utf-8")
+
+          enhancements = Path("web/src/site-enhancements.ts")
+          text = enhancements.read_text(encoding="utf-8")
+          replacements = {
+              '      features: "Tính năng",\n      privacy: "Quyền riêng tư",': '      features: "Tính năng",\n      tour: "Product Tour",\n      manual: "Cài đặt thủ công",\n      privacy: "Quyền riêng tư",',
+              '      features: "Features",\n      privacy: "Privacy",': '      features: "Features",\n      tour: "Product tour",\n      manual: "Manual installation",\n      privacy: "Privacy",',
+              '          <button type="button" data-scroll="#features">${text.nav.features}</button>\n          <button type="button" data-scroll="#privacy">${text.nav.privacy}</button>': '          <button type="button" data-scroll="#features">${text.nav.features}</button>\n          <button type="button" data-scroll="#product-tour">${text.nav.tour}</button>\n          <button type="button" data-scroll="#manual-install">${text.nav.manual}</button>\n          <button type="button" data-scroll="#privacy">${text.nav.privacy}</button>',
+          }
+          for old, new in replacements.items():
+              if new in text:
+                  continue
+              if old not in text:
+                  raise SystemExit(f"Enhancement anchor not found: {old[:50]}")
+              text = text.replace(old, new, 1)
+          enhancements.write_text(text, encoding="utf-8")
+
+      - name: Format and commit
+        run: |
+          corepack enable
+          yarn prettier --write web/src/App.tsx web/src/PhaseTwoSections.tsx web/src/site-enhancements.ts
+          git rm .github/workflows/one-time-phase-two.yml scripts/trigger-phase-two
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/src/App.tsx web/src/PhaseTwoSections.tsx web/src/site-enhancements.ts
+          git commit -m "feat(web): integrate phase two product tour"
+          git push origin HEAD:dev
