@@ -130,7 +130,7 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
       "base_email",
     ])) as StoredAccountData;
     email = resolveActiveEmail(accountResult);
-  } catch (error) {
+  } catch {
     // Silently fall back to defaults
   }
 
