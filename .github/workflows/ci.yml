@@ -27,87 +27,84 @@ jobs:
       - name: Refine product tour implementation
         shell: python
         run: |
+          import re
           from pathlib import Path
 
           path = Path("web/src/PhaseTwoSections.tsx")
           text = path.read_text(encoding="utf-8")
 
-          replacements = {
-              '''const [favorites, setFavorites] = useState<Set<string>>(
-              new Set(["p1", "w1"]),
-            );''': '''const [favorites, setFavorites] = useState<Set<string>>(
-              () => new Set(["p1", "w1"]),
-            );''',
-              '''      if (next.has(id)) next.delete(id);
-              else next.add(id);''': '''      if (next.has(id)) {
-                next.delete(id);
-              } else {
-                next.add(id);
-              }''',
-              '''    try {
-              await navigator.clipboard.writeText(alias);
-            } catch {
-              /* Preview environments may block clipboard access. */
-            }
-            setCopied(alias);''': '''    try {
-              await navigator.clipboard.writeText(alias);
-            } catch {
-              setCopied(null);
-              return;
-            }
-            setCopied(alias);''',
-              '''  const activity =
-              accountId === "personal" ? [1, 2, 1, 4, 3, 5, 4] : [0, 1, 3, 2, 4, 2, 3];''': '''  const activity =
-              accountId === "personal"
-                ? [
-                    { day: "mon", value: 1 },
-                    { day: "tue", value: 2 },
-                    { day: "wed", value: 1 },
-                    { day: "thu", value: 4 },
-                    { day: "fri", value: 3 },
-                    { day: "sat", value: 5 },
-                    { day: "sun", value: 4 },
-                  ]
-                : [
-                    { day: "mon", value: 0 },
-                    { day: "tue", value: 1 },
-                    { day: "wed", value: 3 },
-                    { day: "thu", value: 2 },
-                    { day: "fri", value: 4 },
-                    { day: "sat", value: 2 },
-                    { day: "sun", value: 3 },
-                  ];''',
-              '''          {activity.map((value, index) => (
-                    <div
-                      key={`${value}-${index}`}
-                      className="relative flex-1 rounded-t-xl bg-gradient-to-t from-blue-600 to-blue-400"
-                      style={{ height: `${18 + value * 15}%` }}
-                    >
-                      <span className="absolute -top-6 inset-x-0 text-center text-[10px] font-bold text-slate-500">
-                        {value}
-                      </span>''': '''          {activity.map((item) => (
-                    <div
-                      key={item.day}
-                      className="relative flex-1 rounded-t-xl bg-gradient-to-t from-blue-600 to-blue-400"
-                      style={{ height: `${18 + item.value * 15}%` }}
-                    >
-                      <span className="absolute -top-6 inset-x-0 text-center text-[10px] font-bold text-slate-500">
-                        {item.value}
-                      </span>''',
-              '''const cardClass = "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm";''': '''const PRESETS = ["shopping", "work", "testing", "travel"] as const;
+          def replace_once(pattern: str, replacement: str, label: str) -> None:
+              global text
+              text, count = re.subn(pattern, replacement, text, count=1, flags=re.MULTILINE | re.DOTALL)
+              if count != 1:
+                  raise SystemExit(f"Expected one {label} match, found {count}")
 
-            const cardClass = "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm";''',
-              '''  const presets = ["shopping", "work", "testing", "travel"];
-              const [selected, setSelected] = useState("shopping");''': '''  const [selected, setSelected] = useState("shopping");''',
-              '''        {presets.map((preset) => (''': '''        {PRESETS.map((preset) => (''',
-          }
-
-          for old, new in replacements.items():
-              if new in text:
-                  continue
-              if old not in text:
-                  raise SystemExit(f"Missing expected code fragment: {old[:80]!r}")
-              text = text.replace(old, new, 1)
+          replace_once(
+              r'const \[favorites, setFavorites\] = useState<Set<string>>\(\s*new Set\(\["p1", "w1"\]\),\s*\);',
+              'const [favorites, setFavorites] = useState<Set<string>>(\n    () => new Set(["p1", "w1"]),\n  );',
+              "favorites initializer",
+          )
+          replace_once(
+              r'if \(next\.has\(id\)\) next\.delete\(id\);\s*else next\.add\(id\);',
+              'if (next.has(id)) {\n        next.delete(id);\n      } else {\n        next.add(id);\n      }',
+              "favorite conditional",
+          )
+          replace_once(
+              r'try \{\s*await navigator\.clipboard\.writeText\(alias\);\s*\} catch \{\s*/\* Preview environments may block clipboard access\. \*/\s*\}\s*setCopied\(alias\);',
+              'try {\n      await navigator.clipboard.writeText(alias);\n    } catch {\n      setCopied(null);\n      return;\n    }\n    setCopied(alias);',
+              "clipboard handling",
+          )
+          replace_once(
+              r'const activity =\s*accountId === "personal" \? \[1, 2, 1, 4, 3, 5, 4\] : \[0, 1, 3, 2, 4, 2, 3\];',
+              '''const activity =
+    accountId === "personal"
+      ? [
+          { day: "mon", value: 1 },
+          { day: "tue", value: 2 },
+          { day: "wed", value: 1 },
+          { day: "thu", value: 4 },
+          { day: "fri", value: 3 },
+          { day: "sat", value: 5 },
+          { day: "sun", value: 4 },
+        ]
+      : [
+          { day: "mon", value: 0 },
+          { day: "tue", value: 1 },
+          { day: "wed", value: 3 },
+          { day: "thu", value: 2 },
+          { day: "fri", value: 4 },
+          { day: "sat", value: 2 },
+          { day: "sun", value: 3 },
+        ];''',
+              "activity data",
+          )
+          replace_once(
+              r'\{activity\.map\(\(value, index\) => \(\s*<div\s*key=\{`\$\{value\}-\$\{index\}`\}\s*className="relative flex-1 rounded-t-xl bg-gradient-to-t from-blue-600 to-blue-400"\s*style=\{\{ height: `\$\{18 \+ value \* 15\}%` \}\}\s*>\s*<span className="absolute -top-6 inset-x-0 text-center text-\[10px\] font-bold text-slate-500">\s*\{value\}',
+              '''{activity.map((item) => (
+            <div
+              key={item.day}
+              className="relative flex-1 rounded-t-xl bg-gradient-to-t from-blue-600 to-blue-400"
+              style={{ height: `${18 + item.value * 15}%` }}
+            >
+              <span className="absolute -top-6 inset-x-0 text-center text-[10px] font-bold text-slate-500">
+                {item.value}''',
+              "activity rendering",
+          )
+          replace_once(
+              r'const cardClass =',
+              'const PRESETS = ["shopping", "work", "testing", "travel"] as const;\n\nconst cardClass =',
+              "preset constant insertion",
+          )
+          replace_once(
+              r'\s*const presets = \["shopping", "work", "testing", "travel"\];',
+              '',
+              "local preset removal",
+          )
+          replace_once(
+              r'\{presets\.map\(\(preset\) => \(',
+              '{PRESETS.map((preset) => (',
+              "preset rendering",
+          )
 
           path.write_text(text, encoding="utf-8")
 
