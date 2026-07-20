@@ -1,5 +1,10 @@
 export type Locale = "vi" | "en";
-export type TabId = "history" | "statistics" | "presets" | "accounts" | "context";
+export type TabId =
+  | "history"
+  | "statistics"
+  | "presets"
+  | "accounts"
+  | "context";
 export type AccountId = "personal" | "work";
 
 export interface AliasItem {
@@ -74,7 +79,10 @@ export const ACCOUNTS: Record<AccountId, DemoAccount> = {
 
 export const PRESETS = ["shopping", "work", "testing", "travel"] as const;
 
-export const ACTIVITY: Record<AccountId, Array<{ day: string; value: number }>> = {
+export const ACTIVITY: Record<
+  AccountId,
+  Array<{ day: string; value: number }>
+> = {
   personal: [
     { day: "mon", value: 1 },
     { day: "tue", value: 2 },
@@ -97,7 +105,8 @@ export const ACTIVITY: Record<AccountId, Array<{ day: string; value: number }>> 
 
 export const URLS = {
   releases: "https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/latest",
-  install: "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/INSTALL.md",
+  install:
+    "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/INSTALL.md",
 } as const;
 
 export const TEXT = {
@@ -114,13 +123,15 @@ export const TEXT = {
     },
     switchAccount: "Chuyển tài khoản",
     historyTitle: "Tìm và dùng lại alias trong vài giây",
-    historyDesc: "Tìm theo alias, website hoặc tag; đánh dấu yêu thích và sao chép lại ngay.",
+    historyDesc:
+      "Tìm theo alias, website hoặc tag; đánh dấu yêu thích và sao chép lại ngay.",
     search: "Tìm alias, tag hoặc website...",
     all: "Tất cả",
     favorites: "Yêu thích",
     empty: "Không tìm thấy alias phù hợp.",
     statsTitle: "Số liệu được tách riêng cho từng account",
-    statsDesc: "Theo dõi tổng alias, tag phổ biến và hoạt động mà không gửi dữ liệu ra ngoài.",
+    statsDesc:
+      "Theo dõi tổng alias, tag phổ biến và hoạt động mà không gửi dữ liệu ra ngoài.",
     total: "Tổng alias",
     today: "Hôm nay",
     tags: "Số tag",
@@ -134,19 +145,22 @@ export const TEXT = {
     useAlias: "Dùng alias này",
     used: "Đã chọn alias",
     accountsTitle: "Personal và Work không trộn dữ liệu",
-    accountsDesc: "Mỗi account có history, favorite, statistics và preset riêng.",
+    accountsDesc:
+      "Mỗi account có history, favorite, statistics và preset riêng.",
     active: "Đang dùng",
     saved: "alias đã lưu",
     isolated: "Dữ liệu được cô lập theo account",
     contextTitle: "Tạo alias ngay tại ô email",
-    contextDesc: "Chuột phải vào ô email để dùng gợi ý theo website mà không cần mở popup chính.",
+    contextDesc:
+      "Chuột phải vào ô email để dùng gợi ý theo website mà không cần mở popup chính.",
     formTitle: "Đăng ký nhận bản tin",
     email: "Địa chỉ email",
     rightClick: "Nhấp chuột phải vào ô email",
     filled: "Đã điền alias",
     installEyebrow: "Cài đặt thủ công",
     installTitle: "Dùng ngay cả khi trình duyệt chưa có store chính thức.",
-    installDesc: "Tải package từ GitHub Releases và giữ nguyên thư mục để cập nhật không mất settings.",
+    installDesc:
+      "Tải package từ GitHub Releases và giữ nguyên thư mục để cập nhật không mất settings.",
     chromium: "Chrome / Edge / Opera",
     firefox: "Firefox",
     chromiumSteps: [
@@ -178,13 +192,15 @@ export const TEXT = {
     },
     switchAccount: "Switch account",
     historyTitle: "Find and reuse an alias in seconds",
-    historyDesc: "Search by alias, website or tag; favorite and copy it immediately.",
+    historyDesc:
+      "Search by alias, website or tag; favorite and copy it immediately.",
     search: "Search alias, tag or website...",
     all: "All",
     favorites: "Favorites",
     empty: "No matching aliases found.",
     statsTitle: "Statistics stay isolated per account",
-    statsDesc: "Track totals, top tags and recent activity without sending data anywhere.",
+    statsDesc:
+      "Track totals, top tags and recent activity without sending data anywhere.",
     total: "Total aliases",
     today: "Created today",
     tags: "Unique tags",
@@ -198,19 +214,23 @@ export const TEXT = {
     useAlias: "Use this alias",
     used: "Alias selected",
     accountsTitle: "Personal and Work never mix data",
-    accountsDesc: "Each account owns separate history, favorites, statistics and presets.",
+    accountsDesc:
+      "Each account owns separate history, favorites, statistics and presets.",
     active: "Active",
     saved: "saved aliases",
     isolated: "Account-isolated local data",
     contextTitle: "Generate directly beside an email field",
-    contextDesc: "Right-click an email input to use website-aware suggestions without opening the popup.",
+    contextDesc:
+      "Right-click an email input to use website-aware suggestions without opening the popup.",
     formTitle: "Newsletter registration",
     email: "Email address",
     rightClick: "Right-click the email field",
     filled: "Alias filled",
     installEyebrow: "Manual installation",
-    installTitle: "Use the toolkit before your browser has an official listing.",
-    installDesc: "Download a GitHub Release package and keep the same folder to preserve settings during updates.",
+    installTitle:
+      "Use the toolkit before your browser has an official listing.",
+    installDesc:
+      "Download a GitHub Release package and keep the same folder to preserve settings during updates.",
     chromium: "Chrome / Edge / Opera",
     firefox: "Firefox",
     chromiumSteps: [
