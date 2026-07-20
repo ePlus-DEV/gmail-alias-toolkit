@@ -12,6 +12,7 @@
       content="Gmail alias, plus addressing, email alias generator, Gmail tricks, inline email helper, privacy, browser extension"
     />
     <meta name="theme-color" content="#2563eb" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="application-name" content="Gmail Alias Toolkit" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Gmail Alias Toolkit" />
@@ -23,25 +24,51 @@
       property="og:url"
       content="https://eplus-dev.github.io/gmail-alias-toolkit/"
     />
-    <meta name="twitter:card" content="summary" />
+    <meta
+      property="og:image"
+      content="https://github.com/user-attachments/assets/b0f76cea-2a0c-4522-8a14-d9486023f8bd"
+    />
+    <meta property="og:image:alt" content="Gmail Alias Toolkit extension interface" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Gmail Alias Toolkit" />
     <meta
       name="twitter:description"
       content="A privacy-first Gmail alias generator with a smart inline helper, history, favorites, Gmail tricks and per-site controls."
     />
+    <meta
+      name="twitter:image"
+      content="https://github.com/user-attachments/assets/b0f76cea-2a0c-4522-8a14-d9486023f8bd"
+    />
     <link
       rel="canonical"
       href="https://eplus-dev.github.io/gmail-alias-toolkit/"
     />
+    <link rel="stylesheet" href="/src/site-enhancements.css" />
     <title>Gmail Alias Toolkit</title>
+    <script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem("gat-site-theme");
+          const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme =
+            storedTheme === "dark" || (!storedTheme && prefersDark)
+              ? "dark"
+              : "light";
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "Gmail Alias Toolkit",
         "applicationCategory": "BrowserApplication",
-        "operatingSystem": "Chrome, Firefox, Edge and Chromium browsers",
+        "operatingSystem": "Chrome, Firefox, Edge, Opera and Chromium browsers",
         "description": "Generate and manage Gmail aliases with a full popup and a website-aware inline helper.",
+        "downloadUrl": "https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/latest",
+        "softwareHelp": "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/INSTALL.md",
         "featureList": [
           "Website-aware Gmail alias suggestions",
           "Inline generate and searchable history popup",
@@ -56,6 +83,8 @@
   </head>
   <body>
     <div id="root"></div>
+    <div id="site-enhancements"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/site-enhancements.ts"></script>
   </body>
 </html>
