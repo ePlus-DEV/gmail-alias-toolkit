@@ -562,16 +562,25 @@ export default defineBackground(() => {
       ])) as { email_accounts?: EmailAccount[]; base_email?: string };
       const activeEmail = getActiveEmail(accountResult);
 
-      // Check cache: use cached suggestions if URL hasn't changed
+      // Check cache: use cached suggestions only if both URL and email match
       const cacheResult = (await browser.storage.session?.get?.(
         "contextMenuWebsiteCache",
       )) as
-        | { contextMenuWebsiteCache?: { url: string; suggestions: string[] } }
+        | {
+            contextMenuWebsiteCache?: {
+              url: string;
+              activeEmail: string;
+              suggestions: string[];
+            };
+          }
         | undefined;
       const cached = cacheResult?.contextMenuWebsiteCache;
 
       let suggestions: string[];
-      if (cached?.url === info.pageUrl) {
+      if (
+        cached?.url === info.pageUrl &&
+        cached?.activeEmail === activeEmail
+      ) {
         suggestions = cached.suggestions;
       } else {
         // Generate suggestions and update cache
@@ -581,7 +590,11 @@ export default defineBackground(() => {
         );
         if (browser.storage.session) {
           await browser.storage.session.set({
-            contextMenuWebsiteCache: { url: info.pageUrl, suggestions },
+            contextMenuWebsiteCache: {
+              url: info.pageUrl,
+              activeEmail,
+              suggestions,
+            },
           });
         }
       }
