@@ -762,7 +762,8 @@ function createPopup(
         font-size: 12px;
         text-align: center;
       `;
-      errorDiv.textContent = t("storageError") || "Failed to load history. Check storage access.";
+      errorDiv.textContent =
+        t("storageError") || "Failed to load history. Check storage access.";
       errorDiv.appendChild(retryBtn);
 
       historyList.innerHTML = "";

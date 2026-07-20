@@ -577,10 +577,7 @@ export default defineBackground(() => {
       const cached = cacheResult?.contextMenuWebsiteCache;
 
       let suggestions: string[];
-      if (
-        cached?.url === info.pageUrl &&
-        cached?.activeEmail === activeEmail
-      ) {
+      if (cached?.url === info.pageUrl && cached?.activeEmail === activeEmail) {
         suggestions = cached.suggestions;
       } else {
         // Generate suggestions and update cache
