@@ -15,8 +15,9 @@ const DEV_SITES = [
   "*://127.0.0.1/*",
 ];
 
-const isProduction = process.env.NODE_ENV === "production";
-const hostPermissions = isProduction ? ["<all_urls>"] : DEV_SITES;
+// WXT runs 'wxt' for dev and 'wxt build' for production
+const isBuild = process.argv.includes("build");
+const hostPermissions = isBuild ? ["<all_urls>"] : DEV_SITES;
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
@@ -24,6 +25,7 @@ export default defineConfig({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
+      "__DEV_MODE__": JSON.stringify(!isBuild),
     },
     resolve: {
       alias: {

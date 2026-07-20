@@ -1544,17 +1544,18 @@ function observeDOM() {
   return observer;
 }
 
-const isProduction = process.env.NODE_ENV === "production";
-const contentScriptMatches = isProduction
-  ? ["<all_urls>"]
-  : [
-      "*://gmail.com/*",
-      "*://mail.google.com/*",
-      "*://github.com/*",
-      "*://example.com/*",
-      "*://localhost/*",
-      "*://127.0.0.1/*",
-    ];
+// @ts-expect-error __DEV_MODE__ injected by Vite at build time
+const DEV_SITES = [
+  "*://gmail.com/*",
+  "*://mail.google.com/*",
+  "*://github.com/*",
+  "*://example.com/*",
+  "*://localhost/*",
+  "*://127.0.0.1/*",
+];
+
+// @ts-expect-error __DEV_MODE__ injected by Vite at build time
+const contentScriptMatches = __DEV_MODE__ ? DEV_SITES : ["<all_urls>"];
 
 export default defineContentScript({
   matches: contentScriptMatches,
