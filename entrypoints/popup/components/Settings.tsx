@@ -704,8 +704,8 @@ export default function Settings({
       if (manifest?.version) {
         setVersion(manifest.version);
       }
-    } catch (error) {
-      console.log("Could not get manifest version:", error);
+    } catch {
+      // Silently fall back to default version
     }
   }, []);
 

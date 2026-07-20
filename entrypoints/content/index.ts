@@ -131,7 +131,7 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
     ])) as StoredAccountData;
     email = resolveActiveEmail(accountResult);
   } catch (error) {
-    console.debug("Error resolving active email:", error);
+    // Silently fall back to defaults
   }
 
   const [previousResult, suggestionsResult] = await Promise.allSettled([
@@ -368,8 +368,8 @@ function createPopup(
   disableSiteBtn?.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
-    disableInlineForCurrentSite().catch((error) => {
-      console.debug("Error disabling inline helper:", error);
+    disableInlineForCurrentSite().catch(() => {
+      // Silently fail
     });
   });
 
@@ -393,8 +393,8 @@ function createPopup(
         ?.classList.add("active");
 
       if (tabName === "history") {
-        loadHistory().catch((error) => {
-          console.debug("Error loading history:", error);
+        loadHistory().catch(() => {
+          // Silently fail
         });
       }
     });
@@ -710,14 +710,13 @@ function createPopup(
           : "all";
       }
       renderHistory();
-    } catch (error) {
-      console.debug("Error loading history:", error);
+    } catch {
       historyList.innerHTML = `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
     }
   }
 
-  loadHistory().catch((error) => {
-    console.debug("Error loading history:", error);
+  loadHistory().catch(() => {
+    // Silently fail
   });
 
   // Handle suggestion item hover for preview and click to select
@@ -821,15 +820,12 @@ function injectIcon(input: EmailInputElement) {
       ".gmail-alias-input-icon",
     ) as SVGElement;
     if (!icon) {
-      console.error("[Gmail Alias] Failed to create icon SVG");
       return;
     }
 
     // Render the fixed helper at the document root so form wrappers with
     // overflow/contain/stacking contexts cannot clip or remove it.
     document.body.appendChild(iconContainer);
-
-    console.debug("[Gmail Alias] Icon injected successfully");
 
     // Keep the helper outside the website's input and layout. Fixed positioning
     // avoids colliding with native suffix icons or adjacent submit buttons.
@@ -1236,8 +1232,8 @@ function injectIcon(input: EmailInputElement) {
             }
 
             await Promise.all(tasks);
-          } catch (error) {
-            console.debug("Error saving selected alias:", error);
+          } catch {
+            // Silently fail
           }
         },
         input,
@@ -1284,8 +1280,8 @@ function injectIcon(input: EmailInputElement) {
     });
 
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
-  } catch (error) {
-    console.error("[Gmail Alias] Error injecting icon:", error);
+  } catch {
+    // Silently fail
   }
 }
 
@@ -1426,21 +1422,11 @@ function detectEmailInputs() {
     'input[type="email"], input[name*="email" i], input[placeholder*="email" i], input[id*="email" i], input[aria-label*="email" i]',
   );
 
-  console.debug(`[Gmail Alias] Found ${emailInputs.length} email inputs`);
-
-  emailInputs.forEach((input, idx) => {
+  emailInputs.forEach((input) => {
     const isVisible = input.offsetParent !== null;
-    const hasIcon = Boolean(input.__gmailAliasIcon);
     const isWideEnough = input.offsetWidth > 50;
 
-    console.debug(
-      `[Gmail Alias] Input ${idx}: visible=${isVisible}, hasIcon=${hasIcon}, width=${input.offsetWidth}px`,
-    );
-
     if (isVisible && isWideEnough) {
-      if (!hasIcon) {
-        console.debug(`[Gmail Alias] Injecting icon for input ${idx}`);
-      }
       injectIcon(input);
     }
   });

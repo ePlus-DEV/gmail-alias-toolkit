@@ -355,8 +355,8 @@ export default defineBackground(() => {
               await saveWebsiteAlias(baseEmail, normalized, emailToFill);
             }
           }
-        } catch (error) {
-          console.debug("Error saving website alias:", error);
+        } catch {
+          // Silently fail
         }
       }
 
@@ -457,8 +457,8 @@ export default defineBackground(() => {
       } else {
         await browser.action.setBadgeText({ text: "" });
       }
-    } catch (error) {
-      console.error("Error updating badge:", error);
+    } catch {
+      // Silently fail
     }
   }
 
@@ -638,8 +638,8 @@ export default defineBackground(() => {
       }
 
       await dynamicContextMenus.refresh?.();
-    } catch (error) {
-      console.debug("Error updating website suggestions:", error);
+    } catch {
+      // Silently fail
     }
   });
 
@@ -679,7 +679,6 @@ export default defineBackground(() => {
           sendResponse({ success: true });
         }
       } catch (error) {
-        console.error("Message handler error:", error);
         sendResponse({ error: String(error) });
       }
     },
