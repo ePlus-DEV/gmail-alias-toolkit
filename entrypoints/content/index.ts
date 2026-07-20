@@ -123,7 +123,7 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
   const normalized = normalizeHostname(window.location.href);
   if (!normalized) return null;
 
-  let email = "your.email@gmail.com";
+  let email: string | null = null;
   try {
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
@@ -131,7 +131,8 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
     ])) as StoredAccountData;
     email = resolveActiveEmail(accountResult);
   } catch {
-    // Silently fall back to defaults
+    // Storage access failed; cannot determine real account
+    return null;
   }
 
   const [previousResult, suggestionsResult] = await Promise.allSettled([
