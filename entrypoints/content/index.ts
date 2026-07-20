@@ -1265,6 +1265,7 @@ function injectIcon(input: EmailInputElement) {
           fillInput(input, alias);
           input.classList.remove("gmail-alias-input-preview");
 
+          let saveSuccess = true;
           try {
             const tasks: Promise<unknown>[] = [];
             if (recordUsage) {
@@ -1273,6 +1274,10 @@ function injectIcon(input: EmailInputElement) {
                   action: "saveAliasToHistory",
                   alias,
                   accountEmail: data.activeEmail,
+                }).then((response: { success?: boolean; error?: string }) => {
+                  if (response?.error) {
+                    saveSuccess = false;
+                  }
                 }),
               );
             }
@@ -1285,7 +1290,19 @@ function injectIcon(input: EmailInputElement) {
 
             await Promise.all(tasks);
           } catch {
-            // Silently fail
+            saveSuccess = false;
+          }
+
+          if (!saveSuccess) {
+            input.classList.add("gmail-alias-input-error");
+            input.setAttribute(
+              "title",
+              "Alias filled but save failed. Please check your storage.",
+            );
+            setTimeout(
+              () => input.classList.remove("gmail-alias-input-error"),
+              3000,
+            );
           }
         },
         input,
