@@ -1434,15 +1434,17 @@ function detectEmailInputs() {
 
 /** Watch for dynamically added inputs. */
 function observeDOM() {
+  let debounceTimer: NodeJS.Timeout;
   const observer = new MutationObserver(() => {
-    detectEmailInputs();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(detectEmailInputs, 100);
   });
 
   observer.observe(document.body, {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["type", "name", "placeholder"],
+    attributeFilter: ["type", "name", "placeholder", "id", "aria-label"],
   });
 
   return observer;
@@ -1463,11 +1465,6 @@ export default defineContentScript({
 
     // Initial detect
     detectEmailInputs();
-
-    // Periodic fallback scan for SPA/lazy-loaded inputs
-    const scanInterval = setInterval(() => {
-      detectEmailInputs();
-    }, 2000);
 
     // Listen for DOM ready events
     if (document.readyState === "loading") {
@@ -1519,7 +1516,6 @@ export default defineContentScript({
 
     // Cleanup on unload
     window.addEventListener("beforeunload", () => {
-      clearInterval(scanInterval);
       observer.disconnect();
     });
   },

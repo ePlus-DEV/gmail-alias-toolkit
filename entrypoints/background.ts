@@ -31,6 +31,18 @@ interface AppSettings {
   badgeDisplay?: "none" | "total" | "all-time" | "today" | "week";
 }
 
+/** Get active email account from storage result. */
+function getActiveEmail(
+  accountResult: { email_accounts?: EmailAccount[]; base_email?: string },
+  fallback = "your.email@gmail.com",
+): string {
+  if (accountResult.email_accounts && Array.isArray(accountResult.email_accounts)) {
+    const activeAccount = accountResult.email_accounts.find((acc) => acc.isActive);
+    if (activeAccount) return activeAccount.email;
+  }
+  return accountResult.base_email || fallback;
+}
+
 export default defineBackground(() => {
   // Create context menu on install
   browser.runtime.onInstalled.addListener(async () => {
@@ -314,16 +326,7 @@ export default defineBackground(() => {
       base_email?: string;
       app_settings?: AppSettings;
     };
-    let baseEmail = "your.email@gmail.com";
-
-    if (result.email_accounts && Array.isArray(result.email_accounts)) {
-      const activeAccount = result.email_accounts.find((acc) => acc.isActive);
-      if (activeAccount) {
-        baseEmail = activeAccount.email;
-      }
-    } else if (result.base_email) {
-      baseEmail = result.base_email;
-    }
+    const baseEmail = getActiveEmail(result);
 
     const [username, domain] = baseEmail.split("@");
     let emailToFill = "";
@@ -387,21 +390,7 @@ export default defineBackground(() => {
         "email_accounts",
         "base_email",
       ])) as { email_accounts?: EmailAccount[]; base_email?: string };
-      let activeEmail = "your.email@gmail.com";
-
-      if (
-        accountResult.email_accounts &&
-        Array.isArray(accountResult.email_accounts)
-      ) {
-        const activeAccount = accountResult.email_accounts.find(
-          (acc) => acc.isActive,
-        );
-        if (activeAccount) {
-          activeEmail = activeAccount.email;
-        }
-      } else if (accountResult.base_email) {
-        activeEmail = accountResult.base_email;
-      }
+      const activeEmail = getActiveEmail(accountResult);
 
       // Get history for active account
       const historyKey = getAccountStorageKey(
@@ -485,22 +474,7 @@ export default defineBackground(() => {
       "email_accounts",
       "base_email",
     ])) as { email_accounts?: EmailAccount[]; base_email?: string };
-    let activeEmail = accountEmail?.trim() || "your.email@gmail.com";
-
-    if (
-      !accountEmail &&
-      accountResult.email_accounts &&
-      Array.isArray(accountResult.email_accounts)
-    ) {
-      const activeAccount = accountResult.email_accounts.find(
-        (acc) => acc.isActive,
-      );
-      if (activeAccount) {
-        activeEmail = activeAccount.email;
-      }
-    } else if (!accountEmail && accountResult.base_email) {
-      activeEmail = accountResult.base_email;
-    }
+    const activeEmail = accountEmail?.trim() || getActiveEmail(accountResult);
 
     // Use account-specific storage keys
     const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
@@ -581,27 +555,30 @@ export default defineBackground(() => {
         "email_accounts",
         "base_email",
       ])) as { email_accounts?: EmailAccount[]; base_email?: string };
-      let activeEmail = "your.email@gmail.com";
+      const activeEmail = getActiveEmail(accountResult);
 
-      if (
-        accountResult.email_accounts &&
-        Array.isArray(accountResult.email_accounts)
-      ) {
-        const activeAccount = accountResult.email_accounts.find(
-          (acc) => acc.isActive,
+      // Check cache: use cached suggestions if URL hasn't changed
+      const cacheResult = (await browser.storage.session?.get?.(
+        "contextMenuWebsiteCache",
+      )) as { contextMenuWebsiteCache?: { url: string; suggestions: string[] } } | undefined;
+      const cached = cacheResult?.contextMenuWebsiteCache;
+
+      let suggestions: string[];
+      if (cached?.url === info.pageUrl) {
+        suggestions = cached.suggestions;
+      } else {
+        // Generate suggestions and update cache
+        suggestions = await generateSuggestionsForWebsite(
+          activeEmail,
+          info.pageUrl,
         );
-        if (activeAccount) {
-          activeEmail = activeAccount.email;
+        if (browser.storage.session) {
+          await browser.storage.session.set({
+            contextMenuWebsiteCache: { url: info.pageUrl, suggestions },
+          });
         }
-      } else if (accountResult.base_email) {
-        activeEmail = accountResult.base_email;
       }
 
-      // Generate suggestions
-      const suggestions = await generateSuggestionsForWebsite(
-        activeEmail,
-        info.pageUrl,
-      );
       if (suggestions.length === 0) return;
 
       // Store suggestions in session storage for retrieval in click handler
@@ -629,10 +606,11 @@ export default defineBackground(() => {
       );
 
       for (const [index, suggestion] of suggestions.slice(0, 3).entries()) {
+        const [username, domain] = suggestion.split("@");
         browser.contextMenus.create({
           id: `website-suggestion-${index}`,
           parentId: "website-alias-parent",
-          title: suggestion.split("@")[0],
+          title: `${username}@${domain}`,
           contexts: ["editable"],
         });
       }
