@@ -36,8 +36,13 @@ function getActiveEmail(
   accountResult: { email_accounts?: EmailAccount[]; base_email?: string },
   fallback = "your.email@gmail.com",
 ): string {
-  if (accountResult.email_accounts && Array.isArray(accountResult.email_accounts)) {
-    const activeAccount = accountResult.email_accounts.find((acc) => acc.isActive);
+  if (
+    accountResult.email_accounts &&
+    Array.isArray(accountResult.email_accounts)
+  ) {
+    const activeAccount = accountResult.email_accounts.find(
+      (acc) => acc.isActive,
+    );
     if (activeAccount) return activeAccount.email;
   }
   return accountResult.base_email || fallback;
@@ -560,7 +565,9 @@ export default defineBackground(() => {
       // Check cache: use cached suggestions if URL hasn't changed
       const cacheResult = (await browser.storage.session?.get?.(
         "contextMenuWebsiteCache",
-      )) as { contextMenuWebsiteCache?: { url: string; suggestions: string[] } } | undefined;
+      )) as
+        | { contextMenuWebsiteCache?: { url: string; suggestions: string[] } }
+        | undefined;
       const cached = cacheResult?.contextMenuWebsiteCache;
 
       let suggestions: string[];
