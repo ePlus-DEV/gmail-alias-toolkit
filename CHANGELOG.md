@@ -5,6 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-07-20
+### :sparkles: New Features
+- [`7148619`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7148619a98c09eaaee68376d4cd021149bd70c8f) - **release**: add Edge and Opera zip scripts *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`52257ae`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/52257ae87fa2e2747269346489ff261b67a6e63d) - **release**: publish multi-browser assets and install guide *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`168a08b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/168a08bc3fda078e4e478cfe05148554963310fb) - implement getActiveEmail function for improved email account handling *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`198e720`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/198e7208aa04c6cfedde4145d65fe6c328dc6d70) - **web**: add browser and mobile landing enhancements *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`4d63d84`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4d63d8454c4cf8c387a8364b9b92ac1af040da9d) - **web**: wire landing enhancements and social metadata *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b884365`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b8843656cf4f2c9a9419bbfef2ef0b08bd5ff5fd) - **web**: add interactive product tour *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`2c41d4e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2c41d4e4f022ea3566b532a2130e83a32e9c006c) - **web**: integrate phase two product tour *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`aea2772`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/aea2772ccbcc3354c14a0f5665bc27e619ffa7aa) - **web**: support configurable preview base path *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :bug: Bug Fixes
+- [`ad536f4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ad536f44fcba337a0844f972c28e9fba5bfc7f8f) - silence error logging for various operations *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`56cbed5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/56cbed527708bba4a91cb31b178e7c6297c765e4) - remove unused error variable in catch block *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b6e4498`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b6e44986d40f0bd64ac47a2815a4e984b09f84ed) - prevent placeholder email usage when storage fails *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`c8b3c86`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c8b3c86e664f4aca39c69a01255b352dc9ae7927) - surface disable inline helper errors to user *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0bb5816`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0bb581692d84df128cd906f9c16378054711d87c) - surface alias-save failures with user feedback *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`94dcefa`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/94dcefa001009287c04c1ac2f921504bd23daba3) - clean up partial icon initialization on error *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`9a187ee`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9a187eee135ed8d35a134fd10d457c8e2626922b) - apply CodeRabbit auto-fixes *(commit by [@coderabbitai[bot]](https://github.com/apps/coderabbitai))*
+- [`235f04c`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/235f04c40662c2c3624e8a4cdb4d87f78a9173b5) - correct WXT env detection for dev/build modes *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`6434c8b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/6434c8b8caf12ece96904510eee53f830c8839d7) - remove unused originalTitle variable *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`60ace93`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/60ace930f356f707a2202f08d82a6a0b6e7ae4e9) - include activeEmail in context menu cache key *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e8fd212`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e8fd212f605995c398a7298f2635780410246ace) - show distinct error state for history load failures *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0535079`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0535079e7cb247bedfde04e29156d55b2ed9f6b1) - update DEV_SITES to correct URLs and remove unused entries *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`4530981`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4530981270e96752d0d67fc9b69adfd0238d07a3) - remove unused DEV_SITES entries for cleaner configuration *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`98e5959`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/98e5959e818f6960236bd21a5fa7541bc489da45) - ensure iconContainer is not null and update state references in injectIcon function *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0e259c1`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0e259c1dfec4593222189dd8bbe881e91bd4894d) - make one-time refactor workflow deterministic *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`afa5471`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/afa547199b0d573f8db0925f31eaa97554cc301c) - remove unsafe non-null assertions *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`ea11faf`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ea11faf71f2c74eb1c3a6cdf1ba5bf1ca462a5ba) - **ci**: use dedicated PR preview environment *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :zap: Performance Improvements
+- [`6b70cbd`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/6b70cbddd2bd68e091a9e62dabff464f9fc8ab40) - optimize performance, fix bugs, add base email to inline popup *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7654278`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/76542786e07e38340e126eea1f6cb0a29843ae05) - **web**: avoid duplicate Tailwind output *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :recycle: Refactors
+- [`e30a040`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e30a040fc8361becf0ee4763544b52b924eb096b) - **web**: extract phase two content *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b7811a0`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b7811a028dd26e641b8000d66d995f0dd7f2a8e8) - **web**: extract product tour *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`86e20d8`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/86e20d887af8da48f54139aff1ec4d1b1f12a391) - **web**: extract manual install guide *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`a67ce08`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/a67ce08ccd3b073ccbd9461802d4b2caebece1ee) - **web**: split phase two sections *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :wrench: Chores
+- [`927bb3b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/927bb3b935f52e80758cc1c1a55577eb689a2ebd) - exclude non-source files from DeepSource *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`14263db`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/14263dbfd300747bd7522fc2db944a7769d907d2) - **deps**: bump @babel/core from 7.28.5 to 7.29.7 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`77574d8`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/77574d817a59f3e7b2e55dd44388875fb7c7eef5) - add one-time DeepSource fix workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e41e019`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e41e019eb278cbfa5c48629257194e8c0ac3b746) - remove one-time DeepSource fix workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7e97d8e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7e97d8e821ad9f6b28a6953c7fd1c026a1948b9d) - prepare phase two integration *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`c71b885`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c71b8857bafe79209445ea266b8a06933cd7b56d) - trigger phase two integration *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`5a4f5c7`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/5a4f5c74e52ddaee841275efb3104f0aa1b53671) - **web**: scope analysis for interactive demo *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`2bf1e95`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2bf1e955ed9f868b0b5f9b10ac157d2328d2fef7) - **web**: exclude phase two demo modules *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b39a226`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b39a22699680c77e57a4e2d1141e3d7c827967e1) - **deps**: bump picomatch from 2.3.1 to 2.3.2 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`2d9b904`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2d9b9040ae078c58bd1af978d3d4daaf17f865c7) - **deps**: bump minimatch from 3.1.2 to 3.1.5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+
 ## [1.3.0] - 2026-07-15
 
 ### :sparkles: New Features
@@ -229,3 +282,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
   [1.3.0]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.2.0...1.3.0
+[1.3.1]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.0...1.3.1
