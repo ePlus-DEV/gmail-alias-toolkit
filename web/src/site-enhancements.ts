@@ -1,3 +1,4 @@
+// skipcq: JS-0415 - Landing enhancement markup is intentionally centralized for atomic localized rendering.
 type Locale = "vi" | "en";
 type Theme = "light" | "dark";
 type BrowserId = "chrome" | "firefox" | "edge" | "opera";
@@ -157,6 +158,7 @@ const browsers: BrowserOption[] = [
   },
 ];
 
+/** Reads a persisted landing preference without throwing in restricted storage contexts. */
 function safeStorageGet(key: string): string | null {
   try {
     return window.localStorage.getItem(key);
@@ -165,6 +167,7 @@ function safeStorageGet(key: string): string | null {
   }
 }
 
+/** Persists a landing preference when local storage is available. */
 function safeStorageSet(key: string, value: string): void {
   try {
     window.localStorage.setItem(key, value);
@@ -173,6 +176,7 @@ function safeStorageSet(key: string, value: string): void {
   }
 }
 
+/** Detects the current browser family for the recommended installation target. */
 function detectBrowser(): BrowserId {
   const userAgent = navigator.userAgent;
   if (/Edg\//i.test(userAgent)) return "edge";
@@ -181,12 +185,14 @@ function detectBrowser(): BrowserId {
   return "chrome";
 }
 
+/** Resolves the preferred landing locale from storage or the browser language. */
 function detectLocale(): Locale {
   const stored = safeStorageGet(STORAGE_KEYS.locale);
   if (stored === "vi" || stored === "en") return stored;
   return navigator.language.toLowerCase().startsWith("vi") ? "vi" : "en";
 }
 
+/** Resolves the preferred site theme from storage or the operating-system preference. */
 function detectTheme(): Theme {
   const stored = safeStorageGet(STORAGE_KEYS.theme);
   if (stored === "light" || stored === "dark") return stored;
@@ -199,6 +205,7 @@ let locale: Locale = detectLocale();
 let theme: Theme = detectTheme();
 let menuOpen = false;
 
+/** Builds one localized browser installation card from trusted static metadata. */
 function browserCard(option: BrowserOption, recommended: BrowserId): string {
   const text = copy[locale];
   const isRecommended = option.id === recommended;
@@ -227,6 +234,7 @@ function browserCard(option: BrowserOption, recommended: BrowserId): string {
     </article>`;
 }
 
+/** Renders localized browser, footer, theme, and mobile-navigation enhancements. */
 function renderEnhancements(): void {
   const host = document.querySelector<HTMLElement>("#site-enhancements");
   if (!host) return;
@@ -320,6 +328,7 @@ function renderEnhancements(): void {
   document.documentElement.lang = locale;
 }
 
+/** Applies a site theme and optionally stores the user preference. */
 function applyTheme(nextTheme: Theme, persist = true): void {
   theme = nextTheme;
   document.documentElement.dataset.theme = theme;
@@ -332,6 +341,7 @@ function applyTheme(nextTheme: Theme, persist = true): void {
   updateThemeButtons();
 }
 
+/** Synchronizes every theme button with the active theme and localized label. */
 function updateThemeButtons(): void {
   const text = copy[locale];
   const label = theme === "dark" ? text.themeLight : text.themeDark;
@@ -345,6 +355,7 @@ function updateThemeButtons(): void {
     });
 }
 
+/** Opens or closes the mobile navigation drawer and manages page scrolling. */
 function toggleMenu(open: boolean): void {
   menuOpen = open;
   document.body.classList.toggle("site-menu-open", menuOpen);
@@ -358,6 +369,7 @@ function toggleMenu(open: boolean): void {
   }
 }
 
+/** Switches both the React landing page and enhancement UI to a locale. */
 function switchLandingLocale(nextLocale: Locale): void {
   locale = nextLocale;
   safeStorageSet(STORAGE_KEYS.locale, locale);
@@ -371,6 +383,7 @@ function switchLandingLocale(nextLocale: Locale): void {
   renderEnhancements();
 }
 
+/** Mirrors the locale selected by the main React application. */
 function syncLocaleFromApp(): void {
   const appLocale = document.querySelector<HTMLElement>("#root main")?.lang;
   if (appLocale === "vi" || appLocale === "en") {
@@ -383,6 +396,7 @@ function syncLocaleFromApp(): void {
   }
 }
 
+/** Applies the stored locale after the React application has mounted. */
 function applyPreferredLocale(attempt = 0): void {
   const main = document.querySelector<HTMLElement>("#root main");
   if (!main) {
@@ -400,6 +414,7 @@ function applyPreferredLocale(attempt = 0): void {
   syncLocaleFromApp();
 }
 
+/** Routes delegated clicks for theme, navigation, scrolling, and locale controls. */
 function handleClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
 
@@ -445,6 +460,7 @@ function handleClick(event: MouseEvent): void {
   }
 }
 
+/** Initializes persisted preferences, enhancement rendering, and DOM listeners. */
 function initialize(): void {
   applyTheme(theme, false);
   renderEnhancements();
