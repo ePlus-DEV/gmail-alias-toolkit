@@ -25,7 +25,7 @@ export default defineConfig({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
-      "__DEV_MODE__": JSON.stringify(!isBuild),
+      __DEV_MODE__: JSON.stringify(!isBuild),
     },
     resolve: {
       alias: {
