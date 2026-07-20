@@ -7,10 +7,10 @@ EventEmitter.defaultMaxListeners = 15;
 
 // Dev-only sites to limit reload spam during development
 const DEV_SITES = [
-  "*://gmail.com/*",
+  "*:///miro.com/*",
   "*://mail.google.com/*",
   "*://github.com/*",
-  "*://example.com/*",
+  "*://selfh.st/*",
   "*://localhost/*",
   "*://127.0.0.1/*",
 ];
