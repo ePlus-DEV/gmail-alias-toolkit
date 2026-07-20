@@ -41,7 +41,9 @@ body {
   min-height: 100vh;
   background: var(--site-bg);
   color: var(--site-text);
-  transition: background-color 180ms ease, color 180ms ease;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
 }
 
 body.site-menu-open {
@@ -88,7 +90,11 @@ section[id] {
 .site-install-section {
   border-top: 1px solid var(--site-border);
   background:
-    radial-gradient(circle at 15% 10%, rgb(37 99 235 / 0.11), transparent 32rem),
+    radial-gradient(
+      circle at 15% 10%,
+      rgb(37 99 235 / 0.11),
+      transparent 32rem
+    ),
     var(--site-panel);
   padding: 5rem 0;
   color: var(--site-text);
@@ -140,7 +146,10 @@ section[id] {
   background: color-mix(in srgb, var(--site-panel-strong) 94%, transparent);
   padding: 1.25rem;
   box-shadow: 0 18px 55px rgb(15 23 42 / 0.07);
-  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .site-browser-card:hover {
@@ -186,7 +195,13 @@ section[id] {
 }
 
 .site-browser-mark--chrome {
-  background: linear-gradient(140deg, #ef4444, #f59e0b 43%, #22c55e 67%, #2563eb);
+  background: linear-gradient(
+    140deg,
+    #ef4444,
+    #f59e0b 43%,
+    #22c55e 67%,
+    #2563eb
+  );
 }
 
 .site-browser-mark--firefox {
@@ -233,7 +248,9 @@ section[id] {
   font-size: 0.82rem;
   font-weight: 900;
   text-decoration: none;
-  transition: background-color 160ms ease, transform 160ms ease;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
 }
 
 .site-browser-action:hover {
@@ -479,7 +496,9 @@ html[data-theme="dark"] #root a[href*="chromewebstore"][class*="bg-white"] {
     grid-template-columns: minmax(3rem, 1fr) minmax(17rem, 23rem);
     visibility: hidden;
     opacity: 0;
-    transition: visibility 180ms ease, opacity 180ms ease;
+    transition:
+      visibility 180ms ease,
+      opacity 180ms ease;
   }
 
   .site-drawer.is-open {
