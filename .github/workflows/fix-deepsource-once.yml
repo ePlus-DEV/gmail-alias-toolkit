@@ -1,0 +1,143 @@
+name: One-time DeepSource fix
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - .github/workflows/fix-deepsource-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v7
+        with:
+          ref: dev
+          token: ${{ github.token }}
+
+      - name: Refactor nullable icon state
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("entrypoints/content/index.ts")
+          text = path.read_text(encoding="utf-8")
+
+          old_declarations = '''  let iconContainer: HTMLDivElement | undefined;
+          let state:
+            | {
+                inputResizeObserver: ResizeObserver | undefined;
+                activePopup: HTMLElement | null;
+                iconPlacementDirection: "left" | "right" | "above" | "below" | null;
+                positionIconOutsideInput: () => void;
+              }
+            | undefined;
+          '''
+          new_declarations = '''  type IconState = {
+            inputResizeObserver: ResizeObserver | undefined;
+            activePopup: HTMLElement | null;
+            iconPlacementDirection: "left" | "right" | "above" | "below" | null;
+            positionIconOutsideInput: () => void;
+          };
+          let cleanupContainer: HTMLDivElement | undefined;
+          let cleanupState: IconState | undefined;
+          '''
+
+          old_state = '''    state = {
+                inputResizeObserver: undefined as ResizeObserver | undefined,
+                activePopup: null as HTMLElement | null,
+                iconPlacementDirection: null as
+                  | "left"
+                  | "right"
+                  | "above"
+                  | "below"
+                  | null,
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                positionIconOutsideInput: (() => {}) as () => void,
+              };
+          '''
+          new_state = '''    const state: IconState = {
+                inputResizeObserver: undefined,
+                activePopup: null,
+                iconPlacementDirection: null,
+                positionIconOutsideInput: () => undefined,
+              };
+              cleanupState = state;
+          '''
+
+          old_catch = '''    iconContainer?.remove();
+              input.__gmailAliasIcon = undefined;
+              input.__gmailAliasPosition = undefined;
+              input.__gmailAliasCleanup = undefined;
+              if (state) {
+                state.inputResizeObserver?.disconnect();
+                window.removeEventListener("resize", state.positionIconOutsideInput);
+                window.removeEventListener(
+                  "scroll",
+                  state.positionIconOutsideInput,
+                  true,
+                );
+              }
+          '''
+          new_catch = '''    cleanupContainer?.remove();
+              input.__gmailAliasIcon = undefined;
+              input.__gmailAliasPosition = undefined;
+              input.__gmailAliasCleanup = undefined;
+              if (cleanupState) {
+                cleanupState.inputResizeObserver?.disconnect();
+                window.removeEventListener(
+                  "resize",
+                  cleanupState.positionIconOutsideInput,
+                );
+                window.removeEventListener(
+                  "scroll",
+                  cleanupState.positionIconOutsideInput,
+                  true,
+                );
+              }
+          '''
+
+          replacements = [
+              (old_declarations, new_declarations, "nullable declarations"),
+              (
+                  '    iconContainer = document.createElement("div");',
+                  '    const iconContainer = document.createElement("div");\n    cleanupContainer = iconContainer;',
+                  "container initialization",
+              ),
+              (old_state, new_state, "state initialization"),
+              (old_catch, new_catch, "catch cleanup"),
+          ]
+
+          for old, new, label in replacements:
+              if old not in text:
+                  raise SystemExit(f"Expected {label} pattern was not found")
+              text = text.replace(old, new, 1)
+
+          text = text.replace("iconContainer!", "iconContainer")
+          text = text.replace("state!", "state")
+
+          if "iconContainer!" in text or "state!" in text:
+              raise SystemExit("Non-null assertions remain")
+
+          path.write_text(text, encoding="utf-8")
+
+      - name: Verify
+        run: |
+          corepack enable
+          yarn install --immutable
+          yarn compile
+          yarn test
+          yarn build
+
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add entrypoints/content/index.ts
+          git commit -m "fix: remove unsafe non-null assertions"
+          git push origin HEAD:dev
