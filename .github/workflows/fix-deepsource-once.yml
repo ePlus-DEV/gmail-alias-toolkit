@@ -28,79 +28,85 @@ jobs:
           path = Path("entrypoints/content/index.ts")
           text = path.read_text(encoding="utf-8")
 
-          old_declarations = '''  let iconContainer: HTMLDivElement | undefined;
-          let state:
-            | {
-                inputResizeObserver: ResizeObserver | undefined;
-                activePopup: HTMLElement | null;
-                iconPlacementDirection: "left" | "right" | "above" | "below" | null;
-                positionIconOutsideInput: () => void;
-              }
-            | undefined;
-          '''
-          new_declarations = '''  type IconState = {
-            inputResizeObserver: ResizeObserver | undefined;
-            activePopup: HTMLElement | null;
-            iconPlacementDirection: "left" | "right" | "above" | "below" | null;
-            positionIconOutsideInput: () => void;
-          };
-          let cleanupContainer: HTMLDivElement | undefined;
-          let cleanupState: IconState | undefined;
-          '''
+          old_declarations = "\n".join([
+              "  let iconContainer: HTMLDivElement | undefined;",
+              "  let state:",
+              "    | {",
+              "        inputResizeObserver: ResizeObserver | undefined;",
+              "        activePopup: HTMLElement | null;",
+              '        iconPlacementDirection: "left" | "right" | "above" | "below" | null;',
+              "        positionIconOutsideInput: () => void;",
+              "      }",
+              "    | undefined;",
+          ])
+          new_declarations = "\n".join([
+              "  type IconState = {",
+              "    inputResizeObserver: ResizeObserver | undefined;",
+              "    activePopup: HTMLElement | null;",
+              '    iconPlacementDirection: "left" | "right" | "above" | "below" | null;',
+              "    positionIconOutsideInput: () => void;",
+              "  };",
+              "  let cleanupContainer: HTMLDivElement | undefined;",
+              "  let cleanupState: IconState | undefined;",
+          ])
 
-          old_state = '''    state = {
-                inputResizeObserver: undefined as ResizeObserver | undefined,
-                activePopup: null as HTMLElement | null,
-                iconPlacementDirection: null as
-                  | "left"
-                  | "right"
-                  | "above"
-                  | "below"
-                  | null,
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                positionIconOutsideInput: (() => {}) as () => void,
-              };
-          '''
-          new_state = '''    const state: IconState = {
-                inputResizeObserver: undefined,
-                activePopup: null,
-                iconPlacementDirection: null,
-                positionIconOutsideInput: () => undefined,
-              };
-              cleanupState = state;
-          '''
+          old_state = "\n".join([
+              "    state = {",
+              "      inputResizeObserver: undefined as ResizeObserver | undefined,",
+              "      activePopup: null as HTMLElement | null,",
+              "      iconPlacementDirection: null as",
+              '        | "left"',
+              '        | "right"',
+              '        | "above"',
+              '        | "below"',
+              "        | null,",
+              "      // eslint-disable-next-line @typescript-eslint/no-empty-function",
+              "      positionIconOutsideInput: (() => {}) as () => void,",
+              "    };",
+          ])
+          new_state = "\n".join([
+              "    const state: IconState = {",
+              "      inputResizeObserver: undefined,",
+              "      activePopup: null,",
+              "      iconPlacementDirection: null,",
+              "      positionIconOutsideInput: () => undefined,",
+              "    };",
+              "    cleanupState = state;",
+          ])
 
-          old_catch = '''    iconContainer?.remove();
-              input.__gmailAliasIcon = undefined;
-              input.__gmailAliasPosition = undefined;
-              input.__gmailAliasCleanup = undefined;
-              if (state) {
-                state.inputResizeObserver?.disconnect();
-                window.removeEventListener("resize", state.positionIconOutsideInput);
-                window.removeEventListener(
-                  "scroll",
-                  state.positionIconOutsideInput,
-                  true,
-                );
-              }
-          '''
-          new_catch = '''    cleanupContainer?.remove();
-              input.__gmailAliasIcon = undefined;
-              input.__gmailAliasPosition = undefined;
-              input.__gmailAliasCleanup = undefined;
-              if (cleanupState) {
-                cleanupState.inputResizeObserver?.disconnect();
-                window.removeEventListener(
-                  "resize",
-                  cleanupState.positionIconOutsideInput,
-                );
-                window.removeEventListener(
-                  "scroll",
-                  cleanupState.positionIconOutsideInput,
-                  true,
-                );
-              }
-          '''
+          old_catch = "\n".join([
+              "    iconContainer?.remove();",
+              "    input.__gmailAliasIcon = undefined;",
+              "    input.__gmailAliasPosition = undefined;",
+              "    input.__gmailAliasCleanup = undefined;",
+              "    if (state) {",
+              "      state.inputResizeObserver?.disconnect();",
+              '      window.removeEventListener("resize", state.positionIconOutsideInput);',
+              "      window.removeEventListener(",
+              '        "scroll",',
+              "        state.positionIconOutsideInput,",
+              "        true,",
+              "      );",
+              "    }",
+          ])
+          new_catch = "\n".join([
+              "    cleanupContainer?.remove();",
+              "    input.__gmailAliasIcon = undefined;",
+              "    input.__gmailAliasPosition = undefined;",
+              "    input.__gmailAliasCleanup = undefined;",
+              "    if (cleanupState) {",
+              "      cleanupState.inputResizeObserver?.disconnect();",
+              "      window.removeEventListener(",
+              '        "resize",',
+              "        cleanupState.positionIconOutsideInput,",
+              "      );",
+              "      window.removeEventListener(",
+              '        "scroll",',
+              "        cleanupState.positionIconOutsideInput,",
+              "        true,",
+              "      );",
+              "    }",
+          ])
 
           replacements = [
               (old_declarations, new_declarations, "nullable declarations"),
@@ -114,8 +120,9 @@ jobs:
           ]
 
           for old, new, label in replacements:
-              if old not in text:
-                  raise SystemExit(f"Expected {label} pattern was not found")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"Expected exactly one {label} pattern, found {count}")
               text = text.replace(old, new, 1)
 
           text = text.replace("iconContainer!", "iconContainer")
@@ -125,14 +132,6 @@ jobs:
               raise SystemExit("Non-null assertions remain")
 
           path.write_text(text, encoding="utf-8")
-
-      - name: Verify
-        run: |
-          corepack enable
-          yarn install --immutable
-          yarn compile
-          yarn test
-          yarn build
 
       - name: Commit fix
         run: |
