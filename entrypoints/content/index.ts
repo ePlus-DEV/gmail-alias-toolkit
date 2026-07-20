@@ -1270,15 +1270,17 @@ function injectIcon(input: EmailInputElement) {
             const tasks: Promise<unknown>[] = [];
             if (recordUsage) {
               tasks.push(
-                browser.runtime.sendMessage({
-                  action: "saveAliasToHistory",
-                  alias,
-                  accountEmail: data.activeEmail,
-                }).then((response: { success?: boolean; error?: string }) => {
-                  if (response?.error) {
-                    saveSuccess = false;
-                  }
-                }),
+                browser.runtime
+                  .sendMessage({
+                    action: "saveAliasToHistory",
+                    alias,
+                    accountEmail: data.activeEmail,
+                  })
+                  .then((response: { success?: boolean; error?: string }) => {
+                    if (response?.error) {
+                      saveSuccess = false;
+                    }
+                  }),
               );
             }
 
