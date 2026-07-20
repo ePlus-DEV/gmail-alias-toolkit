@@ -375,9 +375,20 @@ function createPopup(
   disableSiteBtn?.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
-    disableInlineForCurrentSite().catch(() => {
-      // Silently fail
-    });
+    disableSiteBtn.disabled = true;
+    const originalTitle = disableSiteBtn.getAttribute("data-tooltip");
+    disableInlineForCurrentSite()
+      .then(() => {
+        popup.remove();
+      })
+      .catch(() => {
+        disableSiteBtn.disabled = false;
+        disableSiteBtn.setAttribute(
+          "data-tooltip",
+          "Failed to disable. Please try again.",
+        );
+        disableSiteBtn.style.opacity = "0.5";
+      });
   });
 
   // Handle tab switching
