@@ -47,6 +47,8 @@ const copy = {
       mock: "Bản mô phỏng",
       inline: "Inline Popup",
       features: "Tính năng",
+      tour: "Product Tour",
+      manual: "Cài đặt thủ công",
       privacy: "Quyền riêng tư",
       browsers: "Trình duyệt",
       install: "Cài tiện ích",
@@ -93,6 +95,8 @@ const copy = {
       mock: "Popup mock",
       inline: "Inline Popup",
       features: "Features",
+      tour: "Product tour",
+      manual: "Manual installation",
       privacy: "Privacy",
       browsers: "Browsers",
       install: "Install extension",
@@ -311,6 +315,8 @@ function renderEnhancements(): void {
           <button type="button" data-scroll="#mock">${text.nav.mock}</button>
           <button type="button" data-scroll="#inline-popup">${text.nav.inline}</button>
           <button type="button" data-scroll="#features">${text.nav.features}</button>
+          <button type="button" data-scroll="#product-tour">${text.nav.tour}</button>
+          <button type="button" data-scroll="#manual-install">${text.nav.manual}</button>
           <button type="button" data-scroll="#privacy">${text.nav.privacy}</button>
           <button type="button" data-scroll="#browser-install">${text.nav.browsers}</button>
         </div>
