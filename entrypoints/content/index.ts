@@ -1350,7 +1350,14 @@ function injectIcon(input: EmailInputElement) {
 
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
   } catch {
-    // Silently fail
+    // Clean up partial initialization to prevent duplicate injection
+    iconContainer.remove();
+    input.__gmailAliasIcon = undefined;
+    input.__gmailAliasPosition = undefined;
+    input.__gmailAliasCleanup = undefined;
+    state.inputResizeObserver?.disconnect();
+    window.removeEventListener("resize", state.positionIconOutsideInput);
+    window.removeEventListener("scroll", state.positionIconOutsideInput, true);
   }
 }
 
