@@ -239,6 +239,12 @@ function createPopup(
     </div>
     <div class="gmail-alias-popup-content" style="padding: 12px; max-height: 320px; overflow-y: auto;">
       <div class="gmail-alias-popup-tab-content active" data-tab-content="suggestions">
+        <div class="gmail-alias-base-email-section" style="margin-bottom: 12px;">
+          <div class="gmail-alias-base-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px;">Main Account:</div>
+          <button class="gmail-alias-base-email" data-alias="${escapeHtml(data.activeEmail)}" style="display: block; width: 100%; padding: 8px 12px; background: #f0f9ff; border: 2px solid #3b82f6; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; text-align: left; transition: all 0.2s ease; font-weight: 500;">
+            ${escapeHtml(data.activeEmail)}
+          </button>
+        </div>
         ${
           data.previousAlias
             ? `
@@ -751,6 +757,40 @@ function createPopup(
           popup.remove();
         }
       });
+    });
+  }
+
+  // Handle base email button hover and click
+  const baseEmailBtn = popup.querySelector(
+    ".gmail-alias-base-email",
+  ) as HTMLElement;
+  if (baseEmailBtn && input) {
+    const originalValue = input.value;
+    let baseEmailCommitted = false;
+
+    baseEmailBtn.addEventListener("mouseenter", () => {
+      const alias = baseEmailBtn.dataset.alias;
+      if (alias) {
+        fillInput(input, alias);
+        input.classList.add("gmail-alias-input-preview");
+      }
+    });
+
+    baseEmailBtn.addEventListener("mouseleave", () => {
+      if (baseEmailCommitted) return;
+      fillInput(input, originalValue);
+      input.classList.remove("gmail-alias-input-preview");
+    });
+
+    baseEmailBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const alias = baseEmailBtn.dataset.alias;
+      if (alias) {
+        baseEmailCommitted = true;
+        onSelect(alias);
+        popup.remove();
+      }
     });
   }
 
