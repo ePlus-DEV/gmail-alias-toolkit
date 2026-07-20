@@ -28,7 +28,10 @@
       property="og:image"
       content="https://github.com/user-attachments/assets/b0f76cea-2a0c-4522-8a14-d9486023f8bd"
     />
-    <meta property="og:image:alt" content="Gmail Alias Toolkit extension interface" />
+    <meta
+      property="og:image:alt"
+      content="Gmail Alias Toolkit extension interface"
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Gmail Alias Toolkit" />
     <meta
@@ -49,7 +52,9 @@
       (() => {
         try {
           const storedTheme = localStorage.getItem("gat-site-theme");
-          const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+          const prefersDark = matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
           document.documentElement.dataset.theme =
             storedTheme === "dark" || (!storedTheme && prefersDark)
               ? "dark"
