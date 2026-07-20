@@ -900,19 +900,19 @@ function injectIcon(input: EmailInputElement) {
     return;
   }
 
-  let iconContainer: HTMLDivElement | undefined;
-  let state:
-    | {
-        inputResizeObserver: ResizeObserver | undefined;
-        activePopup: HTMLElement | null;
-        iconPlacementDirection: "left" | "right" | "above" | "below" | null;
-        positionIconOutsideInput: () => void;
-      }
-    | undefined;
+  type IconState = {
+    inputResizeObserver: ResizeObserver | undefined;
+    activePopup: HTMLElement | null;
+    iconPlacementDirection: "left" | "right" | "above" | "below" | null;
+    positionIconOutsideInput: () => void;
+  };
+  let cleanupContainer: HTMLDivElement | undefined;
+  let cleanupState: IconState | undefined;
 
   try {
     // Create icon container (no wrapping, just for the icon)
-    iconContainer = document.createElement("div");
+    const iconContainer = document.createElement("div");
+    cleanupContainer = iconContainer;
     iconContainer.className = "gmail-alias-input-icon-container";
     iconContainer.innerHTML = ICON_HTML;
 
@@ -925,23 +925,23 @@ function injectIcon(input: EmailInputElement) {
 
     // Render the fixed helper at the document root so form wrappers with
     // overflow/contain/stacking contexts cannot clip or remove it.
-    document.body.appendChild(iconContainer!);
+    document.body.appendChild(iconContainer);
 
     // Keep the helper outside the website's input and layout. Fixed positioning
     // avoids colliding with native suffix icons or adjacent submit buttons.
-    iconContainer!.style.position = "fixed";
-    iconContainer!.style.pointerEvents = "auto";
-    iconContainer!.style.display = "flex";
-    iconContainer!.style.alignItems = "center";
-    iconContainer!.style.justifyContent = "center";
-    iconContainer!.style.width = "32px";
-    iconContainer!.style.height = "32px";
-    iconContainer!.style.border = "1px solid #e5e7eb";
-    iconContainer!.style.borderRadius = "9999px";
-    iconContainer!.style.backgroundColor = "#ffffff";
-    iconContainer!.style.boxShadow =
+    iconContainer.style.position = "fixed";
+    iconContainer.style.pointerEvents = "auto";
+    iconContainer.style.display = "flex";
+    iconContainer.style.alignItems = "center";
+    iconContainer.style.justifyContent = "center";
+    iconContainer.style.width = "32px";
+    iconContainer.style.height = "32px";
+    iconContainer.style.border = "1px solid #e5e7eb";
+    iconContainer.style.borderRadius = "9999px";
+    iconContainer.style.backgroundColor = "#ffffff";
+    iconContainer.style.boxShadow =
       "0 3px 10px rgba(15, 23, 42, 0.18), 0 1px 2px rgba(15, 23, 42, 0.1)";
-    iconContainer!.style.zIndex = "999998";
+    iconContainer.style.zIndex = "999998";
 
     /** Detects compact controls or floating overlays occupying a candidate. */
     const isPlacementBlocked = (
@@ -964,7 +964,7 @@ function injectIcon(input: EmailInputElement) {
             element === input ||
             element === document.body ||
             element === document.documentElement ||
-            iconContainer!.contains(element)
+            iconContainer.contains(element)
           ) {
             return false;
           }
@@ -989,29 +989,24 @@ function injectIcon(input: EmailInputElement) {
       );
     };
 
-    state = {
-      inputResizeObserver: undefined as ResizeObserver | undefined,
-      activePopup: null as HTMLElement | null,
-      iconPlacementDirection: null as
-        | "left"
-        | "right"
-        | "above"
-        | "below"
-        | null,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      positionIconOutsideInput: (() => {}) as () => void,
+    const state: IconState = {
+      inputResizeObserver: undefined,
+      activePopup: null,
+      iconPlacementDirection: null,
+      positionIconOutsideInput: () => undefined,
     };
+    cleanupState = state;
 
     /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
-      window.removeEventListener("resize", state!.positionIconOutsideInput);
+      window.removeEventListener("resize", state.positionIconOutsideInput);
       window.removeEventListener(
         "scroll",
-        state!.positionIconOutsideInput,
+        state.positionIconOutsideInput,
         true,
       );
-      state!.inputResizeObserver?.disconnect();
-      iconContainer!.remove();
+      state.inputResizeObserver?.disconnect();
+      iconContainer.remove();
       input.__gmailAliasIcon = undefined;
       input.__gmailAliasPosition = undefined;
       input.__gmailAliasCleanup = undefined;
@@ -1030,13 +1025,13 @@ function injectIcon(input: EmailInputElement) {
     const setIconPointerDirection = (
       direction: "left" | "right" | "above" | "below",
     ) => {
-      iconContainer!.classList.remove(
+      iconContainer.classList.remove(
         "gmail-alias-icon-left",
         "gmail-alias-icon-right",
         "gmail-alias-icon-above",
         "gmail-alias-icon-below",
       );
-      iconContainer!.classList.add(`gmail-alias-icon-${direction}`);
+      iconContainer.classList.add(`gmail-alias-icon-${direction}`);
     };
 
     /** Determines the best horizontal side (left/right) for the icon and popup. */
@@ -1074,9 +1069,9 @@ function injectIcon(input: EmailInputElement) {
     const positionPopupNextToInput = (popup: HTMLElement) => {
       const inputRect = input.getBoundingClientRect();
       if (!isInputInViewport(inputRect)) {
-        iconContainer!.style.display = "none";
+        iconContainer.style.display = "none";
         popup.remove();
-        state!.activePopup = null;
+        state.activePopup = null;
         return;
       }
 
@@ -1089,9 +1084,9 @@ function injectIcon(input: EmailInputElement) {
       const rightRoom = window.innerWidth - inputRect.right - viewportPadding;
       const horizontalChrome = inputGap + iconSize + popupGap;
       const preferredHorizontalSide =
-        state!.iconPlacementDirection === "left" ||
-        state!.iconPlacementDirection === "right"
-          ? state!.iconPlacementDirection
+        state.iconPlacementDirection === "left" ||
+        state.iconPlacementDirection === "right"
+          ? state.iconPlacementDirection
           : null;
       const canUseLeft = preferredHorizontalSide === "left";
       const canUseRight = preferredHorizontalSide === "right";
@@ -1128,28 +1123,28 @@ function injectIcon(input: EmailInputElement) {
 
         if (placeRight) {
           const iconLeft = inputRect.right + inputGap;
-          iconContainer!.style.left = `${iconLeft}px`;
+          iconContainer.style.left = `${iconLeft}px`;
           popup.style.left = `${iconLeft + iconSize + popupGap}px`;
           setIconPointerDirection("right");
         } else {
           const iconLeft = inputRect.left - inputGap - iconSize;
-          iconContainer!.style.left = `${iconLeft}px`;
+          iconContainer.style.left = `${iconLeft}px`;
           popup.style.left = `${iconLeft - popupGap - popupWidth}px`;
           setIconPointerDirection("left");
         }
-        iconContainer!.style.top = `${centeredIconTop}px`;
+        iconContainer.style.top = `${centeredIconTop}px`;
         popup.style.top = `${popupTop}px`;
       } else {
         const roomBelow = window.innerHeight - inputRect.bottom - inputGap;
         const roomAbove = inputRect.top - inputGap;
         const placeBelow =
-          state!.iconPlacementDirection === "below" ||
-          (state!.iconPlacementDirection !== "above" && roomBelow >= roomAbove);
+          state.iconPlacementDirection === "below" ||
+          (state.iconPlacementDirection !== "above" && roomBelow >= roomAbove);
         const popupWidth = Math.min(
           maxPopupWidth,
           window.innerWidth - viewportPadding * 2,
         );
-        const currentIconLeft = Number.parseFloat(iconContainer!.style.left);
+        const currentIconLeft = Number.parseFloat(iconContainer.style.left);
         const centeredIconLeft =
           inputRect.left + inputRect.width / 2 - iconSize / 2;
         const iconLeft = Math.min(
@@ -1171,11 +1166,11 @@ function injectIcon(input: EmailInputElement) {
         popup.style.minWidth = `${popupWidth}px`;
         popup.style.maxWidth = `${popupWidth}px`;
         popup.style.left = `${left}px`;
-        iconContainer!.style.left = `${iconLeft}px`;
+        iconContainer.style.left = `${iconLeft}px`;
 
         if (placeBelow) {
           const iconTop = inputRect.bottom + inputGap;
-          iconContainer!.style.top = `${iconTop}px`;
+          iconContainer.style.top = `${iconTop}px`;
           popup.style.top = `${iconTop + iconSize + popupGap}px`;
           availableHeight = Math.max(
             120,
@@ -1188,7 +1183,7 @@ function injectIcon(input: EmailInputElement) {
           const iconTop = inputRect.top - inputGap - iconSize;
           const popupRect = popup.getBoundingClientRect();
           availableHeight = Math.max(120, iconTop - popupGap - viewportPadding);
-          iconContainer!.style.top = `${iconTop}px`;
+          iconContainer.style.top = `${iconTop}px`;
           popup.style.top = `${Math.max(
             viewportPadding,
             iconTop - popupGap - Math.min(popupRect.height, availableHeight),
@@ -1197,7 +1192,7 @@ function injectIcon(input: EmailInputElement) {
         }
       }
 
-      iconContainer!.style.display = "flex";
+      iconContainer.style.display = "flex";
       popup.style.position = "fixed";
       popup.style.maxHeight = `${availableHeight}px`;
       popup.style.overflowY = "hidden";
@@ -1205,7 +1200,7 @@ function injectIcon(input: EmailInputElement) {
     };
 
     // Assign the positioning function (declared earlier to fix forward reference)
-    state!.positionIconOutsideInput = () => {
+    state.positionIconOutsideInput = () => {
       if (!input.isConnected) {
         cleanupPositioning();
         return;
@@ -1213,13 +1208,13 @@ function injectIcon(input: EmailInputElement) {
 
       const rect = input.getBoundingClientRect();
       if (!isInputInViewport(rect)) {
-        iconContainer!.style.display = "none";
-        if (state!.activePopup?.isConnected) state!.activePopup.remove();
-        state!.activePopup = null;
+        iconContainer.style.display = "none";
+        if (state.activePopup?.isConnected) state.activePopup.remove();
+        state.activePopup = null;
         return;
       }
 
-      iconContainer!.style.display = "flex";
+      iconContainer.style.display = "flex";
       const iconSize = 32;
       const gap = 6;
       /** Clamps the left position to keep the icon within viewport bounds. */
@@ -1265,23 +1260,23 @@ function injectIcon(input: EmailInputElement) {
         ) || candidates[0];
       if (!placement) return;
 
-      iconContainer!.style.left = `${placement.left}px`;
-      iconContainer!.style.top = `${placement.top}px`;
-      state!.iconPlacementDirection = placement.direction;
+      iconContainer.style.left = `${placement.left}px`;
+      iconContainer.style.top = `${placement.top}px`;
+      state.iconPlacementDirection = placement.direction;
       setIconPointerDirection(placement.direction);
-      if (state!.activePopup?.isConnected) {
-        positionPopupNextToInput(state!.activePopup);
+      if (state.activePopup?.isConnected) {
+        positionPopupNextToInput(state.activePopup);
       }
     };
-    input.__gmailAliasPosition = state!.positionIconOutsideInput;
+    input.__gmailAliasPosition = state.positionIconOutsideInput;
     input.__gmailAliasCleanup = cleanupPositioning;
-    state!.positionIconOutsideInput();
-    window.addEventListener("resize", state!.positionIconOutsideInput);
-    window.addEventListener("scroll", state!.positionIconOutsideInput, true);
-    state!.inputResizeObserver = new ResizeObserver(
-      state!.positionIconOutsideInput,
+    state.positionIconOutsideInput();
+    window.addEventListener("resize", state.positionIconOutsideInput);
+    window.addEventListener("scroll", state.positionIconOutsideInput, true);
+    state.inputResizeObserver = new ResizeObserver(
+      state.positionIconOutsideInput,
     );
-    state!.inputResizeObserver.observe(input);
+    state.inputResizeObserver.observe(input);
 
     icon.style.cursor = "pointer";
     icon.style.color = "#3b82f6";
@@ -1359,7 +1354,7 @@ function injectIcon(input: EmailInputElement) {
       );
 
       document.body.appendChild(popup);
-      state!.activePopup = popup;
+      state.activePopup = popup;
       positionPopupNextToInput(popup);
 
       // Keep popup open when hovering over it
@@ -1383,7 +1378,7 @@ function injectIcon(input: EmailInputElement) {
       });
     });
 
-    iconContainer!.addEventListener("mouseleave", () => {
+    iconContainer.addEventListener("mouseleave", () => {
       icon.style.opacity = "1";
       input.classList.remove("gmail-alias-input-highlight");
       // Delay close to allow mouse movement to popup (with overlap, 250ms buffer)
@@ -1401,16 +1396,19 @@ function injectIcon(input: EmailInputElement) {
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
   } catch {
     // Clean up partial initialization to prevent duplicate injection
-    iconContainer?.remove();
+    cleanupContainer?.remove();
     input.__gmailAliasIcon = undefined;
     input.__gmailAliasPosition = undefined;
     input.__gmailAliasCleanup = undefined;
-    if (state) {
-      state.inputResizeObserver?.disconnect();
-      window.removeEventListener("resize", state.positionIconOutsideInput);
+    if (cleanupState) {
+      cleanupState.inputResizeObserver?.disconnect();
+      window.removeEventListener(
+        "resize",
+        cleanupState.positionIconOutsideInput,
+      );
       window.removeEventListener(
         "scroll",
-        state.positionIconOutsideInput,
+        cleanupState.positionIconOutsideInput,
         true,
       );
     }
