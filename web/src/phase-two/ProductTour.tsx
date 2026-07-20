@@ -38,8 +38,7 @@ interface AccountSwitchProps {
   onChange: (id: AccountId) => void;
 }
 
-const CARD_CLASS =
-  "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm";
+const CARD_CLASS = "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm";
 const BUTTON_CLASS =
   "inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 transition hover:border-blue-300 hover:text-blue-700";
 const TAB_ITEMS: Array<{
@@ -354,9 +353,7 @@ function HistoryRows({
               onClick={() => onFavorite(item.id)}
               className={`grid h-8 w-8 place-items-center rounded-lg ${isFavorite ? "bg-amber-50 text-amber-500" : "text-slate-300 hover:bg-slate-50"}`}
             >
-              <Star
-                className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`}
-              />
+              <Star className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`} />
             </button>
             <button
               type="button"
@@ -441,7 +438,8 @@ function PresetsDemo({
   account: DemoAccount;
 }) {
   const text = TEXT[locale];
-  const [selected, setSelected] = useState<(typeof PRESETS)[number]>("shopping");
+  const [selected, setSelected] =
+    useState<(typeof PRESETS)[number]>("shopping");
   const [custom, setCustom] = useState("");
   const [used, setUsed] = useState(false);
   const [name = "user", domain = "gmail.com"] = account.email.split("@");
@@ -586,7 +584,10 @@ function ContextDemo({
   const text = TEXT[locale];
   const [open, setOpen] = useState(true);
   const [value, setValue] = useState("");
-  const suggestions = [account.aliases[0]?.alias ?? account.email, account.email];
+  const suggestions = [
+    account.aliases[0]?.alias ?? account.email,
+    account.email,
+  ];
 
   /** Fills the simulated form with a selected alias. */
   const selectAlias = (alias: string) => {
