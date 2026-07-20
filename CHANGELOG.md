@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-07-20
+
+### :sparkles: New Features
+
+- Added a **Main Account** option to the inline suggestions popup, allowing users to preview and select their original Gmail address.
+- Added per-page website suggestion caching scoped to both the current page and active Gmail account.
+
+### :bug: Bug Fixes
+
+- Improved website suggestion, alias history, badge, and storage failure handling while keeping user-facing retry and error feedback.
+- Improved inline helper cleanup to prevent duplicate icons, observers, and event listeners after partial initialization failures.
+- Improved email input detection and removed unnecessary periodic scanning for better reliability and performance.
+- Fixed unsafe nullable icon state handling that caused DeepSource JavaScript checks to fail.
+
+### :art: User Interface
+
+- Added a visible error state when an alias is filled successfully but could not be saved.
+- Improved the disable-on-site interaction and displayed clearer website suggestion labels.
+
+### :wrench: Maintenance
+
+- Updated the extension package version to `1.3.1`.
+- Updated development and production site permissions.
+- Reduced unnecessary console noise and refactored shared active-account resolution logic.
+
 ## [1.3.0] - 2026-07-15
 
 ### :sparkles: New Features
