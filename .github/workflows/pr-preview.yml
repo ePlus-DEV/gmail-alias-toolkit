@@ -1,0 +1,154 @@
+name: Deploy PR Preview
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, closed]
+    paths:
+      - "web/**"
+      - "package.json"
+      - "yarn.lock"
+      - ".yarnrc.yml"
+      - ".github/workflows/pr-preview.yml"
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build preview site
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout production site
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          path: main-site
+
+      - name: Checkout pull request
+        if: github.event.action != 'closed'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: preview-site
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: yarn
+          cache-dependency-path: main-site/yarn.lock
+
+      - name: Build production site
+        working-directory: main-site
+        run: |
+          yarn install --immutable --mode=skip-build
+          yarn exec wxt prepare
+          yarn workspace gmail-alias-toolkit-web build
+
+      - name: Build pull request preview
+        if: github.event.action != 'closed'
+        working-directory: preview-site
+        env:
+          VITE_BASE_PATH: /gmail-alias-toolkit/pr-preview/pr-${{ github.event.number }}/
+        run: |
+          yarn install --immutable --mode=skip-build
+          yarn exec wxt prepare
+          yarn workspace gmail-alias-toolkit-web build
+
+      - name: Assemble Pages artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site
+          mkdir -p site
+          cp -R main-site/web/dist/. site/
+
+          if [[ "${{ github.event.action }}" != "closed" ]]; then
+            preview_dir="site/pr-preview/pr-${{ github.event.number }}"
+            mkdir -p "$preview_dir"
+            cp -R preview-site/web/dist/. "$preview_dir/"
+          fi
+
+          touch site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+  deploy:
+    name: Deploy PR preview
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+  comment:
+    name: Update preview link
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    steps:
+      - name: Comment preview URL
+        uses: actions/github-script@v8
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        with:
+          script: |
+            const marker = "<!-- gmail-alias-toolkit-pr-preview -->";
+            const rootUrl = process.env.PAGE_URL.replace(/\/?$/, "/");
+            const previewUrl = `${rootUrl}pr-preview/pr-${context.issue.number}/`;
+            const isClosed = context.payload.action === "closed";
+            const body = isClosed
+              ? `${marker}\n## Preview removed\n\nThe temporary website preview for this pull request has been removed.`
+              : `${marker}\n## Website preview ready\n\n[Open PR preview ↗](${previewUrl})\n\nThis preview is rebuilt automatically whenever the pull request changes.`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100,
+            });
+            const existing = comments.find((comment) =>
+              comment.body?.includes(marker),
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
