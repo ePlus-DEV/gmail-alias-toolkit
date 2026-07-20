@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import extensionIconUrl from "../../assets/icon.png?url";
 import { ThemeToggle } from "src/components/motion/theme-toggle";
+import { PhaseTwoSections } from "./PhaseTwoSections";
 import {
   ArrowRight,
   AtSign,
@@ -2707,6 +2708,7 @@ export function App() {
       <InlinePopupSection t={copy} />
       <FeaturesSection t={copy} />
       <TricksSection t={copy} />
+      <PhaseTwoSections locale={locale} />
       <PrivacySection t={copy} />
       <CtaSection t={copy} />
     </main>

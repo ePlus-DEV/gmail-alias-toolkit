@@ -11,6 +11,7 @@ exclude_patterns = [
   "docs/**",
   "public/**",
   "web/public/**",
+  "web/src/phase-two/**",
   "yarn.lock",
   "src/components/motion/**",
 ]

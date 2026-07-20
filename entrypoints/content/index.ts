@@ -123,15 +123,16 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
   const normalized = normalizeHostname(window.location.href);
   if (!normalized) return null;
 
-  let email = "your.email@gmail.com";
+  let email: string | null = null;
   try {
     const accountResult = (await browser.storage.local.get([
       "email_accounts",
       "base_email",
     ])) as StoredAccountData;
     email = resolveActiveEmail(accountResult);
-  } catch (error) {
-    console.debug("Error resolving active email:", error);
+  } catch {
+    // Storage access failed; cannot determine real account
+    return null;
   }
 
   const [previousResult, suggestionsResult] = await Promise.allSettled([
@@ -239,6 +240,12 @@ function createPopup(
     </div>
     <div class="gmail-alias-popup-content" style="padding: 12px; max-height: 320px; overflow-y: auto;">
       <div class="gmail-alias-popup-tab-content active" data-tab-content="suggestions">
+        <div class="gmail-alias-base-email-section" style="margin-bottom: 12px;">
+          <div class="gmail-alias-base-label" style="font-size: 11px; font-weight: 600; text-transform: uppercase; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px;">Main Account:</div>
+          <button class="gmail-alias-base-email" data-alias="${escapeHtml(data.activeEmail)}" style="display: block; width: 100%; padding: 8px 12px; background: #f0f9ff; border: 2px solid #3b82f6; border-radius: 6px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; color: #1e40af; cursor: pointer; text-align: left; transition: all 0.2s ease; font-weight: 500;">
+            ${escapeHtml(data.activeEmail)}
+          </button>
+        </div>
         ${
           data.previousAlias
             ? `
@@ -368,9 +375,19 @@ function createPopup(
   disableSiteBtn?.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
-    disableInlineForCurrentSite().catch((error) => {
-      console.debug("Error disabling inline helper:", error);
-    });
+    disableSiteBtn.disabled = true;
+    disableInlineForCurrentSite()
+      .then(() => {
+        popup.remove();
+      })
+      .catch(() => {
+        disableSiteBtn.disabled = false;
+        disableSiteBtn.setAttribute(
+          "data-tooltip",
+          "Failed to disable. Please try again.",
+        );
+        disableSiteBtn.style.opacity = "0.5";
+      });
   });
 
   // Handle tab switching
@@ -393,8 +410,8 @@ function createPopup(
         ?.classList.add("active");
 
       if (tabName === "history") {
-        loadHistory().catch((error) => {
-          console.debug("Error loading history:", error);
+        loadHistory().catch(() => {
+          // Silently fail
         });
       }
     });
@@ -710,14 +727,52 @@ function createPopup(
           : "all";
       }
       renderHistory();
-    } catch (error) {
-      console.debug("Error loading history:", error);
-      historyList.innerHTML = `<div style="padding: 12px; color: #9ca3af; font-size: 12px; text-align: center;">${escapeHtml(t("noResultsFound"))}</div>`;
+    } catch {
+      // Show distinct error state with retry option
+      const retryBtn = document.createElement("button");
+      retryBtn.textContent = t("retry") || "Retry";
+      retryBtn.style.cssText = `
+        margin-top: 8px;
+        padding: 6px 12px;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      `;
+      retryBtn.onmouseover = () => {
+        retryBtn.style.background = "#fee2e2";
+        retryBtn.style.borderColor = "#fca5a5";
+      };
+      retryBtn.onmouseout = () => {
+        retryBtn.style.background = "#fef2f2";
+        retryBtn.style.borderColor = "#fecaca";
+      };
+      retryBtn.onclick = () => loadHistory();
+
+      const errorDiv = document.createElement("div");
+      errorDiv.style.cssText = `
+        padding: 12px;
+        color: #7f1d1d;
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        font-size: 12px;
+        text-align: center;
+      `;
+      errorDiv.textContent =
+        t("storageError") || "Failed to load history. Check storage access.";
+      errorDiv.appendChild(retryBtn);
+
+      historyList.innerHTML = "";
+      historyList.appendChild(errorDiv);
     }
   }
 
-  loadHistory().catch((error) => {
-    console.debug("Error loading history:", error);
+  loadHistory().catch(() => {
+    // Silently fail
   });
 
   // Handle suggestion item hover for preview and click to select
@@ -752,6 +807,40 @@ function createPopup(
           popup.remove();
         }
       });
+    });
+  }
+
+  // Handle base email button hover and click
+  const baseEmailBtn = popup.querySelector(
+    ".gmail-alias-base-email",
+  ) as HTMLElement;
+  if (baseEmailBtn && input) {
+    const originalValue = input.value;
+    let baseEmailCommitted = false;
+
+    baseEmailBtn.addEventListener("mouseenter", () => {
+      const alias = baseEmailBtn.dataset.alias;
+      if (alias) {
+        fillInput(input, alias);
+        input.classList.add("gmail-alias-input-preview");
+      }
+    });
+
+    baseEmailBtn.addEventListener("mouseleave", () => {
+      if (baseEmailCommitted) return;
+      fillInput(input, originalValue);
+      input.classList.remove("gmail-alias-input-preview");
+    });
+
+    baseEmailBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const alias = baseEmailBtn.dataset.alias;
+      if (alias) {
+        baseEmailCommitted = true;
+        onSelect(alias);
+        popup.remove();
+      }
     });
   }
 
@@ -811,9 +900,19 @@ function injectIcon(input: EmailInputElement) {
     return;
   }
 
+  type IconState = {
+    inputResizeObserver: ResizeObserver | undefined;
+    activePopup: HTMLElement | null;
+    iconPlacementDirection: "left" | "right" | "above" | "below" | null;
+    positionIconOutsideInput: () => void;
+  };
+  let cleanupContainer: HTMLDivElement | undefined;
+  let cleanupState: IconState | undefined;
+
   try {
     // Create icon container (no wrapping, just for the icon)
     const iconContainer = document.createElement("div");
+    cleanupContainer = iconContainer;
     iconContainer.className = "gmail-alias-input-icon-container";
     iconContainer.innerHTML = ICON_HTML;
 
@@ -821,15 +920,12 @@ function injectIcon(input: EmailInputElement) {
       ".gmail-alias-input-icon",
     ) as SVGElement;
     if (!icon) {
-      console.error("[Gmail Alias] Failed to create icon SVG");
       return;
     }
 
     // Render the fixed helper at the document root so form wrappers with
     // overflow/contain/stacking contexts cannot clip or remove it.
     document.body.appendChild(iconContainer);
-
-    console.debug("[Gmail Alias] Icon injected successfully");
 
     // Keep the helper outside the website's input and layout. Fixed positioning
     // avoids colliding with native suffix icons or adjacent submit buttons.
@@ -893,18 +989,13 @@ function injectIcon(input: EmailInputElement) {
       );
     };
 
-    const state = {
-      inputResizeObserver: undefined as ResizeObserver | undefined,
-      activePopup: null as HTMLElement | null,
-      iconPlacementDirection: null as
-        | "left"
-        | "right"
-        | "above"
-        | "below"
-        | null,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      positionIconOutsideInput: (() => {}) as () => void,
+    const state: IconState = {
+      inputResizeObserver: undefined,
+      activePopup: null,
+      iconPlacementDirection: null,
+      positionIconOutsideInput: () => undefined,
     };
+    cleanupState = state;
 
     /** Cleans up positioning event listeners, observers, and removes the icon. */
     const cleanupPositioning = () => {
@@ -1217,15 +1308,22 @@ function injectIcon(input: EmailInputElement) {
           fillInput(input, alias);
           input.classList.remove("gmail-alias-input-preview");
 
+          let saveSuccess = true;
           try {
             const tasks: Promise<unknown>[] = [];
             if (recordUsage) {
               tasks.push(
-                browser.runtime.sendMessage({
-                  action: "saveAliasToHistory",
-                  alias,
-                  accountEmail: data.activeEmail,
-                }),
+                browser.runtime
+                  .sendMessage({
+                    action: "saveAliasToHistory",
+                    alias,
+                    accountEmail: data.activeEmail,
+                  })
+                  .then((response: { success?: boolean; error?: string }) => {
+                    if (response?.error) {
+                      saveSuccess = false;
+                    }
+                  }),
               );
             }
 
@@ -1236,8 +1334,20 @@ function injectIcon(input: EmailInputElement) {
             }
 
             await Promise.all(tasks);
-          } catch (error) {
-            console.debug("Error saving selected alias:", error);
+          } catch {
+            saveSuccess = false;
+          }
+
+          if (!saveSuccess) {
+            input.classList.add("gmail-alias-input-error");
+            input.setAttribute(
+              "title",
+              "Alias filled but save failed. Please check your storage.",
+            );
+            setTimeout(
+              () => input.classList.remove("gmail-alias-input-error"),
+              3000,
+            );
           }
         },
         input,
@@ -1284,8 +1394,24 @@ function injectIcon(input: EmailInputElement) {
     });
 
     input.__gmailAliasIcon = icon as unknown as HTMLElement;
-  } catch (error) {
-    console.error("[Gmail Alias] Error injecting icon:", error);
+  } catch {
+    // Clean up partial initialization to prevent duplicate injection
+    cleanupContainer?.remove();
+    input.__gmailAliasIcon = undefined;
+    input.__gmailAliasPosition = undefined;
+    input.__gmailAliasCleanup = undefined;
+    if (cleanupState) {
+      cleanupState.inputResizeObserver?.disconnect();
+      window.removeEventListener(
+        "resize",
+        cleanupState.positionIconOutsideInput,
+      );
+      window.removeEventListener(
+        "scroll",
+        cleanupState.positionIconOutsideInput,
+        true,
+      );
+    }
   }
 }
 
@@ -1426,21 +1552,11 @@ function detectEmailInputs() {
     'input[type="email"], input[name*="email" i], input[placeholder*="email" i], input[id*="email" i], input[aria-label*="email" i]',
   );
 
-  console.debug(`[Gmail Alias] Found ${emailInputs.length} email inputs`);
-
-  emailInputs.forEach((input, idx) => {
+  emailInputs.forEach((input) => {
     const isVisible = input.offsetParent !== null;
-    const hasIcon = Boolean(input.__gmailAliasIcon);
     const isWideEnough = input.offsetWidth > 50;
 
-    console.debug(
-      `[Gmail Alias] Input ${idx}: visible=${isVisible}, hasIcon=${hasIcon}, width=${input.offsetWidth}px`,
-    );
-
     if (isVisible && isWideEnough) {
-      if (!hasIcon) {
-        console.debug(`[Gmail Alias] Injecting icon for input ${idx}`);
-      }
       injectIcon(input);
     }
   });
@@ -1448,22 +1564,29 @@ function detectEmailInputs() {
 
 /** Watch for dynamically added inputs. */
 function observeDOM() {
+  let debounceTimer: NodeJS.Timeout;
   const observer = new MutationObserver(() => {
-    detectEmailInputs();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(detectEmailInputs, 100);
   });
 
   observer.observe(document.body, {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["type", "name", "placeholder"],
+    attributeFilter: ["type", "name", "placeholder", "id", "aria-label"],
   });
 
   return observer;
 }
 
+const DEV_SITES = ["*:///miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+
+// @ts-expect-error __DEV_MODE__ injected by Vite at build time
+const contentScriptMatches = __DEV_MODE__ ? DEV_SITES : ["<all_urls>"];
+
 export default defineContentScript({
-  matches: ["<all_urls>"],
+  matches: contentScriptMatches,
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,
@@ -1477,11 +1600,6 @@ export default defineContentScript({
 
     // Initial detect
     detectEmailInputs();
-
-    // Periodic fallback scan for SPA/lazy-loaded inputs
-    const scanInterval = setInterval(() => {
-      detectEmailInputs();
-    }, 2000);
 
     // Listen for DOM ready events
     if (document.readyState === "loading") {
@@ -1533,7 +1651,6 @@ export default defineContentScript({
 
     // Cleanup on unload
     window.addEventListener("beforeunload", () => {
-      clearInterval(scanInterval);
       observer.disconnect();
     });
   },

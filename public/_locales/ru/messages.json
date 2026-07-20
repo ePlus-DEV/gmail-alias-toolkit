@@ -1,753 +1,774 @@
 {
-  "extensionName": {
-    "message": "Gmail Alias Toolkit"
-  },
-  "extensionDescription": {
-    "message": "Создавайте псевдонимы Gmail и управляйте ими с помощью адресов +tag и шаблонов"
-  },
-  "headerSubtitle": {
-    "message": "Создавайте псевдонимы с адресами +tag"
-  },
-  "settings": {
-    "message": "Настройки"
-  },
-  "back": {
-    "message": "Назад"
-  },
-  "close": {
-    "message": "Закрыть"
-  },
-  "cancel": {
-    "message": "Отмена"
-  },
-  "copy": {
-    "message": "Копировать"
-  },
-  "copyAll": {
-    "message": "Копировать все"
-  },
-  "copyToClipboard": {
-    "message": "Копировать в буфер обмена"
-  },
-  "activeGmailAddress": {
-    "message": "Активный адрес Gmail"
-  },
-  "addNewAccount": {
-    "message": "Добавить новый аккаунт"
-  },
-  "addAccount": {
-    "message": "Добавить аккаунт"
-  },
-  "addNewAccountTitle": {
-    "message": "Добавить новый аккаунт"
-  },
-  "emailPlaceholder": {
-    "message": "your.email"
-  },
-  "accountLabelPlaceholder": {
-    "message": "Метка (необязательно, например Работа, Личное)"
-  },
-  "pressTabToAddGmail": {
-    "message": "Нажмите $KEY$, чтобы добавить @gmail.com",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
-    }
-  },
-  "gmailWarning": {
-    "message": "Это не похоже на адрес Gmail. Plus-адресация лучше всего работает с Gmail."
-  },
-  "random": {
-    "message": "Случайно"
-  },
-  "customTags": {
-    "message": "Пользовательские теги"
-  },
-  "gmailTricks": {
-    "message": "Трюки Gmail"
-  },
-  "tabTagsShort": {
-    "message": "Теги"
-  },
-  "tabTricksShort": {
-    "message": "Трюки"
-  },
-  "generating": {
-    "message": "Создание"
-  },
-  "copied": {
-    "message": "Скопировано"
-  },
-  "switchToLightMode": {
-    "message": "Переключиться на светлый режим"
-  },
-  "switchToDarkMode": {
-    "message": "Переключиться на темный режим"
-  },
-  "aliasColumn": {
-    "message": "Псевдоним"
-  },
-  "copyEmailTooltip": {
-    "message": "$EMAIL$ - нажмите, чтобы скопировать",
-    "placeholders": {
-      "email": {
-        "content": "$1"
-      }
-    }
-  },
-  "pageLabel": {
-    "message": "Страница $PAGE$",
-    "placeholders": {
-      "page": {
-        "content": "$1"
-      }
-    }
-  },
-  "dotTrick": {
-    "message": "Трюк с точками"
-  },
-  "plusTags": {
-    "message": "Plus-теги (+)"
-  },
-  "googlemail": {
-    "message": "Googlemail"
-  },
-  "removeDots": {
-    "message": "Удалить точки"
-  },
-  "dotPlus": {
-    "message": "Точка + Plus"
-  },
-  "allCombos": {
-    "message": "Все комбинации"
-  },
-  "numberOfVariations": {
-    "message": "Количество вариантов"
-  },
-  "randomizeDotPositions": {
-    "message": "Случайные позиции точек"
-  },
-  "sequential": {
-    "message": "Последовательно"
-  },
-  "generateTricks": {
-    "message": "Создать трюки"
-  },
-  "generatedVariations": {
-    "message": "Созданные варианты"
-  },
-  "gmailTrickInfoLabel": {
-    "message": "Трюк Gmail:"
-  },
-  "gmailTrickInfo": {
-    "message": "Точки игнорируются, а все после + попадает в тот же почтовый ящик"
-  },
-  "format": {
-    "message": "Формат"
-  },
-  "privateMailFormat": {
-    "message": "Личная почта (private-mail-xxxx)"
-  },
-  "randomCharactersFormat": {
-    "message": "Случайные символы (abc123xy)"
-  },
-  "randomWordsFormat": {
-    "message": "Случайные слова (happy-fox-42)"
-  },
-  "timestampFormat": {
-    "message": "Метка времени (1234567890)"
-  },
-  "numberOfAliases": {
-    "message": "Количество псевдонимов"
-  },
-  "generateRandomAliases": {
-    "message": "Создать $COUNT$ случайный псевдоним$PLURAL$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      },
-      "plural": {
-        "content": "$2"
-      }
-    }
-  },
-  "generatedAliases": {
-    "message": "Созданные псевдонимы"
-  },
-  "totalCount": {
-    "message": "Всего $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "copiedAliases": {
-    "message": "Скопировано псевдонимов: $COUNT$!",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "failedToCopy": {
-    "message": "Не удалось скопировать"
-  },
-  "formatPrivateMail": {
-    "message": "Формат: private-mail-xxxx"
-  },
-  "formatAlphanumeric": {
-    "message": "8 случайных символов"
-  },
-  "formatWords": {
-    "message": "2 случайных слова"
-  },
-  "formatTimestamp": {
-    "message": "Метка времени Unix"
-  },
-  "tagPlaceholder": {
-    "message": "Введите тег (например, shopping, work)"
-  },
-  "generate": {
-    "message": "Создать"
-  },
-  "yourPresets": {
-    "message": "Ваши шаблоны"
-  },
-  "example": {
-    "message": "Пример:"
-  },
-  "copyExample": {
-    "message": "Копировать пример"
-  },
-  "recentAliases": {
-    "message": "Недавние псевдонимы"
-  },
-  "favorites": {
-    "message": "Избранное"
-  },
-  "exportAsCsv": {
-    "message": "Экспорт как CSV"
-  },
-  "exportAsJson": {
-    "message": "Экспорт как JSON"
-  },
-  "selectAliases": {
-    "message": "Выбрать псевдонимы"
-  },
-  "select": {
-    "message": "Выбрать"
-  },
-  "starredCount": {
-    "message": "$COUNT$ отмечено",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "deselectAll": {
-    "message": "Снять выбор со всех"
-  },
-  "selectAll": {
-    "message": "Выбрать все"
-  },
-  "selectedCount": {
-    "message": "Выбрано $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "deleteCount": {
-    "message": "Удалить $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "allCount": {
-    "message": "Все ($COUNT$)",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "favoritesCount": {
-    "message": "Избранное ($COUNT$)",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "searchAliases": {
-    "message": "Поиск псевдонимов..."
-  },
-  "allTags": {
-    "message": "Все теги"
-  },
-  "mostRecent": {
-    "message": "Самые новые"
-  },
-  "az": {
-    "message": "A-Z"
-  },
-  "noFavoritesYet": {
-    "message": "Пока нет избранного"
-  },
-  "starEmailsHint": {
-    "message": "Отмечайте письма из истории звездочкой, чтобы быстро открывать их здесь"
-  },
-  "noResultsFound": {
-    "message": "Ничего не найдено"
-  },
-  "differentSearchHint": {
-    "message": "Попробуйте другой поиск или фильтр"
-  },
-  "showQrCode": {
-    "message": "Показать QR-код"
-  },
-  "removeFromFavorites": {
-    "message": "Удалить из избранного"
-  },
-  "addToFavorites": {
-    "message": "Добавить в избранное"
-  },
-  "showingRange": {
-    "message": "Показано $START$-$END$ из $TOTAL$",
-    "placeholders": {
-      "start": {
-        "content": "$1"
-      },
-      "end": {
-        "content": "$2"
-      },
-      "total": {
-        "content": "$3"
-      }
-    }
-  },
-  "perPage": {
-    "message": "$COUNT$ / стр.",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "firstPage": {
-    "message": "Первая страница"
-  },
-  "previousPage": {
-    "message": "Предыдущая страница"
-  },
-  "nextPage": {
-    "message": "Следующая страница"
-  },
-  "lastPage": {
-    "message": "Последняя страница"
-  },
-  "scanToCopyAlias": {
-    "message": "Отсканируйте, чтобы скопировать псевдоним"
-  },
-  "general": {
-    "message": "Общие"
-  },
-  "accounts": {
-    "message": "Аккаунты"
-  },
-  "changelog": {
-    "message": "Журнал изменений"
-  },
-  "appearanceDisplay": {
-    "message": "Внешний вид и отображение"
-  },
-  "theme": {
-    "message": "Тема"
-  },
-  "themeLight": {
-    "message": "Светлая"
-  },
-  "themeDark": {
-    "message": "Темная"
-  },
-  "themeAuto": {
-    "message": "Система (авто)"
-  },
-  "badgeCounter": {
-    "message": "Счетчик значка"
-  },
-  "badgeNone": {
-    "message": "Нет (скрыто)"
-  },
-  "badgeTotal": {
-    "message": "Всего в истории"
-  },
-  "badgeAllTime": {
-    "message": "Всего создано (за все время)"
-  },
-  "badgeToday": {
-    "message": "Создано сегодня"
-  },
-  "badgeWeek": {
-    "message": "На этой неделе"
-  },
-  "copyNotifications": {
-    "message": "Уведомления о копировании"
-  },
-  "aliasGeneration": {
-    "message": "Создание псевдонимов"
-  },
-  "randomAliasFormat": {
-    "message": "Формат случайного псевдонима"
-  },
-  "autoSaveLimit": {
-    "message": "Лимит автосохранения"
-  },
-  "aliasesLimit": {
-    "message": "$COUNT$ псевдонимов",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "customPresets": {
-    "message": "Пользовательские шаблоны"
-  },
-  "label": {
-    "message": "Метка"
-  },
-  "tag": {
-    "message": "Тег"
-  },
-  "addPreset": {
-    "message": "+ Добавить шаблон"
-  },
-  "dataManagement": {
-    "message": "Управление данными"
-  },
-  "export": {
-    "message": "Экспорт"
-  },
-  "import": {
-    "message": "Импорт"
-  },
-  "clear": {
-    "message": "Очистить"
-  },
-  "resetSettings": {
-    "message": "Сбросить все настройки по умолчанию"
-  },
-  "resetSettingsTitle": {
-    "message": "Сбросить настройки?"
-  },
-  "resetSettingsMessage": {
-    "message": "Это восстановит все настройки до значений по умолчанию."
-  },
-  "reset": {
-    "message": "Сбросить"
-  },
-  "clearHistoryTitle": {
-    "message": "Очистить недавние псевдонимы?"
-  },
-  "clearHistoryMessage": {
-    "message": "Это удалит все псевдонимы из списка недавней истории."
-  },
-  "emailAccounts": {
-    "message": "Почтовые аккаунты"
-  },
-  "manageAccountsDescription": {
-    "message": "Управляйте своими аккаунтами Gmail. У каждого аккаунта своя история, статистика и избранное."
-  },
-  "noAccountsFound": {
-    "message": "Аккаунты не найдены. Добавьте аккаунт с главного экрана."
-  },
-  "emailAddress": {
-    "message": "Адрес электронной почты"
-  },
-  "accountLabel": {
-    "message": "Метка аккаунта"
-  },
-  "emailAddressPlaceholder": {
-    "message": "your.email@gmail.com"
-  },
-  "emailChangeWarning": {
-    "message": "При изменении e-mail все данные будут перенесены на новый адрес"
-  },
-  "saveChanges": {
-    "message": "Сохранить изменения"
-  },
-  "active": {
-    "message": "Активен"
-  },
-  "editAccount": {
-    "message": "Редактировать аккаунт"
-  },
-  "cannotDeleteLastAccountTitle": {
-    "message": "Нельзя удалить последний аккаунт"
-  },
-  "deleteThisAccount": {
-    "message": "Удалить этот аккаунт"
-  },
-  "deleteAccountTitle": {
-    "message": "Удалить аккаунт?"
-  },
-  "deleteAccountMessage": {
-    "message": "Удалить \"$LABEL$\" ($EMAIL$)?\n\nЭто навсегда удалит:\n- Всю историю этого аккаунта\n- Всю статистику\n- Все избранное\n\nЭто действие нельзя отменить.",
-    "placeholders": {
-      "label": {
-        "content": "$1"
-      },
-      "email": {
-        "content": "$2"
-      }
-    }
-  },
-  "delete": {
-    "message": "Удалить"
-  },
-  "changeAccountEmailTitle": {
-    "message": "Изменить e-mail аккаунта?"
-  },
-  "changeAccountEmailMessage": {
-    "message": "Изменить e-mail с\n$OLD_EMAIL$\nна\n$NEW_EMAIL$?\n\nЭто выполнит:\n- Перенос всей истории, статистики и избранного на новый e-mail\n- Обновление e-mail аккаунта\n- Удаление данных, связанных со старым e-mail\n\nПродолжить?",
-    "placeholders": {
-      "old_email": {
-        "content": "$1"
-      },
-      "new_email": {
-        "content": "$2"
-      }
-    }
-  },
-  "changeEmail": {
-    "message": "Изменить e-mail"
-  },
-  "menuForThisWebsite": {
-    "message": "Для этого сайта"
-  },
-  "menuLoading": {
-    "message": "Загрузка..."
-  },
-  "menuRandomEmailAlias": {
-    "message": "Случайный e-mail псевдоним"
-  },
-  "menuCustomTags": {
-    "message": "Пользовательские теги"
-  },
-  "menuNoPresets": {
-    "message": "Нет шаблонов - добавьте в Настройках"
-  },
-  "menuGmailTricks": {
-    "message": "Трюки Gmail"
-  },
-  "menuDotVariation": {
-    "message": "Вариант с точками"
-  },
-  "menuGooglemailDomain": {
-    "message": "Домен Googlemail"
-  },
-  "menuRemoveAllDots": {
-    "message": "Удалить все точки"
-  },
-  "toastPresetAdded": {
-    "message": "Шаблон добавлен"
-  },
-  "toastPresetRemoved": {
-    "message": "Шаблон удален"
-  },
-  "toastSettingsExported": {
-    "message": "Настройки экспортированы"
-  },
-  "toastSettingsImported": {
-    "message": "Настройки импортированы"
-  },
-  "toastImportFailed": {
-    "message": "Ошибка импорта - недопустимый файл"
-  },
-  "toastSettingsReset": {
-    "message": "Настройки сброшены по умолчанию"
-  },
-  "toastAccountSwitched": {
-    "message": "Аккаунт переключен"
-  },
-  "toastAccountDeleted": {
-    "message": "Аккаунт удален"
-  },
-  "toastAccountUpdated": {
-    "message": "Аккаунт обновлен"
-  },
-  "toastAccountAdded": {
-    "message": "$LABEL$ добавлен",
-    "placeholders": {
-      "label": {
-        "content": "$1"
-      }
-    }
-  },
-  "errorLabelRequired": {
-    "message": "Метка не может быть пустой"
-  },
-  "errorInvalidEmail": {
-    "message": "Введите действительный адрес электронной почты"
-  },
-  "errorDuplicateEmail": {
-    "message": "Этот адрес уже используется другим аккаунтом"
-  },
-  "errorEnterEmail": {
-    "message": "Введите адрес электронной почты"
-  },
-  "errorAccountExists": {
-    "message": "Этот аккаунт уже существует"
-  },
-  "toastQrFailed": {
-    "message": "Не удалось создать QR-код"
-  },
-  "toastExportedAliases": {
-    "message": "Экспортировано псевдонимов: $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastDeletedAliases": {
-    "message": "Удалено псевдонимов: $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastHistoryCleared": {
-    "message": "История очищена"
-  },
-  "toastFavoriteAdded": {
-    "message": "Добавлено в избранное"
-  },
-  "toastFavoriteRemoved": {
-    "message": "Удалено из избранного"
-  },
-  "toastCopiedEmail": {
-    "message": "Скопировано $EMAIL$",
-    "placeholders": {
-      "email": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastCopyFailed": {
-    "message": "Не удалось скопировать"
-  },
-  "welcomeTitle": {
-    "message": "Добро пожаловать в Gmail Alias Toolkit"
-  },
-  "welcomeSubtitle": {
-    "message": "Создавайте неограниченное количество e-mail псевдонимов для приватности и порядка"
-  },
-  "letsGetStarted": {
-    "message": "Начнем"
-  },
-  "enterGmailAddress": {
-    "message": "Введите ваш адрес Gmail"
-  },
-  "pressTabForGmail": {
-    "message": "Нажмите $KEY$ для @gmail.com",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
-    }
-  },
-  "settingUp": {
-    "message": "Настройка..."
-  },
-  "getStarted": {
-    "message": "Начать"
-  },
-  "advancedSetup": {
-    "message": "Расширенная настройка в Настройках"
-  },
-  "whatYouCanDo": {
-    "message": "Что можно делать:"
-  },
-  "featurePrivateEmail": {
-    "message": "Генератор личной почты"
-  },
-  "featureCustomTags": {
-    "message": "Пользовательские теги и шаблоны"
-  },
-  "featureGmailTricks": {
-    "message": "Расширенные трюки Gmail"
-  },
-  "welcomeFooter": {
-    "message": "Все данные хранятся локально. Без отслеживания, без сервера."
-  },
-  "favoritesSaved": {
-    "message": "Сохранено $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "clickStarHint": {
-    "message": "Нажмите звезду на любом псевдониме в истории, чтобы добавить его сюда"
-  },
-  "viewStatistics": {
-    "message": "Показать статистику"
-  },
-  "statistics": {
-    "message": "Статистика"
-  },
-  "metricsTab": {
-    "message": "Метрики"
-  },
-  "timelineTab": {
-    "message": "Хронология"
-  },
-  "tagsTab": {
-    "message": "Теги"
-  },
-  "totalGenerated": {
-    "message": "Всего создано"
-  },
-  "createdToday": {
-    "message": "Создано сегодня"
-  },
-  "thisWeek": {
-    "message": "На этой неделе"
-  },
-  "thisMonth": {
-    "message": "В этом месяце"
-  },
-  "topTag": {
-    "message": "Лучший тег"
-  },
-  "totalTags": {
-    "message": "Всего тегов"
-  },
-  "noTagsYet": {
-    "message": "Пока нет тегов"
-  },
-  "disableInlineForSite": { "message": "Отключить встроенного помощника на этом сайте" },
-  "inlineDisabledSites": { "message": "Сайты с отключённым встроенным помощником" },
-  "inlineDisabledSitesDescription": { "message": "На этих сайтах встроенный значок и быстрое окно будут скрыты." },
-  "noDisabledSites": { "message": "Нет отключённых сайтов" },
-  "enableInlineForSite": { "message": "Включить" },
-  "reportReview": { "message": "Сообщить / Оценить" },
-  "percentLabel": {
-    "message": "$PERCENT$%",
-    "placeholders": {
-      "percent": {
-        "content": "$1"
-      }
-    }
-  }
+    "extensionName":  {
+                          "message":  "Gmail Alias Toolkit"
+                      },
+    "extensionDescription":  {
+                                 "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹ Gmail Ð¸ ÑƒÐ¿Ñ€Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ Ð¸Ð¼Ð¸ Ñ Ð¿Ð¾Ð¼Ð¾Ñ‰ÑŒÑŽ Ð°Ð´Ñ€ÐµÑÐ¾Ð² +tag Ð¸ ÑˆÐ°Ð±Ð»Ð¾Ð½Ð¾Ð²"
+                             },
+    "headerSubtitle":  {
+                           "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹ Ñ Ð°Ð´Ñ€ÐµÑÐ°Ð¼Ð¸ +tag"
+                       },
+    "settings":  {
+                     "message":  "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸"
+                 },
+    "back":  {
+                 "message":  "ÐÐ°Ð·Ð°Ð´"
+             },
+    "close":  {
+                  "message":  "Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ"
+              },
+    "cancel":  {
+                   "message":  "ÐžÑ‚Ð¼ÐµÐ½Ð°"
+               },
+    "copy":  {
+                 "message":  "ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ"
+             },
+    "copyAll":  {
+                    "message":  "ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÑÐµ"
+                },
+    "copyToClipboard":  {
+                            "message":  "ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð² Ð±ÑƒÑ„ÐµÑ€ Ð¾Ð±Ð¼ÐµÐ½Ð°"
+                        },
+    "activeGmailAddress":  {
+                               "message":  "ÐÐºÑ‚Ð¸Ð²Ð½Ñ‹Ð¹ Ð°Ð´Ñ€ÐµÑ Gmail"
+                           },
+    "addNewAccount":  {
+                          "message":  "Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                      },
+    "addAccount":  {
+                       "message":  "Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                   },
+    "addNewAccountTitle":  {
+                               "message":  "Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð¾Ð²Ñ‹Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                           },
+    "emailPlaceholder":  {
+                             "message":  "your.email"
+                         },
+    "accountLabelPlaceholder":  {
+                                    "message":  "ÐœÐµÑ‚ÐºÐ° (Ð½ÐµÐ¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾, Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ Ð Ð°Ð±Ð¾Ñ‚Ð°, Ð›Ð¸Ñ‡Ð½Ð¾Ðµ)"
+                                },
+    "pressTabToAddGmail":  {
+                               "message":  "ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ $KEY$, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð´Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ @gmail.com",
+                               "placeholders":  {
+                                                    "key":  {
+                                                                "content":  "$1"
+                                                            }
+                                                }
+                           },
+    "gmailWarning":  {
+                         "message":  "Ð­Ñ‚Ð¾ Ð½Ðµ Ð¿Ð¾Ñ…Ð¾Ð¶Ðµ Ð½Ð° Ð°Ð´Ñ€ÐµÑ Gmail. Plus-Ð°Ð´Ñ€ÐµÑÐ°Ñ†Ð¸Ñ Ð»ÑƒÑ‡ÑˆÐµ Ð²ÑÐµÐ³Ð¾ Ñ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚ Ñ Gmail."
+                     },
+    "random":  {
+                   "message":  "Ð¡Ð»ÑƒÑ‡Ð°Ð¹Ð½Ð¾"
+               },
+    "customTags":  {
+                       "message":  "ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ðµ Ñ‚ÐµÐ³Ð¸"
+                   },
+    "gmailTricks":  {
+                        "message":  "Ð¢Ñ€ÑŽÐºÐ¸ Gmail"
+                    },
+    "tabTagsShort":  {
+                         "message":  "Ð¢ÐµÐ³Ð¸"
+                     },
+    "tabTricksShort":  {
+                           "message":  "Ð¢Ñ€ÑŽÐºÐ¸"
+                       },
+    "generating":  {
+                       "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ"
+                   },
+    "copied":  {
+                   "message":  "Ð¡ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾"
+               },
+    "switchToLightMode":  {
+                              "message":  "ÐŸÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ð½Ð° ÑÐ²ÐµÑ‚Ð»Ñ‹Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼"
+                          },
+    "switchToDarkMode":  {
+                             "message":  "ÐŸÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ð½Ð° Ñ‚ÐµÐ¼Ð½Ñ‹Ð¹ Ñ€ÐµÐ¶Ð¸Ð¼"
+                         },
+    "aliasColumn":  {
+                        "message":  "ÐŸÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼"
+                    },
+    "copyEmailTooltip":  {
+                             "message":  "$EMAIL$ - Ð½Ð°Ð¶Ð¼Ð¸Ñ‚Ðµ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ",
+                             "placeholders":  {
+                                                  "email":  {
+                                                                "content":  "$1"
+                                                            }
+                                              }
+                         },
+    "pageLabel":  {
+                      "message":  "Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° $PAGE$",
+                      "placeholders":  {
+                                           "page":  {
+                                                        "content":  "$1"
+                                                    }
+                                       }
+                  },
+    "dotTrick":  {
+                     "message":  "Ð¢Ñ€ÑŽÐº Ñ Ñ‚Ð¾Ñ‡ÐºÐ°Ð¼Ð¸"
+                 },
+    "plusTags":  {
+                     "message":  "Plus-Ñ‚ÐµÐ³Ð¸ (+)"
+                 },
+    "googlemail":  {
+                       "message":  "Googlemail"
+                   },
+    "removeDots":  {
+                       "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ñ‚Ð¾Ñ‡ÐºÐ¸"
+                   },
+    "dotPlus":  {
+                    "message":  "Ð¢Ð¾Ñ‡ÐºÐ° + Plus"
+                },
+    "allCombos":  {
+                      "message":  "Ð’ÑÐµ ÐºÐ¾Ð¼Ð±Ð¸Ð½Ð°Ñ†Ð¸Ð¸"
+                  },
+    "numberOfVariations":  {
+                               "message":  "ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ð¾Ð²"
+                           },
+    "randomizeDotPositions":  {
+                                  "message":  "Ð¡Ð»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ðµ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸ Ñ‚Ð¾Ñ‡ÐµÐº"
+                              },
+    "sequential":  {
+                       "message":  "ÐŸÐ¾ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾"
+                   },
+    "generateTricks":  {
+                           "message":  "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ Ñ‚Ñ€ÑŽÐºÐ¸"
+                       },
+    "generatedVariations":  {
+                                "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð²Ð°Ñ€Ð¸Ð°Ð½Ñ‚Ñ‹"
+                            },
+    "gmailTrickInfoLabel":  {
+                                "message":  "Ð¢Ñ€ÑŽÐº Gmail:"
+                            },
+    "gmailTrickInfo":  {
+                           "message":  "Ð¢Ð¾Ñ‡ÐºÐ¸ Ð¸Ð³Ð½Ð¾Ñ€Ð¸Ñ€ÑƒÑŽÑ‚ÑÑ, Ð° Ð²ÑÐµ Ð¿Ð¾ÑÐ»Ðµ + Ð¿Ð¾Ð¿Ð°Ð´Ð°ÐµÑ‚ Ð² Ñ‚Ð¾Ñ‚ Ð¶Ðµ Ð¿Ð¾Ñ‡Ñ‚Ð¾Ð²Ñ‹Ð¹ ÑÑ‰Ð¸Ðº"
+                       },
+    "format":  {
+                   "message":  "Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚"
+               },
+    "privateMailFormat":  {
+                              "message":  "Ð›Ð¸Ñ‡Ð½Ð°Ñ Ð¿Ð¾Ñ‡Ñ‚Ð° (private-mail-xxxx)"
+                          },
+    "randomCharactersFormat":  {
+                                   "message":  "Ð¡Ð»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ðµ ÑÐ¸Ð¼Ð²Ð¾Ð»Ñ‹ (abc123xy)"
+                               },
+    "randomWordsFormat":  {
+                              "message":  "Ð¡Ð»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ðµ ÑÐ»Ð¾Ð²Ð° (happy-fox-42)"
+                          },
+    "timestampFormat":  {
+                            "message":  "ÐœÐµÑ‚ÐºÐ° Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ (1234567890)"
+                        },
+    "numberOfAliases":  {
+                            "message":  "ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²"
+                        },
+    "generateRandomAliases":  {
+                                  "message":  "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ $COUNT$ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ð¹ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼$PLURAL$",
+                                  "placeholders":  {
+                                                       "count":  {
+                                                                     "content":  "$1"
+                                                                 },
+                                                       "plural":  {
+                                                                      "content":  "$2"
+                                                                  }
+                                                   }
+                              },
+    "generatedAliases":  {
+                             "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹"
+                         },
+    "totalCount":  {
+                       "message":  "Ð’ÑÐµÐ³Ð¾ $COUNT$",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      }
+                                        }
+                   },
+    "copiedAliases":  {
+                          "message":  "Ð¡ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²: $COUNT$!",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         }
+                                           }
+                      },
+    "failedToCopy":  {
+                         "message":  "ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ"
+                     },
+    "formatPrivateMail":  {
+                              "message":  "Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚: private-mail-xxxx"
+                          },
+    "formatAlphanumeric":  {
+                               "message":  "8 ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²"
+                           },
+    "formatWords":  {
+                        "message":  "2 ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ñ… ÑÐ»Ð¾Ð²Ð°"
+                    },
+    "formatTimestamp":  {
+                            "message":  "ÐœÐµÑ‚ÐºÐ° Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Unix"
+                        },
+    "tagPlaceholder":  {
+                           "message":  "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ‚ÐµÐ³ (Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€, shopping, work)"
+                       },
+    "generate":  {
+                     "message":  "Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ"
+                 },
+    "yourPresets":  {
+                        "message":  "Ð’Ð°ÑˆÐ¸ ÑˆÐ°Ð±Ð»Ð¾Ð½Ñ‹"
+                    },
+    "example":  {
+                    "message":  "ÐŸÑ€Ð¸Ð¼ÐµÑ€:"
+                },
+    "copyExample":  {
+                        "message":  "ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð¿Ñ€Ð¸Ð¼ÐµÑ€"
+                    },
+    "recentAliases":  {
+                          "message":  "ÐÐµÐ´Ð°Ð²Ð½Ð¸Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹"
+                      },
+    "favorites":  {
+                      "message":  "Ð˜Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ"
+                  },
+    "exportAsCsv":  {
+                        "message":  "Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚ ÐºÐ°Ðº CSV"
+                    },
+    "exportAsJson":  {
+                         "message":  "Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚ ÐºÐ°Ðº JSON"
+                     },
+    "selectAliases":  {
+                          "message":  "Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹"
+                      },
+    "select":  {
+                   "message":  "Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ"
+               },
+    "starredCount":  {
+                         "message":  "$COUNT$ Ð¾Ñ‚Ð¼ÐµÑ‡ÐµÐ½Ð¾",
+                         "placeholders":  {
+                                              "count":  {
+                                                            "content":  "$1"
+                                                        }
+                                          }
+                     },
+    "deselectAll":  {
+                        "message":  "Ð¡Ð½ÑÑ‚ÑŒ Ð²Ñ‹Ð±Ð¾Ñ€ ÑÐ¾ Ð²ÑÐµÑ…"
+                    },
+    "selectAll":  {
+                      "message":  "Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð²ÑÐµ"
+                  },
+    "selectedCount":  {
+                          "message":  "Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð¾ $COUNT$",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         }
+                                           }
+                      },
+    "deleteCount":  {
+                        "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ $COUNT$",
+                        "placeholders":  {
+                                             "count":  {
+                                                           "content":  "$1"
+                                                       }
+                                         }
+                    },
+    "allCount":  {
+                     "message":  "Ð’ÑÐµ ($COUNT$)",
+                     "placeholders":  {
+                                          "count":  {
+                                                        "content":  "$1"
+                                                    }
+                                      }
+                 },
+    "favoritesCount":  {
+                           "message":  "Ð˜Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ ($COUNT$)",
+                           "placeholders":  {
+                                                "count":  {
+                                                              "content":  "$1"
+                                                          }
+                                            }
+                       },
+    "searchAliases":  {
+                          "message":  "ÐŸÐ¾Ð¸ÑÐº Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²..."
+                      },
+    "allTags":  {
+                    "message":  "Ð’ÑÐµ Ñ‚ÐµÐ³Ð¸"
+                },
+    "mostRecent":  {
+                       "message":  "Ð¡Ð°Ð¼Ñ‹Ðµ Ð½Ð¾Ð²Ñ‹Ðµ"
+                   },
+    "az":  {
+               "message":  "A-Z"
+           },
+    "noFavoritesYet":  {
+                           "message":  "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾"
+                       },
+    "starEmailsHint":  {
+                           "message":  "ÐžÑ‚Ð¼ÐµÑ‡Ð°Ð¹Ñ‚Ðµ Ð¿Ð¸ÑÑŒÐ¼Ð° Ð¸Ð· Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸ Ð·Ð²ÐµÐ·Ð´Ð¾Ñ‡ÐºÐ¾Ð¹, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð±Ñ‹ÑÑ‚Ñ€Ð¾ Ð¾Ñ‚ÐºÑ€Ñ‹Ð²Ð°Ñ‚ÑŒ Ð¸Ñ… Ð·Ð´ÐµÑÑŒ"
+                       },
+    "noResultsFound":  {
+                           "message":  "ÐÐ¸Ñ‡ÐµÐ³Ð¾ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð¾"
+                       },
+    "differentSearchHint":  {
+                                "message":  "ÐŸÐ¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ Ð¿Ð¾Ð¸ÑÐº Ð¸Ð»Ð¸ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€"
+                            },
+    "showQrCode":  {
+                       "message":  "ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ QR-ÐºÐ¾Ð´"
+                   },
+    "removeFromFavorites":  {
+                                "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð¸Ð· Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾"
+                            },
+    "addToFavorites":  {
+                           "message":  "Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð² Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ"
+                       },
+    "showingRange":  {
+                         "message":  "ÐŸÐ¾ÐºÐ°Ð·Ð°Ð½Ð¾ $START$-$END$ Ð¸Ð· $TOTAL$",
+                         "placeholders":  {
+                                              "start":  {
+                                                            "content":  "$1"
+                                                        },
+                                              "end":  {
+                                                          "content":  "$2"
+                                                      },
+                                              "total":  {
+                                                            "content":  "$3"
+                                                        }
+                                          }
+                     },
+    "perPage":  {
+                    "message":  "$COUNT$ / ÑÑ‚Ñ€.",
+                    "placeholders":  {
+                                         "count":  {
+                                                       "content":  "$1"
+                                                   }
+                                     }
+                },
+    "firstPage":  {
+                      "message":  "ÐŸÐµÑ€Ð²Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°"
+                  },
+    "previousPage":  {
+                         "message":  "ÐŸÑ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°"
+                     },
+    "nextPage":  {
+                     "message":  "Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð°Ñ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°"
+                 },
+    "lastPage":  {
+                     "message":  "ÐŸÐ¾ÑÐ»ÐµÐ´Ð½ÑÑ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°"
+                 },
+    "scanToCopyAlias":  {
+                            "message":  "ÐžÑ‚ÑÐºÐ°Ð½Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼"
+                        },
+    "general":  {
+                    "message":  "ÐžÐ±Ñ‰Ð¸Ðµ"
+                },
+    "accounts":  {
+                     "message":  "ÐÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹"
+                 },
+    "changelog":  {
+                      "message":  "Ð–ÑƒÑ€Ð½Ð°Ð» Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¹"
+                  },
+    "appearanceDisplay":  {
+                              "message":  "Ð’Ð½ÐµÑˆÐ½Ð¸Ð¹ Ð²Ð¸Ð´ Ð¸ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ"
+                          },
+    "theme":  {
+                  "message":  "Ð¢ÐµÐ¼Ð°"
+              },
+    "themeLight":  {
+                       "message":  "Ð¡Ð²ÐµÑ‚Ð»Ð°Ñ"
+                   },
+    "themeDark":  {
+                      "message":  "Ð¢ÐµÐ¼Ð½Ð°Ñ"
+                  },
+    "themeAuto":  {
+                      "message":  "Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð° (Ð°Ð²Ñ‚Ð¾)"
+                  },
+    "badgeCounter":  {
+                         "message":  "Ð¡Ñ‡ÐµÑ‚Ñ‡Ð¸Ðº Ð·Ð½Ð°Ñ‡ÐºÐ°"
+                     },
+    "badgeNone":  {
+                      "message":  "ÐÐµÑ‚ (ÑÐºÑ€Ñ‹Ñ‚Ð¾)"
+                  },
+    "badgeTotal":  {
+                       "message":  "Ð’ÑÐµÐ³Ð¾ Ð² Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸"
+                   },
+    "badgeAllTime":  {
+                         "message":  "Ð’ÑÐµÐ³Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½Ð¾ (Ð·Ð° Ð²ÑÐµ Ð²Ñ€ÐµÐ¼Ñ)"
+                     },
+    "badgeToday":  {
+                       "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¾ ÑÐµÐ³Ð¾Ð´Ð½Ñ"
+                   },
+    "badgeWeek":  {
+                      "message":  "ÐÐ° ÑÑ‚Ð¾Ð¹ Ð½ÐµÐ´ÐµÐ»Ðµ"
+                  },
+    "copyNotifications":  {
+                              "message":  "Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ Ð¾ ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ð¸"
+                          },
+    "aliasGeneration":  {
+                            "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²"
+                        },
+    "randomAliasFormat":  {
+                              "message":  "Ð¤Ð¾Ñ€Ð¼Ð°Ñ‚ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ð¾Ð³Ð¾ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð°"
+                          },
+    "autoSaveLimit":  {
+                          "message":  "Ð›Ð¸Ð¼Ð¸Ñ‚ Ð°Ð²Ñ‚Ð¾ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ"
+                      },
+    "aliasesLimit":  {
+                         "message":  "$COUNT$ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²",
+                         "placeholders":  {
+                                              "count":  {
+                                                            "content":  "$1"
+                                                        }
+                                          }
+                     },
+    "customPresets":  {
+                          "message":  "ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ðµ ÑˆÐ°Ð±Ð»Ð¾Ð½Ñ‹"
+                      },
+    "label":  {
+                  "message":  "ÐœÐµÑ‚ÐºÐ°"
+              },
+    "tag":  {
+                "message":  "Ð¢ÐµÐ³"
+            },
+    "addPreset":  {
+                      "message":  "+ Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÑˆÐ°Ð±Ð»Ð¾Ð½"
+                  },
+    "dataManagement":  {
+                           "message":  "Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸"
+                       },
+    "export":  {
+                   "message":  "Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚"
+               },
+    "import":  {
+                   "message":  "Ð˜Ð¼Ð¿Ð¾Ñ€Ñ‚"
+               },
+    "clear":  {
+                  "message":  "ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ"
+              },
+    "resetSettings":  {
+                          "message":  "Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ Ð²ÑÐµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ"
+                      },
+    "resetSettingsTitle":  {
+                               "message":  "Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸?"
+                           },
+    "resetSettingsMessage":  {
+                                 "message":  "Ð­Ñ‚Ð¾ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ Ð²ÑÐµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð´Ð¾ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ð¹ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ."
+                             },
+    "reset":  {
+                  "message":  "Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ"
+              },
+    "clearHistoryTitle":  {
+                              "message":  "ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ð½ÐµÐ´Ð°Ð²Ð½Ð¸Ðµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹?"
+                          },
+    "clearHistoryMessage":  {
+                                "message":  "Ð­Ñ‚Ð¾ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ Ð²ÑÐµ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ñ‹ Ð¸Ð· ÑÐ¿Ð¸ÑÐºÐ° Ð½ÐµÐ´Ð°Ð²Ð½ÐµÐ¹ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸."
+                            },
+    "emailAccounts":  {
+                          "message":  "ÐŸÐ¾Ñ‡Ñ‚Ð¾Ð²Ñ‹Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹"
+                      },
+    "manageAccountsDescription":  {
+                                      "message":  "Ð£Ð¿Ñ€Ð°Ð²Ð»ÑÐ¹Ñ‚Ðµ ÑÐ²Ð¾Ð¸Ð¼Ð¸ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°Ð¼Ð¸ Gmail. Ð£ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð° ÑÐ²Ð¾Ñ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ñ, ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ° Ð¸ Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ."
+                                  },
+    "noAccountsFound":  {
+                            "message":  "ÐÐºÐºÐ°ÑƒÐ½Ñ‚Ñ‹ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹. Ð”Ð¾Ð±Ð°Ð²ÑŒÑ‚Ðµ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ Ñ Ð³Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ ÑÐºÑ€Ð°Ð½Ð°."
+                        },
+    "emailAddress":  {
+                         "message":  "ÐÐ´Ñ€ÐµÑ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ð¾Ð¹ Ð¿Ð¾Ñ‡Ñ‚Ñ‹"
+                     },
+    "accountLabel":  {
+                         "message":  "ÐœÐµÑ‚ÐºÐ° Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°"
+                     },
+    "emailAddressPlaceholder":  {
+                                    "message":  "your.email@gmail.com"
+                                },
+    "emailChangeWarning":  {
+                               "message":  "ÐŸÑ€Ð¸ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¸ e-mail Ð²ÑÐµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð±ÑƒÐ´ÑƒÑ‚ Ð¿ÐµÑ€ÐµÐ½ÐµÑÐµÐ½Ñ‹ Ð½Ð° Ð½Ð¾Ð²Ñ‹Ð¹ Ð°Ð´Ñ€ÐµÑ"
+                           },
+    "saveChanges":  {
+                        "message":  "Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ"
+                    },
+    "active":  {
+                   "message":  "ÐÐºÑ‚Ð¸Ð²ÐµÐ½"
+               },
+    "editAccount":  {
+                        "message":  "Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                    },
+    "cannotDeleteLastAccountTitle":  {
+                                         "message":  "ÐÐµÐ»ÑŒÐ·Ñ ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                                     },
+    "deleteThisAccount":  {
+                              "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ ÑÑ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚"
+                          },
+    "deleteAccountTitle":  {
+                               "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚?"
+                           },
+    "deleteAccountMessage":  {
+                                 "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ \"$LABEL$\" ($EMAIL$)?\n\nÐ­Ñ‚Ð¾ Ð½Ð°Ð²ÑÐµÐ³Ð´Ð° ÑƒÐ´Ð°Ð»Ð¸Ñ‚:\n- Ð’ÑÑŽ Ð¸ÑÑ‚Ð¾Ñ€Ð¸ÑŽ ÑÑ‚Ð¾Ð³Ð¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°\n- Ð’ÑÑŽ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÑƒ\n- Ð’ÑÐµ Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ\n\nÐ­Ñ‚Ð¾ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ðµ Ð½ÐµÐ»ÑŒÐ·Ñ Ð¾Ñ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ.",
+                                 "placeholders":  {
+                                                      "label":  {
+                                                                    "content":  "$1"
+                                                                },
+                                                      "email":  {
+                                                                    "content":  "$2"
+                                                                }
+                                                  }
+                             },
+    "delete":  {
+                   "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ"
+               },
+    "changeAccountEmailTitle":  {
+                                    "message":  "Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ e-mail Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°?"
+                                },
+    "changeAccountEmailMessage":  {
+                                      "message":  "Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ e-mail Ñ\n$OLD_EMAIL$\nÐ½Ð°\n$NEW_EMAIL$?\n\nÐ­Ñ‚Ð¾ Ð²Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚:\n- ÐŸÐµÑ€ÐµÐ½Ð¾Ñ Ð²ÑÐµÐ¹ Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸, ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ¸ Ð¸ Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð½Ð° Ð½Ð¾Ð²Ñ‹Ð¹ e-mail\n- ÐžÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ e-mail Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð°\n- Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð´Ð°Ð½Ð½Ñ‹Ñ…, ÑÐ²ÑÐ·Ð°Ð½Ð½Ñ‹Ñ… ÑÐ¾ ÑÑ‚Ð°Ñ€Ñ‹Ð¼ e-mail\n\nÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑŒ?",
+                                      "placeholders":  {
+                                                           "old_email":  {
+                                                                             "content":  "$1"
+                                                                         },
+                                                           "new_email":  {
+                                                                             "content":  "$2"
+                                                                         }
+                                                       }
+                                  },
+    "changeEmail":  {
+                        "message":  "Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ e-mail"
+                    },
+    "menuForThisWebsite":  {
+                               "message":  "Ð”Ð»Ñ ÑÑ‚Ð¾Ð³Ð¾ ÑÐ°Ð¹Ñ‚Ð°"
+                           },
+    "menuLoading":  {
+                        "message":  "Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°..."
+                    },
+    "menuRandomEmailAlias":  {
+                                 "message":  "Ð¡Ð»ÑƒÑ‡Ð°Ð¹Ð½Ñ‹Ð¹ e-mail Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼"
+                             },
+    "menuCustomTags":  {
+                           "message":  "ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ðµ Ñ‚ÐµÐ³Ð¸"
+                       },
+    "menuNoPresets":  {
+                          "message":  "ÐÐµÑ‚ ÑˆÐ°Ð±Ð»Ð¾Ð½Ð¾Ð² - Ð´Ð¾Ð±Ð°Ð²ÑŒÑ‚Ðµ Ð² ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ñ…"
+                      },
+    "menuGmailTricks":  {
+                            "message":  "Ð¢Ñ€ÑŽÐºÐ¸ Gmail"
+                        },
+    "menuDotVariation":  {
+                             "message":  "Ð’Ð°Ñ€Ð¸Ð°Ð½Ñ‚ Ñ Ñ‚Ð¾Ñ‡ÐºÐ°Ð¼Ð¸"
+                         },
+    "menuGooglemailDomain":  {
+                                 "message":  "Ð”Ð¾Ð¼ÐµÐ½ Googlemail"
+                             },
+    "menuRemoveAllDots":  {
+                              "message":  "Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ð²ÑÐµ Ñ‚Ð¾Ñ‡ÐºÐ¸"
+                          },
+    "toastPresetAdded":  {
+                             "message":  "Ð¨Ð°Ð±Ð»Ð¾Ð½ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½"
+                         },
+    "toastPresetRemoved":  {
+                               "message":  "Ð¨Ð°Ð±Ð»Ð¾Ð½ ÑƒÐ´Ð°Ð»ÐµÐ½"
+                           },
+    "toastSettingsExported":  {
+                                  "message":  "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐºÑÐ¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ñ‹"
+                              },
+    "toastSettingsImported":  {
+                                  "message":  "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ñ‹"
+                              },
+    "toastImportFailed":  {
+                              "message":  "ÐžÑˆÐ¸Ð±ÐºÐ° Ð¸Ð¼Ð¿Ð¾Ñ€Ñ‚Ð° - Ð½ÐµÐ´Ð¾Ð¿ÑƒÑÑ‚Ð¸Ð¼Ñ‹Ð¹ Ñ„Ð°Ð¹Ð»"
+                          },
+    "toastSettingsReset":  {
+                               "message":  "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐ±Ñ€Ð¾ÑˆÐµÐ½Ñ‹ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ"
+                           },
+    "toastAccountSwitched":  {
+                                 "message":  "ÐÐºÐºÐ°ÑƒÐ½Ñ‚ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡ÐµÐ½"
+                             },
+    "toastAccountDeleted":  {
+                                "message":  "ÐÐºÐºÐ°ÑƒÐ½Ñ‚ ÑƒÐ´Ð°Ð»ÐµÐ½"
+                            },
+    "toastAccountUpdated":  {
+                                "message":  "ÐÐºÐºÐ°ÑƒÐ½Ñ‚ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½"
+                            },
+    "toastAccountAdded":  {
+                              "message":  "$LABEL$ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½",
+                              "placeholders":  {
+                                                   "label":  {
+                                                                 "content":  "$1"
+                                                             }
+                                               }
+                          },
+    "errorLabelRequired":  {
+                               "message":  "ÐœÐµÑ‚ÐºÐ° Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¿ÑƒÑÑ‚Ð¾Ð¹"
+                           },
+    "errorInvalidEmail":  {
+                              "message":  "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¹ Ð°Ð´Ñ€ÐµÑ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ð¾Ð¹ Ð¿Ð¾Ñ‡Ñ‚Ñ‹"
+                          },
+    "errorDuplicateEmail":  {
+                                "message":  "Ð­Ñ‚Ð¾Ñ‚ Ð°Ð´Ñ€ÐµÑ ÑƒÐ¶Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ Ð´Ñ€ÑƒÐ³Ð¸Ð¼ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð¾Ð¼"
+                            },
+    "errorEnterEmail":  {
+                            "message":  "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð°Ð´Ñ€ÐµÑ ÑÐ»ÐµÐºÑ‚Ñ€Ð¾Ð½Ð½Ð¾Ð¹ Ð¿Ð¾Ñ‡Ñ‚Ñ‹"
+                        },
+    "errorAccountExists":  {
+                               "message":  "Ð­Ñ‚Ð¾Ñ‚ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚"
+                           },
+    "toastQrFailed":  {
+                          "message":  "ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐ¾Ð·Ð´Ð°Ñ‚ÑŒ QR-ÐºÐ¾Ð´"
+                      },
+    "toastExportedAliases":  {
+                                 "message":  "Ð­ÐºÑÐ¿Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²: $COUNT$",
+                                 "placeholders":  {
+                                                      "count":  {
+                                                                    "content":  "$1"
+                                                                }
+                                                  }
+                             },
+    "toastDeletedAliases":  {
+                                "message":  "Ð£Ð´Ð°Ð»ÐµÐ½Ð¾ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð²: $COUNT$",
+                                "placeholders":  {
+                                                     "count":  {
+                                                                   "content":  "$1"
+                                                               }
+                                                 }
+                            },
+    "toastHistoryCleared":  {
+                                "message":  "Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð¾Ñ‡Ð¸Ñ‰ÐµÐ½Ð°"
+                            },
+    "toastFavoriteAdded":  {
+                               "message":  "Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾ Ð² Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ðµ"
+                           },
+    "toastFavoriteRemoved":  {
+                                 "message":  "Ð£Ð´Ð°Ð»ÐµÐ½Ð¾ Ð¸Ð· Ð¸Ð·Ð±Ñ€Ð°Ð½Ð½Ð¾Ð³Ð¾"
+                             },
+    "toastCopiedEmail":  {
+                             "message":  "Ð¡ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ $EMAIL$",
+                             "placeholders":  {
+                                                  "email":  {
+                                                                "content":  "$1"
+                                                            }
+                                              }
+                         },
+    "toastCopyFailed":  {
+                            "message":  "ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ"
+                        },
+    "welcomeTitle":  {
+                         "message":  "Ð”Ð¾Ð±Ñ€Ð¾ Ð¿Ð¾Ð¶Ð°Ð»Ð¾Ð²Ð°Ñ‚ÑŒ Ð² Gmail Alias Toolkit"
+                     },
+    "welcomeSubtitle":  {
+                            "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð²Ð°Ð¹Ñ‚Ðµ Ð½ÐµÐ¾Ð³Ñ€Ð°Ð½Ð¸Ñ‡ÐµÐ½Ð½Ð¾Ðµ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ e-mail Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ð¾Ð² Ð´Ð»Ñ Ð¿Ñ€Ð¸Ð²Ð°Ñ‚Ð½Ð¾ÑÑ‚Ð¸ Ð¸ Ð¿Ð¾Ñ€ÑÐ´ÐºÐ°"
+                        },
+    "letsGetStarted":  {
+                           "message":  "ÐÐ°Ñ‡Ð½ÐµÐ¼"
+                       },
+    "enterGmailAddress":  {
+                              "message":  "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð²Ð°Ñˆ Ð°Ð´Ñ€ÐµÑ Gmail"
+                          },
+    "pressTabForGmail":  {
+                             "message":  "ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ $KEY$ Ð´Ð»Ñ @gmail.com",
+                             "placeholders":  {
+                                                  "key":  {
+                                                              "content":  "$1"
+                                                          }
+                                              }
+                         },
+    "settingUp":  {
+                      "message":  "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°..."
+                  },
+    "getStarted":  {
+                       "message":  "ÐÐ°Ñ‡Ð°Ñ‚ÑŒ"
+                   },
+    "advancedSetup":  {
+                          "message":  "Ð Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ð°Ñ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ° Ð² ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ñ…"
+                      },
+    "whatYouCanDo":  {
+                         "message":  "Ð§Ñ‚Ð¾ Ð¼Ð¾Ð¶Ð½Ð¾ Ð´ÐµÐ»Ð°Ñ‚ÑŒ:"
+                     },
+    "featurePrivateEmail":  {
+                                "message":  "Ð“ÐµÐ½ÐµÑ€Ð°Ñ‚Ð¾Ñ€ Ð»Ð¸Ñ‡Ð½Ð¾Ð¹ Ð¿Ð¾Ñ‡Ñ‚Ñ‹"
+                            },
+    "featureCustomTags":  {
+                              "message":  "ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ðµ Ñ‚ÐµÐ³Ð¸ Ð¸ ÑˆÐ°Ð±Ð»Ð¾Ð½Ñ‹"
+                          },
+    "featureGmailTricks":  {
+                               "message":  "Ð Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð½Ñ‹Ðµ Ñ‚Ñ€ÑŽÐºÐ¸ Gmail"
+                           },
+    "welcomeFooter":  {
+                          "message":  "Ð’ÑÐµ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ñ…Ñ€Ð°Ð½ÑÑ‚ÑÑ Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ð¾. Ð‘ÐµÐ· Ð¾Ñ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð½Ð¸Ñ, Ð±ÐµÐ· ÑÐµÑ€Ð²ÐµÑ€Ð°."
+                      },
+    "favoritesSaved":  {
+                           "message":  "Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¾ $COUNT$",
+                           "placeholders":  {
+                                                "count":  {
+                                                              "content":  "$1"
+                                                          }
+                                            }
+                       },
+    "clickStarHint":  {
+                          "message":  "ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð·Ð²ÐµÐ·Ð´Ñƒ Ð½Ð° Ð»ÑŽÐ±Ð¾Ð¼ Ð¿ÑÐµÐ²Ð´Ð¾Ð½Ð¸Ð¼Ðµ Ð² Ð¸ÑÑ‚Ð¾Ñ€Ð¸Ð¸, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð´Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÐµÐ³Ð¾ ÑÑŽÐ´Ð°"
+                      },
+    "viewStatistics":  {
+                           "message":  "ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÑƒ"
+                       },
+    "statistics":  {
+                       "message":  "Ð¡Ñ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÐ°"
+                   },
+    "metricsTab":  {
+                       "message":  "ÐœÐµÑ‚Ñ€Ð¸ÐºÐ¸"
+                   },
+    "timelineTab":  {
+                        "message":  "Ð¥Ñ€Ð¾Ð½Ð¾Ð»Ð¾Ð³Ð¸Ñ"
+                    },
+    "tagsTab":  {
+                    "message":  "Ð¢ÐµÐ³Ð¸"
+                },
+    "totalGenerated":  {
+                           "message":  "Ð’ÑÐµÐ³Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½Ð¾"
+                       },
+    "createdToday":  {
+                         "message":  "Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¾ ÑÐµÐ³Ð¾Ð´Ð½Ñ"
+                     },
+    "thisWeek":  {
+                     "message":  "ÐÐ° ÑÑ‚Ð¾Ð¹ Ð½ÐµÐ´ÐµÐ»Ðµ"
+                 },
+    "thisMonth":  {
+                      "message":  "Ð’ ÑÑ‚Ð¾Ð¼ Ð¼ÐµÑÑÑ†Ðµ"
+                  },
+    "topTag":  {
+                   "message":  "Ð›ÑƒÑ‡ÑˆÐ¸Ð¹ Ñ‚ÐµÐ³"
+               },
+    "totalTags":  {
+                      "message":  "Ð’ÑÐµÐ³Ð¾ Ñ‚ÐµÐ³Ð¾Ð²"
+                  },
+    "noTagsYet":  {
+                      "message":  "ÐŸÐ¾ÐºÐ° Ð½ÐµÑ‚ Ñ‚ÐµÐ³Ð¾Ð²"
+                  },
+    "disableInlineForSite":  {
+                                 "message":  "ÐžÑ‚ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð¿Ð¾Ð¼Ð¾Ñ‰Ð½Ð¸ÐºÐ° Ð½Ð° ÑÑ‚Ð¾Ð¼ ÑÐ°Ð¹Ñ‚Ðµ"
+                             },
+    "inlineDisabledSites":  {
+                                "message":  "Ð¡Ð°Ð¹Ñ‚Ñ‹ Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ñ‘Ð½Ð½Ñ‹Ð¼ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ð¼ Ð¿Ð¾Ð¼Ð¾Ñ‰Ð½Ð¸ÐºÐ¾Ð¼"
+                            },
+    "inlineDisabledSitesDescription":  {
+                                           "message":  "ÐÐ° ÑÑ‚Ð¸Ñ… ÑÐ°Ð¹Ñ‚Ð°Ñ… Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð½Ñ‹Ð¹ Ð·Ð½Ð°Ñ‡Ð¾Ðº Ð¸ Ð±Ñ‹ÑÑ‚Ñ€Ð¾Ðµ Ð¾ÐºÐ½Ð¾ Ð±ÑƒÐ´ÑƒÑ‚ ÑÐºÑ€Ñ‹Ñ‚Ñ‹."
+                                       },
+    "noDisabledSites":  {
+                            "message":  "ÐÐµÑ‚ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ñ‘Ð½Ð½Ñ‹Ñ… ÑÐ°Ð¹Ñ‚Ð¾Ð²"
+                        },
+    "enableInlineForSite":  {
+                                "message":  "Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ"
+                            },
+    "reportReview":  {
+                         "message":  "Ð¡Ð¾Ð¾Ð±Ñ‰Ð¸Ñ‚ÑŒ / ÐžÑ†ÐµÐ½Ð¸Ñ‚ÑŒ"
+                     },
+    "percentLabel":  {
+                         "message":  "$PERCENT$%",
+                         "placeholders":  {
+                                              "percent":  {
+                                                              "content":  "$1"
+                                                          }
+                                          }
+                     },
+    "retry":  {
+                  "message":  "Повторить"
+              },
+    "enable":  {
+                   "message":  "Включить"
+               },
+    "storageError":  {
+                         "message":  "Не удалось загрузить историю. Проверьте доступ к хранилищу."
+                     }
 }

@@ -77,6 +77,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   randomFormat: "private-mail",
 };
 
+const TOAST_DURATION = 2000;
+
 const CHANGELOG: ChangelogEntry[] = [
   {
     version: "1.3.0",
@@ -668,7 +670,7 @@ export default function Settings({
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const [editingEmail, setEditingEmail] = useState("");
-  const [version, setVersion] = useState("1.1.0");
+  const [version, setVersion] = useState("1.3.0");
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [newAccountEmail, setNewAccountEmail] = useState("");
   const [newAccountLabel, setNewAccountLabel] = useState("");
@@ -680,7 +682,7 @@ export default function Settings({
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
-    setTimeout(() => setToast(null), 2000);
+    setTimeout(() => setToast(null), TOAST_DURATION);
   }, []);
 
   const askForConfirmation = useCallback(
@@ -704,8 +706,8 @@ export default function Settings({
       if (manifest?.version) {
         setVersion(manifest.version);
       }
-    } catch (error) {
-      console.log("Could not get manifest version:", error);
+    } catch {
+      // Silently fall back to default version
     }
   }, []);
 

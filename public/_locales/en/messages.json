@@ -749,5 +749,14 @@
         "content": "$1"
       }
     }
+  },
+  "enable": {
+    "message": "Enable"
+  },
+  "retry": {
+    "message": "Retry"
+  },
+  "storageError": {
+    "message": "Failed to load history. Check storage access."
   }
 }

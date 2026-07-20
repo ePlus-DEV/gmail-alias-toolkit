@@ -5,12 +5,20 @@ import { fileURLToPath } from "node:url";
 // Fix EventEmitter maxListeners warning
 EventEmitter.defaultMaxListeners = 15;
 
+// Dev-only sites to limit reload spam during development
+const DEV_SITES = ["*:///miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+
+// WXT runs 'wxt' for dev and 'wxt build' for production
+const isBuild = process.argv.includes("build");
+const hostPermissions = isBuild ? ["<all_urls>"] : DEV_SITES;
+
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
   vite: () => ({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
+      __DEV_MODE__: JSON.stringify(!isBuild),
     },
     resolve: {
       alias: {
@@ -26,7 +34,7 @@ export default defineConfig({
       default_title: "__MSG_extensionName__",
     },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
-    host_permissions: ["<all_urls>"],
+    host_permissions: hostPermissions,
     browser_specific_settings: {
       gecko: {
         id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",
