@@ -10,14 +10,16 @@ const STORAGE_KEYS = {
 const URLS = {
   chrome:
     "https://chromewebstore.google.com/detail/gmail-alias-toolkit/cbapjlppdfbnfbopdegobofmfijnlibl",
-  firefox: "https://addons.mozilla.org/en-US/firefox/addon/gmail-alias-toolkit/",
+  firefox:
+    "https://addons.mozilla.org/en-US/firefox/addon/gmail-alias-toolkit/",
   releases: "https://github.com/ePlus-DEV/gmail-alias-toolkit/releases/latest",
   install:
     "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/INSTALL.md",
   github: "https://github.com/ePlus-DEV/gmail-alias-toolkit",
   issues: "https://github.com/ePlus-DEV/gmail-alias-toolkit/issues",
   discussions: "https://github.com/ePlus-DEV/gmail-alias-toolkit/discussions",
-  license: "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/LICENSE.md",
+  license:
+    "https://github.com/ePlus-DEV/gmail-alias-toolkit/blob/main/LICENSE.md",
   support: "mailto:dev@eplus.dev",
 } as const;
 
@@ -334,13 +336,13 @@ function updateThemeButtons(): void {
   const text = copy[locale];
   const label = theme === "dark" ? text.themeLight : text.themeDark;
   const icon = theme === "dark" ? "☀" : "☾";
-  document.querySelectorAll<HTMLButtonElement>('[data-action="theme"]').forEach(
-    (button) => {
+  document
+    .querySelectorAll<HTMLButtonElement>('[data-action="theme"]')
+    .forEach((button) => {
       button.textContent = icon;
       button.setAttribute("aria-label", label);
       button.setAttribute("title", label);
-    },
-  );
+    });
 }
 
 function toggleMenu(open: boolean): void {
@@ -350,7 +352,7 @@ function toggleMenu(open: boolean): void {
   if (menuOpen) {
     window.setTimeout(() => {
       document
-        .querySelector<HTMLButtonElement>('.site-drawer__panel [data-scroll]')
+        .querySelector<HTMLButtonElement>(".site-drawer__panel [data-scroll]")
         ?.focus();
     }, 0);
   }
@@ -384,7 +386,8 @@ function syncLocaleFromApp(): void {
 function applyPreferredLocale(attempt = 0): void {
   const main = document.querySelector<HTMLElement>("#root main");
   if (!main) {
-    if (attempt < 30) window.setTimeout(() => applyPreferredLocale(attempt + 1), 50);
+    if (attempt < 30)
+      window.setTimeout(() => applyPreferredLocale(attempt + 1), 50);
     return;
   }
 
@@ -435,7 +438,8 @@ function handleClick(event: MouseEvent): void {
     'button[aria-label="Tiếng Việt"], button[aria-label="English"]',
   );
   if (languageButton) {
-    locale = languageButton.getAttribute("aria-label") === "Tiếng Việt" ? "vi" : "en";
+    locale =
+      languageButton.getAttribute("aria-label") === "Tiếng Việt" ? "vi" : "en";
     safeStorageSet(STORAGE_KEYS.locale, locale);
     window.setTimeout(syncLocaleFromApp, 0);
   }
@@ -456,11 +460,13 @@ function initialize(): void {
     });
   }
 
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
-    if (!safeStorageGet(STORAGE_KEYS.theme)) {
-      applyTheme(event.matches ? "dark" : "light", false);
-    }
-  });
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (event) => {
+      if (!safeStorageGet(STORAGE_KEYS.theme)) {
+        applyTheme(event.matches ? "dark" : "light", false);
+      }
+    });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && menuOpen) toggleMenu(false);
