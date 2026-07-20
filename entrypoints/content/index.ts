@@ -1370,7 +1370,11 @@ function injectIcon(input: EmailInputElement) {
     if (state) {
       state.inputResizeObserver?.disconnect();
       window.removeEventListener("resize", state.positionIconOutsideInput);
-      window.removeEventListener("scroll", state.positionIconOutsideInput, true);
+      window.removeEventListener(
+        "scroll",
+        state.positionIconOutsideInput,
+        true,
+      );
     }
   }
 }
