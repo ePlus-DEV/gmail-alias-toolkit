@@ -6,14 +6,7 @@ import { fileURLToPath } from "node:url";
 EventEmitter.defaultMaxListeners = 15;
 
 // Dev-only sites to limit reload spam during development
-const DEV_SITES = [
-  "*:///miro.com/*",
-  "*://mail.google.com/*",
-  "*://github.com/*",
-  "*://selfh.st/*",
-  "*://localhost/*",
-  "*://127.0.0.1/*",
-];
+const DEV_SITES = ["*:///miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 // WXT runs 'wxt' for dev and 'wxt build' for production
 const isBuild = process.argv.includes("build");
