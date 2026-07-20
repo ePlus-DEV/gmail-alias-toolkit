@@ -1,753 +1,774 @@
 {
-  "extensionName": {
-    "message": "Gmail Alias Toolkit"
-  },
-  "extensionDescription": {
-    "message": "+tag adresleri ve hazır ayarlarla Gmail takma adları oluşturun ve yönetin"
-  },
-  "headerSubtitle": {
-    "message": "+tag adresleriyle takma adlar oluşturun"
-  },
-  "settings": {
-    "message": "Ayarlar"
-  },
-  "back": {
-    "message": "Geri"
-  },
-  "close": {
-    "message": "Kapat"
-  },
-  "cancel": {
-    "message": "İptal"
-  },
-  "copy": {
-    "message": "Kopyala"
-  },
-  "copyAll": {
-    "message": "Tümünü kopyala"
-  },
-  "copyToClipboard": {
-    "message": "Panoya kopyala"
-  },
-  "activeGmailAddress": {
-    "message": "Etkin Gmail Adresi"
-  },
-  "addNewAccount": {
-    "message": "Yeni hesap ekle"
-  },
-  "addAccount": {
-    "message": "Hesap ekle"
-  },
-  "addNewAccountTitle": {
-    "message": "Yeni hesap ekle"
-  },
-  "emailPlaceholder": {
-    "message": "email.adresin"
-  },
-  "accountLabelPlaceholder": {
-    "message": "Etiket (isteğe bağlı, örn. İş, Kişisel)"
-  },
-  "pressTabToAddGmail": {
-    "message": "@gmail.com eklemek için $KEY$ tuşuna basın",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
-    }
-  },
-  "gmailWarning": {
-    "message": "Bu bir Gmail adresine benzemiyor. Plus adresleme en iyi Gmail ile çalışır."
-  },
-  "random": {
-    "message": "Rastgele"
-  },
-  "customTags": {
-    "message": "Özel etiketler"
-  },
-  "gmailTricks": {
-    "message": "Gmail ipuçları"
-  },
-  "tabTagsShort": {
-    "message": "Etiketler"
-  },
-  "tabTricksShort": {
-    "message": "İpuçları"
-  },
-  "generating": {
-    "message": "Oluşturuluyor"
-  },
-  "copied": {
-    "message": "Kopyalandı"
-  },
-  "switchToLightMode": {
-    "message": "Açık moda geç"
-  },
-  "switchToDarkMode": {
-    "message": "Koyu moda geç"
-  },
-  "aliasColumn": {
-    "message": "Takma ad"
-  },
-  "copyEmailTooltip": {
-    "message": "$EMAIL$ - kopyalamak için tıklayın",
-    "placeholders": {
-      "email": {
-        "content": "$1"
-      }
-    }
-  },
-  "pageLabel": {
-    "message": "Sayfa $PAGE$",
-    "placeholders": {
-      "page": {
-        "content": "$1"
-      }
-    }
-  },
-  "dotTrick": {
-    "message": "Nokta ipucu"
-  },
-  "plusTags": {
-    "message": "Plus (+) etiketleri"
-  },
-  "googlemail": {
-    "message": "Googlemail"
-  },
-  "removeDots": {
-    "message": "Noktaları kaldır"
-  },
-  "dotPlus": {
-    "message": "Nokta + Plus"
-  },
-  "allCombos": {
-    "message": "Tüm kombinasyonlar"
-  },
-  "numberOfVariations": {
-    "message": "Varyasyon sayısı"
-  },
-  "randomizeDotPositions": {
-    "message": "Nokta konumlarını rastgele yap"
-  },
-  "sequential": {
-    "message": "Sıralı"
-  },
-  "generateTricks": {
-    "message": "İpuçları oluştur"
-  },
-  "generatedVariations": {
-    "message": "Oluşturulan varyasyonlar"
-  },
-  "gmailTrickInfoLabel": {
-    "message": "Gmail ipucu:"
-  },
-  "gmailTrickInfo": {
-    "message": "Noktalar yok sayılır ve + sonrasındaki her şey aynı gelen kutusuna gider"
-  },
-  "format": {
-    "message": "Biçim"
-  },
-  "privateMailFormat": {
-    "message": "Özel Posta (private-mail-xxxx)"
-  },
-  "randomCharactersFormat": {
-    "message": "Rastgele karakterler (abc123xy)"
-  },
-  "randomWordsFormat": {
-    "message": "Rastgele kelimeler (happy-fox-42)"
-  },
-  "timestampFormat": {
-    "message": "Zaman damgası (1234567890)"
-  },
-  "numberOfAliases": {
-    "message": "Takma ad sayısı"
-  },
-  "generateRandomAliases": {
-    "message": "$COUNT$ rastgele takma ad$PLURAL$ oluştur",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      },
-      "plural": {
-        "content": "$2"
-      }
-    }
-  },
-  "generatedAliases": {
-    "message": "Oluşturulan takma adlar"
-  },
-  "totalCount": {
-    "message": "Toplam $COUNT$",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "copiedAliases": {
-    "message": "$COUNT$ takma ad kopyalandı!",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "failedToCopy": {
-    "message": "Kopyalanamadı"
-  },
-  "formatPrivateMail": {
-    "message": "Biçim: private-mail-xxxx"
-  },
-  "formatAlphanumeric": {
-    "message": "8 rastgele karakter"
-  },
-  "formatWords": {
-    "message": "2 rastgele kelime"
-  },
-  "formatTimestamp": {
-    "message": "Unix zaman damgası"
-  },
-  "tagPlaceholder": {
-    "message": "Etiket girin (örn. shopping, work)"
-  },
-  "generate": {
-    "message": "Oluştur"
-  },
-  "yourPresets": {
-    "message": "Hazır ayarlarınız"
-  },
-  "example": {
-    "message": "Örnek:"
-  },
-  "copyExample": {
-    "message": "Örneği kopyala"
-  },
-  "recentAliases": {
-    "message": "Son takma adlar"
-  },
-  "favorites": {
-    "message": "Favoriler"
-  },
-  "exportAsCsv": {
-    "message": "CSV olarak dışa aktar"
-  },
-  "exportAsJson": {
-    "message": "JSON olarak dışa aktar"
-  },
-  "selectAliases": {
-    "message": "Takma adları seç"
-  },
-  "select": {
-    "message": "Seç"
-  },
-  "starredCount": {
-    "message": "$COUNT$ yıldızlı",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "deselectAll": {
-    "message": "Tüm seçimleri kaldır"
-  },
-  "selectAll": {
-    "message": "Tümünü seç"
-  },
-  "selectedCount": {
-    "message": "$COUNT$ seçildi",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "deleteCount": {
-    "message": "$COUNT$ sil",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "allCount": {
-    "message": "Tümü ($COUNT$)",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "favoritesCount": {
-    "message": "Favoriler ($COUNT$)",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "searchAliases": {
-    "message": "Takma ad ara..."
-  },
-  "allTags": {
-    "message": "Tüm etiketler"
-  },
-  "mostRecent": {
-    "message": "En yeni"
-  },
-  "az": {
-    "message": "A-Z"
-  },
-  "noFavoritesYet": {
-    "message": "Henüz favori yok"
-  },
-  "starEmailsHint": {
-    "message": "Buradan hızlı erişim için geçmişinizdeki e-postalara yıldız ekleyin"
-  },
-  "noResultsFound": {
-    "message": "Sonuç bulunamadı"
-  },
-  "differentSearchHint": {
-    "message": "Farklı bir arama veya filtre deneyin"
-  },
-  "showQrCode": {
-    "message": "QR kodunu göster"
-  },
-  "removeFromFavorites": {
-    "message": "Favorilerden kaldır"
-  },
-  "addToFavorites": {
-    "message": "Favorilere ekle"
-  },
-  "showingRange": {
-    "message": "$TOTAL$ içinden $START$-$END$ gösteriliyor",
-    "placeholders": {
-      "start": {
-        "content": "$1"
-      },
-      "end": {
-        "content": "$2"
-      },
-      "total": {
-        "content": "$3"
-      }
-    }
-  },
-  "perPage": {
-    "message": "$COUNT$ / sayfa",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "firstPage": {
-    "message": "İlk sayfa"
-  },
-  "previousPage": {
-    "message": "Önceki sayfa"
-  },
-  "nextPage": {
-    "message": "Sonraki sayfa"
-  },
-  "lastPage": {
-    "message": "Son sayfa"
-  },
-  "scanToCopyAlias": {
-    "message": "Takma adı kopyalamak için tara"
-  },
-  "general": {
-    "message": "Genel"
-  },
-  "accounts": {
-    "message": "Hesaplar"
-  },
-  "changelog": {
-    "message": "Değişiklik günlüğü"
-  },
-  "appearanceDisplay": {
-    "message": "Görünüm ve görüntüleme"
-  },
-  "theme": {
-    "message": "Tema"
-  },
-  "themeLight": {
-    "message": "Açık"
-  },
-  "themeDark": {
-    "message": "Koyu"
-  },
-  "themeAuto": {
-    "message": "Sistem (Otomatik)"
-  },
-  "badgeCounter": {
-    "message": "Rozet sayacı"
-  },
-  "badgeNone": {
-    "message": "Yok (Gizli)"
-  },
-  "badgeTotal": {
-    "message": "Geçmişte toplam"
-  },
-  "badgeAllTime": {
-    "message": "Toplam oluşturulan (tüm zamanlar)"
-  },
-  "badgeToday": {
-    "message": "Bugün oluşturuldu"
-  },
-  "badgeWeek": {
-    "message": "Bu hafta"
-  },
-  "copyNotifications": {
-    "message": "Kopyalama bildirimleri"
-  },
-  "aliasGeneration": {
-    "message": "Takma ad oluşturma"
-  },
-  "randomAliasFormat": {
-    "message": "Rastgele takma ad biçimi"
-  },
-  "autoSaveLimit": {
-    "message": "Otomatik kaydetme limiti"
-  },
-  "aliasesLimit": {
-    "message": "$COUNT$ takma ad",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "customPresets": {
-    "message": "Özel hazır ayarlar"
-  },
-  "label": {
-    "message": "Etiket"
-  },
-  "tag": {
-    "message": "Etiket"
-  },
-  "addPreset": {
-    "message": "+ Hazır ayar ekle"
-  },
-  "dataManagement": {
-    "message": "Veri yönetimi"
-  },
-  "export": {
-    "message": "Dışa aktar"
-  },
-  "import": {
-    "message": "İçe aktar"
-  },
-  "clear": {
-    "message": "Temizle"
-  },
-  "resetSettings": {
-    "message": "Tüm ayarları varsayılana sıfırla"
-  },
-  "resetSettingsTitle": {
-    "message": "Ayarlar sıfırlansın mı?"
-  },
-  "resetSettingsMessage": {
-    "message": "Bu işlem tüm ayarları varsayılan değerlerine döndürür."
-  },
-  "reset": {
-    "message": "Sıfırla"
-  },
-  "clearHistoryTitle": {
-    "message": "Son takma adlar temizlensin mi?"
-  },
-  "clearHistoryMessage": {
-    "message": "Bu işlem son geçmiş listesindeki tüm takma adları kaldırır."
-  },
-  "emailAccounts": {
-    "message": "E-posta hesapları"
-  },
-  "manageAccountsDescription": {
-    "message": "Gmail hesaplarınızı yönetin. Her hesabın kendi geçmişi, istatistikleri ve favorileri vardır."
-  },
-  "noAccountsFound": {
-    "message": "Hesap bulunamadı. Lütfen ana ekrandan bir hesap ekleyin."
-  },
-  "emailAddress": {
-    "message": "E-posta adresi"
-  },
-  "accountLabel": {
-    "message": "Hesap etiketi"
-  },
-  "emailAddressPlaceholder": {
-    "message": "email.adresin@gmail.com"
-  },
-  "emailChangeWarning": {
-    "message": "E-posta değiştirildiğinde tüm veriler yeni e-posta adresine taşınır"
-  },
-  "saveChanges": {
-    "message": "Değişiklikleri kaydet"
-  },
-  "active": {
-    "message": "Etkin"
-  },
-  "editAccount": {
-    "message": "Hesabı düzenle"
-  },
-  "cannotDeleteLastAccountTitle": {
-    "message": "Son hesap silinemez"
-  },
-  "deleteThisAccount": {
-    "message": "Bu hesabı sil"
-  },
-  "deleteAccountTitle": {
-    "message": "Hesap silinsin mi?"
-  },
-  "deleteAccountMessage": {
-    "message": "\"$LABEL$\" ($EMAIL$) silinsin mi?\n\nBu işlem kalıcı olarak şunları siler:\n- Bu hesaba ait tüm geçmiş\n- Tüm istatistikler\n- Tüm favoriler\n\nBu işlem geri alınamaz.",
-    "placeholders": {
-      "label": {
-        "content": "$1"
-      },
-      "email": {
-        "content": "$2"
-      }
-    }
-  },
-  "delete": {
-    "message": "Sil"
-  },
-  "changeAccountEmailTitle": {
-    "message": "Hesap e-postası değiştirilsin mi?"
-  },
-  "changeAccountEmailMessage": {
-    "message": "E-postayı\n$OLD_EMAIL$\nadresinden\n$NEW_EMAIL$\nadresine değiştirilsin mi?\n\nBu işlem:\n- Tüm geçmişi, istatistikleri ve favorileri yeni e-postaya taşır\n- Hesap e-postasını günceller\n- Eski e-posta ile ilişkili verileri siler\n\nDevam edilsin mi?",
-    "placeholders": {
-      "old_email": {
-        "content": "$1"
-      },
-      "new_email": {
-        "content": "$2"
-      }
-    }
-  },
-  "changeEmail": {
-    "message": "E-postayı değiştir"
-  },
-  "menuForThisWebsite": {
-    "message": "Bu web sitesi için"
-  },
-  "menuLoading": {
-    "message": "Yükleniyor..."
-  },
-  "menuRandomEmailAlias": {
-    "message": "Rastgele e-posta takma adı"
-  },
-  "menuCustomTags": {
-    "message": "Özel etiketler"
-  },
-  "menuNoPresets": {
-    "message": "Hazır ayar yok - Ayarlardan ekleyin"
-  },
-  "menuGmailTricks": {
-    "message": "Gmail ipuçları"
-  },
-  "menuDotVariation": {
-    "message": "Nokta varyasyonu"
-  },
-  "menuGooglemailDomain": {
-    "message": "Googlemail alan adı"
-  },
-  "menuRemoveAllDots": {
-    "message": "Tüm noktaları kaldır"
-  },
-  "toastPresetAdded": {
-    "message": "Hazır ayar eklendi"
-  },
-  "toastPresetRemoved": {
-    "message": "Hazır ayar kaldırıldı"
-  },
-  "toastSettingsExported": {
-    "message": "Ayarlar dışa aktarıldı"
-  },
-  "toastSettingsImported": {
-    "message": "Ayarlar içe aktarıldı"
-  },
-  "toastImportFailed": {
-    "message": "İçe aktarma başarısız - geçersiz dosya"
-  },
-  "toastSettingsReset": {
-    "message": "Ayarlar varsayılana sıfırlandı"
-  },
-  "toastAccountSwitched": {
-    "message": "Hesap değiştirildi"
-  },
-  "toastAccountDeleted": {
-    "message": "Hesap silindi"
-  },
-  "toastAccountUpdated": {
-    "message": "Hesap güncellendi"
-  },
-  "toastAccountAdded": {
-    "message": "$LABEL$ eklendi",
-    "placeholders": {
-      "label": {
-        "content": "$1"
-      }
-    }
-  },
-  "errorLabelRequired": {
-    "message": "Etiket boş olamaz"
-  },
-  "errorInvalidEmail": {
-    "message": "Lütfen geçerli bir e-posta adresi girin"
-  },
-  "errorDuplicateEmail": {
-    "message": "Bu e-posta adresi başka bir hesap tarafından kullanılıyor"
-  },
-  "errorEnterEmail": {
-    "message": "Lütfen bir e-posta adresi girin"
-  },
-  "errorAccountExists": {
-    "message": "Bu hesap zaten var"
-  },
-  "toastQrFailed": {
-    "message": "QR kodu oluşturulamadı"
-  },
-  "toastExportedAliases": {
-    "message": "$COUNT$ takma ad dışa aktarıldı",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastDeletedAliases": {
-    "message": "$COUNT$ takma ad silindi",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastHistoryCleared": {
-    "message": "Geçmiş temizlendi"
-  },
-  "toastFavoriteAdded": {
-    "message": "Favorilere eklendi"
-  },
-  "toastFavoriteRemoved": {
-    "message": "Favorilerden kaldırıldı"
-  },
-  "toastCopiedEmail": {
-    "message": "$EMAIL$ kopyalandı",
-    "placeholders": {
-      "email": {
-        "content": "$1"
-      }
-    }
-  },
-  "toastCopyFailed": {
-    "message": "Kopyalanamadı"
-  },
-  "welcomeTitle": {
-    "message": "Gmail Alias Toolkit’e hoş geldiniz"
-  },
-  "welcomeSubtitle": {
-    "message": "Gizlilik ve düzen için sınırsız e-posta takma adı oluşturun"
-  },
-  "letsGetStarted": {
-    "message": "Başlayalım"
-  },
-  "enterGmailAddress": {
-    "message": "Gmail adresinizi girin"
-  },
-  "pressTabForGmail": {
-    "message": "@gmail.com için $KEY$ tuşuna basın",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
-    }
-  },
-  "settingUp": {
-    "message": "Ayarlanıyor..."
-  },
-  "getStarted": {
-    "message": "Başla"
-  },
-  "advancedSetup": {
-    "message": "Ayarlarda gelişmiş kurulum"
-  },
-  "whatYouCanDo": {
-    "message": "Yapabilecekleriniz:"
-  },
-  "featurePrivateEmail": {
-    "message": "Özel e-posta oluşturucu"
-  },
-  "featureCustomTags": {
-    "message": "Özel etiketler ve hazır ayarlar"
-  },
-  "featureGmailTricks": {
-    "message": "Gelişmiş Gmail ipuçları"
-  },
-  "welcomeFooter": {
-    "message": "Tüm veriler yerel olarak saklanır. Takip yok, sunucu yok."
-  },
-  "favoritesSaved": {
-    "message": "$COUNT$ kaydedildi",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "clickStarHint": {
-    "message": "Buraya eklemek için geçmişteki herhangi bir takma adın yıldızına tıklayın"
-  },
-  "viewStatistics": {
-    "message": "İstatistikleri görüntüle"
-  },
-  "statistics": {
-    "message": "İstatistikler"
-  },
-  "metricsTab": {
-    "message": "Metrikler"
-  },
-  "timelineTab": {
-    "message": "Zaman çizelgesi"
-  },
-  "tagsTab": {
-    "message": "Etiketler"
-  },
-  "totalGenerated": {
-    "message": "Toplam oluşturulan"
-  },
-  "createdToday": {
-    "message": "Bugün oluşturuldu"
-  },
-  "thisWeek": {
-    "message": "Bu hafta"
-  },
-  "thisMonth": {
-    "message": "Bu ay"
-  },
-  "topTag": {
-    "message": "En iyi etiket"
-  },
-  "totalTags": {
-    "message": "Toplam etiket"
-  },
-  "noTagsYet": {
-    "message": "Henüz etiket yok"
-  },
-  "disableInlineForSite": { "message": "Bu web sitesinde satır içi yardımcıyı kapat" },
-  "inlineDisabledSites": { "message": "Satır içi yardımcının kapalı olduğu siteler" },
-  "inlineDisabledSitesDescription": { "message": "Bu sitelerde satır içi simge ve hızlı açılır pencere gizlenir." },
-  "noDisabledSites": { "message": "Devre dışı bırakılmış site yok" },
-  "enableInlineForSite": { "message": "Etkinleştir" },
-  "reportReview": { "message": "Bildir / Değerlendir" },
-  "percentLabel": {
-    "message": "$PERCENT$%",
-    "placeholders": {
-      "percent": {
-        "content": "$1"
-      }
-    }
-  }
+    "extensionName":  {
+                          "message":  "Gmail Alias Toolkit"
+                      },
+    "extensionDescription":  {
+                                 "message":  "+tag adresleri ve hazÄ±r ayarlarla Gmail takma adlarÄ± oluÅŸturun ve yÃ¶netin"
+                             },
+    "headerSubtitle":  {
+                           "message":  "+tag adresleriyle takma adlar oluÅŸturun"
+                       },
+    "settings":  {
+                     "message":  "Ayarlar"
+                 },
+    "back":  {
+                 "message":  "Geri"
+             },
+    "close":  {
+                  "message":  "Kapat"
+              },
+    "cancel":  {
+                   "message":  "Ä°ptal"
+               },
+    "copy":  {
+                 "message":  "Kopyala"
+             },
+    "copyAll":  {
+                    "message":  "TÃ¼mÃ¼nÃ¼ kopyala"
+                },
+    "copyToClipboard":  {
+                            "message":  "Panoya kopyala"
+                        },
+    "activeGmailAddress":  {
+                               "message":  "Etkin Gmail Adresi"
+                           },
+    "addNewAccount":  {
+                          "message":  "Yeni hesap ekle"
+                      },
+    "addAccount":  {
+                       "message":  "Hesap ekle"
+                   },
+    "addNewAccountTitle":  {
+                               "message":  "Yeni hesap ekle"
+                           },
+    "emailPlaceholder":  {
+                             "message":  "email.adresin"
+                         },
+    "accountLabelPlaceholder":  {
+                                    "message":  "Etiket (isteÄŸe baÄŸlÄ±, Ã¶rn. Ä°ÅŸ, KiÅŸisel)"
+                                },
+    "pressTabToAddGmail":  {
+                               "message":  "@gmail.com eklemek iÃ§in $KEY$ tuÅŸuna basÄ±n",
+                               "placeholders":  {
+                                                    "key":  {
+                                                                "content":  "$1"
+                                                            }
+                                                }
+                           },
+    "gmailWarning":  {
+                         "message":  "Bu bir Gmail adresine benzemiyor. Plus adresleme en iyi Gmail ile Ã§alÄ±ÅŸÄ±r."
+                     },
+    "random":  {
+                   "message":  "Rastgele"
+               },
+    "customTags":  {
+                       "message":  "Ã–zel etiketler"
+                   },
+    "gmailTricks":  {
+                        "message":  "Gmail ipuÃ§larÄ±"
+                    },
+    "tabTagsShort":  {
+                         "message":  "Etiketler"
+                     },
+    "tabTricksShort":  {
+                           "message":  "Ä°puÃ§larÄ±"
+                       },
+    "generating":  {
+                       "message":  "OluÅŸturuluyor"
+                   },
+    "copied":  {
+                   "message":  "KopyalandÄ±"
+               },
+    "switchToLightMode":  {
+                              "message":  "AÃ§Ä±k moda geÃ§"
+                          },
+    "switchToDarkMode":  {
+                             "message":  "Koyu moda geÃ§"
+                         },
+    "aliasColumn":  {
+                        "message":  "Takma ad"
+                    },
+    "copyEmailTooltip":  {
+                             "message":  "$EMAIL$ - kopyalamak iÃ§in tÄ±klayÄ±n",
+                             "placeholders":  {
+                                                  "email":  {
+                                                                "content":  "$1"
+                                                            }
+                                              }
+                         },
+    "pageLabel":  {
+                      "message":  "Sayfa $PAGE$",
+                      "placeholders":  {
+                                           "page":  {
+                                                        "content":  "$1"
+                                                    }
+                                       }
+                  },
+    "dotTrick":  {
+                     "message":  "Nokta ipucu"
+                 },
+    "plusTags":  {
+                     "message":  "Plus (+) etiketleri"
+                 },
+    "googlemail":  {
+                       "message":  "Googlemail"
+                   },
+    "removeDots":  {
+                       "message":  "NoktalarÄ± kaldÄ±r"
+                   },
+    "dotPlus":  {
+                    "message":  "Nokta + Plus"
+                },
+    "allCombos":  {
+                      "message":  "TÃ¼m kombinasyonlar"
+                  },
+    "numberOfVariations":  {
+                               "message":  "Varyasyon sayÄ±sÄ±"
+                           },
+    "randomizeDotPositions":  {
+                                  "message":  "Nokta konumlarÄ±nÄ± rastgele yap"
+                              },
+    "sequential":  {
+                       "message":  "SÄ±ralÄ±"
+                   },
+    "generateTricks":  {
+                           "message":  "Ä°puÃ§larÄ± oluÅŸtur"
+                       },
+    "generatedVariations":  {
+                                "message":  "OluÅŸturulan varyasyonlar"
+                            },
+    "gmailTrickInfoLabel":  {
+                                "message":  "Gmail ipucu:"
+                            },
+    "gmailTrickInfo":  {
+                           "message":  "Noktalar yok sayÄ±lÄ±r ve + sonrasÄ±ndaki her ÅŸey aynÄ± gelen kutusuna gider"
+                       },
+    "format":  {
+                   "message":  "BiÃ§im"
+               },
+    "privateMailFormat":  {
+                              "message":  "Ã–zel Posta (private-mail-xxxx)"
+                          },
+    "randomCharactersFormat":  {
+                                   "message":  "Rastgele karakterler (abc123xy)"
+                               },
+    "randomWordsFormat":  {
+                              "message":  "Rastgele kelimeler (happy-fox-42)"
+                          },
+    "timestampFormat":  {
+                            "message":  "Zaman damgasÄ± (1234567890)"
+                        },
+    "numberOfAliases":  {
+                            "message":  "Takma ad sayÄ±sÄ±"
+                        },
+    "generateRandomAliases":  {
+                                  "message":  "$COUNT$ rastgele takma ad$PLURAL$ oluÅŸtur",
+                                  "placeholders":  {
+                                                       "count":  {
+                                                                     "content":  "$1"
+                                                                 },
+                                                       "plural":  {
+                                                                      "content":  "$2"
+                                                                  }
+                                                   }
+                              },
+    "generatedAliases":  {
+                             "message":  "OluÅŸturulan takma adlar"
+                         },
+    "totalCount":  {
+                       "message":  "Toplam $COUNT$",
+                       "placeholders":  {
+                                            "count":  {
+                                                          "content":  "$1"
+                                                      }
+                                        }
+                   },
+    "copiedAliases":  {
+                          "message":  "$COUNT$ takma ad kopyalandÄ±!",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         }
+                                           }
+                      },
+    "failedToCopy":  {
+                         "message":  "KopyalanamadÄ±"
+                     },
+    "formatPrivateMail":  {
+                              "message":  "BiÃ§im: private-mail-xxxx"
+                          },
+    "formatAlphanumeric":  {
+                               "message":  "8 rastgele karakter"
+                           },
+    "formatWords":  {
+                        "message":  "2 rastgele kelime"
+                    },
+    "formatTimestamp":  {
+                            "message":  "Unix zaman damgasÄ±"
+                        },
+    "tagPlaceholder":  {
+                           "message":  "Etiket girin (Ã¶rn. shopping, work)"
+                       },
+    "generate":  {
+                     "message":  "OluÅŸtur"
+                 },
+    "yourPresets":  {
+                        "message":  "HazÄ±r ayarlarÄ±nÄ±z"
+                    },
+    "example":  {
+                    "message":  "Ã–rnek:"
+                },
+    "copyExample":  {
+                        "message":  "Ã–rneÄŸi kopyala"
+                    },
+    "recentAliases":  {
+                          "message":  "Son takma adlar"
+                      },
+    "favorites":  {
+                      "message":  "Favoriler"
+                  },
+    "exportAsCsv":  {
+                        "message":  "CSV olarak dÄ±ÅŸa aktar"
+                    },
+    "exportAsJson":  {
+                         "message":  "JSON olarak dÄ±ÅŸa aktar"
+                     },
+    "selectAliases":  {
+                          "message":  "Takma adlarÄ± seÃ§"
+                      },
+    "select":  {
+                   "message":  "SeÃ§"
+               },
+    "starredCount":  {
+                         "message":  "$COUNT$ yÄ±ldÄ±zlÄ±",
+                         "placeholders":  {
+                                              "count":  {
+                                                            "content":  "$1"
+                                                        }
+                                          }
+                     },
+    "deselectAll":  {
+                        "message":  "TÃ¼m seÃ§imleri kaldÄ±r"
+                    },
+    "selectAll":  {
+                      "message":  "TÃ¼mÃ¼nÃ¼ seÃ§"
+                  },
+    "selectedCount":  {
+                          "message":  "$COUNT$ seÃ§ildi",
+                          "placeholders":  {
+                                               "count":  {
+                                                             "content":  "$1"
+                                                         }
+                                           }
+                      },
+    "deleteCount":  {
+                        "message":  "$COUNT$ sil",
+                        "placeholders":  {
+                                             "count":  {
+                                                           "content":  "$1"
+                                                       }
+                                         }
+                    },
+    "allCount":  {
+                     "message":  "TÃ¼mÃ¼ ($COUNT$)",
+                     "placeholders":  {
+                                          "count":  {
+                                                        "content":  "$1"
+                                                    }
+                                      }
+                 },
+    "favoritesCount":  {
+                           "message":  "Favoriler ($COUNT$)",
+                           "placeholders":  {
+                                                "count":  {
+                                                              "content":  "$1"
+                                                          }
+                                            }
+                       },
+    "searchAliases":  {
+                          "message":  "Takma ad ara..."
+                      },
+    "allTags":  {
+                    "message":  "TÃ¼m etiketler"
+                },
+    "mostRecent":  {
+                       "message":  "En yeni"
+                   },
+    "az":  {
+               "message":  "A-Z"
+           },
+    "noFavoritesYet":  {
+                           "message":  "HenÃ¼z favori yok"
+                       },
+    "starEmailsHint":  {
+                           "message":  "Buradan hÄ±zlÄ± eriÅŸim iÃ§in geÃ§miÅŸinizdeki e-postalara yÄ±ldÄ±z ekleyin"
+                       },
+    "noResultsFound":  {
+                           "message":  "SonuÃ§ bulunamadÄ±"
+                       },
+    "differentSearchHint":  {
+                                "message":  "FarklÄ± bir arama veya filtre deneyin"
+                            },
+    "showQrCode":  {
+                       "message":  "QR kodunu gÃ¶ster"
+                   },
+    "removeFromFavorites":  {
+                                "message":  "Favorilerden kaldÄ±r"
+                            },
+    "addToFavorites":  {
+                           "message":  "Favorilere ekle"
+                       },
+    "showingRange":  {
+                         "message":  "$TOTAL$ iÃ§inden $START$-$END$ gÃ¶steriliyor",
+                         "placeholders":  {
+                                              "start":  {
+                                                            "content":  "$1"
+                                                        },
+                                              "end":  {
+                                                          "content":  "$2"
+                                                      },
+                                              "total":  {
+                                                            "content":  "$3"
+                                                        }
+                                          }
+                     },
+    "perPage":  {
+                    "message":  "$COUNT$ / sayfa",
+                    "placeholders":  {
+                                         "count":  {
+                                                       "content":  "$1"
+                                                   }
+                                     }
+                },
+    "firstPage":  {
+                      "message":  "Ä°lk sayfa"
+                  },
+    "previousPage":  {
+                         "message":  "Ã–nceki sayfa"
+                     },
+    "nextPage":  {
+                     "message":  "Sonraki sayfa"
+                 },
+    "lastPage":  {
+                     "message":  "Son sayfa"
+                 },
+    "scanToCopyAlias":  {
+                            "message":  "Takma adÄ± kopyalamak iÃ§in tara"
+                        },
+    "general":  {
+                    "message":  "Genel"
+                },
+    "accounts":  {
+                     "message":  "Hesaplar"
+                 },
+    "changelog":  {
+                      "message":  "DeÄŸiÅŸiklik gÃ¼nlÃ¼ÄŸÃ¼"
+                  },
+    "appearanceDisplay":  {
+                              "message":  "GÃ¶rÃ¼nÃ¼m ve gÃ¶rÃ¼ntÃ¼leme"
+                          },
+    "theme":  {
+                  "message":  "Tema"
+              },
+    "themeLight":  {
+                       "message":  "AÃ§Ä±k"
+                   },
+    "themeDark":  {
+                      "message":  "Koyu"
+                  },
+    "themeAuto":  {
+                      "message":  "Sistem (Otomatik)"
+                  },
+    "badgeCounter":  {
+                         "message":  "Rozet sayacÄ±"
+                     },
+    "badgeNone":  {
+                      "message":  "Yok (Gizli)"
+                  },
+    "badgeTotal":  {
+                       "message":  "GeÃ§miÅŸte toplam"
+                   },
+    "badgeAllTime":  {
+                         "message":  "Toplam oluÅŸturulan (tÃ¼m zamanlar)"
+                     },
+    "badgeToday":  {
+                       "message":  "BugÃ¼n oluÅŸturuldu"
+                   },
+    "badgeWeek":  {
+                      "message":  "Bu hafta"
+                  },
+    "copyNotifications":  {
+                              "message":  "Kopyalama bildirimleri"
+                          },
+    "aliasGeneration":  {
+                            "message":  "Takma ad oluÅŸturma"
+                        },
+    "randomAliasFormat":  {
+                              "message":  "Rastgele takma ad biÃ§imi"
+                          },
+    "autoSaveLimit":  {
+                          "message":  "Otomatik kaydetme limiti"
+                      },
+    "aliasesLimit":  {
+                         "message":  "$COUNT$ takma ad",
+                         "placeholders":  {
+                                              "count":  {
+                                                            "content":  "$1"
+                                                        }
+                                          }
+                     },
+    "customPresets":  {
+                          "message":  "Ã–zel hazÄ±r ayarlar"
+                      },
+    "label":  {
+                  "message":  "Etiket"
+              },
+    "tag":  {
+                "message":  "Etiket"
+            },
+    "addPreset":  {
+                      "message":  "+ HazÄ±r ayar ekle"
+                  },
+    "dataManagement":  {
+                           "message":  "Veri yÃ¶netimi"
+                       },
+    "export":  {
+                   "message":  "DÄ±ÅŸa aktar"
+               },
+    "import":  {
+                   "message":  "Ä°Ã§e aktar"
+               },
+    "clear":  {
+                  "message":  "Temizle"
+              },
+    "resetSettings":  {
+                          "message":  "TÃ¼m ayarlarÄ± varsayÄ±lana sÄ±fÄ±rla"
+                      },
+    "resetSettingsTitle":  {
+                               "message":  "Ayarlar sÄ±fÄ±rlansÄ±n mÄ±?"
+                           },
+    "resetSettingsMessage":  {
+                                 "message":  "Bu iÅŸlem tÃ¼m ayarlarÄ± varsayÄ±lan deÄŸerlerine dÃ¶ndÃ¼rÃ¼r."
+                             },
+    "reset":  {
+                  "message":  "SÄ±fÄ±rla"
+              },
+    "clearHistoryTitle":  {
+                              "message":  "Son takma adlar temizlensin mi?"
+                          },
+    "clearHistoryMessage":  {
+                                "message":  "Bu iÅŸlem son geÃ§miÅŸ listesindeki tÃ¼m takma adlarÄ± kaldÄ±rÄ±r."
+                            },
+    "emailAccounts":  {
+                          "message":  "E-posta hesaplarÄ±"
+                      },
+    "manageAccountsDescription":  {
+                                      "message":  "Gmail hesaplarÄ±nÄ±zÄ± yÃ¶netin. Her hesabÄ±n kendi geÃ§miÅŸi, istatistikleri ve favorileri vardÄ±r."
+                                  },
+    "noAccountsFound":  {
+                            "message":  "Hesap bulunamadÄ±. LÃ¼tfen ana ekrandan bir hesap ekleyin."
+                        },
+    "emailAddress":  {
+                         "message":  "E-posta adresi"
+                     },
+    "accountLabel":  {
+                         "message":  "Hesap etiketi"
+                     },
+    "emailAddressPlaceholder":  {
+                                    "message":  "email.adresin@gmail.com"
+                                },
+    "emailChangeWarning":  {
+                               "message":  "E-posta deÄŸiÅŸtirildiÄŸinde tÃ¼m veriler yeni e-posta adresine taÅŸÄ±nÄ±r"
+                           },
+    "saveChanges":  {
+                        "message":  "DeÄŸiÅŸiklikleri kaydet"
+                    },
+    "active":  {
+                   "message":  "Etkin"
+               },
+    "editAccount":  {
+                        "message":  "HesabÄ± dÃ¼zenle"
+                    },
+    "cannotDeleteLastAccountTitle":  {
+                                         "message":  "Son hesap silinemez"
+                                     },
+    "deleteThisAccount":  {
+                              "message":  "Bu hesabÄ± sil"
+                          },
+    "deleteAccountTitle":  {
+                               "message":  "Hesap silinsin mi?"
+                           },
+    "deleteAccountMessage":  {
+                                 "message":  "\"$LABEL$\" ($EMAIL$) silinsin mi?\n\nBu iÅŸlem kalÄ±cÄ± olarak ÅŸunlarÄ± siler:\n- Bu hesaba ait tÃ¼m geÃ§miÅŸ\n- TÃ¼m istatistikler\n- TÃ¼m favoriler\n\nBu iÅŸlem geri alÄ±namaz.",
+                                 "placeholders":  {
+                                                      "label":  {
+                                                                    "content":  "$1"
+                                                                },
+                                                      "email":  {
+                                                                    "content":  "$2"
+                                                                }
+                                                  }
+                             },
+    "delete":  {
+                   "message":  "Sil"
+               },
+    "changeAccountEmailTitle":  {
+                                    "message":  "Hesap e-postasÄ± deÄŸiÅŸtirilsin mi?"
+                                },
+    "changeAccountEmailMessage":  {
+                                      "message":  "E-postayÄ±\n$OLD_EMAIL$\nadresinden\n$NEW_EMAIL$\nadresine deÄŸiÅŸtirilsin mi?\n\nBu iÅŸlem:\n- TÃ¼m geÃ§miÅŸi, istatistikleri ve favorileri yeni e-postaya taÅŸÄ±r\n- Hesap e-postasÄ±nÄ± gÃ¼nceller\n- Eski e-posta ile iliÅŸkili verileri siler\n\nDevam edilsin mi?",
+                                      "placeholders":  {
+                                                           "old_email":  {
+                                                                             "content":  "$1"
+                                                                         },
+                                                           "new_email":  {
+                                                                             "content":  "$2"
+                                                                         }
+                                                       }
+                                  },
+    "changeEmail":  {
+                        "message":  "E-postayÄ± deÄŸiÅŸtir"
+                    },
+    "menuForThisWebsite":  {
+                               "message":  "Bu web sitesi iÃ§in"
+                           },
+    "menuLoading":  {
+                        "message":  "YÃ¼kleniyor..."
+                    },
+    "menuRandomEmailAlias":  {
+                                 "message":  "Rastgele e-posta takma adÄ±"
+                             },
+    "menuCustomTags":  {
+                           "message":  "Ã–zel etiketler"
+                       },
+    "menuNoPresets":  {
+                          "message":  "HazÄ±r ayar yok - Ayarlardan ekleyin"
+                      },
+    "menuGmailTricks":  {
+                            "message":  "Gmail ipuÃ§larÄ±"
+                        },
+    "menuDotVariation":  {
+                             "message":  "Nokta varyasyonu"
+                         },
+    "menuGooglemailDomain":  {
+                                 "message":  "Googlemail alan adÄ±"
+                             },
+    "menuRemoveAllDots":  {
+                              "message":  "TÃ¼m noktalarÄ± kaldÄ±r"
+                          },
+    "toastPresetAdded":  {
+                             "message":  "HazÄ±r ayar eklendi"
+                         },
+    "toastPresetRemoved":  {
+                               "message":  "HazÄ±r ayar kaldÄ±rÄ±ldÄ±"
+                           },
+    "toastSettingsExported":  {
+                                  "message":  "Ayarlar dÄ±ÅŸa aktarÄ±ldÄ±"
+                              },
+    "toastSettingsImported":  {
+                                  "message":  "Ayarlar iÃ§e aktarÄ±ldÄ±"
+                              },
+    "toastImportFailed":  {
+                              "message":  "Ä°Ã§e aktarma baÅŸarÄ±sÄ±z - geÃ§ersiz dosya"
+                          },
+    "toastSettingsReset":  {
+                               "message":  "Ayarlar varsayÄ±lana sÄ±fÄ±rlandÄ±"
+                           },
+    "toastAccountSwitched":  {
+                                 "message":  "Hesap deÄŸiÅŸtirildi"
+                             },
+    "toastAccountDeleted":  {
+                                "message":  "Hesap silindi"
+                            },
+    "toastAccountUpdated":  {
+                                "message":  "Hesap gÃ¼ncellendi"
+                            },
+    "toastAccountAdded":  {
+                              "message":  "$LABEL$ eklendi",
+                              "placeholders":  {
+                                                   "label":  {
+                                                                 "content":  "$1"
+                                                             }
+                                               }
+                          },
+    "errorLabelRequired":  {
+                               "message":  "Etiket boÅŸ olamaz"
+                           },
+    "errorInvalidEmail":  {
+                              "message":  "LÃ¼tfen geÃ§erli bir e-posta adresi girin"
+                          },
+    "errorDuplicateEmail":  {
+                                "message":  "Bu e-posta adresi baÅŸka bir hesap tarafÄ±ndan kullanÄ±lÄ±yor"
+                            },
+    "errorEnterEmail":  {
+                            "message":  "LÃ¼tfen bir e-posta adresi girin"
+                        },
+    "errorAccountExists":  {
+                               "message":  "Bu hesap zaten var"
+                           },
+    "toastQrFailed":  {
+                          "message":  "QR kodu oluÅŸturulamadÄ±"
+                      },
+    "toastExportedAliases":  {
+                                 "message":  "$COUNT$ takma ad dÄ±ÅŸa aktarÄ±ldÄ±",
+                                 "placeholders":  {
+                                                      "count":  {
+                                                                    "content":  "$1"
+                                                                }
+                                                  }
+                             },
+    "toastDeletedAliases":  {
+                                "message":  "$COUNT$ takma ad silindi",
+                                "placeholders":  {
+                                                     "count":  {
+                                                                   "content":  "$1"
+                                                               }
+                                                 }
+                            },
+    "toastHistoryCleared":  {
+                                "message":  "GeÃ§miÅŸ temizlendi"
+                            },
+    "toastFavoriteAdded":  {
+                               "message":  "Favorilere eklendi"
+                           },
+    "toastFavoriteRemoved":  {
+                                 "message":  "Favorilerden kaldÄ±rÄ±ldÄ±"
+                             },
+    "toastCopiedEmail":  {
+                             "message":  "$EMAIL$ kopyalandÄ±",
+                             "placeholders":  {
+                                                  "email":  {
+                                                                "content":  "$1"
+                                                            }
+                                              }
+                         },
+    "toastCopyFailed":  {
+                            "message":  "KopyalanamadÄ±"
+                        },
+    "welcomeTitle":  {
+                         "message":  "Gmail Alias Toolkitâ€™e hoÅŸ geldiniz"
+                     },
+    "welcomeSubtitle":  {
+                            "message":  "Gizlilik ve dÃ¼zen iÃ§in sÄ±nÄ±rsÄ±z e-posta takma adÄ± oluÅŸturun"
+                        },
+    "letsGetStarted":  {
+                           "message":  "BaÅŸlayalÄ±m"
+                       },
+    "enterGmailAddress":  {
+                              "message":  "Gmail adresinizi girin"
+                          },
+    "pressTabForGmail":  {
+                             "message":  "@gmail.com iÃ§in $KEY$ tuÅŸuna basÄ±n",
+                             "placeholders":  {
+                                                  "key":  {
+                                                              "content":  "$1"
+                                                          }
+                                              }
+                         },
+    "settingUp":  {
+                      "message":  "AyarlanÄ±yor..."
+                  },
+    "getStarted":  {
+                       "message":  "BaÅŸla"
+                   },
+    "advancedSetup":  {
+                          "message":  "Ayarlarda geliÅŸmiÅŸ kurulum"
+                      },
+    "whatYouCanDo":  {
+                         "message":  "Yapabilecekleriniz:"
+                     },
+    "featurePrivateEmail":  {
+                                "message":  "Ã–zel e-posta oluÅŸturucu"
+                            },
+    "featureCustomTags":  {
+                              "message":  "Ã–zel etiketler ve hazÄ±r ayarlar"
+                          },
+    "featureGmailTricks":  {
+                               "message":  "GeliÅŸmiÅŸ Gmail ipuÃ§larÄ±"
+                           },
+    "welcomeFooter":  {
+                          "message":  "TÃ¼m veriler yerel olarak saklanÄ±r. Takip yok, sunucu yok."
+                      },
+    "favoritesSaved":  {
+                           "message":  "$COUNT$ kaydedildi",
+                           "placeholders":  {
+                                                "count":  {
+                                                              "content":  "$1"
+                                                          }
+                                            }
+                       },
+    "clickStarHint":  {
+                          "message":  "Buraya eklemek iÃ§in geÃ§miÅŸteki herhangi bir takma adÄ±n yÄ±ldÄ±zÄ±na tÄ±klayÄ±n"
+                      },
+    "viewStatistics":  {
+                           "message":  "Ä°statistikleri gÃ¶rÃ¼ntÃ¼le"
+                       },
+    "statistics":  {
+                       "message":  "Ä°statistikler"
+                   },
+    "metricsTab":  {
+                       "message":  "Metrikler"
+                   },
+    "timelineTab":  {
+                        "message":  "Zaman Ã§izelgesi"
+                    },
+    "tagsTab":  {
+                    "message":  "Etiketler"
+                },
+    "totalGenerated":  {
+                           "message":  "Toplam oluÅŸturulan"
+                       },
+    "createdToday":  {
+                         "message":  "BugÃ¼n oluÅŸturuldu"
+                     },
+    "thisWeek":  {
+                     "message":  "Bu hafta"
+                 },
+    "thisMonth":  {
+                      "message":  "Bu ay"
+                  },
+    "topTag":  {
+                   "message":  "En iyi etiket"
+               },
+    "totalTags":  {
+                      "message":  "Toplam etiket"
+                  },
+    "noTagsYet":  {
+                      "message":  "HenÃ¼z etiket yok"
+                  },
+    "disableInlineForSite":  {
+                                 "message":  "Bu web sitesinde satÄ±r iÃ§i yardÄ±mcÄ±yÄ± kapat"
+                             },
+    "inlineDisabledSites":  {
+                                "message":  "SatÄ±r iÃ§i yardÄ±mcÄ±nÄ±n kapalÄ± olduÄŸu siteler"
+                            },
+    "inlineDisabledSitesDescription":  {
+                                           "message":  "Bu sitelerde satÄ±r iÃ§i simge ve hÄ±zlÄ± aÃ§Ä±lÄ±r pencere gizlenir."
+                                       },
+    "noDisabledSites":  {
+                            "message":  "Devre dÄ±ÅŸÄ± bÄ±rakÄ±lmÄ±ÅŸ site yok"
+                        },
+    "enableInlineForSite":  {
+                                "message":  "EtkinleÅŸtir"
+                            },
+    "reportReview":  {
+                         "message":  "Bildir / DeÄŸerlendir"
+                     },
+    "percentLabel":  {
+                         "message":  "$PERCENT$%",
+                         "placeholders":  {
+                                              "percent":  {
+                                                              "content":  "$1"
+                                                          }
+                                          }
+                     },
+    "retry":  {
+                  "message":  "Yeniden Dene"
+              },
+    "enable":  {
+                   "message":  "Etkinleştir"
+               },
+    "storageError":  {
+                         "message":  "Geçmiş yüklenemedi. Depolama erişimini kontrol edin."
+                     }
 }
