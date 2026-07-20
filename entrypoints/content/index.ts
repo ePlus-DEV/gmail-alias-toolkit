@@ -1544,8 +1544,20 @@ function observeDOM() {
   return observer;
 }
 
+const isProduction = process.env.NODE_ENV === "production";
+const contentScriptMatches = isProduction
+  ? ["<all_urls>"]
+  : [
+      "*://gmail.com/*",
+      "*://mail.google.com/*",
+      "*://github.com/*",
+      "*://example.com/*",
+      "*://localhost/*",
+      "*://127.0.0.1/*",
+    ];
+
 export default defineContentScript({
-  matches: ["<all_urls>"],
+  matches: contentScriptMatches,
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,
