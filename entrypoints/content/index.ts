@@ -376,7 +376,6 @@ function createPopup(
     event.preventDefault();
     event.stopPropagation();
     disableSiteBtn.disabled = true;
-    const originalTitle = disableSiteBtn.getAttribute("data-tooltip");
     disableInlineForCurrentSite()
       .then(() => {
         popup.remove();
