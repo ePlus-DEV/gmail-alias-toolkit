@@ -70,13 +70,35 @@ export type RandomFormat =
   | "words"
   | "timestamp";
 
+/**
+ * Returns a cryptographically secure integer in the range [0, maxExclusive).
+ * Uses rejection sampling to avoid modulo bias.
+ */
+function getSecureRandomInt(maxExclusive: number): number {
+  if (!Number.isInteger(maxExclusive) || maxExclusive <= 0) {
+    throw new Error("maxExclusive must be a positive integer");
+  }
+
+  const array = new Uint32Array(1);
+  const maxUint32 = 0x100000000; // 2^32
+  const limit = maxUint32 - (maxUint32 % maxExclusive);
+
+  let value: number;
+  do {
+    crypto.getRandomValues(array);
+    value = array[0];
+  } while (value >= limit);
+
+  return value % maxExclusive;
+}
+
 /** Generates a random alias tag in the given format; `index` de-duplicates timestamp batches. */
 export function generateRandomString(format: RandomFormat, index = 0): string {
   if (format === "private-mail") {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
     for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
+      result += chars.charAt(getSecureRandomInt(chars.length));
     }
     return `private-mail-${result}`;
   }
@@ -130,9 +152,9 @@ export function generateRandomString(format: RandomFormat, index = 0): string {
       "jade",
       "ruby",
     ];
-    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const num = Math.floor(Math.random() * 999);
+    const adj = adjectives[getSecureRandomInt(adjectives.length)];
+    const noun = nouns[getSecureRandomInt(nouns.length)];
+    const num = getSecureRandomInt(999);
     return `${adj}-${noun}-${num}`;
   }
 
@@ -140,7 +162,7 @@ export function generateRandomString(format: RandomFormat, index = 0): string {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+    result += chars.charAt(getSecureRandomInt(chars.length));
   }
   return result;
 }
