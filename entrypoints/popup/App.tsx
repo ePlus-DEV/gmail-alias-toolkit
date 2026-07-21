@@ -12,6 +12,8 @@ import GeneratorTabs from "./components/GeneratorTabs";
 import HistorySection from "./components/HistorySection";
 import {
   getAccountStorageKey,
+  filterAliasesForAccount,
+  isAliasForAccount,
   generateAlias,
   filterAliases,
   type RandomFormat,
@@ -71,6 +73,7 @@ function App() {
   }, []);
 
   const [baseEmail, setBaseEmail] = useState("your.email@gmail.com");
+  const activeAccountEmailRef = useRef(baseEmail);
   const [customTag, setCustomTag] = useState("");
   const [recentAliases, setRecentAliases] = useState<Alias[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -119,6 +122,46 @@ function App() {
     );
   }, []);
 
+  /** Loads and repairs history and favorites for exactly one account. */
+  const loadAccountData = useCallback(async (accountEmail: string) => {
+    const historyKey = getAccountStorageKey(accountEmail, "gmail_alias_recent");
+    const favoritesKey = getAccountStorageKey(accountEmail, "favorites");
+    const result = (await browser.storage.local.get([
+      historyKey,
+      favoritesKey,
+    ])) as Record<string, unknown>;
+
+    const storedHistory = Array.isArray(result[historyKey])
+      ? (result[historyKey] as Alias[])
+      : [];
+    const storedFavorites = Array.isArray(result[favoritesKey])
+      ? (result[favoritesKey] as Favorite[])
+      : [];
+    const accountHistory = filterAliasesForAccount(storedHistory, accountEmail);
+    const accountFavorites = filterAliasesForAccount(
+      storedFavorites,
+      accountEmail,
+    );
+
+    // A previous account-switch race could persist another account's entries.
+    // Repair those keys once they are loaded so old mixed data also disappears.
+    const repairedData: Record<string, Alias[] | Favorite[]> = {};
+    if (accountHistory.length !== storedHistory.length) {
+      repairedData[historyKey] = accountHistory;
+    }
+    if (accountFavorites.length !== storedFavorites.length) {
+      repairedData[favoritesKey] = accountFavorites;
+    }
+    if (Object.keys(repairedData).length > 0) {
+      await browser.storage.local.set(repairedData);
+    }
+
+    // Ignore an obsolete read if the user switched again before it completed.
+    if (activeAccountEmailRef.current !== accountEmail) return;
+    setRecentAliases(accountHistory);
+    setFavorites(accountFavorites.map((favorite) => favorite.email));
+  }, []);
+
   const handleThemeChange = useCallback(
     async (nextTheme: "light" | "dark") => {
       setTheme(nextTheme);
@@ -157,10 +200,12 @@ function App() {
           );
           if (activeAccount) {
             activeEmail = activeAccount.email;
+            activeAccountEmailRef.current = activeEmail;
             setBaseEmail(activeEmail);
           }
         } else if (result.base_email) {
           activeEmail = result.base_email;
+          activeAccountEmailRef.current = activeEmail;
           setBaseEmail(activeEmail);
           // Check if we need to migrate from old format
           needsMigration = true;
@@ -198,37 +243,7 @@ function App() {
           }
         }
 
-        // Load account-specific history
-        const historyKey = getAccountStorageKey(
-          activeEmail,
-          "gmail_alias_recent",
-        );
-        const favoritesKey = getAccountStorageKey(activeEmail, "favorites");
-        const historyResult = await browser.storage.local.get([
-          historyKey,
-          favoritesKey,
-        ]);
-        if (
-          historyResult[historyKey] &&
-          Array.isArray(historyResult[historyKey])
-        ) {
-          setRecentAliases(historyResult[historyKey] as Alias[]);
-        } else {
-          setRecentAliases([]);
-        }
-
-        // Load favorites
-        if (
-          historyResult[favoritesKey] &&
-          Array.isArray(historyResult[favoritesKey])
-        ) {
-          const favEmails = historyResult[favoritesKey].map(
-            (f: Favorite) => f.email,
-          );
-          setFavorites(favEmails);
-        } else {
-          setFavorites([]);
-        }
+        await loadAccountData(activeEmail);
 
         if (result.app_settings) {
           setMaxRecent(result.app_settings.maxHistory || 20);
@@ -252,7 +267,7 @@ function App() {
           setHasEmailAccounts(false);
         }
       });
-  }, []);
+  }, [applyTheme, loadAccountData]);
 
   // Listen for settings changes
   useEffect(() => {
@@ -283,41 +298,21 @@ function App() {
           setHasEmailAccounts(newAccounts.length > 0);
           // Update base email if active account changed
           const activeAccount = newAccounts.find((acc) => acc.isActive);
-          if (activeAccount && activeAccount.email !== baseEmail) {
+          if (activeAccount) {
+            activeAccountEmailRef.current = activeAccount.email;
             setBaseEmail(activeAccount.email);
-            // Load history for new account
-            const historyKey = getAccountStorageKey(
-              activeAccount.email,
-              "gmail_alias_recent",
-            );
-            const historyResult = await browser.storage.local.get(historyKey);
-            if (
-              historyResult[historyKey] &&
-              Array.isArray(historyResult[historyKey])
-            ) {
-              setRecentAliases(historyResult[historyKey] as Alias[]);
-            } else {
-              setRecentAliases([]);
-            }
-            // Load favorites for new account
-            const favoritesKey = getAccountStorageKey(
-              activeAccount.email,
-              "favorites",
-            );
-            const favResult = await browser.storage.local.get(favoritesKey);
-            if (
-              favResult[favoritesKey] &&
-              Array.isArray(favResult[favoritesKey])
-            ) {
-              const favEmails = favResult[favoritesKey].map(
-                (f: Favorite) => f.email,
-              );
-              setFavorites(favEmails);
-            } else {
-              setFavorites([]);
-            }
+            await loadAccountData(activeAccount.email);
           }
         }
+      }
+
+      // Keep the popup synchronized when another extension surface saves history.
+      const historyKey = getAccountStorageKey(baseEmail, "gmail_alias_recent");
+      if (changes[historyKey]) {
+        const newHistory = Array.isArray(changes[historyKey].newValue)
+          ? (changes[historyKey].newValue as Alias[])
+          : [];
+        setRecentAliases(filterAliasesForAccount(newHistory, baseEmail));
       }
 
       // Listen for favorites changes
@@ -327,7 +322,10 @@ function App() {
           | Favorite[]
           | undefined;
         if (newFavorites && Array.isArray(newFavorites)) {
-          const favEmails = newFavorites.map((f: Favorite) => f.email);
+          const favEmails = filterAliasesForAccount(
+            newFavorites,
+            baseEmail,
+          ).map((favorite) => favorite.email);
           setFavorites(favEmails);
         } else {
           setFavorites([]);
@@ -337,7 +335,7 @@ function App() {
 
     browser.storage.onChanged.addListener(handleStorageChange);
     return () => browser.storage.onChanged.removeListener(handleStorageChange);
-  }, [baseEmail]);
+  }, [baseEmail, loadAccountData]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -371,9 +369,9 @@ function App() {
   }, [isSettingsOpen]);
 
   /** Increments the total and per-tag counters for the given generated emails. */
-  const updateStats = async (emails: string[]) => {
+  const updateStats = async (emails: string[], accountEmail: string) => {
     // Use account-specific stats key
-    const statsKey = getAccountStorageKey(baseEmail, "alias_stats");
+    const statsKey = getAccountStorageKey(accountEmail, "alias_stats");
     const result = (await browser.storage.local.get(statsKey)) as Record<
       string,
       { total: number; tags: Record<string, number> } | undefined
@@ -398,9 +396,23 @@ function App() {
   // Batched save: computes the merged list and stats totals once, avoiding the
   // stale-closure / lost-update race that happens when saveRecentAlias is called
   // N times in a tight loop (e.g. "Copy All").
-  const saveRecentAliases = (emails: string[]) => {
-    const uniqueEmails = [...new Set(emails.filter(Boolean))];
+  const saveRecentAliases = async (emails: string[]) => {
+    const accountEmail = activeAccountEmailRef.current;
+    const uniqueEmails = [
+      ...new Set(
+        emails.filter(
+          (email) => email && isAliasForAccount(email, accountEmail),
+        ),
+      ),
+    ];
     if (uniqueEmails.length === 0) return;
+
+    const historyKey = getAccountStorageKey(accountEmail, "gmail_alias_recent");
+    const historyResult = await browser.storage.local.get(historyKey);
+    const storedHistory = Array.isArray(historyResult[historyKey])
+      ? (historyResult[historyKey] as Alias[])
+      : [];
+    const accountHistory = filterAliasesForAccount(storedHistory, accountEmail);
 
     const now = Date.now();
     const newAliases: Alias[] = uniqueEmails.map((email, i) => ({
@@ -411,17 +423,17 @@ function App() {
 
     const updated = [
       ...newAliases,
-      ...recentAliases.filter((a) => !newEmailSet.has(a.email)),
+      ...accountHistory.filter((a) => !newEmailSet.has(a.email)),
     ].slice(0, maxRecent);
 
-    setRecentAliases(updated);
+    await Promise.all([
+      browser.storage.local.set({ [historyKey]: updated }),
+      updateStats(uniqueEmails, accountEmail),
+    ]);
 
-    // Save with account-specific key
-    const historyKey = getAccountStorageKey(baseEmail, "gmail_alias_recent");
-    browser.storage.local.set({ [historyKey]: updated });
-
-    // Update statistics
-    updateStats(uniqueEmails);
+    if (activeAccountEmailRef.current === accountEmail) {
+      setRecentAliases(updated);
+    }
   };
 
   /** Saves a single alias to recent history. */
@@ -730,6 +742,7 @@ function App() {
         <div className="flex-1 overflow-y-auto">
           <WelcomeScreen
             onEmailAdded={(email) => {
+              activeAccountEmailRef.current = email;
               setBaseEmail(email);
               setHasEmailAccounts(true);
             }}
@@ -758,7 +771,11 @@ function App() {
                 focusOnMount={focusOnMount}
                 onToggleAddAccount={() => setShowAddAccount(!showAddAccount)}
                 onSelectAccount={async (selectedEmail) => {
+                  activeAccountEmailRef.current = selectedEmail;
                   setBaseEmail(selectedEmail);
+                  setRecentAliases([]);
+                  setFavorites([]);
+                  setGeneratedRandomList([]);
                   setIsSelectMode(false);
                   setSelectedAliases(new Set());
                   setSearchQuery("");
@@ -774,6 +791,7 @@ function App() {
                     email_accounts: updated,
                     base_email: selectedEmail,
                   });
+                  await loadAccountData(selectedEmail);
                 }}
                 onNewAccountEmailChange={(value) => {
                   setNewAccountEmail(value);
