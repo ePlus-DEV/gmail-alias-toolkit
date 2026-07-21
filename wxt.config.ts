@@ -6,19 +6,16 @@ import { fileURLToPath } from "node:url";
 EventEmitter.defaultMaxListeners = 15;
 
 // Dev-only sites to limit reload spam during development
-const DEV_SITES = ["*:///miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-
-// WXT runs 'wxt' for dev and 'wxt build' for production
-const isBuild = process.argv.includes("build");
-const hostPermissions = isBuild ? ["<all_urls>"] : DEV_SITES;
+const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
-  vite: () => ({
+  /** Defines compile-time values based on the resolved WXT mode. */
+  vite: ({ mode }) => ({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
-      __DEV_MODE__: JSON.stringify(!isBuild),
+      __DEV_MODE__: JSON.stringify(mode === "development"),
     },
     resolve: {
       alias: {
@@ -26,7 +23,8 @@ export default defineConfig({
       },
     },
   }),
-  manifest: {
+  /** Generates manifest permissions based on the resolved WXT mode. */
+  manifest: ({ mode }) => ({
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
     default_locale: "en",
@@ -34,7 +32,7 @@ export default defineConfig({
       default_title: "__MSG_extensionName__",
     },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
-    host_permissions: hostPermissions,
+    host_permissions: mode === "development" ? DEV_SITES : ["<all_urls>"],
     browser_specific_settings: {
       gecko: {
         id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",
@@ -44,7 +42,7 @@ export default defineConfig({
         },
       },
     },
-  },
+  }),
   autoIcons: {
     developmentIndicator: "overlay",
   },
