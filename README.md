@@ -72,9 +72,3 @@ MIT. See `LICENSE.md`.
 - Issues: [github.com/ePlus-DEV/gmail-alias-toolkit/issues](https://github.com/ePlus-DEV/gmail-alias-toolkit/issues)
 - Discussions: [github.com/ePlus-DEV/gmail-alias-toolkit/discussions](https://github.com/ePlus-DEV/gmail-alias-toolkit/discussions)
 - Email: dev@eplus.dev
-
-## Version
-
-Current version: `1.3.0`
-
-See `CHANGELOG.md` for release notes.
