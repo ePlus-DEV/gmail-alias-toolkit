@@ -124,10 +124,7 @@ function App() {
 
   /** Loads and repairs history and favorites for exactly one account. */
   const loadAccountData = useCallback(async (accountEmail: string) => {
-    const historyKey = getAccountStorageKey(
-      accountEmail,
-      "gmail_alias_recent",
-    );
+    const historyKey = getAccountStorageKey(accountEmail, "gmail_alias_recent");
     const favoritesKey = getAccountStorageKey(accountEmail, "favorites");
     const result = (await browser.storage.local.get([
       historyKey,
@@ -140,10 +137,7 @@ function App() {
     const storedFavorites = Array.isArray(result[favoritesKey])
       ? (result[favoritesKey] as Favorite[])
       : [];
-    const accountHistory = filterAliasesForAccount(
-      storedHistory,
-      accountEmail,
-    );
+    const accountHistory = filterAliasesForAccount(storedHistory, accountEmail);
     const accountFavorites = filterAliasesForAccount(
       storedFavorites,
       accountEmail,
@@ -313,10 +307,7 @@ function App() {
       }
 
       // Keep the popup synchronized when another extension surface saves history.
-      const historyKey = getAccountStorageKey(
-        baseEmail,
-        "gmail_alias_recent",
-      );
+      const historyKey = getAccountStorageKey(baseEmail, "gmail_alias_recent");
       if (changes[historyKey]) {
         const newHistory = Array.isArray(changes[historyKey].newValue)
           ? (changes[historyKey].newValue as Alias[])
@@ -416,18 +407,12 @@ function App() {
     ];
     if (uniqueEmails.length === 0) return;
 
-    const historyKey = getAccountStorageKey(
-      accountEmail,
-      "gmail_alias_recent",
-    );
+    const historyKey = getAccountStorageKey(accountEmail, "gmail_alias_recent");
     const historyResult = await browser.storage.local.get(historyKey);
     const storedHistory = Array.isArray(historyResult[historyKey])
       ? (historyResult[historyKey] as Alias[])
       : [];
-    const accountHistory = filterAliasesForAccount(
-      storedHistory,
-      accountEmail,
-    );
+    const accountHistory = filterAliasesForAccount(storedHistory, accountEmail);
 
     const now = Date.now();
     const newAliases: Alias[] = uniqueEmails.map((email, i) => ({

@@ -80,10 +80,7 @@ describe("getLegacyAccountStorageKey", () => {
 describe("account alias isolation", () => {
   it("accepts plus aliases only for their owning account", () => {
     expect(
-      isAliasForAccount(
-        "first+private-mail-a1b2@gmail.com",
-        "first@gmail.com",
-      ),
+      isAliasForAccount("first+private-mail-a1b2@gmail.com", "first@gmail.com"),
     ).toBe(true);
     expect(
       isAliasForAccount(
