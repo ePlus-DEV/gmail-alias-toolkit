@@ -13,6 +13,47 @@ export function getLegacyAccountStorageKey(
   return `${suffix}_${sanitized}`;
 }
 
+/**
+ * Returns the canonical mailbox identity used to decide which account owns an
+ * alias. Gmail ignores dots and treats googlemail.com as gmail.com; plus tags
+ * are removed for every domain because the extension generates them itself.
+ */
+function getMailboxIdentity(email: string): string | null {
+  const parts = email.trim().toLowerCase().split("@");
+  if (parts.length !== 2) return null;
+
+  let [username, domain] = parts;
+  username = username.split("+")[0];
+  if (!username || !domain) return null;
+
+  if (domain === "gmail.com" || domain === "googlemail.com") {
+    username = username.replaceAll(".", "");
+    domain = "gmail.com";
+  }
+
+  return `${username}@${domain}`;
+}
+
+/** Returns whether an alias belongs to the given configured email account. */
+export function isAliasForAccount(
+  aliasEmail: string,
+  accountEmail: string,
+): boolean {
+  const aliasIdentity = getMailboxIdentity(aliasEmail);
+  const accountIdentity = getMailboxIdentity(accountEmail);
+  return aliasIdentity !== null && aliasIdentity === accountIdentity;
+}
+
+/** Removes history or favorite entries that belong to another account. */
+export function filterAliasesForAccount<T extends { email: string }>(
+  aliases: T[],
+  accountEmail: string,
+): T[] {
+  return aliases.filter((alias) =>
+    isAliasForAccount(alias.email, accountEmail),
+  );
+}
+
 /** Creates a plus-addressed alias (user+tag@domain), or null if the base email is malformed. */
 export function generateAlias(baseEmail: string, tag: string): string | null {
   const parts = baseEmail.trim().split("@");
@@ -29,13 +70,35 @@ export type RandomFormat =
   | "words"
   | "timestamp";
 
+/**
+ * Returns a cryptographically secure integer in the range [0, maxExclusive).
+ * Uses rejection sampling to avoid modulo bias.
+ */
+function getSecureRandomInt(maxExclusive: number): number {
+  if (!Number.isInteger(maxExclusive) || maxExclusive <= 0) {
+    throw new Error("maxExclusive must be a positive integer");
+  }
+
+  const array = new Uint32Array(1);
+  const maxUint32 = 0x100000000; // 2^32
+  const limit = maxUint32 - (maxUint32 % maxExclusive);
+
+  let value: number;
+  do {
+    crypto.getRandomValues(array);
+    value = array[0];
+  } while (value >= limit);
+
+  return value % maxExclusive;
+}
+
 /** Generates a random alias tag in the given format; `index` de-duplicates timestamp batches. */
 export function generateRandomString(format: RandomFormat, index = 0): string {
   if (format === "private-mail") {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
     for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
+      result += chars.charAt(getSecureRandomInt(chars.length));
     }
     return `private-mail-${result}`;
   }
@@ -89,9 +152,9 @@ export function generateRandomString(format: RandomFormat, index = 0): string {
       "jade",
       "ruby",
     ];
-    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const num = Math.floor(Math.random() * 999);
+    const adj = adjectives[getSecureRandomInt(adjectives.length)];
+    const noun = nouns[getSecureRandomInt(nouns.length)];
+    const num = getSecureRandomInt(999);
     return `${adj}-${noun}-${num}`;
   }
 
@@ -99,7 +162,7 @@ export function generateRandomString(format: RandomFormat, index = 0): string {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   for (let i = 0; i < 8; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+    result += chars.charAt(getSecureRandomInt(chars.length));
   }
   return result;
 }
