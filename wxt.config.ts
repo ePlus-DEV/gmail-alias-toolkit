@@ -6,11 +6,7 @@ import { fileURLToPath } from "node:url";
 EventEmitter.defaultMaxListeners = 15;
 
 // Dev-only sites to limit reload spam during development
-const DEV_SITES = [
-  "*://*.miro.com/*",
-  "*://selfh.st/*",
-  "*://gumroad.com/*",
-];
+const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
@@ -34,8 +30,7 @@ export default defineConfig({
       default_title: "__MSG_extensionName__",
     },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
-    host_permissions:
-      mode === "development" ? DEV_SITES : ["<all_urls>"],
+    host_permissions: mode === "development" ? DEV_SITES : ["<all_urls>"],
     browser_specific_settings: {
       gecko: {
         id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",
