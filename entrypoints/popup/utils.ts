@@ -13,6 +13,47 @@ export function getLegacyAccountStorageKey(
   return `${suffix}_${sanitized}`;
 }
 
+/**
+ * Returns the canonical mailbox identity used to decide which account owns an
+ * alias. Gmail ignores dots and treats googlemail.com as gmail.com; plus tags
+ * are removed for every domain because the extension generates them itself.
+ */
+function getMailboxIdentity(email: string): string | null {
+  const parts = email.trim().toLowerCase().split("@");
+  if (parts.length !== 2) return null;
+
+  let [username, domain] = parts;
+  username = username.split("+")[0];
+  if (!username || !domain) return null;
+
+  if (domain === "gmail.com" || domain === "googlemail.com") {
+    username = username.replaceAll(".", "");
+    domain = "gmail.com";
+  }
+
+  return `${username}@${domain}`;
+}
+
+/** Returns whether an alias belongs to the given configured email account. */
+export function isAliasForAccount(
+  aliasEmail: string,
+  accountEmail: string,
+): boolean {
+  const aliasIdentity = getMailboxIdentity(aliasEmail);
+  const accountIdentity = getMailboxIdentity(accountEmail);
+  return aliasIdentity !== null && aliasIdentity === accountIdentity;
+}
+
+/** Removes history or favorite entries that belong to another account. */
+export function filterAliasesForAccount<T extends { email: string }>(
+  aliases: T[],
+  accountEmail: string,
+): T[] {
+  return aliases.filter((alias) =>
+    isAliasForAccount(alias.email, accountEmail),
+  );
+}
+
 /** Creates a plus-addressed alias (user+tag@domain), or null if the base email is malformed. */
 export function generateAlias(baseEmail: string, tag: string): string | null {
   const parts = baseEmail.trim().split("@");
