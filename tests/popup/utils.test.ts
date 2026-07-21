@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   getAccountStorageKey,
   getLegacyAccountStorageKey,
+  isAliasForAccount,
+  filterAliasesForAccount,
   generateAlias,
   generateRandomString,
   validateEmail,
@@ -72,6 +74,50 @@ describe("getLegacyAccountStorageKey", () => {
     expect(getLegacyAccountStorageKey(" User@Gmail.com ", "stats")).toBe(
       "stats__User_Gmail_com_",
     );
+  });
+});
+
+describe("account alias isolation", () => {
+  it("accepts plus aliases only for their owning account", () => {
+    expect(
+      isAliasForAccount(
+        "first+private-mail-a1b2@gmail.com",
+        "first@gmail.com",
+      ),
+    ).toBe(true);
+    expect(
+      isAliasForAccount(
+        "first+private-mail-a1b2@gmail.com",
+        "second@gmail.com",
+      ),
+    ).toBe(false);
+  });
+
+  it("recognizes Gmail dot variations and googlemail aliases", () => {
+    expect(
+      isAliasForAccount("fi.rst+shopping@googlemail.com", "first@gmail.com"),
+    ).toBe(true);
+  });
+
+  it("does not ignore dots for non-Gmail domains", () => {
+    expect(
+      isAliasForAccount("fi.rst+tag@example.com", "first@example.com"),
+    ).toBe(false);
+  });
+
+  it("removes history entries copied from another account", () => {
+    const history = [
+      { email: "first+work@gmail.com", timestamp: 2 },
+      { email: "second+test@gmail.com", timestamp: 1 },
+    ];
+
+    expect(filterAliasesForAccount(history, "second@gmail.com")).toEqual([
+      { email: "second+test@gmail.com", timestamp: 1 },
+    ]);
+  });
+
+  it("rejects malformed alias addresses", () => {
+    expect(isAliasForAccount("not-an-email", "first@gmail.com")).toBe(false);
   });
 });
 
