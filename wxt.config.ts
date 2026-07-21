@@ -10,6 +10,7 @@ const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
+  /** Defines compile-time values based on the resolved WXT mode. */
   vite: ({ mode }) => ({
     define: {
       "process.emit": "(() => {})",
@@ -22,6 +23,7 @@ export default defineConfig({
       },
     },
   }),
+  /** Generates manifest permissions based on the resolved WXT mode. */
   manifest: ({ mode }) => ({
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
