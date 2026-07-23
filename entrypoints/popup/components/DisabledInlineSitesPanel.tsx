@@ -62,14 +62,14 @@ export default function DisabledInlineSitesPanel({
           type="search"
           value={query}
           onChange={handleQueryChange}
-          placeholder={t("searchAliases")}
+          placeholder={t("inlineDisabledSites")}
           className="w-full"
         />
       )}
 
       {visibleSites.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border px-3 py-3 text-center text-xs text-muted-foreground">
-          {t("noDisabledSites")}
+          {t("noResultsFound")}
         </p>
       ) : (
         <div className="space-y-1.5">
