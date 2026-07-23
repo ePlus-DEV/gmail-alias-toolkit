@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const OUTPUT_ROOT = ".output";
 const ALL_URLS = "<all_urls>";
@@ -132,7 +133,7 @@ function validateDevelopmentScope(
 }
 
 /** Returns validation failures for one generated manifest. */
-function validateManifest(manifestPath, mode) {
+export function validateManifest(manifestPath, mode) {
   if (!existsSync(manifestPath)) {
     return [`Missing manifest: ${manifestPath}`];
   }
@@ -223,4 +224,10 @@ function main() {
   process.exitCode = 1;
 }
 
-main();
+/** Returns whether this module was launched as the Node.js entrypoint. */
+function isDirectExecution() {
+  const entrypoint = process.argv[1];
+  return Boolean(entrypoint && import.meta.url === pathToFileURL(entrypoint).href);
+}
+
+if (isDirectExecution()) main();
