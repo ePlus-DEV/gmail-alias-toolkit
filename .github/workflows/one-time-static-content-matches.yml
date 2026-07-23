@@ -1,0 +1,72 @@
+name: One-time static content matches
+
+on:
+  push:
+    branches:
+      - agent/cleanup-wxt-environment-checks
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Remove entrypoint mode logic
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout cleanup branch
+        uses: actions/checkout@v7
+        with:
+          ref: agent/cleanup-wxt-environment-checks
+          fetch-depth: 0
+
+      - name: Use static entrypoint matches
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          import re
+          from pathlib import Path
+
+          content_script = Path("entrypoints/content/index.ts")
+          workflow = Path(".github/workflows/one-time-static-content-matches.yml")
+          source = content_script.read_text(encoding="utf-8")
+          pattern = re.compile(
+              r'const DEV_SITES\s*=\s*\[[^;]+\];\s*'
+              r'const contentScriptMatches\s*=.*?;\s*'
+              r'export default defineContentScript\(\{\s*'
+              r'matches:\s*contentScriptMatches,',
+              re.DOTALL,
+          )
+          replacement = (
+              'export default defineContentScript({\n'
+              '  matches: ["<all_urls>"],'
+          )
+          updated, replacements = pattern.subn(replacement, source)
+
+          if replacements != 1:
+              raise SystemExit(
+                  f"Expected exactly one dynamic content-script match block, found {replacements}"
+              )
+
+          content_script.write_text(updated, encoding="utf-8")
+          workflow.unlink()
+          PY
+
+          if grep -n 'contentScriptMatches\|import\.meta\.env\.MODE\|import\.meta\.env\.DEV\|__DEV_MODE__' entrypoints/content/index.ts; then
+            echo 'Legacy entrypoint mode logic remains.' >&2
+            exit 1
+          fi
+
+          git diff --check
+
+      - name: Commit static entrypoint matches
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "eplus-bot"
+          git config user.email "157664013+eplus-bot@users.noreply.github.com"
+          git add entrypoints/content/index.ts .github/workflows/one-time-static-content-matches.yml
+          git commit -m "refactor: keep content script matches static"
+          git push origin HEAD:agent/cleanup-wxt-environment-checks
