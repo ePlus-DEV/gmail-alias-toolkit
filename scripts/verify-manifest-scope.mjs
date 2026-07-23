@@ -158,6 +158,17 @@ function parseArguments() {
   };
 }
 
+/** Parses arguments and reports invalid input without leaving partial state. */
+function parseArgumentsSafely() {
+  try {
+    return parseArguments();
+  } catch (error) {
+    writeError(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+    return null;
+  }
+}
+
 /** Runs the generated manifest scope verification. */
 function main() {
   if (!existsSync(OUTPUT_ROOT)) {
@@ -166,14 +177,8 @@ function main() {
     return;
   }
 
-  let options;
-  try {
-    options = parseArguments();
-  } catch (error) {
-    writeError(error instanceof Error ? error.message : String(error));
-    process.exitCode = 1;
-    return;
-  }
+  const options = parseArgumentsSafely();
+  if (!options) return;
 
   const failures = options.browsers.flatMap((browser) =>
     validateBrowser(browser, options.mode),
