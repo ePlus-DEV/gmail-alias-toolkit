@@ -31,7 +31,11 @@ function readManifest(manifestPath) {
 }
 
 /** Returns failures for the expected production URL scope. */
-function validateProductionScope(manifestPath, contentScriptMatches, grantedHosts) {
+function validateProductionScope(
+  manifestPath,
+  contentScriptMatches,
+  grantedHosts,
+) {
   const failures = [];
 
   if (!contentScriptMatches.includes(ALL_URLS)) {
@@ -101,16 +105,8 @@ function validateManifest(manifestPath, mode) {
   ]);
 
   return mode === "development"
-    ? validateDevelopmentScope(
-        manifestPath,
-        contentScriptMatches,
-        grantedHosts,
-      )
-    : validateProductionScope(
-        manifestPath,
-        contentScriptMatches,
-        grantedHosts,
-      );
+    ? validateDevelopmentScope(manifestPath, contentScriptMatches, grantedHosts)
+    : validateProductionScope(manifestPath, contentScriptMatches, grantedHosts);
 }
 
 /** Returns validation failures for all outputs of one browser. */
