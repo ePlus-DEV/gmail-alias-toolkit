@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 const OUTPUT_ROOT = ".output";
 const ALL_URLS = "<all_urls>";
+const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 const DEVELOPMENT_MODE = "development";
 const PRODUCTION_MODE = "production";
@@ -137,9 +138,15 @@ function validateManifest(manifestPath, mode) {
   }
 
   const manifest = readManifest(manifestPath);
-  const contentScriptMatches = (manifest.content_scripts ?? []).flatMap(
-    (contentScript) => contentScript.matches ?? [],
+  const inlineContentScript = (manifest.content_scripts ?? []).find(
+    (contentScript) =>
+      contentScript.js?.some((file) => file.endsWith(INLINE_CONTENT_SCRIPT)),
   );
+  if (!inlineContentScript) {
+    return [`${manifestPath}: inline content script is missing.`];
+  }
+
+  const contentScriptMatches = inlineContentScript.matches ?? [];
   const grantedHosts = new Set([
     ...(manifest.host_permissions ?? []),
     ...(manifest.permissions ?? []),
