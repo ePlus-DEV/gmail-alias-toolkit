@@ -6,6 +6,7 @@ const ALL_URLS = "<all_urls>";
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 const DEVELOPMENT_MODE = "development";
 const PRODUCTION_MODE = "production";
+const DEVELOPMENT_OUTPUT_SUFFIX = "-dev";
 const SUPPORTED_MODES = new Set([DEVELOPMENT_MODE, PRODUCTION_MODE]);
 
 /** Writes one informational line to standard output. */
@@ -18,11 +19,25 @@ function writeError(message) {
   process.stderr.write(`ERROR: ${message}\n`);
 }
 
-/** Returns WXT output directories for one browser. */
-function findBrowserOutputs(browser) {
+/** Returns whether a generated output directory belongs to the expected mode. */
+function matchesMode(outputDirectory, mode) {
+  const isDevelopmentOutput = outputDirectory.endsWith(
+    DEVELOPMENT_OUTPUT_SUFFIX,
+  );
+
+  return mode === DEVELOPMENT_MODE
+    ? isDevelopmentOutput
+    : !isDevelopmentOutput;
+}
+
+/** Returns WXT output directories for one browser and mode. */
+function findBrowserOutputs(browser, mode) {
   return readdirSync(OUTPUT_ROOT, { withFileTypes: true })
     .filter(
-      (entry) => entry.isDirectory() && entry.name.startsWith(`${browser}-mv`),
+      (entry) =>
+        entry.isDirectory() &&
+        entry.name.startsWith(`${browser}-mv`) &&
+        matchesMode(entry.name, mode),
     )
     .map((entry) => entry.name);
 }
@@ -111,9 +126,9 @@ function validateManifest(manifestPath, mode) {
     : validateProductionScope(manifestPath, contentScriptMatches, grantedHosts);
 }
 
-/** Returns validation failures for all outputs of one browser. */
+/** Returns validation failures for all outputs of one browser and mode. */
 function validateBrowser(browser, mode) {
-  const outputDirectories = findBrowserOutputs(browser);
+  const outputDirectories = findBrowserOutputs(browser, mode);
   if (outputDirectories.length === 0) {
     return [`No ${mode} output directory found for ${browser}.`];
   }
