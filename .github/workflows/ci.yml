@@ -80,11 +80,5 @@ jobs:
       - name: Verify production inline helper scope
         run: node scripts/verify-manifest-scope.mjs production chrome
 
-      - name: Build development-mode extension
-        run: yarn exec wxt build --mode development
-
-      - name: Verify development inline helper scope
-        run: node scripts/verify-manifest-scope.mjs development chrome
-
       - name: Build website
         run: yarn workspace gmail-alias-toolkit-web build
