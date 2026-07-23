@@ -1580,13 +1580,8 @@ function observeDOM() {
   return observer;
 }
 
-const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-
-const contentScriptMatches =
-  import.meta.env.MODE === "development" ? DEV_SITES : ["<all_urls>"];
-
 export default defineContentScript({
-  matches: contentScriptMatches,
+  matches: ["<all_urls>"],
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,
