@@ -43,84 +43,81 @@ jobs:
           if panel_import not in settings:
               if settings.count(input_import) != 1:
                   raise SystemExit("Unexpected Settings input import count")
-              settings = settings.replace(
-                  input_import,
-                  input_import + panel_import,
-                  1,
-              )
+              settings = settings.replace(input_import, input_import + panel_import, 1)
 
-          changelog_marker = '''  {
-            version: "1.3.0",
-            date: "2026-07-13",
-          '''
-          changelog_entries = '''  {
-            version: "1.3.2",
-            date: "2026-07-24",
-            changes: [
-              {
-                type: "Added",
-                items: [
-                  "Added generated-manifest scope verification with regression coverage for Chrome and Firefox-style permissions",
-                ],
-              },
-              {
-                type: "Changed",
-                items: [
-                  "Aligned WXT development and production URL-scope handling",
-                  "Restricted development builds to the configured site allowlist while preserving all-site production support",
-                ],
-              },
-              {
-                type: "Fixed",
-                items: [
-                  "Restored inline popup availability in production builds",
-                  "Prevented unrelated content scripts and broad development URL patterns from passing manifest validation",
-                ],
-              },
-            ],
-          },
-          {
-            version: "1.3.1",
-            date: "2026-07-20",
-            changes: [
-              {
-                type: "Added",
-                items: [
-                  "Added Edge and Opera release packages with multi-browser installation guidance",
-                  "Added an interactive product tour and richer landing-page previews",
-                ],
-              },
-              {
-                type: "Changed",
-                items: [
-                  "Improved active email handling across the popup, inline helper, and context menus",
-                  "Optimized inline popup behavior and displayed the active base email",
-                ],
-              },
-              {
-                type: "Fixed",
-                items: [
-                  "Improved user feedback when disabling the inline helper or saving aliases",
-                  "Fixed context-menu caching, history loading, injected icon cleanup, and development-site configuration",
-                ],
-              },
-            ],
-          },
-          ''' + changelog_marker
+          changelog_marker = (
+              '  {\n'
+              '    version: "1.3.0",\n'
+              '    date: "2026-07-13",\n'
+          )
+          changelog_entries = (
+              '  {\n'
+              '    version: "1.3.2",\n'
+              '    date: "2026-07-24",\n'
+              '    changes: [\n'
+              '      {\n'
+              '        type: "Added",\n'
+              '        items: [\n'
+              '          "Added generated-manifest scope verification with regression coverage for Chrome and Firefox-style permissions",\n'
+              '        ],\n'
+              '      },\n'
+              '      {\n'
+              '        type: "Changed",\n'
+              '        items: [\n'
+              '          "Aligned WXT development and production URL-scope handling",\n'
+              '          "Restricted development builds to the configured site allowlist while preserving all-site production support",\n'
+              '        ],\n'
+              '      },\n'
+              '      {\n'
+              '        type: "Fixed",\n'
+              '        items: [\n'
+              '          "Restored inline popup availability in production builds",\n'
+              '          "Prevented unrelated content scripts and broad development URL patterns from passing manifest validation",\n'
+              '        ],\n'
+              '      },\n'
+              '    ],\n'
+              '  },\n'
+              '  {\n'
+              '    version: "1.3.1",\n'
+              '    date: "2026-07-20",\n'
+              '    changes: [\n'
+              '      {\n'
+              '        type: "Added",\n'
+              '        items: [\n'
+              '          "Added Edge and Opera release packages with multi-browser installation guidance",\n'
+              '          "Added an interactive product tour and richer landing-page previews",\n'
+              '        ],\n'
+              '      },\n'
+              '      {\n'
+              '        type: "Changed",\n'
+              '        items: [\n'
+              '          "Improved active email handling across the popup, inline helper, and context menus",\n'
+              '          "Optimized inline popup behavior and displayed the active base email",\n'
+              '        ],\n'
+              '      },\n'
+              '      {\n'
+              '        type: "Fixed",\n'
+              '        items: [\n'
+              '          "Improved user feedback when disabling the inline helper or saving aliases",\n'
+              '          "Fixed context-menu caching, history loading, injected icon cleanup, and development-site configuration",\n'
+              '        ],\n'
+              '      },\n'
+              '    ],\n'
+              '  },\n'
+              + changelog_marker
+          )
           if 'version: "1.3.2"' not in settings:
               if settings.count(changelog_marker) != 1:
                   raise SystemExit("Unexpected changelog marker count")
+              settings = settings.replace(changelog_marker, changelog_entries, 1)
+
+          fallback_version = 'const [version, setVersion] = useState("1.3.0");'
+          if fallback_version in settings:
               settings = settings.replace(
-                  changelog_marker,
-                  changelog_entries,
+                  fallback_version,
+                  'const [version, setVersion] = useState("1.3.2");',
                   1,
               )
-
-          settings = settings.replace(
-              'const [version, setVersion] = useState("1.3.0");',
-              'const [version, setVersion] = useState("1.3.2");',
-              1,
-          )
 
           inline_section = settings.index(
               '                {\n                  id: "inline-helper-sites",'
@@ -143,17 +140,19 @@ jobs:
               raise SystemExit("Disabled-sites description end was not found")
           description_end += len('                  ),')
 
-          new_description = '''                  description: (
-                    <div className="space-y-3">
-                      <p className="text-xs text-muted-foreground">
-                        {t("inlineDisabledSitesDescription")}
-                      </p>
-                      <DisabledInlineSitesPanel
-                        sites={disabledInlineSites}
-                        onEnable={enableInlineForSite}
-                      />
-                    </div>
-                  ),'''
+          new_description = (
+              '                  description: (\n'
+              '                    <div className="space-y-3">\n'
+              '                      <p className="text-xs text-muted-foreground">\n'
+              '                        {t("inlineDisabledSitesDescription")}\n'
+              '                      </p>\n'
+              '                      <DisabledInlineSitesPanel\n'
+              '                        sites={disabledInlineSites}\n'
+              '                        onEnable={enableInlineForSite}\n'
+              '                      />\n'
+              '                    </div>\n'
+              '                  ),'
+          )
           settings = (
               settings[:description_start]
               + new_description
@@ -166,14 +165,13 @@ jobs:
           if "v1.3.2" not in web:
               if web.count("v1.3.0") != 1:
                   raise SystemExit("Unexpected landing version count")
-              web = web.replace("v1.3.0", "v1.3.2", 1)
-              web_path.write_text(web)
+              web_path.write_text(web.replace("v1.3.0", "v1.3.2", 1))
           PY
 
           rm -f .github/workflows/apply-changelog-sites-update.yml
           rm -f .github/.apply-changelog-trigger
 
-          git fetch origin dev
+          git fetch origin dev:refs/remotes/origin/dev
           git checkout origin/dev -- .github/workflows/ci.yml
 
           if git diff --quiet; then
@@ -183,12 +181,7 @@ jobs:
 
           git config user.name "eplus-bot"
           git config user.email "157664013+eplus-bot@users.noreply.github.com"
-          git add \
-            .github/workflows/ci.yml \
-            .github/workflows/apply-changelog-sites-update.yml \
-            .github/.apply-changelog-trigger \
-            entrypoints/popup/components/Settings.tsx \
-            web/src/App.tsx
+          git add -A
           git commit -m "feat: update changelog and disabled-sites UI"
           git push origin HEAD:feat/update-extension-changelog-sites-pagination
 
