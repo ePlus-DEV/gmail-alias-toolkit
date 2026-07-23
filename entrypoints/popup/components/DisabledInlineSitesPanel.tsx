@@ -62,7 +62,7 @@ export default function DisabledInlineSitesPanel({
           type="search"
           value={query}
           onChange={handleQueryChange}
-          placeholder={t("search")}
+          placeholder={t("searchAliases")}
           className="w-full"
         />
       )}
