@@ -25,9 +25,7 @@ function matchesMode(outputDirectory, mode) {
     DEVELOPMENT_OUTPUT_SUFFIX,
   );
 
-  return mode === DEVELOPMENT_MODE
-    ? isDevelopmentOutput
-    : !isDevelopmentOutput;
+  return mode === DEVELOPMENT_MODE ? isDevelopmentOutput : !isDevelopmentOutput;
 }
 
 /** Returns WXT output directories for one browser and mode. */
