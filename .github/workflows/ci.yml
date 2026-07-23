@@ -72,24 +72,7 @@ jobs:
         run: exit 1
 
       - name: Run tests
-        id: tests
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          yarn test 2>&1 | tee test.log
-
-      - name: Upload test diagnostics
-        if: steps.tests.outcome == 'failure'
-        uses: actions/upload-artifact@v7
-        with:
-          name: test-diagnostics
-          path: test.log
-          if-no-files-found: error
-
-      - name: Fail on test errors
-        if: steps.tests.outcome == 'failure'
-        run: exit 1
+        run: yarn test
 
       - name: Build production extension
         run: yarn build
