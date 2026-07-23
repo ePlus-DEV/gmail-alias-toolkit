@@ -130,7 +130,7 @@ jobs:
                 .workflow != env.COMMAND_WORKFLOW and
                 .workflow != env.APPROVAL_WORKFLOW and
                 (.bucket == "fail" or .bucket == "cancel")
-              ) | "::error::\(.workflow // "status"): \(.name) did not pass"' <<<"$CHECKS"
+              ) | "::error::\(.workflow // \"status\"): \(.name) did not pass"' <<<"$CHECKS"
 
               gh pr comment "$PR_NUMBER" \
                 --repo "$GITHUB_REPOSITORY" \
@@ -180,10 +180,12 @@ jobs:
           )"
 
           if [ -z "$APPROVED_FOR_HEAD" ]; then
-            gh pr review "$PR_NUMBER" \
-              --repo "$GITHUB_REPOSITORY" \
-              --approve \
-              --body "Approved by @eplus-bot after all checks passed for commit \`$CURRENT_HEAD\`."
+            gh api \
+              --method POST \
+              "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews" \
+              -f commit_id="$CURRENT_HEAD" \
+              -f event="APPROVE" \
+              -f body="Approved by @eplus-bot after all checks passed for commit \`$CURRENT_HEAD\`."
           fi
 
           gh pr comment "$PR_NUMBER" \
