@@ -1,0 +1,67 @@
+name: One-time WXT environment cleanup
+
+on:
+  push:
+    branches:
+      - agent/cleanup-wxt-environment-checks
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Replace legacy environment flag
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout cleanup branch
+        uses: actions/checkout@v7
+        with:
+          ref: agent/cleanup-wxt-environment-checks
+          fetch-depth: 0
+
+      - name: Replace legacy WXT environment check
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+          from pathlib import Path
+
+          content_script = Path("entrypoints/content/index.ts")
+          workflow = Path(".github/workflows/one-time-cleanup-wxt-env.yml")
+          source = content_script.read_text(encoding="utf-8")
+
+          old = '''const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+
+          // @ts-expect-error __DEV_MODE__ injected by Vite at build time
+          const contentScriptMatches = __DEV_MODE__ ? DEV_SITES : ["<all_urls>"];'''
+          new = '''const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+
+          const contentScriptMatches = import.meta.env.DEV
+            ? DEV_SITES
+            : ["<all_urls>"];'''
+
+          if source.count(old) != 1:
+              raise SystemExit("Expected exactly one legacy __DEV_MODE__ block")
+
+          content_script.write_text(source.replace(old, new), encoding="utf-8")
+          workflow.unlink()
+          PY
+
+          if grep -RIn --exclude-dir=.git --exclude='CHANGELOG.md' '__DEV_MODE__' .; then
+            echo 'Legacy __DEV_MODE__ references remain.' >&2
+            exit 1
+          fi
+
+          git diff --check
+
+      - name: Commit cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "eplus-bot"
+          git config user.email "157664013+eplus-bot@users.noreply.github.com"
+          git add entrypoints/content/index.ts .github/workflows/one-time-cleanup-wxt-env.yml
+          git commit -m "refactor: use WXT runtime environment directly"
+          git push origin HEAD:agent/cleanup-wxt-environment-checks
