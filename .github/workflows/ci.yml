@@ -74,11 +74,11 @@ jobs:
       - name: Run tests
         run: yarn test
 
-      - name: Build extension
+      - name: Build production extension
         run: yarn build
 
       - name: Verify production inline helper scope
-        run: node scripts/verify-production-manifest.mjs chrome
+        run: node scripts/verify-manifest-scope.mjs production chrome
 
       - name: Build website
         run: yarn workspace gmail-alias-toolkit-web build
