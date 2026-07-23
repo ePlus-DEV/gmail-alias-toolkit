@@ -4,6 +4,16 @@ import { join } from "node:path";
 const OUTPUT_ROOT = ".output";
 const ALL_URLS = "<all_urls>";
 
+/** Writes one informational line to standard output. */
+function writeInfo(message) {
+  process.stdout.write(`${message}\n`);
+}
+
+/** Writes one error line to standard error. */
+function writeError(message) {
+  process.stderr.write(`ERROR: ${message}\n`);
+}
+
 /** Returns WXT production output directories for one browser. */
 function findBrowserOutputs(browser) {
   return readdirSync(OUTPUT_ROOT, { withFileTypes: true })
@@ -61,7 +71,7 @@ function validateBrowser(browser) {
     const failures = validateManifest(manifestPath);
 
     if (failures.length === 0) {
-      console.log(`Verified production inline helper scope: ${manifestPath}`);
+      writeInfo(`Verified production inline helper scope: ${manifestPath}`);
     }
 
     return failures;
@@ -71,7 +81,7 @@ function validateBrowser(browser) {
 /** Runs the production manifest verification command. */
 function main() {
   if (!existsSync(OUTPUT_ROOT)) {
-    console.error(`ERROR: Missing WXT output directory: ${OUTPUT_ROOT}`);
+    writeError(`Missing WXT output directory: ${OUTPUT_ROOT}`);
     process.exitCode = 1;
     return;
   }
@@ -83,7 +93,7 @@ function main() {
 
   if (failures.length === 0) return;
 
-  failures.forEach((failure) => console.error(`ERROR: ${failure}`));
+  failures.forEach(writeError);
   process.exitCode = 1;
 }
 
