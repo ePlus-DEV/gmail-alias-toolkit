@@ -4,7 +4,9 @@ import { join } from "node:path";
 const OUTPUT_ROOT = ".output";
 const ALL_URLS = "<all_urls>";
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-const SUPPORTED_MODES = new Set(["development", "production"]);
+const DEVELOPMENT_MODE = "development";
+const PRODUCTION_MODE = "production";
+const SUPPORTED_MODES = new Set([DEVELOPMENT_MODE, PRODUCTION_MODE]);
 
 /** Writes one informational line to standard output. */
 function writeInfo(message) {
@@ -104,7 +106,7 @@ function validateManifest(manifestPath, mode) {
     ...(manifest.permissions ?? []),
   ]);
 
-  return mode === "development"
+  return mode === DEVELOPMENT_MODE
     ? validateDevelopmentScope(manifestPath, contentScriptMatches, grantedHosts)
     : validateProductionScope(manifestPath, contentScriptMatches, grantedHosts);
 }
@@ -130,10 +132,10 @@ function validateBrowser(browser, mode) {
 
 /** Parses the expected mode and browser arguments. */
 function parseArguments() {
-  const [mode = "production", ...requestedBrowsers] = process.argv.slice(2);
+  const [mode = PRODUCTION_MODE, ...requestedBrowsers] = process.argv.slice(2);
   if (!SUPPORTED_MODES.has(mode)) {
     throw new Error(
-      `Unsupported mode "${mode}". Use development or production.`,
+      `Unsupported mode "${mode}". Use ${DEVELOPMENT_MODE} or ${PRODUCTION_MODE}.`,
     );
   }
 
