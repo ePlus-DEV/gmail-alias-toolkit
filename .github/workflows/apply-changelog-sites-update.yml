@@ -1,16 +1,18 @@
 name: Apply extension changelog update
 
 on:
-  push:
-    branches:
-      - feat/update-extension-changelog-sites-pagination
+  pull_request:
+    branches: [dev]
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
 
 jobs:
   apply:
-    if: ${{ !contains(github.event.head_commit.message, '[skip apply-update]') }}
+    if: >-
+      github.head_ref == 'feat/update-extension-changelog-sites-pagination' &&
+      !contains(github.event.pull_request.head.label, '[skip apply-update]')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -163,13 +165,15 @@ jobs:
           web_path.write_text(web.replace("v1.3.0", "v1.3.2", 1))
           PY
 
-      - name: Remove one-time workflow
-        run: rm .github/workflows/apply-changelog-sites-update.yml
+      - name: Remove one-time files
+        run: |
+          rm .github/workflows/apply-changelog-sites-update.yml
+          rm .github/.apply-changelog-trigger
 
       - name: Commit patched files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add entrypoints/popup/components/Settings.tsx web/src/App.tsx .github/workflows/apply-changelog-sites-update.yml
+          git add entrypoints/popup/components/Settings.tsx web/src/App.tsx .github/workflows/apply-changelog-sites-update.yml .github/.apply-changelog-trigger
           git commit -m "feat: update changelog and disabled-sites UI [skip apply-update]"
           git push origin HEAD:feat/update-extension-changelog-sites-pagination
