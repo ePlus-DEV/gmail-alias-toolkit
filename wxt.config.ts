@@ -10,12 +10,12 @@ const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
-  /** Defines compile-time values based on the resolved WXT mode. */
-  vite: ({ mode }) => ({
+  /** Maps the legacy content-script flag to Vite's documented runtime environment. */
+  vite: () => ({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
-      __DEV_MODE__: JSON.stringify(mode === "development"),
+      __DEV_MODE__: "import.meta.env.DEV",
     },
     resolve: {
       alias: {
@@ -23,7 +23,7 @@ export default defineConfig({
       },
     },
   }),
-  /** Generates manifest permissions based on the resolved WXT mode. */
+  /** Uses WXT's resolved mode because import.meta.env is unavailable in manifest config. */
   manifest: ({ mode }) => ({
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
