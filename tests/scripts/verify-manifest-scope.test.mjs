@@ -4,11 +4,13 @@ import { afterEach, describe, expect, it } from "vitest";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { validateManifest } from "../../scripts/verify-manifest-scope.mjs";
+import {
+  ALL_URLS,
+  DEV_SITES,
+  INLINE_CONTENT_SCRIPT,
+  validateManifest,
+} from "../../scripts/verify-manifest-scope.mjs";
 
-const ALL_URLS = "<all_urls>";
-const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
 const temporaryDirectories = [];
 
 /** Writes one manifest fixture and returns its path. */
@@ -111,6 +113,15 @@ describe("manifest scope validator", () => {
     );
   });
 
+  it("accepts a valid Firefox-style production manifest", () => {
+    const manifestPath = writeManifest({
+      content_scripts: [inlineHelper([ALL_URLS])],
+      permissions: ["storage", ALL_URLS],
+    });
+
+    expect(validateManifest(manifestPath, "production")).toEqual([]);
+  });
+
   it("validates only the inline helper in production", () => {
     const manifestPath = writeManifest({
       content_scripts: [
@@ -141,6 +152,14 @@ describe("manifest scope validator", () => {
 
     expect(validateManifest(manifestPath, "production")).toEqual([
       `${manifestPath}: inline content script is missing.`,
+    ]);
+  });
+
+  it("reports a missing manifest file", () => {
+    const missingManifestPath = join(tmpdir(), "missing-manifest-scope.json");
+
+    expect(validateManifest(missingManifestPath, "production")).toEqual([
+      `Missing manifest: ${missingManifestPath}`,
     ]);
   });
 
