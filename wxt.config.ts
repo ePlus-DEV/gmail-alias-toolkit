@@ -10,12 +10,10 @@ const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
-  /** Maps the legacy content-script flag to Vite's documented runtime environment. */
   vite: () => ({
     define: {
       "process.emit": "(() => {})",
       "process.env": "{}",
-      __DEV_MODE__: "import.meta.env.DEV",
     },
     resolve: {
       alias: {
