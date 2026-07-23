@@ -1236,7 +1236,7 @@ function MockSettingsPanelHeader({
       <span
         className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
       >
-        v1.3.0
+        v1.3.2
       </span>
     </div>
   );
