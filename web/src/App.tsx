@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import extensionIconUrl from "../../assets/icon.png?url";
 import { ThemeToggle } from "src/components/motion/theme-toggle";
+import { APP_VERSION } from "src/version";
 import { PhaseTwoSections } from "./PhaseTwoSections";
 import {
   ArrowRight,
@@ -1236,7 +1237,7 @@ function MockSettingsPanelHeader({
       <span
         className={`rounded-full px-2 py-1 text-[10px] font-bold text-slate-500 ${muted}`}
       >
-        v1.3.2
+        v{APP_VERSION}
       </span>
     </div>
   );

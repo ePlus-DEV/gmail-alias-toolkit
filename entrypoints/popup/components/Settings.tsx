@@ -17,6 +17,7 @@ import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { getAccountStorageKey, validateEmail } from "../utils";
 import { t } from "../../../lib/i18n";
+import { APP_VERSION } from "src/version";
 import {
   INLINE_DISABLED_SITES_KEY,
   parseDisabledInlineSites,
@@ -724,7 +725,7 @@ export default function Settings({
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const [editingEmail, setEditingEmail] = useState("");
-  const [version, setVersion] = useState("1.3.2");
+  const [version, setVersion] = useState(APP_VERSION);
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [newAccountEmail, setNewAccountEmail] = useState("");
   const [newAccountLabel, setNewAccountLabel] = useState("");
