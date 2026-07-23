@@ -47,7 +47,9 @@ function readManifest(manifestPath) {
 
 /** Returns whether a permission value is a URL pattern. */
 function isUrlPattern(value) {
-  return value === ALL_URLS || value.includes("://") || value.startsWith("about:");
+  return (
+    value === ALL_URLS || value.includes("://") || value.startsWith("about:")
+  );
 }
 
 /** Returns failures for the expected production URL scope. */
