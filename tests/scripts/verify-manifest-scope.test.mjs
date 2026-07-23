@@ -62,7 +62,7 @@ describe("manifest scope validator", () => {
     });
 
     expect(validateManifest(manifestPath, "development")).toContain(
-      `${manifestPath}: development content script includes unexpected matches: *://*/*.` ,
+      `${manifestPath}: development content script includes unexpected matches: *://*/*.`,
     );
   });
 
@@ -74,7 +74,7 @@ describe("manifest scope validator", () => {
     });
 
     expect(validateManifest(manifestPath, "development")).toContain(
-      `${manifestPath}: development host permissions include unexpected patterns: *://*/*.` ,
+      `${manifestPath}: development host permissions include unexpected patterns: *://*/*.`,
     );
   });
 
