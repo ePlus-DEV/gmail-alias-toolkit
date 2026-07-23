@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 // Fix EventEmitter maxListeners warning
 EventEmitter.defaultMaxListeners = 15;
 
-// Dev-only sites to limit reload spam during development
+const ALL_URLS = ["<all_urls>"];
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
@@ -21,7 +22,7 @@ export default defineConfig({
       },
     },
   }),
-  /** Uses WXT's resolved mode because import.meta.env is unavailable in manifest config. */
+  /** Uses WXT's resolved mode because Vite runtime variables are unavailable here. */
   manifest: ({ mode }) => ({
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
@@ -30,7 +31,7 @@ export default defineConfig({
       default_title: "__MSG_extensionName__",
     },
     permissions: ["storage", "clipboardWrite", "contextMenus"],
-    host_permissions: mode === "development" ? DEV_SITES : ["<all_urls>"],
+    host_permissions: mode === "development" ? DEV_SITES : ALL_URLS,
     browser_specific_settings: {
       gecko: {
         id: "{c9d7bdb4-9d7e-4a25-8b4a-0a8d51f3b8b1}",
@@ -41,6 +42,23 @@ export default defineConfig({
       },
     },
   }),
+  hooks: {
+    "build:manifestGenerated": (wxt, manifest) => {
+      const inlineContentScript = manifest.content_scripts?.find(
+        (contentScript) =>
+          contentScript.js?.some((file) =>
+            file.endsWith(INLINE_CONTENT_SCRIPT),
+          ),
+      );
+
+      if (!inlineContentScript) {
+        throw new Error("Inline content script was not generated.");
+      }
+
+      inlineContentScript.matches =
+        wxt.config.mode === "development" ? [...DEV_SITES] : [...ALL_URLS];
+    },
+  },
   autoIcons: {
     developmentIndicator: "overlay",
   },
