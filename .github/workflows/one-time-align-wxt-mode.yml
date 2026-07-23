@@ -26,22 +26,27 @@ jobs:
           set -euo pipefail
 
           python <<'PY'
+          import re
           from pathlib import Path
 
           content_script = Path("entrypoints/content/index.ts")
           workflow = Path(".github/workflows/one-time-align-wxt-mode.yml")
           source = content_script.read_text(encoding="utf-8")
+          pattern = re.compile(
+              r'const contentScriptMatches\s*=\s*import\.meta\.env\.DEV\s*\?\s*DEV_SITES\s*:\s*\["<all_urls>"\];'
+          )
+          replacement = (
+              'const contentScriptMatches =\n'
+              '  import.meta.env.MODE === "development" ? DEV_SITES : ["<all_urls>"];'
+          )
+          updated, replacements = pattern.subn(replacement, source)
 
-          old = '''const contentScriptMatches = import.meta.env.DEV
-            ? DEV_SITES
-            : ["<all_urls>"];'''
-          new = '''const contentScriptMatches =
-            import.meta.env.MODE === "development" ? DEV_SITES : ["<all_urls>"];'''
+          if replacements != 1:
+              raise SystemExit(
+                  f"Expected exactly one import.meta.env.DEV scope check, found {replacements}"
+              )
 
-          if source.count(old) != 1:
-              raise SystemExit("Expected exactly one import.meta.env.DEV scope check")
-
-          content_script.write_text(source.replace(old, new), encoding="utf-8")
+          content_script.write_text(updated, encoding="utf-8")
           workflow.unlink()
           PY
 
