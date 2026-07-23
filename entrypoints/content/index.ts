@@ -1582,7 +1582,8 @@ function observeDOM() {
 
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
 
-const contentScriptMatches = import.meta.env.DEV ? DEV_SITES : ["<all_urls>"];
+const contentScriptMatches =
+  import.meta.env.MODE === "development" ? DEV_SITES : ["<all_urls>"];
 
 export default defineContentScript({
   matches: contentScriptMatches,
