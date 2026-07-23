@@ -3,9 +3,13 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const OUTPUT_ROOT = ".output";
-const ALL_URLS = "<all_urls>";
-const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
-const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
+export const ALL_URLS = "<all_urls>";
+export const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
+export const DEV_SITES = [
+  "*://*.miro.com/*",
+  "*://selfh.st/*",
+  "*://gumroad.com/*",
+];
 const DEVELOPMENT_MODE = "development";
 const PRODUCTION_MODE = "production";
 const DEVELOPMENT_OUTPUT_SUFFIX = "-dev";
