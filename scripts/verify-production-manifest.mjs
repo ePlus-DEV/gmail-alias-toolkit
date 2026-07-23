@@ -77,7 +77,8 @@ function main() {
   }
 
   const requestedBrowsers = process.argv.slice(2);
-  const browsers = requestedBrowsers.length > 0 ? requestedBrowsers : ["chrome"];
+  const browsers =
+    requestedBrowsers.length > 0 ? requestedBrowsers : ["chrome"];
   const failures = browsers.flatMap(validateBrowser);
 
   if (failures.length === 0) return;
