@@ -227,7 +227,9 @@ function main() {
 /** Returns whether this module was launched as the Node.js entrypoint. */
 function isDirectExecution() {
   const entrypoint = process.argv[1];
-  return Boolean(entrypoint && import.meta.url === pathToFileURL(entrypoint).href);
+  return Boolean(
+    entrypoint && import.meta.url === pathToFileURL(entrypoint).href,
+  );
 }
 
 if (isDirectExecution()) main();
