@@ -45,6 +45,11 @@ function readManifest(manifestPath) {
   return JSON.parse(readFileSync(manifestPath, "utf8"));
 }
 
+/** Returns whether a permission value is a URL pattern. */
+function isUrlPattern(value) {
+  return value === ALL_URLS || value.includes("://") || value.startsWith("about:");
+}
+
 /** Returns failures for the expected production URL scope. */
 function validateProductionScope(
   manifestPath,
@@ -85,6 +90,25 @@ function validateDevelopmentScope(
   if (grantedHosts.has(ALL_URLS)) {
     failures.push(
       `${manifestPath}: development host permissions unexpectedly include ${ALL_URLS}.`,
+    );
+  }
+
+  const unexpectedMatches = contentScriptMatches.filter(
+    (match) => match !== ALL_URLS && !DEV_SITES.includes(match),
+  );
+  if (unexpectedMatches.length > 0) {
+    failures.push(
+      `${manifestPath}: development content script includes unexpected matches: ${unexpectedMatches.join(", ")}.`,
+    );
+  }
+
+  const unexpectedHosts = [...grantedHosts].filter(
+    (host) =>
+      host !== ALL_URLS && isUrlPattern(host) && !DEV_SITES.includes(host),
+  );
+  if (unexpectedHosts.length > 0) {
+    failures.push(
+      `${manifestPath}: development host permissions include unexpected patterns: ${unexpectedHosts.join(", ")}.`,
     );
   }
 
