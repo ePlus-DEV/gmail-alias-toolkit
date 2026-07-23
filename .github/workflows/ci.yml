@@ -86,5 +86,13 @@ jobs:
       - name: Verify development inline helper scope
         run: node scripts/verify-manifest-scope.mjs development chrome
 
+      - name: Upload generated manifest diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated-manifest-diagnostics
+          path: .output/*/manifest.json
+          if-no-files-found: warn
+
       - name: Build website
         run: yarn workspace gmail-alias-toolkit-web build
