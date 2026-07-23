@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { APP_VERSION } from "../src/version";
 
 const readSource = (relativePath: string) =>
-  readFileSync(new URL(`../${relativePath}`, import.meta.url), "utf8");
+  readFileSync(resolve(process.cwd(), relativePath), "utf8");
 
 describe("application version", () => {
   it("uses the root package version as the single source of truth", () => {
