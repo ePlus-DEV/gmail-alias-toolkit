@@ -1,19 +1,15 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { resolveInlineDevMatches } from "./inline-dev-matches.mjs";
 
 const OUTPUT_ROOT = ".output";
 export const ALL_URLS = "<all_urls>";
 export const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
-export const DEV_SITES = [
-  "*://*.miro.com/*",
-  "*://selfh.st/*",
-  "*://gumroad.com/*",
-];
+export const DEV_SITES = resolveInlineDevMatches("development");
 const DEVELOPMENT_MODE = "development";
 const PRODUCTION_MODE = "production";
 const DEVELOPMENT_OUTPUT_SUFFIX = "-dev";
-const DEVELOPMENT_RUNTIME_HOSTS = new Set(["http://localhost/*"]);
 const SUPPORTED_MODES = new Set([DEVELOPMENT_MODE, PRODUCTION_MODE]);
 
 /** Writes one informational line to standard output. */
@@ -87,6 +83,7 @@ function validateDevelopmentScope(
   manifestPath,
   contentScriptMatches,
   grantedHosts,
+  expectedDevSites,
 ) {
   const failures = [];
 
@@ -103,7 +100,7 @@ function validateDevelopmentScope(
   }
 
   const unexpectedMatches = (contentScriptMatches ?? []).filter(
-    (match) => match !== ALL_URLS && !DEV_SITES.includes(match),
+    (match) => match !== ALL_URLS && !expectedDevSites.includes(match),
   );
   if (unexpectedMatches.length > 0) {
     failures.push(
@@ -115,8 +112,7 @@ function validateDevelopmentScope(
     (host) =>
       host !== ALL_URLS &&
       isUrlPattern(host) &&
-      !DEVELOPMENT_RUNTIME_HOSTS.has(host) &&
-      !DEV_SITES.includes(host),
+      !expectedDevSites.includes(host),
   );
   if (unexpectedHosts.length > 0) {
     failures.push(
@@ -124,7 +120,7 @@ function validateDevelopmentScope(
     );
   }
 
-  for (const site of DEV_SITES) {
+  for (const site of expectedDevSites) {
     if (contentScriptMatches && !contentScriptMatches.includes(site)) {
       failures.push(
         `${manifestPath}: development content script is missing ${site}.`,
@@ -141,7 +137,11 @@ function validateDevelopmentScope(
 }
 
 /** Returns validation failures for one generated manifest. */
-export function validateManifest(manifestPath, mode) {
+export function validateManifest(
+  manifestPath,
+  mode,
+  expectedDevSites = DEV_SITES,
+) {
   if (!existsSync(manifestPath)) {
     return [`Missing manifest: ${manifestPath}`];
   }
@@ -162,7 +162,12 @@ export function validateManifest(manifestPath, mode) {
   ]);
 
   return mode === DEVELOPMENT_MODE
-    ? validateDevelopmentScope(manifestPath, contentScriptMatches, grantedHosts)
+    ? validateDevelopmentScope(
+        manifestPath,
+        contentScriptMatches,
+        grantedHosts,
+        expectedDevSites,
+      )
     : validateProductionScope(manifestPath, contentScriptMatches, grantedHosts);
 }
 

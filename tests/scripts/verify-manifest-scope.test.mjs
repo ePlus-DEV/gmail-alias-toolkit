@@ -10,6 +10,10 @@ import {
   INLINE_CONTENT_SCRIPT,
   validateManifest,
 } from "../../scripts/verify-manifest-scope.mjs";
+import {
+  DEFAULT_INLINE_DEV_MATCHES,
+  parseInlineDevMatches,
+} from "../../scripts/inline-dev-matches.mjs";
 
 const temporaryDirectories = [];
 
@@ -40,11 +44,37 @@ afterEach(() => {
 describe("manifest scope validator", () => {
   it("accepts WXT's runtime-registered development content script", () => {
     const manifestPath = writeManifest({
-      host_permissions: [...DEV_SITES, "http://localhost/*"],
+      host_permissions: DEV_SITES,
       permissions: ["storage", "scripting"],
     });
 
     expect(validateManifest(manifestPath, "development")).toEqual([]);
+  });
+
+  it("requires env-configured pages to receive the inline helper", () => {
+    const configuredDevSites = parseInlineDevMatches("http://localhost/*");
+    const manifestPath = writeManifest({
+      content_scripts: [inlineHelper(DEFAULT_INLINE_DEV_MATCHES)],
+      host_permissions: configuredDevSites,
+    });
+
+    expect(
+      validateManifest(manifestPath, "development", configuredDevSites),
+    ).toContain(
+      `${manifestPath}: development content script is missing http://localhost/*.`,
+    );
+  });
+
+  it("parses and deduplicates env-configured development matches", () => {
+    expect(
+      parseInlineDevMatches(
+        "http://localhost/*, http://127.0.0.1/* http://localhost/*",
+      ),
+    ).toEqual([
+      ...DEFAULT_INLINE_DEV_MATCHES,
+      "http://localhost/*",
+      "http://127.0.0.1/*",
+    ]);
   });
 
   it("accepts the exact development allowlist", () => {
