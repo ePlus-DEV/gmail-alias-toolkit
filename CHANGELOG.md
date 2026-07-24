@@ -5,6 +5,101 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-07-24
+### :sparkles: New Features
+- [`9730377`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9730377be7c71678e540783dd047389d8b544eaf) - paginate disabled inline sites *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`81621a8`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/81621a8caa52746c4b876e34035a9670efd69759) - add disabled-site filtering *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`99a5b32`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/99a5b3210757a82bb01fcbb44200db6d2d56c0e6) - update changelog and disabled-sites UI *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`e435ec1`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e435ec1c99b0cf2c2fc8144396e25a9a7fb121fb) - resolve web version from latest GitHub release *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`588cc18`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/588cc180656e5cff263100a68d3d434cf1f141e3) - allow web builds to inject release version *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`6554efc`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/6554efc1eec84ffde5c7a0ae0e7ef2951eed4c10) - inject latest GitHub release into web build *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`94eff46`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/94eff46fb06fb9a8ed96512d9c5a8f003aa2172d) - enhance development manifest validation and add test for runtime-registered content script *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`f2e9683`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/f2e96830b77eb8ecad2acfef39a1911bcd50e5cd) - add environment configuration for inline helper and enhance manifest validation *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`67c4ec5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/67c4ec5eac9ef4e2858abca3460720891e88401c) - update inline helper match patterns and improve URL handling in content script *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0c61496`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0c614960bf05c4cb179c343a9d41a85bf38a3adc) - add localized user guide labels *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`96789a6`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/96789a6e8cacee21d4f2b177e05c202c4bb3cfab) - add tracked user guide link *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e156a8a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e156a8a1fe41984ee994f0b7034bced329eb015a) - add localized user guide action to popup header *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ef95855`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ef958555fb42b9ec1697cf572fa00ab74adb3157) - add user guide link to inline popup *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`65282dc`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/65282dcf0e89fddb044016f8f85b1f06f42e22c9) - add user guide button to Settings and remove from PopupHeader *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :bug: Bug Fixes
+- [`b353f92`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b353f921b71a9e872b876410546ff2c638c788bd) - align inline helper with WXT environment *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7a2c078`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7a2c0786dc838014bc5359b0b4056341999a7ea9) - avoid console usage in manifest verifier *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`bfff3c1`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/bfff3c164295ecd5f915c15b43af016835af7ab3) - make one-time WXT mode replacement format-safe *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`cc6a0cf`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/cc6a0cf388e781d8ed9db7c94ca4d0ac6bada8cf) - align content script with WXT build mode *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`44c1240`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/44c1240f759c5cd12399847df7ad3b30676404a9) - generate inline content scope from WXT mode *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`20be629`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/20be629392774fb8b2fc2f325c6ff7a87d56a832) - select generated manifests by WXT mode *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`64f1634`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/64f1634b341d56da70f9062664b3f3b5ab435242) - reject unexpected development URL patterns *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`291128c`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/291128cfed38e0a86d2154c878b33ef1f17c5bf4) - validate only inline helper manifest scope *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b0cdb11`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b0cdb111ac14b286cbe59b24169f824b6c8a5dca) - pin bot approval to reviewed commit *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`6f8931e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/6f8931ee632367b0a75601571ebd08aec18189e1) - make extension update patch indentation-safe *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ff92cf9`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ff92cf981462d959679b85eb15a6c35e1017034b) - reuse localized alias search label *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`09ebc7f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/09ebc7f9dc357159ad415e0a8212a9e683eb3d53) - clarify disabled-site search states *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`71dfa36`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/71dfa36fec1bf052d0fb1c498a39fa13fc021a96) - resolve version test paths from repository root *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e7f2280`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e7f2280b60fa8a65da8751fb9533998689735ab7) - address CodeRabbit release findings *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`c40d80d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c40d80df85a85382f5e104d3ae71383a2fac24bf) - guard browser locale resolution for user guide *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`bb89f81`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/bb89f81ae9b01115e2e03b1eb40f7db4eee0ee6d) - handle user guide navigation failures *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7cb836a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7cb836a820b5f5765c2a415aaaf36ec96090ce3d) - handle popup guide navigation errors *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`4e471c2`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4e471c2f446d8bcced259e3b11a9270ac8895c20) - simplify generated locale coverage test *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`825c707`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/825c707114d91d7a173c51b92e262480203531f9) - simplify WXT locale migration workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :recycle: Refactors
+- [`4ed6cb5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4ed6cb55fdda931dbe8e19cc4bcdbf452d0ade38) - remove custom WXT development flag *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`aff50e8`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/aff50e8dd179f733cecce39b7fdb07363aca182f) - use WXT runtime environment directly *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`eb8212b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/eb8212b97dd83befaec7c3a493c1f9c8f680eb19) - replace production-only manifest verifier *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`dec94a3`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/dec94a31c140bc2c00e66cdaa03c623d85f2ec14) - centralize WXT mode names *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`80ad957`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/80ad957a37225e1e5800ab08ab1cbb4f9124fca1) - keep content script matches static *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`f777b10`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/f777b109fa220726b7159034a624a872e29066a6) - initialize manifest verifier options safely *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`32c3f0b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/32c3f0b69822f775a1985c08422145ad9028e049) - centralize application version metadata *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0c35b8a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0c35b8a47b43b806b1f8ed62cfd3001716f45731) - source displayed version from package metadata *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`5b36146`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/5b361467299872eca9e4c99d22097e38a7ec7691) - use WXT locales for user guide labels *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :white_check_mark: Tests
+- [`7f54aaf`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7f54aafa239dd981a1fa33634ba098393c375872) - verify production inline helper manifest *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`d19795e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/d19795efcfad028b41cca6fa4cdd56a97a0066b9) - verify WXT manifest scope by mode *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`874a63c`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/874a63ca3c395759c7025122cc403ab791f9b3cb) - verify WXT development and production scopes *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7ea4a2a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7ea4a2ad201c2bcf28fdd16da498bfa99ab5494d) - expose manifest validator for unit coverage *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`cbc4b67`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/cbc4b673e66f4c160665a42ad1bee861e9d7f28e) - include Node manifest validator specs *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0c101d5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0c101d5c0f484585295df0c4a52d719b620b8287) - cover manifest scope validation regressions *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ff42dbe`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ff42dbec7a8461fdf48aa897be08d6cea49fc9f3) - share manifest scope constants with specs *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`37231c6`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/37231c6c8660771936dfa87b4c4cc03a87c3a0ef) - cover missing and valid production manifests *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e83862d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e83862d359142b32d053fe4a95ca9c625fea11a9) - cover disabled-site filtering *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ade38e7`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ade38e740a3cd78e19d3d1b61361ff1cfa28d14c) - prevent user-facing version hardcoding *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`76c17bb`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/76c17bbaceabe1e805576bb8202617bb24b780da) - cover GitHub release version resolution *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`c01b230`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c01b230a587ca085f8e7b8ba14fe0334628b2fbf) - cover localized user guide labels *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`73bb4a6`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/73bb4a6d8e4f70f2790dcb176ec84a9ced79f006) - cover user guide tab navigation *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`38f72aa`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/38f72aabbf673813633de4858138079a9c6a59c6) - cover user guide navigation fallbacks *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`9ba3333`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9ba333344fb41a784aa5e5b21723cdb98fa456c4) - cover browser locale resolution for user guide *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`0b81a66`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/0b81a66cf1e2c944bd62d0356486aa4b5a360efa) - document WXT locale coverage callbacks *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :wrench: Chores
+- [`f6ac25a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/f6ac25aa6cd59424d8de4a86f820454df21bad6f) - **deps**: bump brace-expansion from 1.1.15 to 1.1.16 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`42e3553`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/42e355335ea96e104b46e8a8ba79e369a77cef17) - **deps**: bump actions/github-script from 8 to 9 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`1a98dac`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/1a98dac0f645d1bc16f67a1801e45bc21a48dba5) - add one-time WXT environment cleanup *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`d380e3c`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/d380e3c14326837031c2e76f11b5dc4a03afff38) - no-op placeholder *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`f314e5e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/f314e5e0bc3904bd4f34ec163c65aa991f709632) - remove accidental placeholder *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ec7471e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ec7471e0fb20853472486ca8fe8ccb09277009ce) - align content script with WXT mode *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`f2c0085`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/f2c0085ebe7c0b014b19fb85573a4de4909be28e) - move content matches to WXT manifest generation *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`6537b8e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/6537b8eb6b3fae5d61617bbf135e8c67ece55a55) - capture WXT development manifest *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ee06b84`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ee06b84ba5b5406a6298a65ed2fc90fd67d87968) - capture generated development manifest *(commit by [@eplus-bot](https://github.com/eplus-bot))*
+- [`924a3d4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/924a3d4710bdb3eb71ea7fdc209c76f26f5e0a3f) - remove temporary manifest capture *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`beb45d8`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/beb45d818c0405a5d1c53039388554b29f81b950) - set extension version to 1.3.2 *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`8149632`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/8149632b8892853eb9b5e123ea5e875fb62ca3b9) - apply extension changelog update *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`40fe714`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/40fe714418c542de1057703773a7b0e7308efdd7) - trigger extension update workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`fbe503f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/fbe503f99b9615e073d4ce083cc9672ee228a0f5) - rerun extension update workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b8ca5f5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b8ca5f5c54af7fbb88606aedc0d0afaa1e9f2cfa) - run extension update from pull request *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`2d2deff`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2d2deff61b98e32810a5487fc90b4b2fcd20da04) - apply pending extension UI updates *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`cf60a11`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/cf60a11ad5e19bfa4de0dcc661e063126899b5c8) - apply automatic version source update *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`2294c69`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2294c69965c7a5bf80da1a36fbd0487c6302f38e) - capture version test diagnostics *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`fd551dd`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/fd551dd3379d398587bf8f8ae90a0cb06994cc33) - restore standard CI workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`527fba0`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/527fba0814b77a2427419f41263c14fba6e903ed) - prepare inline guide link patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`9c69c7e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9c69c7e8970d896cb900f794eaf53a07b26e29a1) - prepare inline guide CSS cleanup *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7bf49f4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7bf49f4799bd350faf7140f3ed289bd17122df79) - add one-shot WXT locale migration *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`73ce83a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/73ce83a55128debe508dcaab829b5255af5fa725) - prepare WXT locale migration trigger *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`88f95c9`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/88f95c9fcf26ae9d2a2a5b7dc627a44318ea386a) - keep WXT locale migration ready *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`99c4c2d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/99c4c2de2e53f8696dae83e665b9975358d5c0f0) - add one-shot WXT locale migration script *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+
 ## [1.3.1] - 2026-07-20
 ### :sparkles: New Features
 - [`7148619`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7148619a98c09eaaee68376d4cd021149bd70c8f) - **release**: add Edge and Opera zip scripts *(commit by [@hoangsvit](https://github.com/hoangsvit))*
@@ -283,3 +378,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release
   [1.3.0]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.2.0...1.3.0
 [1.3.1]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.0...1.3.1
+[1.3.2]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.1...1.3.2
