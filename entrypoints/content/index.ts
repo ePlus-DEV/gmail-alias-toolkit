@@ -5,6 +5,7 @@ import {
   parseDisabledInlineSites,
 } from "src/utils/inlineSiteSettings";
 import { t } from "../../lib/i18n";
+import { USER_GUIDE_URL } from "src/utils/externalLinks";
 import {
   getPreviousAliasForWebsite,
   generateSuggestionsForWebsite,
@@ -39,9 +40,31 @@ interface EmailInputElement extends HTMLInputElement {
 
 let inlineDisabledForCurrentSite = false;
 
+/** Resolves a usable website URL inside regular and about:blank/srcdoc frames. */
+function currentPageUrl(): string {
+  const ancestorOrigins = window.location.ancestorOrigins
+    ? Array.from(window.location.ancestorOrigins)
+    : [];
+  const candidates = [
+    window.location.href,
+    document.referrer,
+    ...ancestorOrigins.reverse(),
+  ];
+
+  return (
+    candidates.find((candidate) => normalizeHostname(candidate) !== null) ||
+    window.location.href
+  );
+}
+
 /** Gets the normalized hostname for the current site. */
-const currentSiteHostname = () =>
-  normalizeSiteHostname(window.location.hostname);
+function currentSiteHostname(): string {
+  try {
+    return normalizeSiteHostname(new URL(currentPageUrl()).hostname);
+  } catch {
+    return normalizeSiteHostname(window.location.hostname);
+  }
+}
 
 /** Removes all inline helper icons and popups from the page. */
 function removeInlineHelpers() {
@@ -120,7 +143,8 @@ function resolveActiveEmail(accountData: StoredAccountData): string {
 
 /** Fetch suggestion data for current page. */
 async function fetchSuggestions(): Promise<SuggestionData | null> {
-  const normalized = normalizeHostname(window.location.href);
+  const pageUrl = currentPageUrl();
+  const normalized = normalizeHostname(pageUrl);
   if (!normalized) return null;
 
   let email: string | null = null;
@@ -136,8 +160,8 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
   }
 
   const [previousResult, suggestionsResult] = await Promise.allSettled([
-    getPreviousAliasForWebsite(email, window.location.href),
-    generateSuggestionsForWebsite(email, window.location.href),
+    getPreviousAliasForWebsite(email, pageUrl),
+    generateSuggestionsForWebsite(email, pageUrl),
   ]);
 
   return {
@@ -217,12 +241,20 @@ function createPopup(
     nextPage: escapeHtml(t("nextPage")),
     disableInlineForSite: escapeHtml(t("disableInlineForSite")),
     extensionName: escapeHtml(t("extensionName")),
+    userGuide: escapeHtml(t("userGuide")),
     reportReview: escapeHtml(t("reportReview")),
   };
   popup.innerHTML = `
     <div class="gmail-alias-popup-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px 8px 0 0;">
       <span class="gmail-alias-popup-title" title="${safeWebsite}" style="font-weight: 600; font-size: 13px; color: #374151;">${labels.extensionName}</span>
       <div class="gmail-alias-popup-header-actions" style="display: flex; align-items: center; gap: 6px;">
+        <a class="gmail-alias-popup-user-guide" href="${USER_GUIDE_URL}" target="_blank" rel="noopener noreferrer" data-tooltip="${labels.userGuide}" aria-label="${labels.userGuide}">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.1 9a3 3 0 1 1 5.83 1c0 2-3 2-3 4" />
+            <path d="M12 18h.01" />
+          </svg>
+        </a>
         <button class="gmail-alias-popup-disable-site" type="button" data-tooltip="${labels.disableInlineForSite}" aria-label="${labels.disableInlineForSite}">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
@@ -1580,13 +1612,10 @@ function observeDOM() {
   return observer;
 }
 
-const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-
-// @ts-expect-error __DEV_MODE__ injected by Vite at build time
-const contentScriptMatches = __DEV_MODE__ ? DEV_SITES : ["<all_urls>"];
-
 export default defineContentScript({
-  matches: contentScriptMatches,
+  matches: ["<all_urls>"],
+  // Keep the helper in the top document so third-party embedded frames
+  // cannot receive alias suggestions or extension UI.
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,

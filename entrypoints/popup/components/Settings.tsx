@@ -1,8 +1,10 @@
 // skipcq: JS-0415 - Settings sections keep related controls inline for readability in a constrained popup.
 import { useState, useEffect, useCallback } from "react";
+import { CircleHelp } from "lucide-react";
 import Toggle from "./Toggle";
 import Button from "./Button";
 import Input from "./Input";
+import DisabledInlineSitesPanel from "./DisabledInlineSitesPanel";
 import {
   Select,
   SelectContent,
@@ -16,10 +18,12 @@ import { BouncyAccordion } from "src/components/motion/bouncy-accordion";
 import { AnimatedBadge } from "src/components/motion/animated-badge";
 import { getAccountStorageKey, validateEmail } from "../utils";
 import { t } from "../../../lib/i18n";
+import { APP_VERSION } from "src/version";
 import {
   INLINE_DISABLED_SITES_KEY,
   parseDisabledInlineSites,
 } from "src/utils/inlineSiteSettings";
+import { openUserGuide } from "src/utils/externalLinks";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -80,6 +84,59 @@ const DEFAULT_SETTINGS: AppSettings = {
 const TOAST_DURATION = 2000;
 
 const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.3.2",
+    date: "2026-07-24",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Added generated-manifest scope verification with regression coverage for Chrome and Firefox-style permissions",
+        ],
+      },
+      {
+        type: "Changed",
+        items: [
+          "Aligned WXT development and production URL-scope handling",
+          "Restricted development builds to the configured site allowlist while preserving all-site production support",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          "Restored inline popup availability in production builds",
+          "Prevented unrelated content scripts and broad development URL patterns from passing manifest validation",
+        ],
+      },
+    ],
+  },
+  {
+    version: "1.3.1",
+    date: "2026-07-20",
+    changes: [
+      {
+        type: "Added",
+        items: [
+          "Added Edge and Opera release packages with multi-browser installation guidance",
+          "Added an interactive product tour and richer landing-page previews",
+        ],
+      },
+      {
+        type: "Changed",
+        items: [
+          "Improved active email handling across the popup, inline helper, and context menus",
+          "Optimized inline popup behavior and displayed the active base email",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          "Improved user feedback when disabling the inline helper or saving aliases",
+          "Fixed context-menu caching, history loading, injected icon cleanup, and development-site configuration",
+        ],
+      },
+    ],
+  },
   {
     version: "1.3.0",
     date: "2026-07-13",
@@ -653,6 +710,13 @@ function changeBadgeStatus(type: ChangelogChange["type"]) {
   return "info";
 }
 
+/** Opens the public user guide from Settings. */
+function handleOpenUserGuide() {
+  void openUserGuide().catch((error) => {
+    console.error("Failed to open the Gmail Alias Toolkit user guide.", error);
+  });
+}
+
 /** Settings modal with general, accounts, presets, advanced, and changelog tabs. */
 export default function Settings({
   isOpen,
@@ -670,7 +734,7 @@ export default function Settings({
   const [editingAccountId, setEditingAccountId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const [editingEmail, setEditingEmail] = useState("");
-  const [version, setVersion] = useState("1.3.0");
+  const [version, setVersion] = useState(APP_VERSION);
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [newAccountEmail, setNewAccountEmail] = useState("");
   const [newAccountLabel, setNewAccountLabel] = useState("");
@@ -1139,9 +1203,21 @@ export default function Settings({
             </Tooltip>
             <h2 className="text-base font-semibold">{t("settings")}</h2>
           </div>
-          <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
-            v{version}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleOpenUserGuide}
+              className="h-8 gap-1.5 rounded-lg px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
+              aria-label={t("userGuide")}
+            >
+              <CircleHelp className="h-4 w-4" aria-hidden="true" />
+              {t("userGuide")}
+            </Button>
+            <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+              v{version}
+            </span>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -1293,33 +1369,10 @@ export default function Settings({
                       <p className="text-xs text-muted-foreground">
                         {t("inlineDisabledSitesDescription")}
                       </p>
-                      {disabledInlineSites.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-border px-3 py-3 text-center text-xs text-muted-foreground">
-                          {t("noDisabledSites")}
-                        </p>
-                      ) : (
-                        <div className="max-h-36 space-y-1.5 overflow-y-auto">
-                          {disabledInlineSites.map((site) => (
-                            <div
-                              key={site}
-                              className="flex items-center justify-between gap-2 rounded-xl border border-border bg-muted/45 px-3 py-2"
-                            >
-                              <span className="min-w-0 truncate font-mono text-xs text-foreground">
-                                {site}
-                              </span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="shrink-0 rounded-lg px-2 text-xs text-primary hover:bg-primary/10"
-                                onClick={() => enableInlineForSite(site)}
-                                aria-label={`${t("enableInlineForSite")}: ${site}`}
-                              >
-                                {t("enableInlineForSite")}
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      <DisabledInlineSitesPanel
+                        sites={disabledInlineSites}
+                        onEnable={enableInlineForSite}
+                      />
                     </div>
                   ),
                 },

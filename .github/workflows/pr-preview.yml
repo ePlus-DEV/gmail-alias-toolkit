@@ -26,7 +26,6 @@ jobs:
     name: Build preview site
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout production site
         uses: actions/checkout@v7
@@ -53,6 +52,8 @@ jobs:
 
       - name: Build production site
         working-directory: main-site
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           yarn install --immutable --mode=skip-build
           yarn exec wxt prepare

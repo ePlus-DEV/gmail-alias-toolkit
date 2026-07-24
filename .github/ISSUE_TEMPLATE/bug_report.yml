@@ -71,7 +71,7 @@ body:
     id: extension-version
     attributes:
       label: Extension version
-      placeholder: "Example: v1.2.0"
+      placeholder: "Example: vX.Y.Z"
 
   - type: dropdown
     id: mode
