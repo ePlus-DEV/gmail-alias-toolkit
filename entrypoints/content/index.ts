@@ -39,9 +39,31 @@ interface EmailInputElement extends HTMLInputElement {
 
 let inlineDisabledForCurrentSite = false;
 
+/** Resolves a usable website URL inside regular and about:blank/srcdoc frames. */
+function currentPageUrl(): string {
+  const ancestorOrigins = window.location.ancestorOrigins
+    ? Array.from(window.location.ancestorOrigins)
+    : [];
+  const candidates = [
+    window.location.href,
+    document.referrer,
+    ...ancestorOrigins.reverse(),
+  ];
+
+  return (
+    candidates.find((candidate) => normalizeHostname(candidate) !== null) ||
+    window.location.href
+  );
+}
+
 /** Gets the normalized hostname for the current site. */
-const currentSiteHostname = () =>
-  normalizeSiteHostname(window.location.hostname);
+function currentSiteHostname(): string {
+  try {
+    return normalizeSiteHostname(new URL(currentPageUrl()).hostname);
+  } catch {
+    return normalizeSiteHostname(window.location.hostname);
+  }
+}
 
 /** Removes all inline helper icons and popups from the page. */
 function removeInlineHelpers() {
@@ -120,7 +142,8 @@ function resolveActiveEmail(accountData: StoredAccountData): string {
 
 /** Fetch suggestion data for current page. */
 async function fetchSuggestions(): Promise<SuggestionData | null> {
-  const normalized = normalizeHostname(window.location.href);
+  const pageUrl = currentPageUrl();
+  const normalized = normalizeHostname(pageUrl);
   if (!normalized) return null;
 
   let email: string | null = null;
@@ -136,8 +159,8 @@ async function fetchSuggestions(): Promise<SuggestionData | null> {
   }
 
   const [previousResult, suggestionsResult] = await Promise.allSettled([
-    getPreviousAliasForWebsite(email, window.location.href),
-    generateSuggestionsForWebsite(email, window.location.href),
+    getPreviousAliasForWebsite(email, pageUrl),
+    generateSuggestionsForWebsite(email, pageUrl),
   ]);
 
   return {
@@ -1580,13 +1603,10 @@ function observeDOM() {
   return observer;
 }
 
-const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-
-// @ts-expect-error __DEV_MODE__ injected by Vite at build time
-const contentScriptMatches = __DEV_MODE__ ? DEV_SITES : ["<all_urls>"];
-
 export default defineContentScript({
-  matches: contentScriptMatches,
+  matches: ["<all_urls>"],
+  allFrames: true,
+  matchAboutBlank: true,
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,

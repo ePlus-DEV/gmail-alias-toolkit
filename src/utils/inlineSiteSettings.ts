@@ -22,3 +22,14 @@ export function parseDisabledInlineSites(value: unknown): string[] {
     ),
   ).sort((a, b) => a.localeCompare(b));
 }
+
+/** Filters disabled-site hostnames using the same normalization as stored values. */
+export function filterDisabledInlineSites(
+  sites: string[],
+  query: string,
+): string[] {
+  const normalizedQuery = normalizeSiteHostname(query);
+  if (!normalizedQuery) return sites;
+
+  return sites.filter((site) => site.includes(normalizedQuery));
+}

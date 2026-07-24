@@ -1,774 +1,774 @@
 {
-    "extensionName":  {
-                          "message":  "Gmail Alias Toolkit"
-                      },
-    "extensionDescription":  {
-                                 "message":  "Táº¡o vÃ  quáº£n lÃ½ alias Gmail báº±ng cÃº phÃ¡p +tag vÃ  preset"
-                             },
-    "headerSubtitle":  {
-                           "message":  "Táº¡o alias báº±ng cÃº phÃ¡p +tag"
-                       },
-    "settings":  {
-                     "message":  "CÃ i Ä‘áº·t"
-                 },
-    "back":  {
-                 "message":  "Quay láº¡i"
-             },
-    "close":  {
-                  "message":  "ÄÃ³ng"
-              },
-    "cancel":  {
-                   "message":  "Há»§y"
-               },
-    "copy":  {
-                 "message":  "Sao chÃ©p"
-             },
-    "copyAll":  {
-                    "message":  "Sao chÃ©p táº¥t cáº£"
-                },
-    "copyToClipboard":  {
-                            "message":  "Sao chÃ©p vÃ o clipboard"
-                        },
-    "activeGmailAddress":  {
-                               "message":  "Äá»‹a chá»‰ Gmail Ä‘ang hoáº¡t Ä‘á»™ng"
-                           },
-    "addNewAccount":  {
-                          "message":  "ThÃªm tÃ i khoáº£n má»›i"
-                      },
-    "addAccount":  {
-                       "message":  "ThÃªm tÃ i khoáº£n"
-                   },
-    "addNewAccountTitle":  {
-                               "message":  "ThÃªm tÃ i khoáº£n má»›i"
-                           },
-    "emailPlaceholder":  {
-                             "message":  "email.cua.ban"
-                         },
-    "accountLabelPlaceholder":  {
-                                    "message":  "NhÃ£n (tÃ¹y chá»n, vÃ­ dá»¥: CÃ´ng viá»‡c, CÃ¡ nhÃ¢n)"
-                                },
-    "pressTabToAddGmail":  {
-                               "message":  "Nháº¥n $KEY$ Ä‘á»ƒ thÃªm @gmail.com",
-                               "placeholders":  {
-                                                    "key":  {
-                                                                "content":  "$1"
-                                                            }
-                                                }
-                           },
-    "gmailWarning":  {
-                         "message":  "Äá»‹a chá»‰ nÃ y cÃ³ váº» khÃ´ng pháº£i Gmail. Äá»‹a chá»‰ cá»™ng hoáº¡t Ä‘á»™ng tá»‘t nháº¥t vá»›i Gmail."
-                     },
-    "random":  {
-                   "message":  "Ngáº«u nhiÃªn"
-               },
-    "customTags":  {
-                       "message":  "Tháº» tÃ¹y chá»‰nh"
-                   },
-    "gmailTricks":  {
-                        "message":  "Thá»§ thuáº­t Gmail"
-                    },
-    "tabTagsShort":  {
-                         "message":  "Tháº»"
-                     },
-    "tabTricksShort":  {
-                           "message":  "Máº¹o"
-                       },
-    "generating":  {
-                       "message":  "Äang táº¡o"
-                   },
-    "copied":  {
-                   "message":  "ÄÃ£ sao chÃ©p"
-               },
-    "switchToLightMode":  {
-                              "message":  "Chuyá»ƒn sang cháº¿ Ä‘á»™ sÃ¡ng"
-                          },
-    "switchToDarkMode":  {
-                             "message":  "Chuyá»ƒn sang cháº¿ Ä‘á»™ tá»‘i"
-                         },
-    "aliasColumn":  {
-                        "message":  "BÃ­ danh"
-                    },
-    "copyEmailTooltip":  {
-                             "message":  "$EMAIL$ - nháº¥p Ä‘á»ƒ sao chÃ©p",
-                             "placeholders":  {
-                                                  "email":  {
-                                                                "content":  "$1"
-                                                            }
-                                              }
-                         },
-    "pageLabel":  {
-                      "message":  "Trang $PAGE$",
-                      "placeholders":  {
-                                           "page":  {
-                                                        "content":  "$1"
-                                                    }
-                                       }
-                  },
-    "dotTrick":  {
-                     "message":  "Thá»§ thuáº­t dáº¥u cháº¥m"
-                 },
-    "plusTags":  {
-                     "message":  "Tháº» cá»™ng (+)"
-                 },
-    "googlemail":  {
-                       "message":  "Googlemail"
-                   },
-    "removeDots":  {
-                       "message":  "XÃ³a dáº¥u cháº¥m"
-                   },
-    "dotPlus":  {
-                    "message":  "Dáº¥u cháº¥m + Dáº¥u cá»™ng"
-                },
-    "allCombos":  {
-                      "message":  "Táº¥t cáº£ káº¿t há»£p"
-                  },
-    "numberOfVariations":  {
-                               "message":  "Sá»‘ biáº¿n thá»ƒ"
-                           },
-    "randomizeDotPositions":  {
-                                  "message":  "Ngáº«u nhiÃªn vá»‹ trÃ­ dáº¥u cháº¥m"
-                              },
-    "sequential":  {
-                       "message":  "Tuáº§n tá»±"
-                   },
-    "generateTricks":  {
-                           "message":  "Táº¡o thá»§ thuáº­t"
-                       },
-    "generatedVariations":  {
-                                "message":  "Biáº¿n thá»ƒ Ä‘Ã£ táº¡o"
-                            },
-    "gmailTrickInfoLabel":  {
-                                "message":  "Thá»§ thuáº­t Gmail:"
-                            },
-    "gmailTrickInfo":  {
-                           "message":  "Dáº¥u cháº¥m bá»‹ bá» qua vÃ  má»i ná»™i dung sau dáº¥u + sáº½ vÃ o cÃ¹ng má»™t há»™p thÆ°"
-                       },
-    "format":  {
-                   "message":  "Äá»‹nh dáº¡ng"
-               },
-    "privateMailFormat":  {
-                              "message":  "Private Mail (private-mail-xxxx)"
-                          },
-    "randomCharactersFormat":  {
-                                   "message":  "KÃ½ tá»± ngáº«u nhiÃªn (abc123xy)"
-                               },
-    "randomWordsFormat":  {
-                              "message":  "Tá»« ngáº«u nhiÃªn (happy-fox-42)"
-                          },
-    "timestampFormat":  {
-                            "message":  "Dáº¥u thá»i gian (1234567890)"
-                        },
-    "numberOfAliases":  {
-                            "message":  "Sá»‘ bÃ­ danh"
-                        },
-    "generateRandomAliases":  {
-                                  "message":  "Táº¡o $COUNT$ bÃ­ danh ngáº«u nhiÃªn$PLURAL$",
-                                  "placeholders":  {
-                                                       "count":  {
-                                                                     "content":  "$1"
-                                                                 },
-                                                       "plural":  {
-                                                                      "content":  "$2"
-                                                                  }
-                                                   }
-                              },
-    "generatedAliases":  {
-                             "message":  "BÃ­ danh Ä‘Ã£ táº¡o"
-                         },
-    "totalCount":  {
-                       "message":  "Tá»•ng cá»™ng $COUNT$",
-                       "placeholders":  {
-                                            "count":  {
-                                                          "content":  "$1"
-                                                      }
-                                        }
-                   },
-    "copiedAliases":  {
-                          "message":  "ÄÃ£ sao chÃ©p $COUNT$ bÃ­ danh!",
-                          "placeholders":  {
-                                               "count":  {
-                                                             "content":  "$1"
-                                                         }
-                                           }
-                      },
-    "failedToCopy":  {
-                         "message":  "Sao chÃ©p tháº¥t báº¡i"
-                     },
-    "formatPrivateMail":  {
-                              "message":  "Äá»‹nh dáº¡ng: private-mail-xxxx"
-                          },
-    "formatAlphanumeric":  {
-                               "message":  "8 kÃ½ tá»± ngáº«u nhiÃªn"
-                           },
-    "formatWords":  {
-                        "message":  "2 tá»« ngáº«u nhiÃªn"
-                    },
-    "formatTimestamp":  {
-                            "message":  "Dáº¥u thá»i gian Unix"
-                        },
-    "tagPlaceholder":  {
-                           "message":  "Nháº­p tháº» (vÃ­ dá»¥: shopping, work)"
-                       },
-    "generate":  {
-                     "message":  "Táº¡o"
-                 },
-    "yourPresets":  {
-                        "message":  "Preset cá»§a báº¡n"
-                    },
-    "example":  {
-                    "message":  "VÃ­ dá»¥:"
-                },
-    "copyExample":  {
-                        "message":  "Sao chÃ©p vÃ­ dá»¥"
-                    },
-    "recentAliases":  {
-                          "message":  "BÃ­ danh gáº§n Ä‘Ã¢y"
-                      },
-    "favorites":  {
-                      "message":  "YÃªu thÃ­ch"
-                  },
-    "exportAsCsv":  {
-                        "message":  "Xuáº¥t CSV"
-                    },
-    "exportAsJson":  {
-                         "message":  "Xuáº¥t JSON"
-                     },
-    "selectAliases":  {
-                          "message":  "Chá»n bÃ­ danh"
-                      },
-    "select":  {
-                   "message":  "Chá»n"
-               },
-    "starredCount":  {
-                         "message":  "$COUNT$ Ä‘Ã£ Ä‘Ã¡nh dáº¥u sao",
-                         "placeholders":  {
-                                              "count":  {
-                                                            "content":  "$1"
-                                                        }
-                                          }
-                     },
-    "deselectAll":  {
-                        "message":  "Bá» chá»n táº¥t cáº£"
-                    },
-    "selectAll":  {
-                      "message":  "Chá»n táº¥t cáº£"
-                  },
-    "selectedCount":  {
-                          "message":  "ÄÃ£ chá»n $COUNT$",
-                          "placeholders":  {
-                                               "count":  {
-                                                             "content":  "$1"
-                                                         }
-                                           }
-                      },
-    "deleteCount":  {
-                        "message":  "XÃ³a $COUNT$",
-                        "placeholders":  {
-                                             "count":  {
-                                                           "content":  "$1"
-                                                       }
-                                         }
-                    },
-    "allCount":  {
-                     "message":  "Táº¥t cáº£ ($COUNT$)",
-                     "placeholders":  {
-                                          "count":  {
-                                                        "content":  "$1"
-                                                    }
-                                      }
-                 },
-    "favoritesCount":  {
-                           "message":  "YÃªu thÃ­ch ($COUNT$)",
-                           "placeholders":  {
-                                                "count":  {
-                                                              "content":  "$1"
-                                                          }
-                                            }
-                       },
-    "searchAliases":  {
-                          "message":  "TÃ¬m bÃ­ danh..."
-                      },
-    "allTags":  {
-                    "message":  "Táº¥t cáº£ tháº»"
-                },
-    "mostRecent":  {
-                       "message":  "Má»›i nháº¥t"
-                   },
-    "az":  {
-               "message":  "A-Z"
-           },
-    "noFavoritesYet":  {
-                           "message":  "ChÆ°a cÃ³ má»¥c yÃªu thÃ­ch"
-                       },
-    "starEmailsHint":  {
-                           "message":  "ÄÃ¡nh dáº¥u sao email tá»« lá»‹ch sá»­ Ä‘á»ƒ truy cáº­p nhanh táº¡i Ä‘Ã¢y"
-                       },
-    "noResultsFound":  {
-                           "message":  "KhÃ´ng tÃ¬m tháº¥y káº¿t quáº£"
-                       },
-    "differentSearchHint":  {
-                                "message":  "Thá»­ tÃ¬m kiáº¿m hoáº·c bá»™ lá»c khÃ¡c"
-                            },
-    "showQrCode":  {
-                       "message":  "Hiá»ƒn thá»‹ mÃ£ QR"
-                   },
-    "removeFromFavorites":  {
-                                "message":  "XÃ³a khá»i yÃªu thÃ­ch"
-                            },
-    "addToFavorites":  {
-                           "message":  "ThÃªm vÃ o yÃªu thÃ­ch"
-                       },
-    "showingRange":  {
-                         "message":  "Hiá»ƒn thá»‹ $START$-$END$ trÃªn $TOTAL$",
-                         "placeholders":  {
-                                              "start":  {
-                                                            "content":  "$1"
-                                                        },
-                                              "end":  {
-                                                          "content":  "$2"
-                                                      },
-                                              "total":  {
-                                                            "content":  "$3"
-                                                        }
-                                          }
-                     },
-    "perPage":  {
-                    "message":  "$COUNT$ / trang",
-                    "placeholders":  {
-                                         "count":  {
-                                                       "content":  "$1"
-                                                   }
-                                     }
-                },
-    "firstPage":  {
-                      "message":  "Trang Ä‘áº§u"
-                  },
-    "previousPage":  {
-                         "message":  "Trang trÆ°á»›c"
-                     },
-    "nextPage":  {
-                     "message":  "Trang tiáº¿p"
-                 },
-    "lastPage":  {
-                     "message":  "Trang cuá»‘i"
-                 },
-    "scanToCopyAlias":  {
-                            "message":  "QuÃ©t Ä‘á»ƒ sao chÃ©p bÃ­ danh"
-                        },
-    "general":  {
-                    "message":  "Chung"
-                },
-    "accounts":  {
-                     "message":  "TÃ i khoáº£n"
-                 },
-    "changelog":  {
-                      "message":  "Nháº­t kÃ½ thay Ä‘á»•i"
-                  },
-    "appearanceDisplay":  {
-                              "message":  "Giao diá»‡n \u0026 hiá»ƒn thá»‹"
-                          },
-    "theme":  {
-                  "message":  "Chá»§ Ä‘á»"
-              },
-    "themeLight":  {
-                       "message":  "SÃ¡ng"
-                   },
-    "themeDark":  {
-                      "message":  "Tá»‘i"
-                  },
-    "themeAuto":  {
-                      "message":  "Há»‡ thá»‘ng (Tá»± Ä‘á»™ng)"
-                  },
-    "badgeCounter":  {
-                         "message":  "Bá»™ Ä‘áº¿m huy hiá»‡u"
-                     },
-    "badgeNone":  {
-                      "message":  "KhÃ´ng (áº¨n)"
-                  },
-    "badgeTotal":  {
-                       "message":  "Tá»•ng trong lá»‹ch sá»­"
-                   },
-    "badgeAllTime":  {
-                         "message":  "Tá»•ng Ä‘Ã£ táº¡o (Táº¥t cáº£ thá»i gian)"
-                     },
-    "badgeToday":  {
-                       "message":  "Táº¡o hÃ´m nay"
-                   },
-    "badgeWeek":  {
-                      "message":  "Tuáº§n nÃ y"
-                  },
-    "copyNotifications":  {
-                              "message":  "ThÃ´ng bÃ¡o sao chÃ©p"
-                          },
-    "aliasGeneration":  {
-                            "message":  "Táº¡o bÃ­ danh"
-                        },
-    "randomAliasFormat":  {
-                              "message":  "Äá»‹nh dáº¡ng bÃ­ danh ngáº«u nhiÃªn"
-                          },
-    "autoSaveLimit":  {
-                          "message":  "Giá»›i háº¡n tá»± Ä‘á»™ng lÆ°u"
-                      },
-    "aliasesLimit":  {
-                         "message":  "$COUNT$ bÃ­ danh",
-                         "placeholders":  {
-                                              "count":  {
-                                                            "content":  "$1"
-                                                        }
-                                          }
-                     },
-    "customPresets":  {
-                          "message":  "Preset tÃ¹y chá»‰nh"
-                      },
-    "label":  {
-                  "message":  "NhÃ£n"
-              },
-    "tag":  {
-                "message":  "Tháº»"
-            },
-    "addPreset":  {
-                      "message":  "+ ThÃªm preset"
-                  },
-    "dataManagement":  {
-                           "message":  "Quáº£n lÃ½ dá»¯ liá»‡u"
-                       },
-    "export":  {
-                   "message":  "Xuáº¥t"
-               },
-    "import":  {
-                   "message":  "Nháº­p"
-               },
-    "clear":  {
-                  "message":  "XÃ³a"
-              },
-    "resetSettings":  {
-                          "message":  "Äáº·t láº¡i táº¥t cáº£ cÃ i Ä‘áº·t vá» máº·c Ä‘á»‹nh"
-                      },
-    "resetSettingsTitle":  {
-                               "message":  "Äáº·t láº¡i cÃ i Ä‘áº·t?"
-                           },
-    "resetSettingsMessage":  {
-                                 "message":  "Thao tÃ¡c nÃ y sáº½ khÃ´i phá»¥c má»i cÃ i Ä‘áº·t vá» giÃ¡ trá»‹ máº·c Ä‘á»‹nh."
-                             },
-    "reset":  {
-                  "message":  "Äáº·t láº¡i"
-              },
-    "clearHistoryTitle":  {
-                              "message":  "XÃ³a bÃ­ danh gáº§n Ä‘Ã¢y?"
-                          },
-    "clearHistoryMessage":  {
-                                "message":  "Thao tÃ¡c nÃ y xÃ³a táº¥t cáº£ bÃ­ danh khá»i danh sÃ¡ch lá»‹ch sá»­ gáº§n Ä‘Ã¢y."
-                            },
-    "emailAccounts":  {
-                          "message":  "TÃ i khoáº£n email"
-                      },
-    "manageAccountsDescription":  {
-                                      "message":  "Quáº£n lÃ½ cÃ¡c tÃ i khoáº£n Gmail cá»§a báº¡n. Má»—i tÃ i khoáº£n cÃ³ lá»‹ch sá»­, thá»‘ng kÃª vÃ  má»¥c yÃªu thÃ­ch riÃªng."
-                                  },
-    "noAccountsFound":  {
-                            "message":  "KhÃ´ng tÃ¬m tháº¥y tÃ i khoáº£n. Vui lÃ²ng thÃªm tÃ i khoáº£n tá»« mÃ n hÃ¬nh chÃ­nh."
-                        },
-    "emailAddress":  {
-                         "message":  "Äá»‹a chá»‰ email"
-                     },
-    "accountLabel":  {
-                         "message":  "NhÃ£n tÃ i khoáº£n"
-                     },
-    "emailAddressPlaceholder":  {
-                                    "message":  "email.cua.ban@gmail.com"
-                                },
-    "emailChangeWarning":  {
-                               "message":  "Thay Ä‘á»•i email sáº½ di chuyá»ƒn toÃ n bá»™ dá»¯ liá»‡u sang Ä‘á»‹a chá»‰ email má»›i"
-                           },
-    "saveChanges":  {
-                        "message":  "LÆ°u thay Ä‘á»•i"
-                    },
-    "active":  {
-                   "message":  "Äang hoáº¡t Ä‘á»™ng"
-               },
-    "editAccount":  {
-                        "message":  "Sá»­a tÃ i khoáº£n"
-                    },
-    "cannotDeleteLastAccountTitle":  {
-                                         "message":  "KhÃ´ng thá»ƒ xÃ³a tÃ i khoáº£n cuá»‘i cÃ¹ng"
-                                     },
-    "deleteThisAccount":  {
-                              "message":  "XÃ³a tÃ i khoáº£n nÃ y"
-                          },
-    "deleteAccountTitle":  {
-                               "message":  "XÃ³a tÃ i khoáº£n?"
-                           },
-    "deleteAccountMessage":  {
-                                 "message":  "XÃ³a \"$LABEL$\" ($EMAIL$)?\n\nThao tÃ¡c nÃ y sáº½ xÃ³a vÄ©nh viá»…n:\n- ToÃ n bá»™ lá»‹ch sá»­ cá»§a tÃ i khoáº£n nÃ y\n- ToÃ n bá»™ thá»‘ng kÃª\n- ToÃ n bá»™ má»¥c yÃªu thÃ­ch\n\nKhÃ´ng thá»ƒ hoÃ n tÃ¡c thao tÃ¡c nÃ y.",
-                                 "placeholders":  {
-                                                      "label":  {
-                                                                    "content":  "$1"
-                                                                },
-                                                      "email":  {
-                                                                    "content":  "$2"
-                                                                }
-                                                  }
-                             },
-    "delete":  {
-                   "message":  "XÃ³a"
-               },
-    "changeAccountEmailTitle":  {
-                                    "message":  "Thay Ä‘á»•i email tÃ i khoáº£n?"
-                                },
-    "changeAccountEmailMessage":  {
-                                      "message":  "Thay Ä‘á»•i email tá»«\n$OLD_EMAIL$\nthÃ nh\n$NEW_EMAIL$?\n\nThao tÃ¡c nÃ y sáº½:\n- Di chuyá»ƒn toÃ n bá»™ lá»‹ch sá»­, thá»‘ng kÃª vÃ  má»¥c yÃªu thÃ­ch sang email má»›i\n- Cáº­p nháº­t email tÃ i khoáº£n\n- XÃ³a dá»¯ liá»‡u liÃªn quan Ä‘áº¿n email cÅ©\n\nTiáº¿p tá»¥c?",
-                                      "placeholders":  {
-                                                           "old_email":  {
-                                                                             "content":  "$1"
-                                                                         },
-                                                           "new_email":  {
-                                                                             "content":  "$2"
-                                                                         }
-                                                       }
-                                  },
-    "changeEmail":  {
-                        "message":  "Thay Ä‘á»•i email"
-                    },
-    "menuForThisWebsite":  {
-                               "message":  "Cho trang web nÃ y"
-                           },
-    "menuLoading":  {
-                        "message":  "Äang táº£i..."
-                    },
-    "menuRandomEmailAlias":  {
-                                 "message":  "BÃ­ danh email ngáº«u nhiÃªn"
-                             },
-    "menuCustomTags":  {
-                           "message":  "Tháº» tÃ¹y chá»‰nh"
-                       },
-    "menuNoPresets":  {
-                          "message":  "ChÆ°a cÃ³ preset - ThÃªm trong CÃ i Ä‘áº·t"
-                      },
-    "menuGmailTricks":  {
-                            "message":  "Thá»§ thuáº­t Gmail"
-                        },
-    "menuDotVariation":  {
-                             "message":  "Biáº¿n thá»ƒ dáº¥u cháº¥m"
-                         },
-    "menuGooglemailDomain":  {
-                                 "message":  "TÃªn miá»n Googlemail"
-                             },
-    "menuRemoveAllDots":  {
-                              "message":  "XÃ³a táº¥t cáº£ dáº¥u cháº¥m"
-                          },
-    "toastPresetAdded":  {
-                             "message":  "ÄÃ£ thÃªm preset"
-                         },
-    "toastPresetRemoved":  {
-                               "message":  "ÄÃ£ xÃ³a preset"
-                           },
-    "toastSettingsExported":  {
-                                  "message":  "ÄÃ£ xuáº¥t cÃ i Ä‘áº·t"
-                              },
-    "toastSettingsImported":  {
-                                  "message":  "ÄÃ£ nháº­p cÃ i Ä‘áº·t"
-                              },
-    "toastImportFailed":  {
-                              "message":  "Nháº­p tháº¥t báº¡i - tá»‡p khÃ´ng há»£p lá»‡"
-                          },
-    "toastSettingsReset":  {
-                               "message":  "CÃ i Ä‘áº·t Ä‘Ã£ Ä‘Æ°á»£c Ä‘áº·t vá» máº·c Ä‘á»‹nh"
-                           },
-    "toastAccountSwitched":  {
-                                 "message":  "ÄÃ£ chuyá»ƒn tÃ i khoáº£n"
-                             },
-    "toastAccountDeleted":  {
-                                "message":  "ÄÃ£ xÃ³a tÃ i khoáº£n"
-                            },
-    "toastAccountUpdated":  {
-                                "message":  "ÄÃ£ cáº­p nháº­t tÃ i khoáº£n"
-                            },
-    "toastAccountAdded":  {
-                              "message":  "ÄÃ£ thÃªm $LABEL$",
-                              "placeholders":  {
-                                                   "label":  {
-                                                                 "content":  "$1"
-                                                             }
-                                               }
-                          },
-    "errorLabelRequired":  {
-                               "message":  "NhÃ£n khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng"
-                           },
-    "errorInvalidEmail":  {
-                              "message":  "Vui lÃ²ng nháº­p Ä‘á»‹a chá»‰ email há»£p lá»‡"
-                          },
-    "errorDuplicateEmail":  {
-                                "message":  "Äá»‹a chá»‰ email nÃ y Ä‘Ã£ Ä‘Æ°á»£c tÃ i khoáº£n khÃ¡c sá»­ dá»¥ng"
-                            },
-    "errorEnterEmail":  {
-                            "message":  "Vui lÃ²ng nháº­p Ä‘á»‹a chá»‰ email"
-                        },
-    "errorAccountExists":  {
-                               "message":  "TÃ i khoáº£n nÃ y Ä‘Ã£ tá»“n táº¡i"
-                           },
-    "toastQrFailed":  {
-                          "message":  "Táº¡o mÃ£ QR tháº¥t báº¡i"
-                      },
-    "toastExportedAliases":  {
-                                 "message":  "ÄÃ£ xuáº¥t $COUNT$ bÃ­ danh",
-                                 "placeholders":  {
-                                                      "count":  {
-                                                                    "content":  "$1"
-                                                                }
-                                                  }
-                             },
-    "toastDeletedAliases":  {
-                                "message":  "ÄÃ£ xÃ³a $COUNT$ bÃ­ danh",
-                                "placeholders":  {
-                                                     "count":  {
-                                                                   "content":  "$1"
-                                                               }
-                                                 }
-                            },
-    "toastHistoryCleared":  {
-                                "message":  "ÄÃ£ xÃ³a lá»‹ch sá»­"
-                            },
-    "toastFavoriteAdded":  {
-                               "message":  "ÄÃ£ thÃªm vÃ o yÃªu thÃ­ch"
-                           },
-    "toastFavoriteRemoved":  {
-                                 "message":  "ÄÃ£ xÃ³a khá»i yÃªu thÃ­ch"
-                             },
-    "toastCopiedEmail":  {
-                             "message":  "ÄÃ£ sao chÃ©p $EMAIL$",
-                             "placeholders":  {
-                                                  "email":  {
-                                                                "content":  "$1"
-                                                            }
-                                              }
-                         },
-    "toastCopyFailed":  {
-                            "message":  "Sao chÃ©p tháº¥t báº¡i"
-                        },
-    "welcomeTitle":  {
-                         "message":  "ChÃ o má»«ng Ä‘áº¿n vá»›i Gmail Alias Toolkit"
-                     },
-    "welcomeSubtitle":  {
-                            "message":  "Táº¡o bÃ­ danh email khÃ´ng giá»›i háº¡n Ä‘á»ƒ báº£o vá»‡ riÃªng tÆ° vÃ  sáº¯p xáº¿p tá»‘t hÆ¡n"
-                        },
-    "letsGetStarted":  {
-                           "message":  "Báº¯t Ä‘áº§u thÃ´i"
-                       },
-    "enterGmailAddress":  {
-                              "message":  "Nháº­p Ä‘á»‹a chá»‰ Gmail cá»§a báº¡n"
-                          },
-    "pressTabForGmail":  {
-                             "message":  "Nháº¥n $KEY$ Ä‘á»ƒ thÃªm @gmail.com",
-                             "placeholders":  {
-                                                  "key":  {
-                                                              "content":  "$1"
-                                                          }
-                                              }
-                         },
-    "settingUp":  {
-                      "message":  "Äang thiáº¿t láº­p..."
-                  },
-    "getStarted":  {
-                       "message":  "Báº¯t Ä‘áº§u"
-                   },
-    "advancedSetup":  {
-                          "message":  "Thiáº¿t láº­p nÃ¢ng cao trong CÃ i Ä‘áº·t"
-                      },
-    "whatYouCanDo":  {
-                         "message":  "Báº¡n cÃ³ thá»ƒ lÃ m gÃ¬:"
-                     },
-    "featurePrivateEmail":  {
-                                "message":  "TrÃ¬nh táº¡o email riÃªng tÆ°"
-                            },
-    "featureCustomTags":  {
-                              "message":  "Tháº» \u0026 preset tÃ¹y chá»‰nh"
-                          },
-    "featureGmailTricks":  {
-                               "message":  "Thá»§ thuáº­t Gmail nÃ¢ng cao"
-                           },
-    "welcomeFooter":  {
-                          "message":  "Táº¥t cáº£ dá»¯ liá»‡u Ä‘Æ°á»£c lÆ°u cá»¥c bá»™. KhÃ´ng theo dÃµi, khÃ´ng mÃ¡y chá»§."
-                      },
-    "favoritesSaved":  {
-                           "message":  "ÄÃ£ lÆ°u $COUNT$",
-                           "placeholders":  {
-                                                "count":  {
-                                                              "content":  "$1"
-                                                          }
-                                            }
-                       },
-    "clickStarHint":  {
-                          "message":  "Nháº¥p vÃ o sao trÃªn báº¥t ká»³ bÃ­ danh nÃ o trong lá»‹ch sá»­ Ä‘á»ƒ thÃªm vÃ o Ä‘Ã¢y"
-                      },
-    "viewStatistics":  {
-                           "message":  "Xem thá»‘ng kÃª"
-                       },
-    "statistics":  {
-                       "message":  "Thá»‘ng kÃª"
-                   },
-    "metricsTab":  {
-                       "message":  "Chá»‰ sá»‘"
-                   },
-    "timelineTab":  {
-                        "message":  "DÃ²ng thá»i gian"
-                    },
-    "tagsTab":  {
-                    "message":  "Tháº»"
-                },
-    "totalGenerated":  {
-                           "message":  "Tá»•ng Ä‘Ã£ táº¡o"
-                       },
-    "createdToday":  {
-                         "message":  "Táº¡o hÃ´m nay"
-                     },
-    "thisWeek":  {
-                     "message":  "Tuáº§n nÃ y"
-                 },
-    "thisMonth":  {
-                      "message":  "ThÃ¡ng nÃ y"
-                  },
-    "topTag":  {
-                   "message":  "Tháº» hÃ ng Ä‘áº§u"
-               },
-    "totalTags":  {
-                      "message":  "Tá»•ng sá»‘ tháº»"
-                  },
-    "noTagsYet":  {
-                      "message":  "ChÆ°a cÃ³ tháº»"
-                  },
-    "disableInlineForSite":  {
-                                 "message":  "Táº¯t trá»£ lÃ½ nhanh trÃªn website nÃ y"
-                             },
-    "inlineDisabledSites":  {
-                                "message":  "Website Ä‘Ã£ táº¯t trá»£ lÃ½ nhanh"
-                            },
-    "inlineDisabledSitesDescription":  {
-                                           "message":  "Biá»ƒu tÆ°á»£ng vÃ  popup thao tÃ¡c nhanh sáº½ bá»‹ áº©n trÃªn cÃ¡c website nÃ y."
-                                       },
-    "noDisabledSites":  {
-                            "message":  "ChÆ°a táº¯t trÃªn website nÃ o"
-                        },
-    "enableInlineForSite":  {
-                                "message":  "Báº­t láº¡i"
-                            },
-    "reportReview":  {
-                         "message":  "BÃ¡o lá»—i / ÄÃ¡nh giÃ¡"
-                     },
-    "percentLabel":  {
-                         "message":  "$PERCENT$%",
-                         "placeholders":  {
-                                              "percent":  {
-                                                              "content":  "$1"
-                                                          }
-                                          }
-                     },
-    "retry":  {
-                  "message":  "Thử lại"
-              },
-    "enable":  {
-                   "message":  "Kích hoạt"
-               },
-    "storageError":  {
-                         "message":  "Không thể tải lịch sử. Kiểm tra quyền truy cập bộ nhớ."
-                     }
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "Tạo và quản lý alias Gmail bằng cú pháp +tag và preset"
+  },
+  "headerSubtitle": {
+    "message": "Tạo alias bằng cú pháp +tag"
+  },
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "back": {
+    "message": "Quay lại"
+  },
+  "close": {
+    "message": "Đóng"
+  },
+  "cancel": {
+    "message": "Hủy"
+  },
+  "copy": {
+    "message": "Sao chép"
+  },
+  "copyAll": {
+    "message": "Sao chép tất cả"
+  },
+  "copyToClipboard": {
+    "message": "Sao chép vào clipboard"
+  },
+  "activeGmailAddress": {
+    "message": "Địa chỉ Gmail đang hoạt động"
+  },
+  "addNewAccount": {
+    "message": "Thêm tài khoản mới"
+  },
+  "addAccount": {
+    "message": "Thêm tài khoản"
+  },
+  "addNewAccountTitle": {
+    "message": "Thêm tài khoản mới"
+  },
+  "emailPlaceholder": {
+    "message": "email.cua.ban"
+  },
+  "accountLabelPlaceholder": {
+    "message": "Nhãn (tùy chọn, ví dụ: Công việc, Cá nhân)"
+  },
+  "pressTabToAddGmail": {
+    "message": "Nhấn $KEY$ để thêm @gmail.com",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "Địa chỉ này có vẻ không phải Gmail. Địa chỉ cộng hoạt động tốt nhất với Gmail."
+  },
+  "random": {
+    "message": "Ngẫu nhiên"
+  },
+  "customTags": {
+    "message": "Thẻ tùy chỉnh"
+  },
+  "gmailTricks": {
+    "message": "Thủ thuật Gmail"
+  },
+  "tabTagsShort": {
+    "message": "Thẻ"
+  },
+  "tabTricksShort": {
+    "message": "Mẹo"
+  },
+  "generating": {
+    "message": "Đang tạo"
+  },
+  "copied": {
+    "message": "Đã sao chép"
+  },
+  "switchToLightMode": {
+    "message": "Chuyển sang chế độ sáng"
+  },
+  "switchToDarkMode": {
+    "message": "Chuyển sang chế độ tối"
+  },
+  "aliasColumn": {
+    "message": "Bí danh"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - nhấp để sao chép",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "Trang $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "Thủ thuật dấu chấm"
+  },
+  "plusTags": {
+    "message": "Thẻ cộng (+)"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "Xóa dấu chấm"
+  },
+  "dotPlus": {
+    "message": "Dấu chấm + Dấu cộng"
+  },
+  "allCombos": {
+    "message": "Tất cả kết hợp"
+  },
+  "numberOfVariations": {
+    "message": "Số biến thể"
+  },
+  "randomizeDotPositions": {
+    "message": "Ngẫu nhiên vị trí dấu chấm"
+  },
+  "sequential": {
+    "message": "Tuần tự"
+  },
+  "generateTricks": {
+    "message": "Tạo thủ thuật"
+  },
+  "generatedVariations": {
+    "message": "Biến thể đã tạo"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Thủ thuật Gmail:"
+  },
+  "gmailTrickInfo": {
+    "message": "Dấu chấm bị bỏ qua và mọi nội dung sau dấu + sẽ vào cùng một hộp thư"
+  },
+  "format": {
+    "message": "Định dạng"
+  },
+  "privateMailFormat": {
+    "message": "Private Mail (private-mail-xxxx)"
+  },
+  "randomCharactersFormat": {
+    "message": "Ký tự ngẫu nhiên (abc123xy)"
+  },
+  "randomWordsFormat": {
+    "message": "Từ ngẫu nhiên (happy-fox-42)"
+  },
+  "timestampFormat": {
+    "message": "Dấu thời gian (1234567890)"
+  },
+  "numberOfAliases": {
+    "message": "Số bí danh"
+  },
+  "generateRandomAliases": {
+    "message": "Tạo $COUNT$ bí danh ngẫu nhiên$PLURAL$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "Bí danh đã tạo"
+  },
+  "totalCount": {
+    "message": "Tổng cộng $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "Đã sao chép $COUNT$ bí danh!",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "Sao chép thất bại"
+  },
+  "formatPrivateMail": {
+    "message": "Định dạng: private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 ký tự ngẫu nhiên"
+  },
+  "formatWords": {
+    "message": "2 từ ngẫu nhiên"
+  },
+  "formatTimestamp": {
+    "message": "Dấu thời gian Unix"
+  },
+  "tagPlaceholder": {
+    "message": "Nhập thẻ (ví dụ: shopping, work)"
+  },
+  "generate": {
+    "message": "Tạo"
+  },
+  "yourPresets": {
+    "message": "Preset của bạn"
+  },
+  "example": {
+    "message": "Ví dụ:"
+  },
+  "copyExample": {
+    "message": "Sao chép ví dụ"
+  },
+  "recentAliases": {
+    "message": "Bí danh gần đây"
+  },
+  "favorites": {
+    "message": "Yêu thích"
+  },
+  "exportAsCsv": {
+    "message": "Xuất CSV"
+  },
+  "exportAsJson": {
+    "message": "Xuất JSON"
+  },
+  "selectAliases": {
+    "message": "Chọn bí danh"
+  },
+  "select": {
+    "message": "Chọn"
+  },
+  "starredCount": {
+    "message": "$COUNT$ đã đánh dấu sao",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "Bỏ chọn tất cả"
+  },
+  "selectAll": {
+    "message": "Chọn tất cả"
+  },
+  "selectedCount": {
+    "message": "Đã chọn $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "Xóa $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "Tất cả ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "Yêu thích ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "Tìm bí danh..."
+  },
+  "allTags": {
+    "message": "Tất cả thẻ"
+  },
+  "mostRecent": {
+    "message": "Mới nhất"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "Chưa có mục yêu thích"
+  },
+  "starEmailsHint": {
+    "message": "Đánh dấu sao email từ lịch sử để truy cập nhanh tại đây"
+  },
+  "noResultsFound": {
+    "message": "Không tìm thấy kết quả"
+  },
+  "differentSearchHint": {
+    "message": "Thử tìm kiếm hoặc bộ lọc khác"
+  },
+  "showQrCode": {
+    "message": "Hiển thị mã QR"
+  },
+  "removeFromFavorites": {
+    "message": "Xóa khỏi yêu thích"
+  },
+  "addToFavorites": {
+    "message": "Thêm vào yêu thích"
+  },
+  "showingRange": {
+    "message": "Hiển thị $START$-$END$ trên $TOTAL$",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / trang",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "Trang đầu"
+  },
+  "previousPage": {
+    "message": "Trang trước"
+  },
+  "nextPage": {
+    "message": "Trang tiếp"
+  },
+  "lastPage": {
+    "message": "Trang cuối"
+  },
+  "scanToCopyAlias": {
+    "message": "Quét để sao chép bí danh"
+  },
+  "general": {
+    "message": "Chung"
+  },
+  "accounts": {
+    "message": "Tài khoản"
+  },
+  "changelog": {
+    "message": "Nhật ký thay đổi"
+  },
+  "appearanceDisplay": {
+    "message": "Giao diện & hiển thị"
+  },
+  "theme": {
+    "message": "Chủ đề"
+  },
+  "themeLight": {
+    "message": "Sáng"
+  },
+  "themeDark": {
+    "message": "Tối"
+  },
+  "themeAuto": {
+    "message": "Hệ thống (Tự động)"
+  },
+  "badgeCounter": {
+    "message": "Bộ đếm huy hiệu"
+  },
+  "badgeNone": {
+    "message": "Không (Ẩn)"
+  },
+  "badgeTotal": {
+    "message": "Tổng trong lịch sử"
+  },
+  "badgeAllTime": {
+    "message": "Tổng đã tạo (Tất cả thời gian)"
+  },
+  "badgeToday": {
+    "message": "Tạo hôm nay"
+  },
+  "badgeWeek": {
+    "message": "Tuần này"
+  },
+  "copyNotifications": {
+    "message": "Thông báo sao chép"
+  },
+  "aliasGeneration": {
+    "message": "Tạo bí danh"
+  },
+  "randomAliasFormat": {
+    "message": "Định dạng bí danh ngẫu nhiên"
+  },
+  "autoSaveLimit": {
+    "message": "Giới hạn tự động lưu"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ bí danh",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "Preset tùy chỉnh"
+  },
+  "label": {
+    "message": "Nhãn"
+  },
+  "tag": {
+    "message": "Thẻ"
+  },
+  "addPreset": {
+    "message": "+ Thêm preset"
+  },
+  "dataManagement": {
+    "message": "Quản lý dữ liệu"
+  },
+  "export": {
+    "message": "Xuất"
+  },
+  "import": {
+    "message": "Nhập"
+  },
+  "clear": {
+    "message": "Xóa"
+  },
+  "resetSettings": {
+    "message": "Đặt lại tất cả cài đặt về mặc định"
+  },
+  "resetSettingsTitle": {
+    "message": "Đặt lại cài đặt?"
+  },
+  "resetSettingsMessage": {
+    "message": "Thao tác này sẽ khôi phục mọi cài đặt về giá trị mặc định."
+  },
+  "reset": {
+    "message": "Đặt lại"
+  },
+  "clearHistoryTitle": {
+    "message": "Xóa bí danh gần đây?"
+  },
+  "clearHistoryMessage": {
+    "message": "Thao tác này xóa tất cả bí danh khỏi danh sách lịch sử gần đây."
+  },
+  "emailAccounts": {
+    "message": "Tài khoản email"
+  },
+  "manageAccountsDescription": {
+    "message": "Quản lý các tài khoản Gmail của bạn. Mỗi tài khoản có lịch sử, thống kê và mục yêu thích riêng."
+  },
+  "noAccountsFound": {
+    "message": "Không tìm thấy tài khoản. Vui lòng thêm tài khoản từ màn hình chính."
+  },
+  "emailAddress": {
+    "message": "Địa chỉ email"
+  },
+  "accountLabel": {
+    "message": "Nhãn tài khoản"
+  },
+  "emailAddressPlaceholder": {
+    "message": "email.cua.ban@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "Thay đổi email sẽ di chuyển toàn bộ dữ liệu sang địa chỉ email mới"
+  },
+  "saveChanges": {
+    "message": "Lưu thay đổi"
+  },
+  "active": {
+    "message": "Đang hoạt động"
+  },
+  "editAccount": {
+    "message": "Sửa tài khoản"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "Không thể xóa tài khoản cuối cùng"
+  },
+  "deleteThisAccount": {
+    "message": "Xóa tài khoản này"
+  },
+  "deleteAccountTitle": {
+    "message": "Xóa tài khoản?"
+  },
+  "deleteAccountMessage": {
+    "message": "Xóa \"$LABEL$\" ($EMAIL$)?\n\nThao tác này sẽ xóa vĩnh viễn:\n- Toàn bộ lịch sử của tài khoản này\n- Toàn bộ thống kê\n- Toàn bộ mục yêu thích\n\nKhông thể hoàn tác thao tác này.",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "Xóa"
+  },
+  "changeAccountEmailTitle": {
+    "message": "Thay đổi email tài khoản?"
+  },
+  "changeAccountEmailMessage": {
+    "message": "Thay đổi email từ\n$OLD_EMAIL$\nthành\n$NEW_EMAIL$?\n\nThao tác này sẽ:\n- Di chuyển toàn bộ lịch sử, thống kê và mục yêu thích sang email mới\n- Cập nhật email tài khoản\n- Xóa dữ liệu liên quan đến email cũ\n\nTiếp tục?",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "Thay đổi email"
+  },
+  "menuForThisWebsite": {
+    "message": "Cho trang web này"
+  },
+  "menuLoading": {
+    "message": "Đang tải..."
+  },
+  "menuRandomEmailAlias": {
+    "message": "Bí danh email ngẫu nhiên"
+  },
+  "menuCustomTags": {
+    "message": "Thẻ tùy chỉnh"
+  },
+  "menuNoPresets": {
+    "message": "Chưa có preset - Thêm trong Cài đặt"
+  },
+  "menuGmailTricks": {
+    "message": "Thủ thuật Gmail"
+  },
+  "menuDotVariation": {
+    "message": "Biến thể dấu chấm"
+  },
+  "menuGooglemailDomain": {
+    "message": "Tên miền Googlemail"
+  },
+  "menuRemoveAllDots": {
+    "message": "Xóa tất cả dấu chấm"
+  },
+  "toastPresetAdded": {
+    "message": "Đã thêm preset"
+  },
+  "toastPresetRemoved": {
+    "message": "Đã xóa preset"
+  },
+  "toastSettingsExported": {
+    "message": "Đã xuất cài đặt"
+  },
+  "toastSettingsImported": {
+    "message": "Đã nhập cài đặt"
+  },
+  "toastImportFailed": {
+    "message": "Nhập thất bại - tệp không hợp lệ"
+  },
+  "toastSettingsReset": {
+    "message": "Cài đặt đã được đặt về mặc định"
+  },
+  "toastAccountSwitched": {
+    "message": "Đã chuyển tài khoản"
+  },
+  "toastAccountDeleted": {
+    "message": "Đã xóa tài khoản"
+  },
+  "toastAccountUpdated": {
+    "message": "Đã cập nhật tài khoản"
+  },
+  "toastAccountAdded": {
+    "message": "Đã thêm $LABEL$",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "Nhãn không được để trống"
+  },
+  "errorInvalidEmail": {
+    "message": "Vui lòng nhập địa chỉ email hợp lệ"
+  },
+  "errorDuplicateEmail": {
+    "message": "Địa chỉ email này đã được tài khoản khác sử dụng"
+  },
+  "errorEnterEmail": {
+    "message": "Vui lòng nhập địa chỉ email"
+  },
+  "errorAccountExists": {
+    "message": "Tài khoản này đã tồn tại"
+  },
+  "toastQrFailed": {
+    "message": "Tạo mã QR thất bại"
+  },
+  "toastExportedAliases": {
+    "message": "Đã xuất $COUNT$ bí danh",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "Đã xóa $COUNT$ bí danh",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "Đã xóa lịch sử"
+  },
+  "toastFavoriteAdded": {
+    "message": "Đã thêm vào yêu thích"
+  },
+  "toastFavoriteRemoved": {
+    "message": "Đã xóa khỏi yêu thích"
+  },
+  "toastCopiedEmail": {
+    "message": "Đã sao chép $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "Sao chép thất bại"
+  },
+  "welcomeTitle": {
+    "message": "Chào mừng đến với Gmail Alias Toolkit"
+  },
+  "welcomeSubtitle": {
+    "message": "Tạo bí danh email không giới hạn để bảo vệ riêng tư và sắp xếp tốt hơn"
+  },
+  "letsGetStarted": {
+    "message": "Bắt đầu thôi"
+  },
+  "enterGmailAddress": {
+    "message": "Nhập địa chỉ Gmail của bạn"
+  },
+  "pressTabForGmail": {
+    "message": "Nhấn $KEY$ để thêm @gmail.com",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "Đang thiết lập..."
+  },
+  "getStarted": {
+    "message": "Bắt đầu"
+  },
+  "advancedSetup": {
+    "message": "Thiết lập nâng cao trong Cài đặt"
+  },
+  "whatYouCanDo": {
+    "message": "Bạn có thể làm gì:"
+  },
+  "featurePrivateEmail": {
+    "message": "Trình tạo email riêng tư"
+  },
+  "featureCustomTags": {
+    "message": "Thẻ & preset tùy chỉnh"
+  },
+  "featureGmailTricks": {
+    "message": "Thủ thuật Gmail nâng cao"
+  },
+  "welcomeFooter": {
+    "message": "Tất cả dữ liệu được lưu cục bộ. Không theo dõi, không máy chủ."
+  },
+  "favoritesSaved": {
+    "message": "Đã lưu $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "Nhấp vào sao trên bất kỳ bí danh nào trong lịch sử để thêm vào đây"
+  },
+  "viewStatistics": {
+    "message": "Xem thống kê"
+  },
+  "statistics": {
+    "message": "Thống kê"
+  },
+  "metricsTab": {
+    "message": "Chỉ số"
+  },
+  "timelineTab": {
+    "message": "Dòng thời gian"
+  },
+  "tagsTab": {
+    "message": "Thẻ"
+  },
+  "totalGenerated": {
+    "message": "Tổng đã tạo"
+  },
+  "createdToday": {
+    "message": "Tạo hôm nay"
+  },
+  "thisWeek": {
+    "message": "Tuần này"
+  },
+  "thisMonth": {
+    "message": "Tháng này"
+  },
+  "topTag": {
+    "message": "Thẻ hàng đầu"
+  },
+  "totalTags": {
+    "message": "Tổng số thẻ"
+  },
+  "noTagsYet": {
+    "message": "Chưa có thẻ"
+  },
+  "disableInlineForSite": {
+    "message": "Tắt trợ lý nhanh trên website này"
+  },
+  "inlineDisabledSites": {
+    "message": "Website đã tắt trợ lý nhanh"
+  },
+  "inlineDisabledSitesDescription": {
+    "message": "Biểu tượng và popup thao tác nhanh sẽ bị ẩn trên các website này."
+  },
+  "noDisabledSites": {
+    "message": "Chưa tắt trên website nào"
+  },
+  "enableInlineForSite": {
+    "message": "Bật lại"
+  },
+  "reportReview": {
+    "message": "Báo lỗi / Đánh giá"
+  },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "enable": {
+    "message": "Kích hoạt"
+  },
+  "retry": {
+    "message": "Thử lại"
+  },
+  "storageError": {
+    "message": "Không thể tải lịch sử. Kiểm tra quyền truy cập bộ nhớ."
+  }
 }

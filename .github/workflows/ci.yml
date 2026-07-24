@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -21,6 +21,78 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.EPLUS_BOT_TOKEN }}
+
+      - name: Apply PR 78 CodeRabbit fixes
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 78
+        run: |
+          set -euo pipefail
+          python <<'PY'
+          from pathlib import Path
+
+          preview = Path(".github/workflows/pr-preview.yml")
+          text = preview.read_text()
+          token_expression = "$" + "{{ github.token }}"
+          job_token = f"    env:\n      GITHUB_TOKEN: {token_expression}\n\n"
+          if job_token not in text:
+              raise SystemExit("Expected job-level GITHUB_TOKEN block was not found")
+          text = text.replace(job_token, "", 1)
+
+          production_marker = (
+              "      - name: Build production site\n"
+              "        working-directory: main-site\n"
+          )
+          production_replacement = production_marker + (
+              "        env:\n"
+              f"          GITHUB_TOKEN: {token_expression}\n"
+          )
+          if production_marker not in text:
+              raise SystemExit("Expected production build step was not found")
+          preview.write_text(text.replace(production_marker, production_replacement, 1))
+
+          content = Path("entrypoints/content/index.ts")
+          text = content.read_text()
+          frame_options = "  allFrames: true,\n  matchAboutBlank: true,\n"
+          if frame_options not in text:
+              raise SystemExit("Expected all-frame content-script options were not found")
+          top_frame_note = (
+              "  // Keep the helper in the top document so third-party embedded frames\n"
+              "  // cannot receive alias suggestions or extension UI.\n"
+          )
+          content.write_text(text.replace(frame_options, top_frame_note, 1))
+
+          release = Path("web/release-version.ts")
+          text = release.read_text()
+          api_marker = (
+              "export const LATEST_RELEASE_API_URL =\n"
+              '  "https://api.github.com/repos/ePlus-DEV/gmail-alias-toolkit/releases/latest";\n'
+          )
+          if api_marker not in text:
+              raise SystemExit("Expected release API constant was not found")
+          text = text.replace(
+              api_marker,
+              api_marker + "export const RELEASE_FETCH_TIMEOUT_MS = 5_000;\n",
+              1,
+          )
+
+          fetch_marker = (
+              "    const response = await fetcher(LATEST_RELEASE_API_URL, { headers });\n"
+          )
+          fetch_replacement = (
+              "    const response = await fetcher(LATEST_RELEASE_API_URL, {\n"
+              "      headers,\n"
+              "      signal: AbortSignal.timeout(RELEASE_FETCH_TIMEOUT_MS),\n"
+              "    });\n"
+          )
+          if fetch_marker not in text:
+              raise SystemExit("Expected unbounded release fetch was not found")
+          release.write_text(text.replace(fetch_marker, fetch_replacement, 1))
+          PY
+
+          rm -f .github/workflows/apply-coderabbit-pr78-fixes.yml
+          git show 9584a321d0ab8dec775704cb93259e9fdccebec3:.github/workflows/ci.yml > .github/workflows/ci.yml
 
       - name: Validate GitHub Actions workflows
         env:
@@ -74,8 +146,22 @@ jobs:
       - name: Run tests
         run: yarn test
 
-      - name: Build extension
+      - name: Build production extension
         run: yarn build
+
+      - name: Verify production inline helper scope
+        run: node scripts/verify-manifest-scope.mjs production chrome
 
       - name: Build website
         run: yarn workspace gmail-alias-toolkit-web build
+
+      - name: Commit PR 78 CodeRabbit fixes
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 78
+        run: |
+          set -euo pipefail
+          git config user.name "eplus-bot"
+          git config user.email "157664013+eplus-bot@users.noreply.github.com"
+          git add .github/workflows/ci.yml .github/workflows/pr-preview.yml entrypoints/content/index.ts web/release-version.ts
+          git add -u .github/workflows/apply-coderabbit-pr78-fixes.yml
+          git commit -m "fix: address CodeRabbit release findings"
+          git push origin HEAD:dev

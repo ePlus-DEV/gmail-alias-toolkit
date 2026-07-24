@@ -1,774 +1,774 @@
 {
-    "extensionName":  {
-                          "message":  "Gmail Alias Toolkit"
-                      },
-    "extensionDescription":  {
-                                 "message":  "+tag ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒ—ãƒªã‚»ãƒƒãƒˆã§ Gmail ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ç”Ÿæˆãƒ»ç®¡ç†"
-                             },
-    "headerSubtitle":  {
-                           "message":  "+tag ã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ç”Ÿæˆ"
-                       },
-    "settings":  {
-                     "message":  "è¨­å®š"
-                 },
-    "back":  {
-                 "message":  "æˆ»ã‚‹"
-             },
-    "close":  {
-                  "message":  "é–‰ã˜ã‚‹"
-              },
-    "cancel":  {
-                   "message":  "ã‚­ãƒ£ãƒ³ã‚»ãƒ«"
-               },
-    "copy":  {
-                 "message":  "ã‚³ãƒ”ãƒ¼"
-             },
-    "copyAll":  {
-                    "message":  "ã™ã¹ã¦ã‚³ãƒ”ãƒ¼"
-                },
-    "copyToClipboard":  {
-                            "message":  "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼"
-                        },
-    "activeGmailAddress":  {
-                               "message":  "æœ‰åŠ¹ãª Gmail ã‚¢ãƒ‰ãƒ¬ã‚¹"
-                           },
-    "addNewAccount":  {
-                          "message":  "æ–°ã—ã„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’è¿½åŠ "
-                      },
-    "addAccount":  {
-                       "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’è¿½åŠ "
-                   },
-    "addNewAccountTitle":  {
-                               "message":  "æ–°ã—ã„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’è¿½åŠ "
-                           },
-    "emailPlaceholder":  {
-                             "message":  "your.email"
-                         },
-    "accountLabelPlaceholder":  {
-                                    "message":  "ãƒ©ãƒ™ãƒ«ï¼ˆä»»æ„ã€ä¾‹ï¼šä»•äº‹ã€å€‹äººï¼‰"
-                                },
-    "pressTabToAddGmail":  {
-                               "message":  "$KEY$ ã‚’æŠ¼ã—ã¦ @gmail.com ã‚’è¿½åŠ ",
-                               "placeholders":  {
-                                                    "key":  {
-                                                                "content":  "$1"
-                                                            }
-                                                }
-                           },
-    "gmailWarning":  {
-                         "message":  "Gmail ã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã¯ãªã„ã‚ˆã†ã§ã™ã€‚ãƒ—ãƒ©ã‚¹ã‚¢ãƒ‰ãƒ¬ã‚¹ã¯ Gmail ã§æœ€ã‚‚ã‚ˆãæ©Ÿèƒ½ã—ã¾ã™ã€‚"
-                     },
-    "random":  {
-                   "message":  "ãƒ©ãƒ³ãƒ€ãƒ "
-               },
-    "customTags":  {
-                       "message":  "ã‚«ã‚¹ã‚¿ãƒ ã‚¿ã‚°"
-                   },
-    "gmailTricks":  {
-                        "message":  "Gmail ã®å°æŠ€"
-                    },
-    "tabTagsShort":  {
-                         "message":  "ã‚¿ã‚°"
-                     },
-    "tabTricksShort":  {
-                           "message":  "å°æŠ€"
-                       },
-    "generating":  {
-                       "message":  "ç”Ÿæˆä¸­"
-                   },
-    "copied":  {
-                   "message":  "ã‚³ãƒ”ãƒ¼æ¸ˆã¿"
-               },
-    "switchToLightMode":  {
-                              "message":  "ãƒ©ã‚¤ãƒˆãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆ"
-                          },
-    "switchToDarkMode":  {
-                             "message":  "ãƒ€ãƒ¼ã‚¯ãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›¿ãˆ"
-                         },
-    "aliasColumn":  {
-                        "message":  "ã‚¨ã‚¤ãƒªã‚¢ã‚¹"
-                    },
-    "copyEmailTooltip":  {
-                             "message":  "$EMAIL$ - ã‚¯ãƒªãƒƒã‚¯ã—ã¦ã‚³ãƒ”ãƒ¼",
-                             "placeholders":  {
-                                                  "email":  {
-                                                                "content":  "$1"
-                                                            }
-                                              }
-                         },
-    "pageLabel":  {
-                      "message":  "ãƒšãƒ¼ã‚¸ $PAGE$",
-                      "placeholders":  {
-                                           "page":  {
-                                                        "content":  "$1"
-                                                    }
-                                       }
-                  },
-    "dotTrick":  {
-                     "message":  "ãƒ‰ãƒƒãƒˆã®å°æŠ€"
-                 },
-    "plusTags":  {
-                     "message":  "ãƒ—ãƒ©ã‚¹ï¼ˆ+ï¼‰ã‚¿ã‚°"
-                 },
-    "googlemail":  {
-                       "message":  "Googlemail"
-                   },
-    "removeDots":  {
-                       "message":  "ãƒ‰ãƒƒãƒˆã‚’å‰Šé™¤"
-                   },
-    "dotPlus":  {
-                    "message":  "ãƒ‰ãƒƒãƒˆ + ãƒ—ãƒ©ã‚¹"
-                },
-    "allCombos":  {
-                      "message":  "ã™ã¹ã¦ã®çµ„ã¿åˆã‚ã›"
-                  },
-    "numberOfVariations":  {
-                               "message":  "ãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³æ•°"
-                           },
-    "randomizeDotPositions":  {
-                                  "message":  "ãƒ‰ãƒƒãƒˆä½ç½®ã‚’ãƒ©ãƒ³ãƒ€ãƒ åŒ–"
-                              },
-    "sequential":  {
-                       "message":  "é †ç•ª"
-                   },
-    "generateTricks":  {
-                           "message":  "å°æŠ€ã‚’ç”Ÿæˆ"
-                       },
-    "generatedVariations":  {
-                                "message":  "ç”Ÿæˆã•ã‚ŒãŸãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³"
-                            },
-    "gmailTrickInfoLabel":  {
-                                "message":  "Gmail ã®å°æŠ€:"
-                            },
-    "gmailTrickInfo":  {
-                           "message":  "ãƒ‰ãƒƒãƒˆã¯ç„¡è¦–ã•ã‚Œã€+ ã®å¾Œã‚ã¯ã™ã¹ã¦åŒã˜å—ä¿¡ãƒˆãƒ¬ã‚¤ã«å±Šãã¾ã™"
-                       },
-    "format":  {
-                   "message":  "å½¢å¼"
-               },
-    "privateMailFormat":  {
-                              "message":  "ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãƒ¡ãƒ¼ãƒ«ï¼ˆprivate-mail-xxxxï¼‰"
-                          },
-    "randomCharactersFormat":  {
-                                   "message":  "ãƒ©ãƒ³ãƒ€ãƒ æ–‡å­—ï¼ˆabc123xyï¼‰"
-                               },
-    "randomWordsFormat":  {
-                              "message":  "ãƒ©ãƒ³ãƒ€ãƒ å˜èªžï¼ˆhappy-fox-42ï¼‰"
-                          },
-    "timestampFormat":  {
-                            "message":  "ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ï¼ˆ1234567890ï¼‰"
-                        },
-    "numberOfAliases":  {
-                            "message":  "ã‚¨ã‚¤ãƒªã‚¢ã‚¹æ•°"
-                        },
-    "generateRandomAliases":  {
-                                  "message":  "$COUNT$ å€‹ã®ãƒ©ãƒ³ãƒ€ãƒ ã‚¨ã‚¤ãƒªã‚¢ã‚¹$PLURAL$ã‚’ç”Ÿæˆ",
-                                  "placeholders":  {
-                                                       "count":  {
-                                                                     "content":  "$1"
-                                                                 },
-                                                       "plural":  {
-                                                                      "content":  "$2"
-                                                                  }
-                                                   }
-                              },
-    "generatedAliases":  {
-                             "message":  "ç”Ÿæˆã•ã‚ŒãŸã‚¨ã‚¤ãƒªã‚¢ã‚¹"
-                         },
-    "totalCount":  {
-                       "message":  "åˆè¨ˆ $COUNT$",
-                       "placeholders":  {
-                                            "count":  {
-                                                          "content":  "$1"
-                                                      }
-                                        }
-                   },
-    "copiedAliases":  {
-                          "message":  "$COUNT$ å€‹ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸï¼",
-                          "placeholders":  {
-                                               "count":  {
-                                                             "content":  "$1"
-                                                         }
-                                           }
-                      },
-    "failedToCopy":  {
-                         "message":  "ã‚³ãƒ”ãƒ¼ã«å¤±æ•—ã—ã¾ã—ãŸ"
-                     },
-    "formatPrivateMail":  {
-                              "message":  "å½¢å¼: private-mail-xxxx"
-                          },
-    "formatAlphanumeric":  {
-                               "message":  "8 å€‹ã®ãƒ©ãƒ³ãƒ€ãƒ æ–‡å­—"
-                           },
-    "formatWords":  {
-                        "message":  "2 å€‹ã®ãƒ©ãƒ³ãƒ€ãƒ å˜èªž"
-                    },
-    "formatTimestamp":  {
-                            "message":  "Unix ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—"
-                        },
-    "tagPlaceholder":  {
-                           "message":  "ã‚¿ã‚°ã‚’å…¥åŠ›ï¼ˆä¾‹ï¼šshoppingã€workï¼‰"
-                       },
-    "generate":  {
-                     "message":  "ç”Ÿæˆ"
-                 },
-    "yourPresets":  {
-                        "message":  "ã‚ãªãŸã®ãƒ—ãƒªã‚»ãƒƒãƒˆ"
-                    },
-    "example":  {
-                    "message":  "ä¾‹:"
-                },
-    "copyExample":  {
-                        "message":  "ä¾‹ã‚’ã‚³ãƒ”ãƒ¼"
-                    },
-    "recentAliases":  {
-                          "message":  "æœ€è¿‘ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹"
-                      },
-    "favorites":  {
-                      "message":  "ãŠæ°—ã«å…¥ã‚Š"
-                  },
-    "exportAsCsv":  {
-                        "message":  "CSV ã¨ã—ã¦ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
-                    },
-    "exportAsJson":  {
-                         "message":  "JSON ã¨ã—ã¦ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
-                     },
-    "selectAliases":  {
-                          "message":  "ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’é¸æŠž"
-                      },
-    "select":  {
-                   "message":  "é¸æŠž"
-               },
-    "starredCount":  {
-                         "message":  "$COUNT$ ä»¶ã«ã‚¹ã‚¿ãƒ¼",
-                         "placeholders":  {
-                                              "count":  {
-                                                            "content":  "$1"
-                                                        }
-                                          }
-                     },
-    "deselectAll":  {
-                        "message":  "ã™ã¹ã¦é¸æŠžè§£é™¤"
-                    },
-    "selectAll":  {
-                      "message":  "ã™ã¹ã¦é¸æŠž"
-                  },
-    "selectedCount":  {
-                          "message":  "$COUNT$ ä»¶ã‚’é¸æŠž",
-                          "placeholders":  {
-                                               "count":  {
-                                                             "content":  "$1"
-                                                         }
-                                           }
-                      },
-    "deleteCount":  {
-                        "message":  "$COUNT$ ä»¶ã‚’å‰Šé™¤",
-                        "placeholders":  {
-                                             "count":  {
-                                                           "content":  "$1"
-                                                       }
-                                         }
-                    },
-    "allCount":  {
-                     "message":  "ã™ã¹ã¦ï¼ˆ$COUNT$ï¼‰",
-                     "placeholders":  {
-                                          "count":  {
-                                                        "content":  "$1"
-                                                    }
-                                      }
-                 },
-    "favoritesCount":  {
-                           "message":  "ãŠæ°—ã«å…¥ã‚Šï¼ˆ$COUNT$ï¼‰",
-                           "placeholders":  {
-                                                "count":  {
-                                                              "content":  "$1"
-                                                          }
-                                            }
-                       },
-    "searchAliases":  {
-                          "message":  "ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’æ¤œç´¢..."
-                      },
-    "allTags":  {
-                    "message":  "ã™ã¹ã¦ã®ã‚¿ã‚°"
-                },
-    "mostRecent":  {
-                       "message":  "æœ€æ–°"
-                   },
-    "az":  {
-               "message":  "A-Z"
-           },
-    "noFavoritesYet":  {
-                           "message":  "ãŠæ°—ã«å…¥ã‚Šã¯ã¾ã ã‚ã‚Šã¾ã›ã‚“"
-                       },
-    "starEmailsHint":  {
-                           "message":  "å±¥æ­´ã®ãƒ¡ãƒ¼ãƒ«ã«ã‚¹ã‚¿ãƒ¼ã‚’ä»˜ã‘ã‚‹ã¨ã€ã“ã“ã‹ã‚‰ã™ã°ã‚„ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã™"
-                       },
-    "noResultsFound":  {
-                           "message":  "çµæžœãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“"
-                       },
-    "differentSearchHint":  {
-                                "message":  "åˆ¥ã®æ¤œç´¢ã¾ãŸã¯ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚’è©¦ã—ã¦ãã ã•ã„"
-                            },
-    "showQrCode":  {
-                       "message":  "QR ã‚³ãƒ¼ãƒ‰ã‚’è¡¨ç¤º"
-                   },
-    "removeFromFavorites":  {
-                                "message":  "ãŠæ°—ã«å…¥ã‚Šã‹ã‚‰å‰Šé™¤"
-                            },
-    "addToFavorites":  {
-                           "message":  "ãŠæ°—ã«å…¥ã‚Šã«è¿½åŠ "
-                       },
-    "showingRange":  {
-                         "message":  "$TOTAL$ ä»¶ä¸­ $START$-$END$ ã‚’è¡¨ç¤º",
-                         "placeholders":  {
-                                              "start":  {
-                                                            "content":  "$1"
-                                                        },
-                                              "end":  {
-                                                          "content":  "$2"
-                                                      },
-                                              "total":  {
-                                                            "content":  "$3"
-                                                        }
-                                          }
-                     },
-    "perPage":  {
-                    "message":  "$COUNT$ / ãƒšãƒ¼ã‚¸",
-                    "placeholders":  {
-                                         "count":  {
-                                                       "content":  "$1"
-                                                   }
-                                     }
-                },
-    "firstPage":  {
-                      "message":  "æœ€åˆã®ãƒšãƒ¼ã‚¸"
-                  },
-    "previousPage":  {
-                         "message":  "å‰ã®ãƒšãƒ¼ã‚¸"
-                     },
-    "nextPage":  {
-                     "message":  "æ¬¡ã®ãƒšãƒ¼ã‚¸"
-                 },
-    "lastPage":  {
-                     "message":  "æœ€å¾Œã®ãƒšãƒ¼ã‚¸"
-                 },
-    "scanToCopyAlias":  {
-                            "message":  "ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ã‚³ãƒ”ãƒ¼"
-                        },
-    "general":  {
-                    "message":  "ä¸€èˆ¬"
-                },
-    "accounts":  {
-                     "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ"
-                 },
-    "changelog":  {
-                      "message":  "å¤‰æ›´å±¥æ­´"
-                  },
-    "appearanceDisplay":  {
-                              "message":  "å¤–è¦³ã¨è¡¨ç¤º"
-                          },
-    "theme":  {
-                  "message":  "ãƒ†ãƒ¼ãƒž"
-              },
-    "themeLight":  {
-                       "message":  "ãƒ©ã‚¤ãƒˆ"
-                   },
-    "themeDark":  {
-                      "message":  "ãƒ€ãƒ¼ã‚¯"
-                  },
-    "themeAuto":  {
-                      "message":  "ã‚·ã‚¹ãƒ†ãƒ ï¼ˆè‡ªå‹•ï¼‰"
-                  },
-    "badgeCounter":  {
-                         "message":  "ãƒãƒƒã‚¸ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼"
-                     },
-    "badgeNone":  {
-                      "message":  "ãªã—ï¼ˆéžè¡¨ç¤ºï¼‰"
-                  },
-    "badgeTotal":  {
-                       "message":  "å±¥æ­´å†…ã®åˆè¨ˆ"
-                   },
-    "badgeAllTime":  {
-                         "message":  "ç·ç”Ÿæˆæ•°ï¼ˆå…¨æœŸé–“ï¼‰"
-                     },
-    "badgeToday":  {
-                       "message":  "ä»Šæ—¥ä½œæˆ"
-                   },
-    "badgeWeek":  {
-                      "message":  "ä»Šé€±"
-                  },
-    "copyNotifications":  {
-                              "message":  "ã‚³ãƒ”ãƒ¼é€šçŸ¥"
-                          },
-    "aliasGeneration":  {
-                            "message":  "ã‚¨ã‚¤ãƒªã‚¢ã‚¹ç”Ÿæˆ"
-                        },
-    "randomAliasFormat":  {
-                              "message":  "ãƒ©ãƒ³ãƒ€ãƒ ã‚¨ã‚¤ãƒªã‚¢ã‚¹å½¢å¼"
-                          },
-    "autoSaveLimit":  {
-                          "message":  "è‡ªå‹•ä¿å­˜ä¸Šé™"
-                      },
-    "aliasesLimit":  {
-                         "message":  "$COUNT$ å€‹ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹",
-                         "placeholders":  {
-                                              "count":  {
-                                                            "content":  "$1"
-                                                        }
-                                          }
-                     },
-    "customPresets":  {
-                          "message":  "ã‚«ã‚¹ã‚¿ãƒ ãƒ—ãƒªã‚»ãƒƒãƒˆ"
-                      },
-    "label":  {
-                  "message":  "ãƒ©ãƒ™ãƒ«"
-              },
-    "tag":  {
-                "message":  "ã‚¿ã‚°"
-            },
-    "addPreset":  {
-                      "message":  "+ ãƒ—ãƒªã‚»ãƒƒãƒˆã‚’è¿½åŠ "
-                  },
-    "dataManagement":  {
-                           "message":  "ãƒ‡ãƒ¼ã‚¿ç®¡ç†"
-                       },
-    "export":  {
-                   "message":  "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
-               },
-    "import":  {
-                   "message":  "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
-               },
-    "clear":  {
-                  "message":  "ã‚¯ãƒªã‚¢"
-              },
-    "resetSettings":  {
-                          "message":  "ã™ã¹ã¦ã®è¨­å®šã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«æˆ»ã™"
-                      },
-    "resetSettingsTitle":  {
-                               "message":  "è¨­å®šã‚’ãƒªã‚»ãƒƒãƒˆã—ã¾ã™ã‹ï¼Ÿ"
-                           },
-    "resetSettingsMessage":  {
-                                 "message":  "ã™ã¹ã¦ã®è¨­å®šãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã«æˆ»ã‚Šã¾ã™ã€‚"
-                             },
-    "reset":  {
-                  "message":  "ãƒªã‚»ãƒƒãƒˆ"
-              },
-    "clearHistoryTitle":  {
-                              "message":  "æœ€è¿‘ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ã‚¯ãƒªã‚¢ã—ã¾ã™ã‹ï¼Ÿ"
-                          },
-    "clearHistoryMessage":  {
-                                "message":  "æœ€è¿‘ã®å±¥æ­´ãƒªã‚¹ãƒˆã‹ã‚‰ã™ã¹ã¦ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’å‰Šé™¤ã—ã¾ã™ã€‚"
-                            },
-    "emailAccounts":  {
-                          "message":  "ãƒ¡ãƒ¼ãƒ«ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ"
-                      },
-    "manageAccountsDescription":  {
-                                      "message":  "Gmail ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ç®¡ç†ã—ã¾ã™ã€‚å„ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ã¯ç‹¬è‡ªã®å±¥æ­´ã€çµ±è¨ˆã€ãŠæ°—ã«å…¥ã‚ŠãŒã‚ã‚Šã¾ã™ã€‚"
-                                  },
-    "noAccountsFound":  {
-                            "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚ãƒ¡ã‚¤ãƒ³ç”»é¢ã‹ã‚‰ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’è¿½åŠ ã—ã¦ãã ã•ã„ã€‚"
-                        },
-    "emailAddress":  {
-                         "message":  "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹"
-                     },
-    "accountLabel":  {
-                         "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆãƒ©ãƒ™ãƒ«"
-                     },
-    "emailAddressPlaceholder":  {
-                                    "message":  "your.email@gmail.com"
-                                },
-    "emailChangeWarning":  {
-                               "message":  "ãƒ¡ãƒ¼ãƒ«ã‚’å¤‰æ›´ã™ã‚‹ã¨ã€ã™ã¹ã¦ã®ãƒ‡ãƒ¼ã‚¿ãŒæ–°ã—ã„ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ç§»è¡Œã•ã‚Œã¾ã™"
-                           },
-    "saveChanges":  {
-                        "message":  "å¤‰æ›´ã‚’ä¿å­˜"
-                    },
-    "active":  {
-                   "message":  "æœ‰åŠ¹"
-               },
-    "editAccount":  {
-                        "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ç·¨é›†"
-                    },
-    "cannotDeleteLastAccountTitle":  {
-                                         "message":  "æœ€å¾Œã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¯å‰Šé™¤ã§ãã¾ã›ã‚“"
-                                     },
-    "deleteThisAccount":  {
-                              "message":  "ã“ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤"
-                          },
-    "deleteAccountTitle":  {
-                               "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ"
-                           },
-    "deleteAccountMessage":  {
-                                 "message":  "\"$LABEL$\"ï¼ˆ$EMAIL$ï¼‰ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ\n\nã“ã‚Œã«ã‚ˆã‚Šæ¬¡ã®å†…å®¹ãŒå®Œå…¨ã«å‰Šé™¤ã•ã‚Œã¾ã™:\n- ã“ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ã™ã¹ã¦ã®å±¥æ­´\n- ã™ã¹ã¦ã®çµ±è¨ˆ\n- ã™ã¹ã¦ã®ãŠæ°—ã«å…¥ã‚Š\n\nã“ã®æ“ä½œã¯å…ƒã«æˆ»ã›ã¾ã›ã‚“ã€‚",
-                                 "placeholders":  {
-                                                      "label":  {
-                                                                    "content":  "$1"
-                                                                },
-                                                      "email":  {
-                                                                    "content":  "$2"
-                                                                }
-                                                  }
-                             },
-    "delete":  {
-                   "message":  "å‰Šé™¤"
-               },
-    "changeAccountEmailTitle":  {
-                                    "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ãƒ¡ãƒ¼ãƒ«ã‚’å¤‰æ›´ã—ã¾ã™ã‹ï¼Ÿ"
-                                },
-    "changeAccountEmailMessage":  {
-                                      "message":  "ãƒ¡ãƒ¼ãƒ«ã‚’\n$OLD_EMAIL$\nã‹ã‚‰\n$NEW_EMAIL$\nã«å¤‰æ›´ã—ã¾ã™ã‹ï¼Ÿ\n\nã“ã‚Œã«ã‚ˆã‚Šæ¬¡ã®å‡¦ç†ãŒè¡Œã‚ã‚Œã¾ã™:\n- ã™ã¹ã¦ã®å±¥æ­´ã€çµ±è¨ˆã€ãŠæ°—ã«å…¥ã‚Šã‚’æ–°ã—ã„ãƒ¡ãƒ¼ãƒ«ã¸ç§»è¡Œ\n- ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ãƒ¡ãƒ¼ãƒ«ã‚’æ›´æ–°\n- å¤ã„ãƒ¡ãƒ¼ãƒ«ã«é–¢é€£ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤\n\nç¶šè¡Œã—ã¾ã™ã‹ï¼Ÿ",
-                                      "placeholders":  {
-                                                           "old_email":  {
-                                                                             "content":  "$1"
-                                                                         },
-                                                           "new_email":  {
-                                                                             "content":  "$2"
-                                                                         }
-                                                       }
-                                  },
-    "changeEmail":  {
-                        "message":  "ãƒ¡ãƒ¼ãƒ«ã‚’å¤‰æ›´"
-                    },
-    "menuForThisWebsite":  {
-                               "message":  "ã“ã®ã‚¦ã‚§ãƒ–ã‚µã‚¤ãƒˆç”¨"
-                           },
-    "menuLoading":  {
-                        "message":  "èª­ã¿è¾¼ã¿ä¸­..."
-                    },
-    "menuRandomEmailAlias":  {
-                                 "message":  "ãƒ©ãƒ³ãƒ€ãƒ ãƒ¡ãƒ¼ãƒ«ã‚¨ã‚¤ãƒªã‚¢ã‚¹"
-                             },
-    "menuCustomTags":  {
-                           "message":  "ã‚«ã‚¹ã‚¿ãƒ ã‚¿ã‚°"
-                       },
-    "menuNoPresets":  {
-                          "message":  "ãƒ—ãƒªã‚»ãƒƒãƒˆãªã— - è¨­å®šã§è¿½åŠ "
-                      },
-    "menuGmailTricks":  {
-                            "message":  "Gmail ã®å°æŠ€"
-                        },
-    "menuDotVariation":  {
-                             "message":  "ãƒ‰ãƒƒãƒˆã®ãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³"
-                         },
-    "menuGooglemailDomain":  {
-                                 "message":  "Googlemail ãƒ‰ãƒ¡ã‚¤ãƒ³"
-                             },
-    "menuRemoveAllDots":  {
-                              "message":  "ã™ã¹ã¦ã®ãƒ‰ãƒƒãƒˆã‚’å‰Šé™¤"
-                          },
-    "toastPresetAdded":  {
-                             "message":  "ãƒ—ãƒªã‚»ãƒƒãƒˆã‚’è¿½åŠ ã—ã¾ã—ãŸ"
-                         },
-    "toastPresetRemoved":  {
-                               "message":  "ãƒ—ãƒªã‚»ãƒƒãƒˆã‚’å‰Šé™¤ã—ã¾ã—ãŸ"
-                           },
-    "toastSettingsExported":  {
-                                  "message":  "è¨­å®šã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ã¾ã—ãŸ"
-                              },
-    "toastSettingsImported":  {
-                                  "message":  "è¨­å®šã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã—ãŸ"
-                              },
-    "toastImportFailed":  {
-                              "message":  "ã‚¤ãƒ³ãƒãƒ¼ãƒˆã«å¤±æ•—ã—ã¾ã—ãŸ - ç„¡åŠ¹ãªãƒ•ã‚¡ã‚¤ãƒ«"
-                          },
-    "toastSettingsReset":  {
-                               "message":  "è¨­å®šã‚’ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«ãƒªã‚»ãƒƒãƒˆã—ã¾ã—ãŸ"
-                           },
-    "toastAccountSwitched":  {
-                                 "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’åˆ‡ã‚Šæ›¿ãˆã¾ã—ãŸ"
-                             },
-    "toastAccountDeleted":  {
-                                "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ã—ã¾ã—ãŸ"
-                            },
-    "toastAccountUpdated":  {
-                                "message":  "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’æ›´æ–°ã—ã¾ã—ãŸ"
-                            },
-    "toastAccountAdded":  {
-                              "message":  "$LABEL$ ã‚’è¿½åŠ ã—ã¾ã—ãŸ",
-                              "placeholders":  {
-                                                   "label":  {
-                                                                 "content":  "$1"
-                                                             }
-                                               }
-                          },
-    "errorLabelRequired":  {
-                               "message":  "ãƒ©ãƒ™ãƒ«ã¯ç©ºã«ã§ãã¾ã›ã‚“"
-                           },
-    "errorInvalidEmail":  {
-                              "message":  "æœ‰åŠ¹ãªãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„"
-                          },
-    "errorDuplicateEmail":  {
-                                "message":  "ã“ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¯åˆ¥ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã§ã™ã§ã«ä½¿ç”¨ã•ã‚Œã¦ã„ã¾ã™"
-                            },
-    "errorEnterEmail":  {
-                            "message":  "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„"
-                        },
-    "errorAccountExists":  {
-                               "message":  "ã“ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¯ã™ã§ã«å­˜åœ¨ã—ã¾ã™"
-                           },
-    "toastQrFailed":  {
-                          "message":  "QR ã‚³ãƒ¼ãƒ‰ã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸ"
-                      },
-    "toastExportedAliases":  {
-                                 "message":  "$COUNT$ å€‹ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ã¾ã—ãŸ",
-                                 "placeholders":  {
-                                                      "count":  {
-                                                                    "content":  "$1"
-                                                                }
-                                                  }
-                             },
-    "toastDeletedAliases":  {
-                                "message":  "$COUNT$ å€‹ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’å‰Šé™¤ã—ã¾ã—ãŸ",
-                                "placeholders":  {
-                                                     "count":  {
-                                                                   "content":  "$1"
-                                                               }
-                                                 }
-                            },
-    "toastHistoryCleared":  {
-                                "message":  "å±¥æ­´ã‚’ã‚¯ãƒªã‚¢ã—ã¾ã—ãŸ"
-                            },
-    "toastFavoriteAdded":  {
-                               "message":  "ãŠæ°—ã«å…¥ã‚Šã«è¿½åŠ ã—ã¾ã—ãŸ"
-                           },
-    "toastFavoriteRemoved":  {
-                                 "message":  "ãŠæ°—ã«å…¥ã‚Šã‹ã‚‰å‰Šé™¤ã—ã¾ã—ãŸ"
-                             },
-    "toastCopiedEmail":  {
-                             "message":  "$EMAIL$ ã‚’ã‚³ãƒ”ãƒ¼ã—ã¾ã—ãŸ",
-                             "placeholders":  {
-                                                  "email":  {
-                                                                "content":  "$1"
-                                                            }
-                                              }
-                         },
-    "toastCopyFailed":  {
-                            "message":  "ã‚³ãƒ”ãƒ¼ã«å¤±æ•—ã—ã¾ã—ãŸ"
-                        },
-    "welcomeTitle":  {
-                         "message":  "Gmail Alias Toolkit ã¸ã‚ˆã†ã“ã"
-                     },
-    "welcomeSubtitle":  {
-                            "message":  "ãƒ—ãƒ©ã‚¤ãƒã‚·ãƒ¼ã¨æ•´ç†ã®ãŸã‚ã«ç„¡åˆ¶é™ã®ãƒ¡ãƒ¼ãƒ«ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã‚’ç”Ÿæˆ"
-                        },
-    "letsGetStarted":  {
-                           "message":  "å§‹ã‚ã¾ã—ã‚‡ã†"
-                       },
-    "enterGmailAddress":  {
-                              "message":  "Gmail ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›"
-                          },
-    "pressTabForGmail":  {
-                             "message":  "@gmail.com ã«ã¯ $KEY$ ã‚’æŠ¼ã—ã¦ãã ã•ã„",
-                             "placeholders":  {
-                                                  "key":  {
-                                                              "content":  "$1"
-                                                          }
-                                              }
-                         },
-    "settingUp":  {
-                      "message":  "è¨­å®šä¸­..."
-                  },
-    "getStarted":  {
-                       "message":  "é–‹å§‹"
-                   },
-    "advancedSetup":  {
-                          "message":  "è¨­å®šã§è©³ç´°ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—"
-                      },
-    "whatYouCanDo":  {
-                         "message":  "ã§ãã‚‹ã“ã¨:"
-                     },
-    "featurePrivateEmail":  {
-                                "message":  "ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãƒ¡ãƒ¼ãƒ«ç”Ÿæˆ"
-                            },
-    "featureCustomTags":  {
-                              "message":  "ã‚«ã‚¹ã‚¿ãƒ ã‚¿ã‚°ã¨ãƒ—ãƒªã‚»ãƒƒãƒˆ"
-                          },
-    "featureGmailTricks":  {
-                               "message":  "Gmail ã®é«˜åº¦ãªå°æŠ€"
-                           },
-    "welcomeFooter":  {
-                          "message":  "ã™ã¹ã¦ã®ãƒ‡ãƒ¼ã‚¿ã¯ãƒ­ãƒ¼ã‚«ãƒ«ã«ä¿å­˜ã•ã‚Œã¾ã™ã€‚è¿½è·¡ãªã—ã€ã‚µãƒ¼ãƒãƒ¼ãªã—ã€‚"
-                      },
-    "favoritesSaved":  {
-                           "message":  "$COUNT$ ä»¶ä¿å­˜æ¸ˆã¿",
-                           "placeholders":  {
-                                                "count":  {
-                                                              "content":  "$1"
-                                                          }
-                                            }
-                       },
-    "clickStarHint":  {
-                          "message":  "å±¥æ­´å†…ã®ä»»æ„ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã®ã‚¹ã‚¿ãƒ¼ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ã€ã“ã“ã«è¿½åŠ ã—ã¾ã™"
-                      },
-    "viewStatistics":  {
-                           "message":  "çµ±è¨ˆã‚’è¡¨ç¤º"
-                       },
-    "statistics":  {
-                       "message":  "çµ±è¨ˆ"
-                   },
-    "metricsTab":  {
-                       "message":  "æŒ‡æ¨™"
-                   },
-    "timelineTab":  {
-                        "message":  "ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³"
-                    },
-    "tagsTab":  {
-                    "message":  "ã‚¿ã‚°"
-                },
-    "totalGenerated":  {
-                           "message":  "ç·ç”Ÿæˆæ•°"
-                       },
-    "createdToday":  {
-                         "message":  "ä»Šæ—¥ä½œæˆ"
-                     },
-    "thisWeek":  {
-                     "message":  "ä»Šé€±"
-                 },
-    "thisMonth":  {
-                      "message":  "ä»Šæœˆ"
-                  },
-    "topTag":  {
-                   "message":  "ä¸Šä½ã‚¿ã‚°"
-               },
-    "totalTags":  {
-                      "message":  "ã‚¿ã‚°åˆè¨ˆ"
-                  },
-    "noTagsYet":  {
-                      "message":  "ã‚¿ã‚°ã¯ã¾ã ã‚ã‚Šã¾ã›ã‚“"
-                  },
-    "disableInlineForSite":  {
-                                 "message":  "ã“ã®ã‚µã‚¤ãƒˆã§ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚’ç„¡åŠ¹ã«ã™ã‚‹"
-                             },
-    "inlineDisabledSites":  {
-                                "message":  "ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ãƒ˜ãƒ«ãƒ‘ãƒ¼ã‚’ç„¡åŠ¹ã«ã—ãŸã‚µã‚¤ãƒˆ"
-                            },
-    "inlineDisabledSitesDescription":  {
-                                           "message":  "ã“ã‚Œã‚‰ã®ã‚µã‚¤ãƒˆã§ã¯ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³ã‚¢ã‚¤ã‚³ãƒ³ã¨ã‚¯ã‚¤ãƒƒã‚¯ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãŒéžè¡¨ç¤ºã«ãªã‚Šã¾ã™ã€‚"
-                                       },
-    "noDisabledSites":  {
-                            "message":  "ç„¡åŠ¹ã«ã—ãŸã‚µã‚¤ãƒˆã¯ã‚ã‚Šã¾ã›ã‚“"
-                        },
-    "enableInlineForSite":  {
-                                "message":  "æœ‰åŠ¹ã«ã™ã‚‹"
-                            },
-    "reportReview":  {
-                         "message":  "å ±å‘Š / ãƒ¬ãƒ“ãƒ¥ãƒ¼"
-                     },
-    "percentLabel":  {
-                         "message":  "$PERCENT$%",
-                         "placeholders":  {
-                                              "percent":  {
-                                                              "content":  "$1"
-                                                          }
-                                          }
-                     },
-    "retry":  {
-                  "message":  "もう一度試す"
-              },
-    "enable":  {
-                   "message":  "有効にする"
-               },
-    "storageError":  {
-                         "message":  "履歴を読み込めませんでした。ストレージアクセスを確認してください。"
-                     }
+  "extensionName": {
+    "message": "Gmail Alias Toolkit"
+  },
+  "extensionDescription": {
+    "message": "+tag アドレスとプリセットで Gmail エイリアスを生成・管理"
+  },
+  "headerSubtitle": {
+    "message": "+tag アドレスでエイリアスを生成"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "back": {
+    "message": "戻る"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "copy": {
+    "message": "コピー"
+  },
+  "copyAll": {
+    "message": "すべてコピー"
+  },
+  "copyToClipboard": {
+    "message": "クリップボードにコピー"
+  },
+  "activeGmailAddress": {
+    "message": "有効な Gmail アドレス"
+  },
+  "addNewAccount": {
+    "message": "新しいアカウントを追加"
+  },
+  "addAccount": {
+    "message": "アカウントを追加"
+  },
+  "addNewAccountTitle": {
+    "message": "新しいアカウントを追加"
+  },
+  "emailPlaceholder": {
+    "message": "your.email"
+  },
+  "accountLabelPlaceholder": {
+    "message": "ラベル（任意、例：仕事、個人）"
+  },
+  "pressTabToAddGmail": {
+    "message": "$KEY$ を押して @gmail.com を追加",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "gmailWarning": {
+    "message": "Gmail アドレスではないようです。プラスアドレスは Gmail で最もよく機能します。"
+  },
+  "random": {
+    "message": "ランダム"
+  },
+  "customTags": {
+    "message": "カスタムタグ"
+  },
+  "gmailTricks": {
+    "message": "Gmail の小技"
+  },
+  "tabTagsShort": {
+    "message": "タグ"
+  },
+  "tabTricksShort": {
+    "message": "小技"
+  },
+  "generating": {
+    "message": "生成中"
+  },
+  "copied": {
+    "message": "コピー済み"
+  },
+  "switchToLightMode": {
+    "message": "ライトモードに切り替え"
+  },
+  "switchToDarkMode": {
+    "message": "ダークモードに切り替え"
+  },
+  "aliasColumn": {
+    "message": "エイリアス"
+  },
+  "copyEmailTooltip": {
+    "message": "$EMAIL$ - クリックしてコピー",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "pageLabel": {
+    "message": "ページ $PAGE$",
+    "placeholders": {
+      "page": {
+        "content": "$1"
+      }
+    }
+  },
+  "dotTrick": {
+    "message": "ドットの小技"
+  },
+  "plusTags": {
+    "message": "プラス（+）タグ"
+  },
+  "googlemail": {
+    "message": "Googlemail"
+  },
+  "removeDots": {
+    "message": "ドットを削除"
+  },
+  "dotPlus": {
+    "message": "ドット + プラス"
+  },
+  "allCombos": {
+    "message": "すべての組み合わせ"
+  },
+  "numberOfVariations": {
+    "message": "バリエーション数"
+  },
+  "randomizeDotPositions": {
+    "message": "ドット位置をランダム化"
+  },
+  "sequential": {
+    "message": "順番"
+  },
+  "generateTricks": {
+    "message": "小技を生成"
+  },
+  "generatedVariations": {
+    "message": "生成されたバリエーション"
+  },
+  "gmailTrickInfoLabel": {
+    "message": "Gmail の小技:"
+  },
+  "gmailTrickInfo": {
+    "message": "ドットは無視され、+ の後ろはすべて同じ受信トレイに届きます"
+  },
+  "format": {
+    "message": "形式"
+  },
+  "privateMailFormat": {
+    "message": "プライベートメール（private-mail-xxxx）"
+  },
+  "randomCharactersFormat": {
+    "message": "ランダム文字（abc123xy）"
+  },
+  "randomWordsFormat": {
+    "message": "ランダム単語（happy-fox-42）"
+  },
+  "timestampFormat": {
+    "message": "タイムスタンプ（1234567890）"
+  },
+  "numberOfAliases": {
+    "message": "エイリアス数"
+  },
+  "generateRandomAliases": {
+    "message": "$COUNT$ 個のランダムエイリアス$PLURAL$を生成",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "generatedAliases": {
+    "message": "生成されたエイリアス"
+  },
+  "totalCount": {
+    "message": "合計 $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "copiedAliases": {
+    "message": "$COUNT$ 個のエイリアスをコピーしました！",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "failedToCopy": {
+    "message": "コピーに失敗しました"
+  },
+  "formatPrivateMail": {
+    "message": "形式: private-mail-xxxx"
+  },
+  "formatAlphanumeric": {
+    "message": "8 個のランダム文字"
+  },
+  "formatWords": {
+    "message": "2 個のランダム単語"
+  },
+  "formatTimestamp": {
+    "message": "Unix タイムスタンプ"
+  },
+  "tagPlaceholder": {
+    "message": "タグを入力（例：shopping、work）"
+  },
+  "generate": {
+    "message": "生成"
+  },
+  "yourPresets": {
+    "message": "あなたのプリセット"
+  },
+  "example": {
+    "message": "例:"
+  },
+  "copyExample": {
+    "message": "例をコピー"
+  },
+  "recentAliases": {
+    "message": "最近のエイリアス"
+  },
+  "favorites": {
+    "message": "お気に入り"
+  },
+  "exportAsCsv": {
+    "message": "CSV としてエクスポート"
+  },
+  "exportAsJson": {
+    "message": "JSON としてエクスポート"
+  },
+  "selectAliases": {
+    "message": "エイリアスを選択"
+  },
+  "select": {
+    "message": "選択"
+  },
+  "starredCount": {
+    "message": "$COUNT$ 件にスター",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deselectAll": {
+    "message": "すべて選択解除"
+  },
+  "selectAll": {
+    "message": "すべて選択"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ 件を選択",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCount": {
+    "message": "$COUNT$ 件を削除",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "allCount": {
+    "message": "すべて（$COUNT$）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "favoritesCount": {
+    "message": "お気に入り（$COUNT$）",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "searchAliases": {
+    "message": "エイリアスを検索..."
+  },
+  "allTags": {
+    "message": "すべてのタグ"
+  },
+  "mostRecent": {
+    "message": "最新"
+  },
+  "az": {
+    "message": "A-Z"
+  },
+  "noFavoritesYet": {
+    "message": "お気に入りはまだありません"
+  },
+  "starEmailsHint": {
+    "message": "履歴のメールにスターを付けると、ここからすばやくアクセスできます"
+  },
+  "noResultsFound": {
+    "message": "結果が見つかりません"
+  },
+  "differentSearchHint": {
+    "message": "別の検索またはフィルターを試してください"
+  },
+  "showQrCode": {
+    "message": "QR コードを表示"
+  },
+  "removeFromFavorites": {
+    "message": "お気に入りから削除"
+  },
+  "addToFavorites": {
+    "message": "お気に入りに追加"
+  },
+  "showingRange": {
+    "message": "$TOTAL$ 件中 $START$-$END$ を表示",
+    "placeholders": {
+      "start": {
+        "content": "$1"
+      },
+      "end": {
+        "content": "$2"
+      },
+      "total": {
+        "content": "$3"
+      }
+    }
+  },
+  "perPage": {
+    "message": "$COUNT$ / ページ",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "firstPage": {
+    "message": "最初のページ"
+  },
+  "previousPage": {
+    "message": "前のページ"
+  },
+  "nextPage": {
+    "message": "次のページ"
+  },
+  "lastPage": {
+    "message": "最後のページ"
+  },
+  "scanToCopyAlias": {
+    "message": "スキャンしてエイリアスをコピー"
+  },
+  "general": {
+    "message": "一般"
+  },
+  "accounts": {
+    "message": "アカウント"
+  },
+  "changelog": {
+    "message": "変更履歴"
+  },
+  "appearanceDisplay": {
+    "message": "外観と表示"
+  },
+  "theme": {
+    "message": "テーマ"
+  },
+  "themeLight": {
+    "message": "ライト"
+  },
+  "themeDark": {
+    "message": "ダーク"
+  },
+  "themeAuto": {
+    "message": "システム（自動）"
+  },
+  "badgeCounter": {
+    "message": "バッジカウンター"
+  },
+  "badgeNone": {
+    "message": "なし（非表示）"
+  },
+  "badgeTotal": {
+    "message": "履歴内の合計"
+  },
+  "badgeAllTime": {
+    "message": "総生成数（全期間）"
+  },
+  "badgeToday": {
+    "message": "今日作成"
+  },
+  "badgeWeek": {
+    "message": "今週"
+  },
+  "copyNotifications": {
+    "message": "コピー通知"
+  },
+  "aliasGeneration": {
+    "message": "エイリアス生成"
+  },
+  "randomAliasFormat": {
+    "message": "ランダムエイリアス形式"
+  },
+  "autoSaveLimit": {
+    "message": "自動保存上限"
+  },
+  "aliasesLimit": {
+    "message": "$COUNT$ 個のエイリアス",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "customPresets": {
+    "message": "カスタムプリセット"
+  },
+  "label": {
+    "message": "ラベル"
+  },
+  "tag": {
+    "message": "タグ"
+  },
+  "addPreset": {
+    "message": "+ プリセットを追加"
+  },
+  "dataManagement": {
+    "message": "データ管理"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "import": {
+    "message": "インポート"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "resetSettings": {
+    "message": "すべての設定をデフォルトに戻す"
+  },
+  "resetSettingsTitle": {
+    "message": "設定をリセットしますか？"
+  },
+  "resetSettingsMessage": {
+    "message": "すべての設定がデフォルト値に戻ります。"
+  },
+  "reset": {
+    "message": "リセット"
+  },
+  "clearHistoryTitle": {
+    "message": "最近のエイリアスをクリアしますか？"
+  },
+  "clearHistoryMessage": {
+    "message": "最近の履歴リストからすべてのエイリアスを削除します。"
+  },
+  "emailAccounts": {
+    "message": "メールアカウント"
+  },
+  "manageAccountsDescription": {
+    "message": "Gmail アカウントを管理します。各アカウントには独自の履歴、統計、お気に入りがあります。"
+  },
+  "noAccountsFound": {
+    "message": "アカウントが見つかりません。メイン画面からアカウントを追加してください。"
+  },
+  "emailAddress": {
+    "message": "メールアドレス"
+  },
+  "accountLabel": {
+    "message": "アカウントラベル"
+  },
+  "emailAddressPlaceholder": {
+    "message": "your.email@gmail.com"
+  },
+  "emailChangeWarning": {
+    "message": "メールを変更すると、すべてのデータが新しいメールアドレスに移行されます"
+  },
+  "saveChanges": {
+    "message": "変更を保存"
+  },
+  "active": {
+    "message": "有効"
+  },
+  "editAccount": {
+    "message": "アカウントを編集"
+  },
+  "cannotDeleteLastAccountTitle": {
+    "message": "最後のアカウントは削除できません"
+  },
+  "deleteThisAccount": {
+    "message": "このアカウントを削除"
+  },
+  "deleteAccountTitle": {
+    "message": "アカウントを削除しますか？"
+  },
+  "deleteAccountMessage": {
+    "message": "\"$LABEL$\"（$EMAIL$）を削除しますか？\n\nこれにより次の内容が完全に削除されます:\n- このアカウントのすべての履歴\n- すべての統計\n- すべてのお気に入り\n\nこの操作は元に戻せません。",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "delete": {
+    "message": "削除"
+  },
+  "changeAccountEmailTitle": {
+    "message": "アカウントのメールを変更しますか？"
+  },
+  "changeAccountEmailMessage": {
+    "message": "メールを\n$OLD_EMAIL$\nから\n$NEW_EMAIL$\nに変更しますか？\n\nこれにより次の処理が行われます:\n- すべての履歴、統計、お気に入りを新しいメールへ移行\n- アカウントのメールを更新\n- 古いメールに関連するデータを削除\n\n続行しますか？",
+    "placeholders": {
+      "old_email": {
+        "content": "$1"
+      },
+      "new_email": {
+        "content": "$2"
+      }
+    }
+  },
+  "changeEmail": {
+    "message": "メールを変更"
+  },
+  "menuForThisWebsite": {
+    "message": "このウェブサイト用"
+  },
+  "menuLoading": {
+    "message": "読み込み中..."
+  },
+  "menuRandomEmailAlias": {
+    "message": "ランダムメールエイリアス"
+  },
+  "menuCustomTags": {
+    "message": "カスタムタグ"
+  },
+  "menuNoPresets": {
+    "message": "プリセットなし - 設定で追加"
+  },
+  "menuGmailTricks": {
+    "message": "Gmail の小技"
+  },
+  "menuDotVariation": {
+    "message": "ドットのバリエーション"
+  },
+  "menuGooglemailDomain": {
+    "message": "Googlemail ドメイン"
+  },
+  "menuRemoveAllDots": {
+    "message": "すべてのドットを削除"
+  },
+  "toastPresetAdded": {
+    "message": "プリセットを追加しました"
+  },
+  "toastPresetRemoved": {
+    "message": "プリセットを削除しました"
+  },
+  "toastSettingsExported": {
+    "message": "設定をエクスポートしました"
+  },
+  "toastSettingsImported": {
+    "message": "設定をインポートしました"
+  },
+  "toastImportFailed": {
+    "message": "インポートに失敗しました - 無効なファイル"
+  },
+  "toastSettingsReset": {
+    "message": "設定をデフォルトにリセットしました"
+  },
+  "toastAccountSwitched": {
+    "message": "アカウントを切り替えました"
+  },
+  "toastAccountDeleted": {
+    "message": "アカウントを削除しました"
+  },
+  "toastAccountUpdated": {
+    "message": "アカウントを更新しました"
+  },
+  "toastAccountAdded": {
+    "message": "$LABEL$ を追加しました",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorLabelRequired": {
+    "message": "ラベルは空にできません"
+  },
+  "errorInvalidEmail": {
+    "message": "有効なメールアドレスを入力してください"
+  },
+  "errorDuplicateEmail": {
+    "message": "このメールアドレスは別のアカウントですでに使用されています"
+  },
+  "errorEnterEmail": {
+    "message": "メールアドレスを入力してください"
+  },
+  "errorAccountExists": {
+    "message": "このアカウントはすでに存在します"
+  },
+  "toastQrFailed": {
+    "message": "QR コードの生成に失敗しました"
+  },
+  "toastExportedAliases": {
+    "message": "$COUNT$ 個のエイリアスをエクスポートしました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastDeletedAliases": {
+    "message": "$COUNT$ 個のエイリアスを削除しました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastHistoryCleared": {
+    "message": "履歴をクリアしました"
+  },
+  "toastFavoriteAdded": {
+    "message": "お気に入りに追加しました"
+  },
+  "toastFavoriteRemoved": {
+    "message": "お気に入りから削除しました"
+  },
+  "toastCopiedEmail": {
+    "message": "$EMAIL$ をコピーしました",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "toastCopyFailed": {
+    "message": "コピーに失敗しました"
+  },
+  "welcomeTitle": {
+    "message": "Gmail Alias Toolkit へようこそ"
+  },
+  "welcomeSubtitle": {
+    "message": "プライバシーと整理のために無制限のメールエイリアスを生成"
+  },
+  "letsGetStarted": {
+    "message": "始めましょう"
+  },
+  "enterGmailAddress": {
+    "message": "Gmail アドレスを入力"
+  },
+  "pressTabForGmail": {
+    "message": "@gmail.com には $KEY$ を押してください",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+  "settingUp": {
+    "message": "設定中..."
+  },
+  "getStarted": {
+    "message": "開始"
+  },
+  "advancedSetup": {
+    "message": "設定で詳細セットアップ"
+  },
+  "whatYouCanDo": {
+    "message": "できること:"
+  },
+  "featurePrivateEmail": {
+    "message": "プライベートメール生成"
+  },
+  "featureCustomTags": {
+    "message": "カスタムタグとプリセット"
+  },
+  "featureGmailTricks": {
+    "message": "Gmail の高度な小技"
+  },
+  "welcomeFooter": {
+    "message": "すべてのデータはローカルに保存されます。追跡なし、サーバーなし。"
+  },
+  "favoritesSaved": {
+    "message": "$COUNT$ 件保存済み",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "clickStarHint": {
+    "message": "履歴内の任意のエイリアスのスターをクリックして、ここに追加します"
+  },
+  "viewStatistics": {
+    "message": "統計を表示"
+  },
+  "statistics": {
+    "message": "統計"
+  },
+  "metricsTab": {
+    "message": "指標"
+  },
+  "timelineTab": {
+    "message": "タイムライン"
+  },
+  "tagsTab": {
+    "message": "タグ"
+  },
+  "totalGenerated": {
+    "message": "総生成数"
+  },
+  "createdToday": {
+    "message": "今日作成"
+  },
+  "thisWeek": {
+    "message": "今週"
+  },
+  "thisMonth": {
+    "message": "今月"
+  },
+  "topTag": {
+    "message": "上位タグ"
+  },
+  "totalTags": {
+    "message": "タグ合計"
+  },
+  "noTagsYet": {
+    "message": "タグはまだありません"
+  },
+  "disableInlineForSite": {
+    "message": "このサイトでインラインヘルパーを無効にする"
+  },
+  "inlineDisabledSites": {
+    "message": "インラインヘルパーを無効にしたサイト"
+  },
+  "inlineDisabledSitesDescription": {
+    "message": "これらのサイトではインラインアイコンとクイックポップアップが非表示になります。"
+  },
+  "noDisabledSites": {
+    "message": "無効にしたサイトはありません"
+  },
+  "enableInlineForSite": {
+    "message": "有効にする"
+  },
+  "reportReview": {
+    "message": "報告 / レビュー"
+  },
+  "percentLabel": {
+    "message": "$PERCENT$%",
+    "placeholders": {
+      "percent": {
+        "content": "$1"
+      }
+    }
+  },
+  "enable": {
+    "message": "有効にする"
+  },
+  "retry": {
+    "message": "もう一度試す"
+  },
+  "storageError": {
+    "message": "履歴を読み込めませんでした。ストレージアクセスを確認してください。"
+  }
 }
