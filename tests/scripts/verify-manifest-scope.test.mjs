@@ -38,6 +38,15 @@ afterEach(() => {
 });
 
 describe("manifest scope validator", () => {
+  it("accepts WXT's runtime-registered development content script", () => {
+    const manifestPath = writeManifest({
+      host_permissions: [...DEV_SITES, "http://localhost/*"],
+      permissions: ["storage", "scripting"],
+    });
+
+    expect(validateManifest(manifestPath, "development")).toEqual([]);
+  });
+
   it("accepts the exact development allowlist", () => {
     const manifestPath = writeManifest({
       content_scripts: [inlineHelper(DEV_SITES)],

@@ -13,6 +13,7 @@ export const DEV_SITES = [
 const DEVELOPMENT_MODE = "development";
 const PRODUCTION_MODE = "production";
 const DEVELOPMENT_OUTPUT_SUFFIX = "-dev";
+const DEVELOPMENT_RUNTIME_HOSTS = new Set(["http://localhost/*"]);
 const SUPPORTED_MODES = new Set([DEVELOPMENT_MODE, PRODUCTION_MODE]);
 
 /** Writes one informational line to standard output. */
@@ -89,7 +90,7 @@ function validateDevelopmentScope(
 ) {
   const failures = [];
 
-  if (contentScriptMatches.includes(ALL_URLS)) {
+  if (contentScriptMatches?.includes(ALL_URLS)) {
     failures.push(
       `${manifestPath}: development content script unexpectedly matches ${ALL_URLS}.`,
     );
@@ -101,7 +102,7 @@ function validateDevelopmentScope(
     );
   }
 
-  const unexpectedMatches = contentScriptMatches.filter(
+  const unexpectedMatches = (contentScriptMatches ?? []).filter(
     (match) => match !== ALL_URLS && !DEV_SITES.includes(match),
   );
   if (unexpectedMatches.length > 0) {
@@ -112,7 +113,10 @@ function validateDevelopmentScope(
 
   const unexpectedHosts = [...grantedHosts].filter(
     (host) =>
-      host !== ALL_URLS && isUrlPattern(host) && !DEV_SITES.includes(host),
+      host !== ALL_URLS &&
+      isUrlPattern(host) &&
+      !DEVELOPMENT_RUNTIME_HOSTS.has(host) &&
+      !DEV_SITES.includes(host),
   );
   if (unexpectedHosts.length > 0) {
     failures.push(
@@ -121,7 +125,7 @@ function validateDevelopmentScope(
   }
 
   for (const site of DEV_SITES) {
-    if (!contentScriptMatches.includes(site)) {
+    if (contentScriptMatches && !contentScriptMatches.includes(site)) {
       failures.push(
         `${manifestPath}: development content script is missing ${site}.`,
       );
@@ -147,11 +151,11 @@ export function validateManifest(manifestPath, mode) {
     (contentScript) =>
       contentScript.js?.some((file) => file.endsWith(INLINE_CONTENT_SCRIPT)),
   );
-  if (!inlineContentScript) {
+  if (!inlineContentScript && mode === PRODUCTION_MODE) {
     return [`${manifestPath}: inline content script is missing.`];
   }
 
-  const contentScriptMatches = inlineContentScript.matches ?? [];
+  const contentScriptMatches = inlineContentScript?.matches;
   const grantedHosts = new Set([
     ...(manifest.host_permissions ?? []),
     ...(manifest.permissions ?? []),

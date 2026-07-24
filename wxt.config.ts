@@ -7,7 +7,6 @@ EventEmitter.defaultMaxListeners = 15;
 
 const ALL_URLS = ["<all_urls>"];
 const DEV_SITES = ["*://*.miro.com/*", "*://selfh.st/*", "*://gumroad.com/*"];
-const INLINE_CONTENT_SCRIPT = "content-scripts/content.js";
 
 export default defineConfig({
   modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
@@ -43,19 +42,17 @@ export default defineConfig({
     },
   }),
   hooks: {
-    "build:manifestGenerated": (wxt, manifest) => {
-      const inlineContentScript = manifest.content_scripts?.find(
-        (contentScript) =>
-          contentScript.js?.some((file) =>
-            file.endsWith(INLINE_CONTENT_SCRIPT),
-          ),
+    "entrypoints:resolved": (wxt, entrypoints) => {
+      const inlineContentScript = entrypoints.find(
+        (entrypoint) =>
+          entrypoint.type === "content-script" && entrypoint.name === "content",
       );
 
-      if (!inlineContentScript) {
-        throw new Error("Inline content script was not generated.");
+      if (inlineContentScript?.type !== "content-script") {
+        throw new Error("Inline content script entrypoint was not resolved.");
       }
 
-      inlineContentScript.matches =
+      inlineContentScript.options.matches =
         wxt.config.mode === "development" ? [...DEV_SITES] : [...ALL_URLS];
     },
   },
