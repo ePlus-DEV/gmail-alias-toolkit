@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "기록을 로드할 수 없습니다. 저장소 접근을 확인하세요."
+  },
+  "userGuide": {
+    "message": "사용자 가이드"
   }
 }

@@ -3,7 +3,6 @@ import { CircleHelp, Settings, Sparkles } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
 import { Tooltip } from "src/components/motion/tooltip";
 import { ThemeToggle } from "src/components/motion/theme-toggle";
-import { getUserGuideLabel } from "src/i18n/userGuide";
 import { openUserGuide } from "src/utils/externalLinks";
 import { t } from "../../../lib/i18n";
 
@@ -52,7 +51,7 @@ function HeaderActions({
   onOpenSettings,
   onThemeChange,
 }: HeaderActionsProps) {
-  const userGuideLabel = getUserGuideLabel();
+  const userGuideLabel = t("userGuide");
 
   return (
     <div className="flex shrink-0 items-center gap-1.5">

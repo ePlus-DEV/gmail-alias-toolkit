@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Impossibile caricare la cronologia. Verificare l'accesso all'archivio."
+  },
+  "userGuide": {
+    "message": "Guida utente"
   }
 }

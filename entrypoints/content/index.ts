@@ -5,7 +5,6 @@ import {
   parseDisabledInlineSites,
 } from "src/utils/inlineSiteSettings";
 import { t } from "../../lib/i18n";
-import { getUserGuideLabel } from "src/i18n/userGuide";
 import { USER_GUIDE_URL } from "src/utils/externalLinks";
 import {
   getPreviousAliasForWebsite,
@@ -242,7 +241,7 @@ function createPopup(
     nextPage: escapeHtml(t("nextPage")),
     disableInlineForSite: escapeHtml(t("disableInlineForSite")),
     extensionName: escapeHtml(t("extensionName")),
-    userGuide: escapeHtml(getUserGuideLabel()),
+    userGuide: escapeHtml(t("userGuide")),
     reportReview: escapeHtml(t("reportReview")),
   };
   popup.innerHTML = `

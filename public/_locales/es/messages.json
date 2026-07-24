@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "No se pudo cargar el historial. Verifique el acceso al almacenamiento."
+  },
+  "userGuide": {
+    "message": "Guía del usuario"
   }
 }

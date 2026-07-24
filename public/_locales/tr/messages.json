@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Geçmiş yüklenemedi. Depolama erişimini kontrol edin."
+  },
+  "userGuide": {
+    "message": "Kullanım kılavuzu"
   }
 }

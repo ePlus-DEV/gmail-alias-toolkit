@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Không thể tải lịch sử. Kiểm tra quyền truy cập bộ nhớ."
+  },
+  "userGuide": {
+    "message": "Hướng dẫn sử dụng"
   }
 }
