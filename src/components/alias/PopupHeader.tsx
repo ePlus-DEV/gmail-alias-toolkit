@@ -1,8 +1,10 @@
 // skipcq: JS-0415 - Header markup is a compact visual composition with no nested business logic.
-import { Settings, Sparkles } from "lucide-react";
+import { CircleHelp, Settings, Sparkles } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
 import { Tooltip } from "src/components/motion/tooltip";
 import { ThemeToggle } from "src/components/motion/theme-toggle";
+import { getUserGuideLabel } from "src/i18n/userGuide";
+import { openUserGuide } from "src/utils/externalLinks";
 import { t } from "../../../lib/i18n";
 
 export interface PopupHeaderProps {
@@ -37,12 +39,19 @@ interface HeaderActionsProps {
   onThemeChange: (theme: "light" | "dark") => void;
 }
 
-/** Header actions for theme switching and opening settings. */
+/** Opens the public user guide without blocking the popup event handler. */
+function handleOpenUserGuide() {
+  void openUserGuide();
+}
+
+/** Header actions for theme switching, help, and opening settings. */
 function HeaderActions({
   isDark,
   onOpenSettings,
   onThemeChange,
 }: HeaderActionsProps) {
+  const userGuideLabel = getUserGuideLabel();
+
   return (
     <div className="flex shrink-0 items-center gap-1.5">
       <Tooltip
@@ -60,6 +69,17 @@ function HeaderActions({
           className="h-9 w-9 rounded-2xl text-primary-foreground transition-colors hover:bg-primary-foreground/15 focus-visible:ring-primary-foreground/60"
           iconClassName="h-4 w-4"
         />
+      </Tooltip>
+      <Tooltip content={userGuideLabel} side="bottom">
+        <Button
+          onClick={handleOpenUserGuide}
+          variant="ghost"
+          size="icon"
+          className="shrink-0 rounded-2xl text-primary-foreground hover:bg-primary-foreground/15 focus-visible:ring-primary-foreground/60"
+          aria-label={userGuideLabel}
+        >
+          <CircleHelp className="h-5 w-5" aria-hidden="true" />
+        </Button>
       </Tooltip>
       <Tooltip content={t("settings")} side="bottom">
         <Button
