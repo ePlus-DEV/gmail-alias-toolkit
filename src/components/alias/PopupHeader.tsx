@@ -39,9 +39,11 @@ interface HeaderActionsProps {
   onThemeChange: (theme: "light" | "dark") => void;
 }
 
-/** Opens the public user guide without blocking the popup event handler. */
+/** Opens the public user guide and contains any unexpected navigation error. */
 function handleOpenUserGuide() {
-  void openUserGuide();
+  void openUserGuide().catch((error) => {
+    console.error("Failed to open the Gmail Alias Toolkit user guide.", error);
+  });
 }
 
 /** Header actions for theme switching, help, and opening settings. */
