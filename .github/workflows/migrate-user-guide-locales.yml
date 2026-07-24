@@ -1,0 +1,130 @@
+name: Migrate user guide translations to WXT locales
+
+on:
+  pull_request:
+    types: [reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.event.pull_request.number == 85 && github.head_ref == 'feat/add-user-guide-links'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Move user-guide labels into messages.json
+        shell: bash
+        run: |
+          python3 <<'PY'
+          import json
+          from pathlib import Path
+
+          translations = {
+              "en": "User guide",
+              "de": "Benutzerhandbuch",
+              "es": "Guía del usuario",
+              "fr": "Guide d’utilisation",
+              "hi": "उपयोगकर्ता मार्गदर्शिका",
+              "it": "Guida utente",
+              "ja": "ユーザーガイド",
+              "ko": "사용자 가이드",
+              "pl": "Podręcznik użytkownika",
+              "pt_BR": "Guia do usuário",
+              "ru": "Руководство пользователя",
+              "tr": "Kullanım kılavuzu",
+              "vi": "Hướng dẫn sử dụng",
+              "zh_CN": "用户指南",
+          }
+
+          for locale, message in translations.items():
+              path = Path("public/_locales") / locale / "messages.json"
+              data = json.loads(path.read_text(encoding="utf-8"))
+              data["userGuide"] = {"message": message}
+              path.write_text(
+                  json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                  encoding="utf-8",
+              )
+
+          popup_path = Path("src/components/alias/PopupHeader.tsx")
+          popup = popup_path.read_text(encoding="utf-8")
+          popup = popup.replace(
+              'import { getUserGuideLabel } from "src/i18n/userGuide";\n',
+              "",
+          )
+          popup = popup.replace(
+              "  const userGuideLabel = getUserGuideLabel();",
+              '  const userGuideLabel = t("userGuide");',
+          )
+          popup_path.write_text(popup, encoding="utf-8")
+
+          content_path = Path("entrypoints/content/index.ts")
+          content = content_path.read_text(encoding="utf-8")
+          content = content.replace(
+              'import { getUserGuideLabel } from "src/i18n/userGuide";\n',
+              "",
+          )
+          content = content.replace(
+              "    userGuide: escapeHtml(getUserGuideLabel()),",
+              '    userGuide: escapeHtml(t("userGuide")),',
+          )
+          content_path.write_text(content, encoding="utf-8")
+
+          Path("src/i18n/userGuide.ts").unlink()
+          Path("tests/i18n/userGuide.test.ts").unlink()
+
+          test_path = Path("tests/i18n/userGuideLocales.test.ts")
+          test_path.write_text(
+              '''import { readdirSync, readFileSync } from "node:fs";\n'
+              'import { resolve } from "node:path";\n'
+              'import { describe, expect, it } from "vitest";\n\n'
+              'describe("WXT user guide translations", () => {\n'
+              '  const localesRoot = resolve(process.cwd(), "public/_locales");\n'
+              '  const localeDirectories = readdirSync(localesRoot, {\n'
+              '    withFileTypes: true,\n'
+              '  }).filter((entry) => entry.isDirectory());\n\n'
+              '  it("defines a non-empty userGuide message for every locale", () => {\n'
+              '    expect(localeDirectories.length).toBeGreaterThan(0);\n\n'
+              '    for (const locale of localeDirectories) {\n'
+              '      const messagesPath = resolve(\n'
+              '        localesRoot,\n'
+              '        locale.name,\n'
+              '        "messages.json",\n'
+              '      );\n'
+              '      const messages = JSON.parse(readFileSync(messagesPath, "utf8")) as Record<\n'
+              '        string,\n'
+              '        { message?: unknown }\n'
+              '      >;\n\n'
+              '      expect(messages.userGuide, locale.name).toBeDefined();\n'
+              '      expect(messages.userGuide.message, locale.name).toEqual(\n'
+              '        expect.any(String),\n'
+              '      );\n'
+              '      expect((messages.userGuide.message as string).trim(), locale.name).not.toBe(\n'
+              '        "",\n'
+              '      );\n'
+              '    }\n'
+              '  });\n'
+              '});\n'''.replace("'\n              '", ""),
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Validate generated locale files
+        shell: bash
+        run: |
+          node -e 'const fs=require("fs"); for (const locale of fs.readdirSync("public/_locales")) JSON.parse(fs.readFileSync(`public/_locales/${locale}/messages.json`, "utf8"));'
+
+      - name: Commit migration and remove temporary workflow
+        shell: bash
+        run: |
+          git rm .github/workflows/migrate-user-guide-locales.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/_locales src/components/alias/PopupHeader.tsx entrypoints/content/index.ts tests/i18n
+          git commit -m "refactor: use WXT locales for user guide labels"
+          git push origin HEAD:${{ github.head_ref }}
