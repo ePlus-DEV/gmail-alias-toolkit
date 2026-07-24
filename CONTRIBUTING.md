@@ -50,11 +50,13 @@ To test the inline helper on additional local or remote sites, copy
 match patterns:
 
 ```dotenv
-WXT_INLINE_DEV_MATCHES=http://localhost/*,http://127.0.0.1/*
+WXT_INLINE_DEV_MATCHES=http://localhost/*,http://127.0.0.1/*,*://*.w3schools.com/*
 ```
 
 These patterns are added to the default development sites. Restart the
-development server after changing the value.
+development server after changing the value. Each entry must use Chrome's
+`scheme://host/path` match-pattern format; use `*://*.example.com/*` for a
+domain and all its subdomains.
 
 ## Build
 
