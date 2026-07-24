@@ -15,9 +15,20 @@ const USER_GUIDE_LABELS: Record<string, string> = {
   zh_cn: "用户指南",
 };
 
+/** Safely reads the browser UI locale outside and inside extension contexts. */
+function resolveBrowserLocale(): string {
+  try {
+    return typeof browser !== "undefined"
+      ? browser.i18n?.getUILanguage?.() || "en"
+      : "en";
+  } catch {
+    return "en";
+  }
+}
+
 /** Resolves the user-guide label for a browser UI locale. */
 export function getUserGuideLabel(locale?: string): string {
-  const browserLocale = locale ?? browser.i18n.getUILanguage?.() ?? "en";
+  const browserLocale = locale ?? resolveBrowserLocale();
   const normalizedLocale = browserLocale.toLowerCase().replaceAll("-", "_");
   const baseLocale = normalizedLocale.split("_")[0];
 
