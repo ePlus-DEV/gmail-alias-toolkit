@@ -1,5 +1,6 @@
 // skipcq: JS-0415 - Settings sections keep related controls inline for readability in a constrained popup.
 import { useState, useEffect, useCallback } from "react";
+import { CircleHelp } from "lucide-react";
 import Toggle from "./Toggle";
 import Button from "./Button";
 import Input from "./Input";
@@ -22,6 +23,7 @@ import {
   INLINE_DISABLED_SITES_KEY,
   parseDisabledInlineSites,
 } from "src/utils/inlineSiteSettings";
+import { openUserGuide } from "src/utils/externalLinks";
 
 interface SettingsProps {
   isOpen: boolean;
@@ -708,6 +710,13 @@ function changeBadgeStatus(type: ChangelogChange["type"]) {
   return "info";
 }
 
+/** Opens the public user guide from Settings. */
+function handleOpenUserGuide() {
+  void openUserGuide().catch((error) => {
+    console.error("Failed to open the Gmail Alias Toolkit user guide.", error);
+  });
+}
+
 /** Settings modal with general, accounts, presets, advanced, and changelog tabs. */
 export default function Settings({
   isOpen,
@@ -1194,9 +1203,21 @@ export default function Settings({
             </Tooltip>
             <h2 className="text-base font-semibold">{t("settings")}</h2>
           </div>
-          <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
-            v{version}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleOpenUserGuide}
+              className="h-8 gap-1.5 rounded-lg px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
+              aria-label={t("userGuide")}
+            >
+              <CircleHelp className="h-4 w-4" aria-hidden="true" />
+              {t("userGuide")}
+            </Button>
+            <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+              v{version}
+            </span>
+          </div>
         </div>
 
         {/* Tabs */}
