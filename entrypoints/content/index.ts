@@ -1605,8 +1605,8 @@ function observeDOM() {
 
 export default defineContentScript({
   matches: ["<all_urls>"],
-  allFrames: true,
-  matchAboutBlank: true,
+  // Keep the helper in the top document so third-party embedded frames
+  // cannot receive alias suggestions or extension UI.
   async main() {
     const disabledSitesResult = await browser.storage.local.get(
       INLINE_DISABLED_SITES_KEY,

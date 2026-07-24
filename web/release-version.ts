@@ -2,6 +2,7 @@ import packageMetadata from "../package.json";
 
 export const LATEST_RELEASE_API_URL =
   "https://api.github.com/repos/ePlus-DEV/gmail-alias-toolkit/releases/latest";
+export const RELEASE_FETCH_TIMEOUT_MS = 5_000;
 
 const SEMVER_PATTERN =
   /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
@@ -26,7 +27,10 @@ export async function resolveLatestReleaseVersion(
     const token = process.env.GITHUB_TOKEN?.trim();
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    const response = await fetcher(LATEST_RELEASE_API_URL, { headers });
+    const response = await fetcher(LATEST_RELEASE_API_URL, {
+      headers,
+      signal: AbortSignal.timeout(RELEASE_FETCH_TIMEOUT_MS),
+    });
     if (!response.ok) return packageMetadata.version;
 
     const payload = (await response.json()) as { tag_name?: unknown };
