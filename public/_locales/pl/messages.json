@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Nie udało się załadować historii. Sprawdź dostęp do pamięci."
+  },
+  "userGuide": {
+    "message": "Podręcznik użytkownika"
   }
 }

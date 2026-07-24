@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Impossible de charger l'historique. Vérifiez l'accès au stockage."
+  },
+  "userGuide": {
+    "message": "Guide d’utilisation"
   }
 }

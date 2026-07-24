@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "无法加载历史记录。请检查存储访问权限。"
+  },
+  "userGuide": {
+    "message": "用户指南"
   }
 }

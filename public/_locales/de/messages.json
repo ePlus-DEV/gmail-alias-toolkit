@@ -770,5 +770,8 @@
   },
   "storageError": {
     "message": "Verlauf konnte nicht geladen werden. Überprüfen Sie den Speicherzugriff."
+  },
+  "userGuide": {
+    "message": "Benutzerhandbuch"
   }
 }
