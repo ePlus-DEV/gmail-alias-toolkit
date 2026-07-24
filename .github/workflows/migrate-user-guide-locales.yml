@@ -78,38 +78,43 @@ jobs:
           Path("src/i18n/userGuide.ts").unlink()
           Path("tests/i18n/userGuide.test.ts").unlink()
 
-          test_path = Path("tests/i18n/userGuideLocales.test.ts")
-          test_path.write_text(
-              '''import { readdirSync, readFileSync } from "node:fs";\n'
-              'import { resolve } from "node:path";\n'
-              'import { describe, expect, it } from "vitest";\n\n'
-              'describe("WXT user guide translations", () => {\n'
-              '  const localesRoot = resolve(process.cwd(), "public/_locales");\n'
-              '  const localeDirectories = readdirSync(localesRoot, {\n'
-              '    withFileTypes: true,\n'
-              '  }).filter((entry) => entry.isDirectory());\n\n'
-              '  it("defines a non-empty userGuide message for every locale", () => {\n'
-              '    expect(localeDirectories.length).toBeGreaterThan(0);\n\n'
-              '    for (const locale of localeDirectories) {\n'
-              '      const messagesPath = resolve(\n'
-              '        localesRoot,\n'
-              '        locale.name,\n'
-              '        "messages.json",\n'
-              '      );\n'
-              '      const messages = JSON.parse(readFileSync(messagesPath, "utf8")) as Record<\n'
-              '        string,\n'
-              '        { message?: unknown }\n'
-              '      >;\n\n'
-              '      expect(messages.userGuide, locale.name).toBeDefined();\n'
-              '      expect(messages.userGuide.message, locale.name).toEqual(\n'
-              '        expect.any(String),\n'
-              '      );\n'
-              '      expect((messages.userGuide.message as string).trim(), locale.name).not.toBe(\n'
-              '        "",\n'
-              '      );\n'
-              '    }\n'
-              '  });\n'
-              '});\n'''.replace("'\n              '", ""),
+          Path("tests/i18n/userGuideLocales.test.ts").write_text(
+              '''import { readdirSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { describe, expect, it } from "vitest";
+
+describe("WXT user guide translations", () => {
+  const localesRoot = resolve(process.cwd(), "public/_locales");
+  const localeDirectories = readdirSync(localesRoot, {
+    withFileTypes: true,
+  }).filter((entry) => entry.isDirectory());
+
+  it("defines a non-empty userGuide message for every locale", () => {
+    expect(localeDirectories.length).toBeGreaterThan(0);
+
+    for (const locale of localeDirectories) {
+      const messagesPath = resolve(
+        localesRoot,
+        locale.name,
+        "messages.json",
+      );
+      const messages = JSON.parse(readFileSync(messagesPath, "utf8")) as Record<
+        string,
+        { message?: unknown }
+      >;
+
+      expect(messages.userGuide, locale.name).toBeDefined();
+      expect(messages.userGuide.message, locale.name).toEqual(
+        expect.any(String),
+      );
+      expect(
+        (messages.userGuide.message as string).trim(),
+        locale.name,
+      ).not.toBe("");
+    }
+  });
+});
+''',
               encoding="utf-8",
           )
           PY
@@ -125,6 +130,6 @@ jobs:
           git rm .github/workflows/migrate-user-guide-locales.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/_locales src/components/alias/PopupHeader.tsx entrypoints/content/index.ts tests/i18n
+          git add public/_locales src/components/alias/PopupHeader.tsx entrypoints/content/index.ts tests/i18n src/i18n
           git commit -m "refactor: use WXT locales for user guide labels"
           git push origin HEAD:${{ github.head_ref }}
