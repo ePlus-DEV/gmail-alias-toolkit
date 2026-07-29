@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.3.3] - 2026-07-29
+
+### :bug: Bug Fixes
+
+- [`63c969f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/63c969f3cacc3c79e91ac7a76b4b8a46885601d5) - preserve Google Workspace domains when generating website aliases and prevent Gmail alias history or favorites from leaking into another active account *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
 ## [1.3.1] - 2026-07-20
 ### :sparkles: New Features
 - [`7148619`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7148619a98c09eaaee68376d4cd021149bd70c8f) - **release**: add Edge and Opera zip scripts *(commit by [@hoangsvit](https://github.com/hoangsvit))*
