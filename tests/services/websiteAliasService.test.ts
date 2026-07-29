@@ -48,9 +48,16 @@ vi.stubGlobal("browser", {
 } as unknown as MockBrowser);
 
 // Mock the getAccountStorageKey utility
-vi.mock("../../entrypoints/popup/utils", () => ({
-  getAccountStorageKey: (email: string, suffix: string) => `${email}:${suffix}`,
-}));
+vi.mock("../../entrypoints/popup/utils", async (importOriginal) => {
+  const original = await importOriginal<
+    typeof import("../../entrypoints/popup/utils")
+  >();
+
+  return {
+    ...original,
+    getAccountStorageKey: (email: string, suffix: string) => `${email}:${suffix}`,
+  };
+});
 
 describe("websiteAliasService", () => {
   const testEmail = "user@gmail.com";
@@ -183,6 +190,14 @@ describe("websiteAliasService", () => {
       expect(suggestions).toEqual([]);
     });
 
+    it("returns empty array for malformed base email", async () => {
+      const suggestions = await generateSuggestionsForWebsite(
+        "invalid-email",
+        "https://github.com",
+      );
+      expect(suggestions).toEqual([]);
+    });
+
     it("generates up to 5 suggestions for new website", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
@@ -258,14 +273,19 @@ describe("websiteAliasService", () => {
       expect(suggestions.length).toBeLessThanOrEqual(5);
     });
 
-    it("always uses @gmail.com for suggestions regardless of email domain", async () => {
+    it("preserves the selected Google Workspace domain", async () => {
+      const workspaceEmail = "nguyen.minh.hoang@rivercrane.vn";
       const suggestions = await generateSuggestionsForWebsite(
-        "user@example.com",
+        workspaceEmail,
         "https://github.com",
       );
 
-      // Suggestions always use @gmail.com, not the original email domain
-      suggestions.forEach((s) => expect(s).toMatch(/@gmail\.com$/));
+      expect(suggestions).toContain(
+        "nguyen.minh.hoang+github@rivercrane.vn",
+      );
+      suggestions.forEach((suggestion) =>
+        expect(suggestion).toMatch(/@rivercrane\.vn$/),
+      );
     });
   });
 
