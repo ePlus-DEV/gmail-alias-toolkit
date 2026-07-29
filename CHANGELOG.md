@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-07-29
+### :bug: Bug Fixes
+- [`12f4d2f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/12f4d2fbb85bd4138f9e5e28247f2599c4fb36f9) - preserve active account domain in website aliases *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`511f183`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/511f1835a2fa2268847d06514ce312381f50d52b) - ignore cross-account website aliases *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`8abcb6d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/8abcb6dd4f48fee59e8a3e8bed9c6feb883c74bc) - enable one-shot Workspace patch workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`4c13406`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4c134063029437abd10dc1a81e1bb6a1852faa54) - isolate Workspace inline aliases *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`2efd275`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/2efd2755a68a7e2eeca0228013dafebf54a457d3) - validate base email before generating suggestions *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e20fe7d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e20fe7d99a3829ccc7e7e07eb116840042ac3053) - keep package metadata aligned with dev *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b0d1e79`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b0d1e79d1dd5feb5584e0049608a1e075dae8b42) - import changelog types from data module *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`ae6327a`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/ae6327ae874153d8216db55d528b6983661da655) - harden scoped inline history parsing *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :recycle: Refactors
+- [`d99587d`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/d99587daa7ef1ab340c0e5c7a0e7be56a7b54eae) - isolate inline account history loading *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`301e063`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/301e063d1c63e9b039026cc3837073ee7df69370) - use inline history service *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`a8ef1af`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/a8ef1af765368a64887f3b0343d2eb917993070d) - extract extension changelog data *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`8b3271e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/8b3271e71328b17d09157ad30dbbcc0430f7323e) - separate extension changelog data *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+
+### :white_check_mark: Tests
+- [`596ee9f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/596ee9fee7f595200f297b9f635213ec771d3275) - cover Google Workspace alias domains *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`33fa0a4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/33fa0a436543dd7483bc3c4a037eb41e8628a729) - harden Workspace alias regression coverage *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`7458d65`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7458d6512869dada5c8d3326f449fc62f1f41a07) - cover inline Workspace history isolation *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`c1248e5`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c1248e586876da45c3941c8051273c2af0042bdb) - cover malformed inline history storage *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`b70a116`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/b70a116ffb6f4afdd6e6e32c3b9e501def3f6bc8) - type popup utility mock factory *(commit by [@github-actions[bot]](https://github.com/apps/github-actions))*
+- [`7c71b38`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/7c71b38ab895f39f7e108509ac8bcce3673ebbae) - cover inline history storage failures *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`503b2d6`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/503b2d6f290e51d7eaabf2b95ddfb2fdea1aa3f6) - validate extension changelog data *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`e760053`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/e7600539290f4bf233fba7173848df1210ce1c45) - cover malformed scoped inline history *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`45e2ff9`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/45e2ff988c916dfd7671af4e9eff8c1e8b9d8b2b) - cover changelog comparator and reset state *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+### :wrench: Chores
+- [`8e4c8a4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/8e4c8a469f078fbae76917821632a781cbbe61a1) - add one-shot Workspace history patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`8f83b4c`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/8f83b4c31d4b7ac390380ee222bc76e37222a241) - add one-shot Workspace fix workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`3a47e42`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/3a47e42140ae10d4a614222450ec49e5a0623a60) - add one-shot inline history service patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`a031d5b`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/a031d5b20cd693a0791155ec8f2ac2d7af0c85ed) - add one-shot inline history service workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`5a81788`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/5a817883f675d31c47c6090709cb0b275ceaf24e) - add one-shot mock return type patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`aebca33`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/aebca333e3c6b123b2803d52dade4f7d861480f5) - add one-shot mock return type workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`236c888`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/236c8887f49bb170c1c2503a6a77a4546142b4f7) - add one-shot v1.3.3 changelog script *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`4eceb5e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/4eceb5e10fd910451169fd04214e99c21182bbbe) - add one-shot v1.3.3 changelog workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`31f2a22`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/31f2a227d9c22c2d76c817ca1ca741a180e18f9a) - add one-shot extension changelog patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`608ca57`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/608ca57cef4776717d62864e4e5a64b0c555e7af) - add one-shot extension changelog workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`1e4c3e4`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/1e4c3e48634baa94eb630e43a98cf03ee8ef9185) - retain v1.3.3 release version *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`9545d59`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9545d59ffefe6b5550ad4aa05fa5777eb73f320e) - normalize package metadata formatting *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`06298a9`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/06298a9db9738430a3302e0c263d150e430c54a4) - restore package trailing newline *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`862cedd`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/862cedd65cbf9fc3cccf65bfcf3a95d566de6346) - add one-shot changelog extraction patch *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`c45194f`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/c45194f3e6ae91787bb55cf917641b64e538157c) - add one-shot changelog extraction workflow *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`11f8d6e`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/11f8d6ecde70c0aff9d472c4952759617f20aa45) - keep release branch active *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`59b2adb`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/59b2adb45fba9110304f2d503b46a4bfc094dc4b) - normalize release package metadata *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+- [`875befa`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/875befa0c8ae699a6fd4872e81d7d5560087fd7e) - preserve package formatting *(commit by [@hoangsvit](https://github.com/hoangsvit))*
+
+
 ## [1.3.2] - 2026-07-24
 ### :sparkles: New Features
 - [`9730377`](https://github.com/ePlus-DEV/gmail-alias-toolkit/commit/9730377be7c71678e540783dd047389d8b544eaf) - paginate disabled inline sites *(commit by [@hoangsvit](https://github.com/hoangsvit))*
@@ -379,3 +428,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [1.3.0]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.2.0...1.3.0
 [1.3.1]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.0...1.3.1
 [1.3.2]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.1...1.3.2
+[1.3.3]: https://github.com/ePlus-DEV/gmail-alias-toolkit/compare/1.3.2...1.3.3
