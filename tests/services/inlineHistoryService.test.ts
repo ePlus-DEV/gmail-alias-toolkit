@@ -111,6 +111,53 @@ async function assertScopedStorageTakesPrecedence(): Promise<void> {
   expect(result).toEqual({ history: [], favorites: [] });
 }
 
+/** Verifies non-array account storage is treated as empty data. */
+async function assertNonArrayStorageIsIgnored(): Promise<void> {
+  const activeEmail = "nguyen.minh.hoang@rivercrane.vn";
+  const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
+  const favoritesKey = getAccountStorageKey(activeEmail, "favorites");
+  mockStorageData[historyKey] = { email: "not-an-array" };
+  mockStorageData[favoritesKey] = "not-an-array";
+
+  const result = await loadInlineAccountHistory(activeEmail);
+
+  expect(result).toEqual({ history: [], favorites: [] });
+}
+
+/** Verifies malformed entries are skipped while valid Workspace entries remain. */
+async function assertMalformedEntriesAreIgnored(): Promise<void> {
+  const activeEmail = "nguyen.minh.hoang@rivercrane.vn";
+  const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
+  const favoritesKey = getAccountStorageKey(activeEmail, "favorites");
+  mockStorageData[historyKey] = [
+    null,
+    { email: "nguyen.minh.hoang+missing-time@rivercrane.vn" },
+    {
+      email: "nguyen.minh.hoang+bad-time@rivercrane.vn",
+      timestamp: "10",
+    },
+    { email: 123, timestamp: 9 },
+    { email: "nguyen.minh.hoang+valid@rivercrane.vn", timestamp: 8 },
+  ];
+  mockStorageData[favoritesKey] = [
+    null,
+    "",
+    {},
+    { email: "" },
+    { email: 123 },
+    { email: "nguyen.minh.hoang+valid@rivercrane.vn" },
+  ];
+
+  const result = await loadInlineAccountHistory(activeEmail);
+
+  expect(result.history).toEqual([
+    { email: "nguyen.minh.hoang+valid@rivercrane.vn", timestamp: 8 },
+  ]);
+  expect(result.favorites).toEqual([
+    "nguyen.minh.hoang+valid@rivercrane.vn",
+  ]);
+}
+
 /** Registers browser-storage integration coverage for inline account history. */
 function defineInlineHistoryServiceTests(): void {
   beforeEach(resetMockStorage);
@@ -125,6 +172,11 @@ function defineInlineHistoryServiceTests(): void {
   it(
     "prefers account-scoped storage over legacy global storage",
     assertScopedStorageTakesPrecedence,
+  );
+  it("treats non-array storage as empty", assertNonArrayStorageIsIgnored);
+  it(
+    "ignores malformed history and favorite entries",
+    assertMalformedEntriesAreIgnored,
   );
 }
 
