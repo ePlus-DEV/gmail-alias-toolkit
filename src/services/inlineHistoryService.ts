@@ -23,7 +23,8 @@ function isInlineHistoryAlias(value: unknown): value is InlineHistoryAlias {
   const candidate = value as { email?: unknown; timestamp?: unknown };
   return (
     typeof candidate.email === "string" &&
-    typeof candidate.timestamp === "number"
+    typeof candidate.timestamp === "number" &&
+    Number.isFinite(candidate.timestamp)
   );
 }
 
@@ -67,13 +68,15 @@ function parseFavorites(value: unknown): FavoriteAlias[] {
   return favorites;
 }
 
-/** Returns the first available account-scoped value, then its legacy fallback. */
+/** Uses scoped storage whenever its key exists, otherwise falls back to legacy data. */
 function selectStoredValue(
   storage: Record<string, unknown>,
   accountKey: string,
   legacyKey: string,
 ): unknown {
-  return storage[accountKey] ?? storage[legacyKey] ?? [];
+  return Object.prototype.hasOwnProperty.call(storage, accountKey)
+    ? storage[accountKey]
+    : (storage[legacyKey] ?? []);
 }
 
 /** Loads account-isolated history and favorites for the inline helper popup. */
