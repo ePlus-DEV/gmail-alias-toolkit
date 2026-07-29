@@ -20,6 +20,8 @@ type MockBrowser = {
   };
 };
 
+type ImportOriginal = <T>() => Promise<T>;
+
 vi.stubGlobal("browser", {
   storage: {
     local: {
@@ -47,10 +49,26 @@ vi.stubGlobal("browser", {
   },
 } as unknown as MockBrowser);
 
-// Mock the getAccountStorageKey utility
-vi.mock("../../entrypoints/popup/utils", () => ({
-  getAccountStorageKey: (email: string, suffix: string) => `${email}:${suffix}`,
-}));
+/** Builds deterministic account-scoped storage keys for service tests. */
+function getMockAccountStorageKey(email: string, suffix: string): string {
+  return `${email}:${suffix}`;
+}
+
+/** Keeps real alias utilities while replacing account storage key generation. */
+async function createPopupUtilsMock(
+  importOriginal: ImportOriginal,
+): Promise<typeof import("../../entrypoints/popup/utils")> {
+  const original = await importOriginal<
+    typeof import("../../entrypoints/popup/utils")
+  >();
+
+  return {
+    ...original,
+    getAccountStorageKey: getMockAccountStorageKey,
+  };
+}
+
+vi.mock("../../entrypoints/popup/utils", createPopupUtilsMock);
 
 describe("websiteAliasService", () => {
   const testEmail = "user@gmail.com";
@@ -131,6 +149,21 @@ describe("websiteAliasService", () => {
   });
 
   describe("getPreviousAliasForWebsite", () => {
+    /** Verifies that a stored Gmail alias cannot leak into a Workspace account. */
+    async function assertCrossAccountAliasIsIgnored(): Promise<void> {
+      const workspaceEmail = "nguyen.minh.hoang@rivercrane.vn";
+      mockStorageData[`${workspaceEmail}:website_alias_map`] = {
+        github: {
+          alias: "nguyen.minh.hoang+github@gmail.com",
+          timestamp: 12345,
+          generatedCount: 1,
+        },
+      };
+
+      const result = await getPreviousAliasForWebsite(workspaceEmail, testUrl);
+      expect(result).toBeNull();
+    }
+
     it("returns null for unmapped website", async () => {
       const result = await getPreviousAliasForWebsite(testEmail, "unknown.com");
       expect(result).toBeNull();
@@ -145,6 +178,11 @@ describe("websiteAliasService", () => {
       const result = await getPreviousAliasForWebsite(testEmail, testUrl);
       expect(result).toEqual({ alias: testAlias, timestamp });
     });
+
+    it(
+      "ignores a stale website alias owned by another account",
+      assertCrossAccountAliasIsIgnored,
+    );
 
     it("accepts both URL and hostname", async () => {
       // Save alias with normalized key "github"
@@ -175,6 +213,39 @@ describe("websiteAliasService", () => {
   });
 
   describe("generateSuggestionsForWebsite", () => {
+    /** Verifies that malformed base emails never produce inline suggestions. */
+    async function assertMalformedBaseEmailsAreRejected(): Promise<void> {
+      const invalidEmails = [
+        "invalid-email",
+        "user@localhost",
+        "user @gmail.com",
+      ];
+
+      for (const invalidEmail of invalidEmails) {
+        const suggestions = await generateSuggestionsForWebsite(
+          invalidEmail,
+          "https://github.com",
+        );
+        expect(suggestions, invalidEmail).toEqual([]);
+      }
+    }
+
+    /** Verifies that all generated suggestions retain the Workspace domain. */
+    async function assertWorkspaceDomainIsPreserved(): Promise<void> {
+      const workspaceEmail = "nguyen.minh.hoang@rivercrane.vn";
+      const suggestions = await generateSuggestionsForWebsite(
+        workspaceEmail,
+        "https://github.com",
+      );
+
+      expect(suggestions).toContain(
+        "nguyen.minh.hoang+github@rivercrane.vn",
+      );
+      for (const suggestion of suggestions) {
+        expect(suggestion).toMatch(/@rivercrane\.vn$/);
+      }
+    }
+
     it("returns empty array for invalid hostname", async () => {
       const suggestions = await generateSuggestionsForWebsite(
         testEmail,
@@ -182,6 +253,11 @@ describe("websiteAliasService", () => {
       );
       expect(suggestions).toEqual([]);
     });
+
+    it(
+      "returns empty array for malformed base email",
+      assertMalformedBaseEmailsAreRejected,
+    );
 
     it("generates up to 5 suggestions for new website", async () => {
       const suggestions = await generateSuggestionsForWebsite(
@@ -258,15 +334,10 @@ describe("websiteAliasService", () => {
       expect(suggestions.length).toBeLessThanOrEqual(5);
     });
 
-    it("always uses @gmail.com for suggestions regardless of email domain", async () => {
-      const suggestions = await generateSuggestionsForWebsite(
-        "user@example.com",
-        "https://github.com",
-      );
-
-      // Suggestions always use @gmail.com, not the original email domain
-      suggestions.forEach((s) => expect(s).toMatch(/@gmail\.com$/));
-    });
+    it(
+      "preserves the selected Google Workspace domain",
+      assertWorkspaceDomainIsPreserved,
+    );
   });
 
   describe("clearWebsiteAliasMap", () => {
