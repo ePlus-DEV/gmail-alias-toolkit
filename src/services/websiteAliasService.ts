@@ -3,6 +3,7 @@ import {
   generateAlias,
   getAccountStorageKey,
   isAliasForAccount,
+  validateEmail,
 } from "../../entrypoints/popup/utils";
 
 interface WebsiteAliasEntry {
@@ -79,7 +80,7 @@ export async function generateSuggestionsForWebsite(
   urlOrHostname: string,
 ): Promise<string[]> {
   const normalized = normalizeHostname(urlOrHostname);
-  if (!normalized || !generateAlias(baseEmail, normalized)) return [];
+  if (!normalized || !validateEmail(baseEmail).isValid) return [];
 
   const suggestions: string[] = [];
 
