@@ -2,7 +2,7 @@
   "name": "gmail-alias-toolkit",
   "description": "Generate and manage Gmail aliases with plus addressing and presets",
   "private": true,
-  "version": "1.3.2",
+  "version": "1.3.3",
   "author": "dev@eplus.dev",
   "license": "MIT",
   "homepage_url": "https://eplus.dev",
