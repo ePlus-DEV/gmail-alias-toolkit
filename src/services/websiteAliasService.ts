@@ -117,6 +117,6 @@ export async function generateSuggestionsForWebsite(
  * Clear all website alias mappings for an email (used for reset/import).
  */
 export async function clearWebsiteAliasMap(email: string): Promise<void> {
-  const key = getWebsiteAliasMapKey(email,);
+  const key = getWebsiteAliasMapKey(email);
   await browser.storage.local.remove([key]);
 }

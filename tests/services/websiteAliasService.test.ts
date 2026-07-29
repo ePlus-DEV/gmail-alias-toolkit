@@ -153,6 +153,20 @@ describe("websiteAliasService", () => {
       expect(result).toEqual({ alias: testAlias, timestamp });
     });
 
+    it("ignores a stale website alias owned by another account", async () => {
+      const workspaceEmail = "nguyen.minh.hoang@rivercrane.vn";
+      mockStorageData[`${workspaceEmail}:website_alias_map`] = {
+        github: {
+          alias: "nguyen.minh.hoang+github@gmail.com",
+          timestamp: 12345,
+          generatedCount: 1,
+        },
+      };
+
+      const result = await getPreviousAliasForWebsite(workspaceEmail, testUrl);
+      expect(result).toBeNull();
+    });
+
     it("accepts both URL and hostname", async () => {
       // Save alias with normalized key "github"
       await saveWebsiteAlias(testEmail, "github", testAlias);

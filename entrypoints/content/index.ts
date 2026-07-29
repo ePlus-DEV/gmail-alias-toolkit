@@ -15,6 +15,7 @@ import {
   generateAlias,
   generateRandomString,
   filterAliases,
+  filterAliasesForAccount,
   getAccountStorageKey,
   getAliasTags,
   getDotVariationCandidates,
@@ -730,20 +731,30 @@ function createPopup(
         email: string;
         timestamp: number;
       }>;
-      currentHistory = history
-        .filter((item) => item && typeof item.email === "string")
+      const validHistory = history.filter(
+        (item) => item && typeof item.email === "string",
+      );
+      currentHistory = filterAliasesForAccount(
+        validHistory,
+        data.activeEmail,
+      )
         .slice()
         .sort((a, b) => b.timestamp - a.timestamp);
       const favorites = (storage[favoritesKey] ?? storage.favorites ?? []) as
         | Array<{ email?: string } | string>
         | undefined;
-      currentFavorites = Array.isArray(favorites)
+      const favoriteEntries = Array.isArray(favorites)
         ? favorites
-            .map((favorite) =>
-              typeof favorite === "string" ? favorite : favorite.email,
-            )
-            .filter((email): email is string => Boolean(email))
+            .map((favorite) => ({
+              email:
+                typeof favorite === "string" ? favorite : favorite.email || "",
+            }))
+            .filter((favorite) => Boolean(favorite.email))
         : [];
+      currentFavorites = filterAliasesForAccount(
+        favoriteEntries,
+        data.activeEmail,
+      ).map((favorite) => favorite.email);
 
       if (historyTag) {
         const selectedTag = historyTag.value;
