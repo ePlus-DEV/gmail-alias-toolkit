@@ -1,0 +1,35 @@
+name: Apply v1.3.3 changelog
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.pull_request.base.ref == 'dev' && github.head_ref == 'release/v1.3.3-workspace-alias-fix'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Apply changelog section
+        run: python3 scripts/prepare-v1.3.3-changelog.py
+
+      - name: Commit changelog and remove temporary files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm \
+            .github/workflows/apply-v1.3.3-changelog.yml \
+            scripts/prepare-v1.3.3-changelog.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs: add v1.3.3 changelog"
+          git push origin HEAD:${{ github.head_ref }}
