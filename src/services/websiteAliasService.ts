@@ -2,6 +2,7 @@ import { normalizeHostname } from "../utils/hostnameNormalizer";
 import {
   generateAlias,
   getAccountStorageKey,
+  isAliasForAccount,
 } from "../../entrypoints/popup/utils";
 
 interface WebsiteAliasEntry {
@@ -65,7 +66,8 @@ export async function getPreviousAliasForWebsite(
   const map = await getWebsiteAliasMap(email);
   const entry = map[normalized];
 
-  return entry ? { alias: entry.alias, timestamp: entry.timestamp } : null;
+  if (!entry || !isAliasForAccount(entry.alias, email)) return null;
+  return { alias: entry.alias, timestamp: entry.timestamp };
 }
 
 /**
@@ -115,6 +117,6 @@ export async function generateSuggestionsForWebsite(
  * Clear all website alias mappings for an email (used for reset/import).
  */
 export async function clearWebsiteAliasMap(email: string): Promise<void> {
-  const key = getWebsiteAliasMapKey(email);
+  const key = getWebsiteAliasMapKey(email,);
   await browser.storage.local.remove([key]);
 }
