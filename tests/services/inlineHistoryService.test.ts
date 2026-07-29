@@ -13,10 +13,12 @@ function mockStorageGet(keys: string[]): Promise<Record<string, unknown>> {
   return Promise.resolve(result);
 }
 
+const mockStorageGetFunction = vi.fn(mockStorageGet);
+
 vi.stubGlobal("browser", {
   storage: {
     local: {
-      get: vi.fn(mockStorageGet),
+      get: mockStorageGetFunction,
     },
   },
 });
@@ -158,6 +160,17 @@ async function assertMalformedEntriesAreIgnored(): Promise<void> {
   ]);
 }
 
+/** Verifies browser storage failures propagate to the inline popup caller. */
+async function assertStorageFailurePropagates(): Promise<void> {
+  mockStorageGetFunction.mockRejectedValueOnce(
+    new Error("Inline history storage unavailable"),
+  );
+
+  await expect(
+    loadInlineAccountHistory("nguyen.minh.hoang@rivercrane.vn"),
+  ).rejects.toThrow("Inline history storage unavailable");
+}
+
 /** Registers browser-storage integration coverage for inline account history. */
 function defineInlineHistoryServiceTests(): void {
   beforeEach(resetMockStorage);
@@ -178,6 +191,7 @@ function defineInlineHistoryServiceTests(): void {
     "ignores malformed history and favorite entries",
     assertMalformedEntriesAreIgnored,
   );
+  it("propagates browser storage failures", assertStorageFailurePropagates);
 }
 
 describe("loadInlineAccountHistory", defineInlineHistoryServiceTests);
