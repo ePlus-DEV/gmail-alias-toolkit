@@ -1,0 +1,55 @@
+name: Apply Workspace inline history fix
+
+on:
+  pull_request:
+    types: [reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.pull_request.number == 87 && github.head_ref == 'fix/preserve-workspace-alias-domain'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: yarn
+          cache-dependency-path: yarn.lock
+
+      - name: Apply account-isolation patch
+        run: python3 scripts/patch-workspace-inline-history.py
+
+      - name: Validate patched source
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          yarn install --immutable --mode=skip-build
+          yarn exec wxt prepare
+          yarn compile --pretty false
+          yarn test
+
+      - name: Commit fix and remove temporary files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm \
+            .github/workflows/apply-workspace-inline-history-fix.yml \
+            scripts/patch-workspace-inline-history.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            entrypoints/content/index.ts \
+            src/services/websiteAliasService.ts \
+            tests/services/websiteAliasService.test.ts
+          git commit -m "fix: isolate Workspace inline aliases"
+          git push origin HEAD:${{ github.head_ref }}
