@@ -55,7 +55,9 @@ function getMockAccountStorageKey(email: string, suffix: string): string {
 }
 
 /** Keeps real alias utilities while replacing account storage key generation. */
-async function createPopupUtilsMock(importOriginal: ImportOriginal) {
+async function createPopupUtilsMock(
+  importOriginal: ImportOriginal,
+): Promise<typeof import("../../entrypoints/popup/utils")> {
   const original = await importOriginal<
     typeof import("../../entrypoints/popup/utils")
   >();
