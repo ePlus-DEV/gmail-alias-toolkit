@@ -113,6 +113,25 @@ async function assertScopedStorageTakesPrecedence(): Promise<void> {
   expect(result).toEqual({ history: [], favorites: [] });
 }
 
+/** Verifies present null scoped values block fallback to obsolete global data. */
+async function assertNullScopedStorageBlocksLegacyFallback(): Promise<void> {
+  const activeEmail = "nguyen.minh.hoang@rivercrane.vn";
+  const historyKey = getAccountStorageKey(activeEmail, "gmail_alias_recent");
+  const favoritesKey = getAccountStorageKey(activeEmail, "favorites");
+  mockStorageData[historyKey] = null;
+  mockStorageData[favoritesKey] = null;
+  mockStorageData.gmail_alias_recent = [
+    { email: "nguyen.minh.hoang+legacy@rivercrane.vn", timestamp: 1 },
+  ];
+  mockStorageData.favorites = [
+    "nguyen.minh.hoang+legacy@rivercrane.vn",
+  ];
+
+  const result = await loadInlineAccountHistory(activeEmail);
+
+  expect(result).toEqual({ history: [], favorites: [] });
+}
+
 /** Verifies non-array account storage is treated as empty data. */
 async function assertNonArrayStorageIsIgnored(): Promise<void> {
   const activeEmail = "nguyen.minh.hoang@rivercrane.vn";
@@ -137,6 +156,18 @@ async function assertMalformedEntriesAreIgnored(): Promise<void> {
     {
       email: "nguyen.minh.hoang+bad-time@rivercrane.vn",
       timestamp: "10",
+    },
+    {
+      email: "nguyen.minh.hoang+nan@rivercrane.vn",
+      timestamp: Number.NaN,
+    },
+    {
+      email: "nguyen.minh.hoang+infinity@rivercrane.vn",
+      timestamp: Number.POSITIVE_INFINITY,
+    },
+    {
+      email: "nguyen.minh.hoang+negative-infinity@rivercrane.vn",
+      timestamp: Number.NEGATIVE_INFINITY,
     },
     { email: 123, timestamp: 9 },
     { email: "nguyen.minh.hoang+valid@rivercrane.vn", timestamp: 8 },
@@ -185,6 +216,10 @@ function defineInlineHistoryServiceTests(): void {
   it(
     "prefers account-scoped storage over legacy global storage",
     assertScopedStorageTakesPrecedence,
+  );
+  it(
+    "does not fall back when scoped storage exists as null",
+    assertNullScopedStorageBlocksLegacyFallback,
   );
   it("treats non-array storage as empty", assertNonArrayStorageIsIgnored);
   it(
