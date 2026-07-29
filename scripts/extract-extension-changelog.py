@@ -17,7 +17,11 @@ content = replace_once(
     content,
     'import { openUserGuide } from "src/utils/externalLinks";\n',
     'import { openUserGuide } from "src/utils/externalLinks";\n'
-    'import { CHANGELOG } from "../data/changelog";\n',
+    'import {\n'
+    '  CHANGELOG,\n'
+    '  type ChangelogChange,\n'
+    '  type ChangelogEntry,\n'
+    '} from "../data/changelog";\n',
 )
 
 interfaces_start = content.index("interface ChangelogChange {")
@@ -30,7 +34,7 @@ content = content[:changelog_start] + content[changelog_end:]
 
 if "interface ChangelogEntry" in content or "const CHANGELOG:" in content:
     raise RuntimeError("Inline changelog declarations were not fully removed")
-if 'import { CHANGELOG } from "../data/changelog";' not in content:
-    raise RuntimeError("Changelog data import was not added")
+if 'type ChangelogEntry,' not in content or 'type ChangelogChange,' not in content:
+    raise RuntimeError("Changelog data types were not imported")
 
 SETTINGS_PATH.write_text(content, encoding="utf-8")
