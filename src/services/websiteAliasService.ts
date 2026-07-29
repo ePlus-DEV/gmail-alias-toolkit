@@ -54,9 +54,7 @@ export async function saveWebsiteAlias(
   await browser.storage.local.set({ [key]: map });
 }
 
-/**
- * Get the previously used alias for a website (if any).
- */
+/** Returns a previous website alias only when it belongs to the active account. */
 export async function getPreviousAliasForWebsite(
   email: string,
   urlOrHostname: string,
@@ -71,10 +69,7 @@ export async function getPreviousAliasForWebsite(
   return { alias: entry.alias, timestamp: entry.timestamp };
 }
 
-/**
- * Generate alias suggestions for a website.
- * Returns 3–5 suggestions based on the normalized hostname and random formats.
- */
+/** Generates website-aware suggestions while preserving the active account domain. */
 export async function generateSuggestionsForWebsite(
   baseEmail: string,
   urlOrHostname: string,
