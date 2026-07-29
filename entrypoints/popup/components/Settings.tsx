@@ -85,6 +85,20 @@ const TOAST_DURATION = 2000;
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.3",
+    date: "2026-07-29",
+    changes: [
+      {
+        type: "Fixed",
+        items: [
+          "Preserved the selected Google Workspace domain when generating website-aware aliases instead of forcing @gmail.com",
+          "Filtered previous aliases, recent history, and favorites by the active account to prevent Gmail data from appearing under a Workspace account",
+          "Rejected malformed base email addresses before generating inline alias suggestions",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.3.2",
     date: "2026-07-24",
     changes: [
