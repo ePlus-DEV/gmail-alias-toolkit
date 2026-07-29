@@ -1,5 +1,8 @@
 import { normalizeHostname } from "../utils/hostnameNormalizer";
-import { getAccountStorageKey } from "../../entrypoints/popup/utils";
+import {
+  generateAlias,
+  getAccountStorageKey,
+} from "../../entrypoints/popup/utils";
 
 interface WebsiteAliasEntry {
   alias: string;
@@ -74,36 +77,36 @@ export async function generateSuggestionsForWebsite(
   urlOrHostname: string,
 ): Promise<string[]> {
   const normalized = normalizeHostname(urlOrHostname);
-  if (!normalized) return [];
-
-  // Extract base email part (before @gmail.com)
-  const emailBase = baseEmail.split("@")[0];
+  if (!normalized || !generateAlias(baseEmail, normalized)) return [];
 
   const suggestions: string[] = [];
 
-  // 1. Simple: base+normalized
-  suggestions.push(`${emailBase}+${normalized}@gmail.com`);
+  /** Adds a valid plus-addressed alias while preserving the active account domain. */
+  function appendSuggestion(tag: string): void {
+    const alias = generateAlias(baseEmail, tag);
+    if (alias) suggestions.push(alias);
+  }
 
-  // 2. Counter: base+normalized001
+  // 1. Simple: base+normalized@configured-domain
+  appendSuggestion(normalized);
+
+  // 2. Counter: base+normalized001@configured-domain
   const map = await getWebsiteAliasMap(baseEmail);
   const count = map[normalized]?.generatedCount || 0;
   if (count > 0) {
-    suggestions.push(
-      `${emailBase}+${normalized}${String(count + 1).padStart(3, "0")}@gmail.com`,
-    );
+    appendSuggestion(`${normalized}${String(count + 1).padStart(3, "0")}`);
   }
 
-  // 3. Short: base+first-3-letters
-  const shortCode = normalized.slice(0, 3);
-  suggestions.push(`${emailBase}+${shortCode}@gmail.com`);
+  // 3. Short: base+first-3-letters@configured-domain
+  appendSuggestion(normalized.slice(0, 3));
 
-  // 4. With date: base+normalized-YYYYMMDD
+  // 4. With date: base+normalized-YYYYMMDD@configured-domain
   const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  suggestions.push(`${emailBase}+${normalized}-${today}@gmail.com`);
+  appendSuggestion(`${normalized}-${today}`);
 
-  // 5. Random suffix: base+normalized-XXXX
+  // 5. Random suffix: base+normalized-XXXX@configured-domain
   const randomSuffix = Math.random().toString(36).substring(2, 6);
-  suggestions.push(`${emailBase}+${normalized}-${randomSuffix}@gmail.com`);
+  appendSuggestion(`${normalized}-${randomSuffix}`);
 
   return suggestions.slice(0, 5);
 }
