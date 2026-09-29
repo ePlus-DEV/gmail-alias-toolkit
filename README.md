@@ -58,6 +58,10 @@ A lightweight browser extension that generates, manages, and organizes Gmail ali
 
 For development and build commands, see `CONTRIBUTING.md`.
 
+## Roadmap
+
+See [`ROADMAP.md`](ROADMAP.md) for shipped milestones, active research, planned releases, and longer-term ideas.
+
 ## Contributing
 
 Please read `CONTRIBUTING.md` for local setup, checks, project structure, and
