@@ -160,6 +160,28 @@ describe("generateAlias", () => {
       "user+private-mail-abc1@gmail.com",
     );
   });
+
+  it("trims surrounding whitespace from tags", () => {
+    expect(generateAlias("user@gmail.com", " shopping ")).toBe(
+      "user+shopping@gmail.com",
+    );
+  });
+
+  it("rejects an empty tag", () => {
+    expect(generateAlias("user@gmail.com", "   ")).toBeNull();
+  });
+
+  it("rejects tags containing whitespace", () => {
+    expect(generateAlias("user@gmail.com", "project alpha")).toBeNull();
+  });
+
+  it("rejects tags containing an @ sign", () => {
+    expect(generateAlias("user@gmail.com", "shop@example.com")).toBeNull();
+  });
+
+  it("rejects a base email without a routable domain", () => {
+    expect(generateAlias("user@localhost", "tag")).toBeNull();
+  });
 });
 
 // ─── generateRandomString ────────────────────────────────────────────────────
