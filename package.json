@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.5",
-    "@wxt-dev/auto-icons": "^1.1.0",
-    "@wxt-dev/module-react": "^1.1.5",
+    "@wxt-dev/auto-icons": "^1.1.2",
+    "@wxt-dev/module-react": "^1.2.2",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "motion": "^12.0.0",
@@ -59,6 +59,6 @@
     "typescript": "^5.9.3",
     "vite": "^8.1.1",
     "vitest": "^4.1.11",
-    "wxt": "^0.20.27"
+    "wxt": "^0.21.4"
   }
 }
