@@ -13,6 +13,25 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
   {
+    version: "1.3.4",
+    date: "2026-10-06",
+    changes: [
+      {
+        type: "Changed",
+        items: [
+          "Rolled the latest dependency security and maintenance updates into the extension release, including patched transitive packages used by the build and test toolchain",
+          "Refreshed CI and release dependencies to current supported GitHub Actions versions",
+        ],
+      },
+      {
+        type: "Fixed",
+        items: [
+          "Updated vulnerable or outdated dependency resolutions for brace-expansion, undici, ip-address, browserslist, postcss, and related packages",
+        ],
+      },
+    ],
+  },
+  {
     version: "1.3.3",
     date: "2026-07-29",
     changes: [
@@ -140,7 +159,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       {
         type: "Fixed",
         items: [
-          "\"Copy All\" no longer undercounts statistics for generated aliases",
+          '"Copy All" no longer undercounts statistics for generated aliases',
           "Settings/QR modals no longer render outside the popup bounds",
           "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
           "Fixed missing imports and old component references after replacing legacy UI components",
