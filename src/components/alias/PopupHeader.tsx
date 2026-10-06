@@ -3,6 +3,7 @@ import { Settings, Sparkles } from "lucide-react";
 import { Button } from "src/components/motion/button/base";
 import { Tooltip } from "src/components/motion/tooltip";
 import { ThemeToggle } from "src/components/motion/theme-toggle";
+import ExtensionUpdateBanner from "./ExtensionUpdateBanner";
 import { t } from "../../../lib/i18n";
 
 export interface PopupHeaderProps {
@@ -99,6 +100,7 @@ export default function PopupHeader({
           />
         </div>
       </div>
+      <ExtensionUpdateBanner />
     </div>
   );
 }
