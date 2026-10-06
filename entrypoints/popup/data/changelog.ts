@@ -159,7 +159,7 @@ export const CHANGELOG: readonly ChangelogEntry[] = [
       {
         type: "Fixed",
         items: [
-          "\"Copy All\" no longer undercounts statistics for generated aliases",
+          '"Copy All" no longer undercounts statistics for generated aliases',
           "Settings/QR modals no longer render outside the popup bounds",
           "Tab key now moves focus normally instead of being hijacked for @gmail.com autocomplete",
           "Fixed missing imports and old component references after replacing legacy UI components",
