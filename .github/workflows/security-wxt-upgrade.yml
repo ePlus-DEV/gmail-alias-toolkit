@@ -1,0 +1,114 @@
+name: One-time WXT Security Upgrade
+
+on:
+  push:
+    branches:
+      - chore/security-audit-refresh
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout security branch
+        uses: actions/checkout@v7
+        with:
+          ref: chore/security-audit-refresh
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+
+      - name: Enable Corepack
+        run: |
+          npm install --global corepack@latest
+          corepack enable
+          corepack install --global yarn@4.14.1
+
+      - name: Install current dependency tree
+        run: yarn install --immutable --mode=skip-build
+
+      - name: Upgrade WXT stack
+        run: |
+          yarn up 'wxt@^0.21.4' '@wxt-dev/auto-icons@^1.1.2' '@wxt-dev/module-react@^1.2.2'
+
+      - name: Refresh remaining vulnerable transitive parents
+        shell: bash
+        run: |
+          set -euo pipefail
+          packages=(
+            firefox-profile
+            make-fetch-happen
+            @devicefarmer/adbkit
+            fx-runner
+            web-ext-run
+            node-notifier
+            sharp
+            shell-quote
+            tmp
+            uuid
+          )
+
+          for package in "${packages[@]}"; do
+            echo "::group::Refresh $package"
+            yarn up -R "$package" || true
+            echo "::endgroup::"
+          done
+
+          yarn dedupe --strategy highest
+          yarn install --mode=skip-build
+
+      - name: Audit upgraded tree
+        shell: bash
+        run: |
+          set +e
+          yarn npm audit --recursive --severity moderate | tee /tmp/audit-after-wxt.txt
+          echo "audit_exit=${PIPESTATUS[0]}" >> "$GITHUB_ENV"
+          exit 0
+
+      - name: Prepare and validate
+        run: |
+          yarn exec wxt prepare
+          yarn compile
+          yarn test
+          yarn build
+          yarn build:firefox
+          node scripts/verify-manifest-scope.mjs
+          yarn workspace gmail-alias-toolkit-web build
+
+      - name: Publish audit summary
+        shell: bash
+        run: |
+          {
+            echo "## WXT security upgrade"
+            echo
+            echo "- Audit exit: \`${audit_exit:-unknown}\`"
+            echo
+            echo "### Remaining audit output"
+            echo '~~~text'
+            tail -n 160 /tmp/audit-after-wxt.txt
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit WXT security upgrade
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git rm .github/workflows/security-wxt-upgrade.yml
+          git add package.json yarn.lock web/package.json
+
+          if git diff --cached --quiet; then
+            echo "No dependency changes were produced."
+            exit 0
+          fi
+
+          git commit -m "chore(security): upgrade WXT dependency stack"
+          git push origin HEAD:chore/security-audit-refresh
