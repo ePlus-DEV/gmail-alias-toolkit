@@ -56,12 +56,26 @@ export function filterAliasesForAccount<T extends { email: string }>(
 
 /** Creates a plus-addressed alias (user+tag@domain), or null if the base email is malformed. */
 export function generateAlias(baseEmail: string, tag: string): string | null {
-  const parts = baseEmail.trim().split("@");
+  const normalizedEmail = baseEmail.trim();
+  const normalizedTag = tag.trim();
+  const parts = normalizedEmail.split("@");
   if (parts.length !== 2) return null;
 
   const [username, domain] = parts;
-  if (!username || !domain) return null;
-  return `${username}+${tag}@${domain}`;
+  if (!username || !domain || !domain.includes(".")) return null;
+
+  // A plus tag becomes part of the email local-part. Whitespace, an @ sign,
+  // or control characters would create an address that cannot be safely used
+  // in forms and could also introduce a second domain separator.
+  if (
+    !normalizedTag ||
+    /[\\s@]/.test(normalizedTag) ||
+    /[\\u0000-\\u001f\\u007f]/.test(normalizedTag)
+  ) {
+    return null;
+  }
+
+  return `${username}+${normalizedTag}@${domain}`;
 }
 
 export type RandomFormat =
