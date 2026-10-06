@@ -47,6 +47,13 @@ export default defineConfig({
     };
   },
   hooks: {
+    // WXT 0.21 enables stricter Vite-recommended TypeScript defaults.
+    // Keep the v0.20 behavior for this security upgrade; migrate the codebase
+    // to these stricter checks in a separate, focused refactor.
+    "prepare:tsconfig": (_wxt, { tsconfig }) => {
+      delete tsconfig.verbatimModuleSyntax;
+      delete tsconfig.noUncheckedIndexedAccess;
+    },
     "entrypoints:resolved": (wxt, entrypoints) => {
       const inlineContentScript = entrypoints.find(
         (entrypoint) =>
